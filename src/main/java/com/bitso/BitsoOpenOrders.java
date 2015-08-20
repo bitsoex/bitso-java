@@ -1,0 +1,42 @@
+package com.bitso;
+
+import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.bitso.exchange.BookOrder;
+
+public class BitsoOpenOrders {
+
+    public ArrayList<BookOrder> list;
+
+    public BitsoOpenOrders(String openOrdersJSON) {
+        JSONArray obj;
+        try {
+            obj = new JSONArray(openOrdersJSON);
+        } catch (Exception e) {
+            System.err.println("BitsoOpenOrders cannot parse JSON");
+            System.err.println(openOrdersJSON);
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+            return;
+        }
+        list = new ArrayList<BookOrder>(obj.length());
+        for (int i = 0; i < obj.length(); i++) {
+            JSONObject o = obj.getJSONObject(i);
+            list.add(Bitso.processBookOrderJSON(o.toString()));
+        }
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("====OPEN_ORDERS====");
+        if (list != null) {
+            for (BookOrder o : list) {
+                sb.append(o);
+            }
+        }
+        return sb.toString();
+    }
+}
