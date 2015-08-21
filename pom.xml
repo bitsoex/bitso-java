@@ -4,7 +4,7 @@
   <groupId>com.bitso</groupId>
   <artifactId>bitso-java</artifactId>
   <packaging>jar</packaging>
-  <version>0.0.1</version>
+  <version>0.0.1-SNAPSHOT</version>
   <name>bitso-java</name>
   <url>http://maven.apache.org</url>
 
