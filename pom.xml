@@ -75,6 +75,7 @@
             <execution>
               <id>attach-sources</id>
               <goals>
+                <goal>release</goal>
                 <goal>jar-no-fork</goal>
               </goals>
             </execution>
@@ -89,6 +90,7 @@
             <execution>
               <id>attach-javadocs</id>
               <goals>
+                <goal>release</goal>
                 <goal>jar</goal>
               </goals>
             </execution>
