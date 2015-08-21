@@ -4,7 +4,7 @@
   <groupId>com.bitso</groupId>
   <artifactId>bitso-java</artifactId>
   <packaging>jar</packaging>
-  <version>0.0.1</version>
+  <version>0.0.1-SNAPSHOT</version>
   <name>bitso-java</name>
   <description>A Java wrapper for the Bitso Exchange API</description>
   <url>https://bitso.com</url>
@@ -120,6 +120,18 @@
               </goals>
             </execution>
           </executions>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>2.5</version>
+          <configuration>
+            <autoVersionSubmodules>true</autoVersionSubmodules>
+            <useReleaseProfile>false</useReleaseProfile>
+            <releaseProfiles>release</releaseProfiles>
+            <goals>deploy</goals>
+          </configuration>
         </plugin>
 
         <plugin>
