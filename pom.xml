@@ -112,9 +112,9 @@
           <configuration>
             <!-- During release:perform, enable the "release" profile -->
             <releaseProfiles>release</releaseProfiles>
-          
+
             <useReleaseProfile>false</useReleaseProfile>
-            <goals>deploy</goals>
+            <goals>deploy nexus-staging:release</goals>
           </configuration>
         </plugin>
 
@@ -125,6 +125,17 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <plugin>
+      <groupId>org.sonatype.plugins</groupId>
+      <artifactId>nexus-staging-maven-plugin</artifactId>
+      <version>1.6.3</version>
+      <extensions>true</extensions>
+      <configuration>
+        <serverId>ossrh</serverId>
+        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+      </configuration>
+    </plugin>
   </build>
 
   <profiles>
