@@ -5,3 +5,4 @@ conf/*
 .classpath
 .project
 target/
+pom.xml.versionsBackup
