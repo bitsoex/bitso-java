@@ -8,6 +8,10 @@
   <description>A Java wrapper for the Bitso Exchange API</description>
   <url>https://bitso.com</url>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
   <licenses>
     <license>
       <name>MIT License</name>
