@@ -1,14 +1,11 @@
 package com.bitso.http;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map.Entry;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
@@ -94,50 +91,6 @@ public class BlockingHttpClient {
     public String sendPost(String url, String body, HashMap<String, String> headers)
             throws Exception {
         throttle();
-        URL obj = new URL(url);
-        HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
-
-        // add request headers
-        if (headers != null) {
-            for (Entry<String, String> e : headers.entrySet()) {
-                con.setRequestProperty(e.getKey(), e.getValue());
-            }
-            log("\nHeaders are \n" + headers.toString());
-        }
-        con.setRequestProperty("User-Agent", USER_AGENT);
-        con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-        con.setRequestMethod("POST");
-
-        // Send post request
-        con.setDoOutput(true);
-        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        wr.writeBytes(body);
-        wr.flush();
-        wr.close();
-
-        int responseCode = con.getResponseCode();
-        log("\nSending 'POST' request to URL : " + url);
-        log("Post parameters : " + body);
-        log("Response Code : " + responseCode);
-
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
-
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
-
-        // print result
-        log(response);
-        log(response.toString());
-        return response.toString();
-    }
-
-    public String sendPost2(String url, String body, HashMap<String, String> headers)
-            throws Exception {
-        throttle();
         HttpPost postRequest = new HttpPost(url);
         // add request headers
         if (headers != null) {
@@ -197,10 +150,6 @@ public class BlockingHttpClient {
         log(responseBody);
 
         return responseBody.toString();
-    }
-
-    public String sendPost(String url, String body) throws Exception {
-        return sendPost(url, body, null);
     }
 
 }

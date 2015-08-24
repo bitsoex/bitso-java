@@ -236,22 +236,20 @@ public class Bitso {
         String message = nonce + key + clientId;
         String signature = signRequest(secret, message);
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("key=");
-        sb.append(key);
-        sb.append("&nonce=");
-        sb.append(nonce);
-        sb.append("&signature=");
-        sb.append(signature);
+        JSONObject json = new JSONObject();
+        json.put("key", key);
+        json.put("nonce", nonce);
+        json.put("signature", signature);
+
         if (bodyExtras != null) {
             for (Entry<String, String> e : bodyExtras.entrySet()) {
-                sb.append('&');
-                sb.append(e.getKey());
-                sb.append('=');
-                sb.append(e.getValue());
+                json.put(e.getKey(), e.getValue());
             }
         }
-        return client.sendPost(url, sb.toString());
+
+        HashMap<String, String> headers = new HashMap<String, String>();
+        headers.put("Content-Type", "application/json");
+        return client.sendPost(url, json.toString(), headers);
     }
 
     private String sendBitsoPost(String url) throws Exception {
