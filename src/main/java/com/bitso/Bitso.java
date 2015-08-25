@@ -88,9 +88,9 @@ public class Bitso {
         return new BigDecimal(o.getString("amount"));
     }
 
-    public BigDecimal placeSellMarketOrder(BigDecimal amount) throws Exception {
+    public BigDecimal placeSellMarketOrder(BigDecimal btcAmountToSpend) throws Exception {
         HashMap<String, String> body = new HashMap<String, String>();
-        body.put("amount", amount.toPlainString());
+        body.put("amount", btcAmountToSpend.toPlainString());
         System.out.println("Placing the following sell maket order: " + body);
         String json = sendBitsoPost(BITSO_BASE_URL + "sell", body);
         JSONObject o;
