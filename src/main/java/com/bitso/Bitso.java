@@ -72,13 +72,36 @@ public class Bitso {
         return false;
     }
 
-    // TODO: return an actual object
-    public String placeSellMarketOrder(BigDecimal amount) throws Exception {
+    public BigDecimal placeBuyMarketOrder(BigDecimal mxnAmountToSpend) throws Exception {
+        HashMap<String, String> body = new HashMap<String, String>();
+        body.put("amount", mxnAmountToSpend.toPlainString());
+        System.out.println("Placing the following buy maket order: " + body);
+        String json = sendBitsoPost(BITSO_BASE_URL + "buy", body);
+        JSONObject o;
+        try {
+            o = new JSONObject(json);
+        } catch (JSONException e) {
+            System.err.println("Unable to parse json: " + json);
+            e.printStackTrace();
+            return null;
+        }
+        return new BigDecimal(o.getString("amount"));
+    }
+
+    public BigDecimal placeSellMarketOrder(BigDecimal amount) throws Exception {
         HashMap<String, String> body = new HashMap<String, String>();
         body.put("amount", amount.toPlainString());
         System.out.println("Placing the following sell maket order: " + body);
         String json = sendBitsoPost(BITSO_BASE_URL + "sell", body);
-        return json;
+        JSONObject o;
+        try {
+            o = new JSONObject(json);
+        } catch (JSONException e) {
+            System.err.println("Unable to parse json: " + json);
+            e.printStackTrace();
+            return null;
+        }
+        return new BigDecimal(o.getString("amount"));
     }
 
     public BookOrder placeBuyLimitOrder(BigDecimal price, BigDecimal amount) throws Exception {

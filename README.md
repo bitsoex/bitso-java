@@ -1,5 +1,5 @@
 # bitso-java
-[Bitso's](https://bitso.com) official Java wrapper to interact with the [Bitso v2 API](https://bitso.com/api_info).
+[Bitso's](https://bitso.com) official Java wrapper to interact with the [Bitso REST API v2](https://bitso.com/api_info).
 
 ## Installation
 
@@ -41,24 +41,22 @@ Notice here that we did not hard code the API keys into our codebase, but set th
 System.out.println(bitso.getBalance());
 ```
 
-### Get your available balance
+### Get your available BTC balance
 
 ```java
 BigDecimal btcAvailable = bitso.getBalance().btcAvailable;
-System.out.println(btcAvailable);
 ```
 
-### Get your trading fee
+### Get your available MXN balance
 
 ```java
-System.out.println(bitso.getBalance().fee);
+BigDecimal mxnAvailable = bitso.getBalance().mxnAvailable;
 ```
 
 ### Get your trading fee
 
 ```java
 BigDecimal fee = bitso.getBalance().fee;
-System.out.println(fee);
 ```
 
 ### Iterate through the order book
