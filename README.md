@@ -98,7 +98,7 @@ BookOrder order = bitso.placeBuyLimitOrder(new BigDecimal("2000.00"), new BigDec
 BookOrder order = bitso.placeSellLimitOrder(new BigDecimal("10000.00"), new BigDecimal("1"));
 ```
 
-### Place a sell limit order to sell 1 BTC at a price of $10,000 MXN/BTC and then cancel it
+### Place a sell limit order and then cancel it (assuming it wasn't matched)
 
 ```java
 BookOrder order = bitso.placeSellLimitOrder(new BigDecimal("10000.00"), new BigDecimal("1"));
@@ -108,7 +108,7 @@ bitso.cancelOrder(order.id);
 ### Get a list of open orders
 
 ```java
-BitsoOrders openOrder = bitso.getOpenOrders();
+BitsoOrders openOrders = bitso.getOpenOrders();
 ```
 
 ### Withdraw 2 BTC to the following address: 17s4n5L9Lz7qciToYjjs5CJGBGRR7MxjUu
