@@ -72,15 +72,57 @@ for (BookOrder bid : orderBook.bids) {
 
 ```java
 String depositAddress = bitso.getDepositAddress();
-System.out.println(depositAddress);
 ```
 
-### Place a market order to sell 1.23456789 BTC
+### Place a market order to sell 1.23456789 BTC (returns the amount of MXN received)
 
 ```java
-bitso.placeSellMarketOrder(new BigDecimal("1.23456789"));
+BigDecimal mxnBought = bitso.placeSellMarketOrder(new BigDecimal("1.23456789"));
 ```
 
+### Place a market order to sell $100 MXN (returns the amount of BTC received)
+
+```java
+BigDecimal btcBought = bitso.placeBuyMarketOrder(new BigDecimal("100.00"));
+```
+
+### Place a buy limit order to buy 3 BTC at a price of $2,000 MXN/BTC
+
+```java
+BookOrder order = bitso.placeBuyLimitOrder(new BigDecimal("2000.00"), new BigDecimal("3"));
+```
+
+### Place a sell limit order to sell 1 BTC at a price of $10,000 MXN/BTC
+
+```java
+BookOrder order = bitso.placeSellLimitOrder(new BigDecimal("10000.00"), new BigDecimal("1"));
+```
+
+### Place a sell limit order to sell 1 BTC at a price of $10,000 MXN/BTC and then cancel it
+
+```java
+BookOrder order = bitso.placeSellLimitOrder(new BigDecimal("10000.00"), new BigDecimal("1"));
+bitso.cancelOrder(order.id);
+```
+
+### Get a list of open orders
+
+```java
+BitsoOrders openOrder = bitso.getOpenOrders();
+```
+
+### Withdraw 2 BTC to the following address: 17s4n5L9Lz7qciToYjjs5CJGBGRR7MxjUu
+
+```java
+String btcAddress = "17s4n5L9Lz7qciToYjjs5CJGBGRR7MxjUu";
+BigDecimal btcAmount = new BigDecimal("1.00");
+boolean success = bitso.withdrawBTC(btcAddress, btcAmount);
+if (success) {
+  System.out.println("Successfully sent " + btcAmount + "BTC to " + btcAddress);
+} else {
+  System.out.println("An error ocurred");
+}
+```
 
 ## Decimal precision
 
