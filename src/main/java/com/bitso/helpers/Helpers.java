@@ -1,13 +1,24 @@
 package com.bitso.helpers;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Helpers {
+
+    private static final List<Field> getAllFields(List<Field> fields, Class<?> type) {
+        fields.addAll(Arrays.asList(type.getDeclaredFields()));
+        if (type.getSuperclass() != null) {
+            fields = getAllFields(fields, type.getSuperclass());
+        }
+        return fields;
+    }
 
     public static final String fieldPrinter(Object obj) {
         StringBuilder sb = new StringBuilder();
         sb.append("==============");
-        Field[] fields = obj.getClass().getDeclaredFields();
+        List<Field> fields = getAllFields(new ArrayList<Field>(), obj.getClass());
         for (Field f : fields) {
             try {
                 Object o = f.get(obj);
