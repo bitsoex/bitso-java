@@ -3,7 +3,7 @@
   <groupId>com.bitso</groupId>
   <artifactId>bitso-java</artifactId>
   <packaging>jar</packaging>
-  <version>0.0.9</version>
+  <version>0.0.10-SNAPSHOT</version>
   <name>bitso-java</name>
   <description>A Java wrapper for the Bitso Exchange API</description>
   <url>https://bitso.com</url>
@@ -36,7 +36,7 @@
     <connection>scm:git:git@github.com:bitsoex/bitso-java.git</connection>
     <developerConnection>scm:git:git@github.com:bitsoex/bitso-java.git</developerConnection>
     <url>git@github.com:bitsoex/bitso-java.git</url>
-    <tag>bitso-java-0.0.9</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <dependencies>
