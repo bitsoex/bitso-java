@@ -4,17 +4,9 @@ import java.math.BigDecimal;
 
 import org.json.JSONObject;
 
-import com.bitso.helpers.Helpers;
+import com.bitso.exchange.Ticker;
 
-public class BitsoTicker {
-
-    public BigDecimal last;
-    public BigDecimal high;
-    public BigDecimal low;
-    public BigDecimal vwap;
-    public BigDecimal volume;
-    public BigDecimal bid;
-    public BigDecimal ask;
+public class BitsoTicker extends Ticker {
 
     public BitsoTicker(String json) {
         JSONObject o = new JSONObject(json);
@@ -25,9 +17,5 @@ public class BitsoTicker {
         volume = new BigDecimal(o.getString("volume"));
         bid = new BigDecimal(o.getString("bid"));
         ask = new BigDecimal(o.getString("ask"));
-    }
-
-    public String toString() {
-        return Helpers.fieldPrinter(this);
     }
 }
