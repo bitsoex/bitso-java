@@ -48,6 +48,10 @@ public class Bitso {
         return new BitsoOpenOrders(sendBitsoPost(BITSO_BASE_URL + "open_orders"));
     }
 
+    public BitsoTicker getTicker() throws Exception {
+        return new BitsoTicker(client.get(BITSO_BASE_URL + "ticker"));
+    }
+
     public BitsoLookupOrders getLookupOrders(String orderId) throws Exception {
         // TODO: idea of when sending just one ID
         // ArrayList<String> ids = new ArrayList<String>(1);
