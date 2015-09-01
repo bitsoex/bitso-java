@@ -1,5 +1,6 @@
 package com.bitso.helpers;
 
+import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,5 +33,20 @@ public class Helpers {
         }
         sb.append("\n==============\n");
         return sb.toString();
+    }
+
+    public static final void printStackTrace(PrintStream out) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Printing Stack Trace\n");
+        for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
+            sb.append('\t');
+            sb.append(ste);
+            sb.append('\n');
+        }
+        out.print(sb);
+    }
+
+    public static final void printStackTrace() {
+        printStackTrace(System.err);
     }
 }
