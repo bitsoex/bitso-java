@@ -89,6 +89,10 @@ public class Bitso {
             e.printStackTrace();
             return null;
         }
+        if (o.has("error")) {
+            System.err.println("Unable to place Buy Market Order: " + json);
+            return null;
+        }
         return new BigDecimal(o.getString("amount"));
     }
 
