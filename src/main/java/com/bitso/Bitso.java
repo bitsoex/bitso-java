@@ -41,7 +41,13 @@ public class Bitso {
     }
 
     public BitsoBalance getBalance() throws Exception {
-        return new BitsoBalance(sendBitsoPost(BITSO_BASE_URL + "balance"));
+        String json = sendBitsoPost(BITSO_BASE_URL + "balance");
+        JSONObject o = new JSONObject(json);
+        if (o.has("error")) {
+            System.err.println("Error getting Bitso Balance: " + json);
+            return null;
+        }
+        return new BitsoBalance(o);
     }
 
     public BitsoOpenOrders getOpenOrders() throws Exception {

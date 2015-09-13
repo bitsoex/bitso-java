@@ -16,9 +16,7 @@ public class BitsoBalance {
 
     public BigDecimal fee; // customer trading fee
 
-    public BitsoBalance(String balanceJSON) {
-        JSONObject obj = new JSONObject(balanceJSON);
-
+    public BitsoBalance(JSONObject obj) {
         btcBalance = new BigDecimal(obj.getString("btc_balance"));
         btcAvailable = new BigDecimal(obj.getString("btc_available"));
         btcReserved = new BigDecimal(obj.getString("btc_reserved"));
