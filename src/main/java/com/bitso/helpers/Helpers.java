@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Helpers {
 
     private static final List<Field> getAllFields(List<Field> fields, Class<?> type) {
@@ -48,5 +51,17 @@ public class Helpers {
 
     public static final void printStackTrace() {
         printStackTrace(System.err);
+    }
+
+    public static JSONObject parseJson(String json) {
+        JSONObject o;
+        try {
+            o = new JSONObject(json);
+        } catch (JSONException e) {
+            System.err.println("Unable to parse json: " + json);
+            e.printStackTrace();
+            return null;
+        }
+        return o;
     }
 }
