@@ -64,14 +64,14 @@ public class Bitso {
         // ArrayList<String> ids = new ArrayList<String>(1);
         // ids.add(id);
         // return getLookupOrders(ids);
-        HashMap<String, String> body = new HashMap<String, String>();
+        HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("id", orderId);
         return new BitsoLookupOrders(sendBitsoPost(BITSO_BASE_URL + "lookup_order", body));
     }
 
     public boolean cancelOrder(String orderId) throws Exception {
         System.out.println("Attempting to cancel order: " + orderId);
-        HashMap<String, String> body = new HashMap<String, String>();
+        HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("id", orderId);
         String ret = sendBitsoPost(BITSO_BASE_URL + "cancel_order", body);
         if (ret.equals("\"true\"")) {
@@ -84,7 +84,7 @@ public class Bitso {
     }
 
     public BigDecimal placeBuyMarketOrder(BigDecimal mxnAmountToSpend) throws Exception {
-        HashMap<String, String> body = new HashMap<String, String>();
+        HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", mxnAmountToSpend.toPlainString());
         System.out.println("Placing the following buy maket order: " + body);
         String json = sendBitsoPost(BITSO_BASE_URL + "buy", body);
@@ -104,7 +104,7 @@ public class Bitso {
     }
 
     public BigDecimal placeSellMarketOrder(BigDecimal btcAmountToSpend) throws Exception {
-        HashMap<String, String> body = new HashMap<String, String>();
+        HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", btcAmountToSpend.toPlainString());
         System.out.println("Placing the following sell maket order: " + body);
         String json = sendBitsoPost(BITSO_BASE_URL + "sell", body);
@@ -124,7 +124,7 @@ public class Bitso {
     }
 
     public BookOrder placeBuyLimitOrder(BigDecimal price, BigDecimal amount) throws Exception {
-        HashMap<String, String> body = new HashMap<String, String>();
+        HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", amount.toPlainString());
         body.put("price", price.toPlainString());
         System.out.println("Placing the following buy order: " + body);
@@ -133,7 +133,7 @@ public class Bitso {
     }
 
     public BookOrder placeSellLimitOrder(BigDecimal price, BigDecimal amount) throws Exception {
-        HashMap<String, String> body = new HashMap<String, String>();
+        HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", amount.toPlainString());
         body.put("price", price.toPlainString());
         System.out.println("Placing the following sell order: " + body);
@@ -196,7 +196,7 @@ public class Bitso {
     }
 
     public boolean withdrawBTC(String address, BigDecimal amount) throws Exception {
-        HashMap<String, String> body = new HashMap<String, String>();
+        HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", amount.toPlainString());
         body.put("address", address);
         System.out.println("Executing the following BTC withdrawal: " + body);
@@ -217,7 +217,7 @@ public class Bitso {
             System.err.println("MXN withdrawal has incorrect scale " + amount);
             return false;
         }
-        HashMap<String, String> body = new HashMap<String, String>();
+        HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", amount.toPlainString());
         body.put("recipient_given_names", recipientGivenName);
         body.put("recipient_family_names", recipientFamilyName);
@@ -245,11 +245,11 @@ public class Bitso {
             System.err.println("btcAmount and amount are mutually exclusive!");
             return null;
         }
-        HashMap<String, String> body = new HashMap<String, String>();
+        HashMap<String, Object> body = new HashMap<String, Object>();
         if (btcAmount != null) body.put("btc_amount", btcAmount.toPlainString());
         if (amount != null) body.put("amount", amount.toPlainString());
         body.put("currency", currency);
-        body.put("full", String.valueOf(full));
+        body.put("full", full);
         String ret = sendBitsoPost(BITSO_BASE_URL + "transfer_quote", body);
         JSONObject o = Helpers.parseJson(ret);
         if (o == null || o.has("error")) {
@@ -296,7 +296,7 @@ public class Bitso {
         return signature;
     }
 
-    private String sendBitsoPost(String url, HashMap<String, String> bodyExtras) throws Exception {
+    private String sendBitsoPost(String url, HashMap<String, Object> bodyExtras) throws Exception {
         long nonce = System.currentTimeMillis();
         String message = nonce + key + clientId;
         String signature = signRequest(secret, message);
@@ -307,7 +307,7 @@ public class Bitso {
         json.put("signature", signature);
 
         if (bodyExtras != null) {
-            for (Entry<String, String> e : bodyExtras.entrySet()) {
+            for (Entry<String, Object> e : bodyExtras.entrySet()) {
                 json.put(e.getKey(), e.getValue());
             }
         }
