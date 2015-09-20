@@ -259,7 +259,30 @@ public class Bitso {
         return new BitsoTransferQuote(o);
     }
 
-    public Object createTransfer() {
+    public Object createTransfer(BigDecimal btcAmount, BigDecimal amount, String currency, BigDecimal rate,
+            String paymentOutlet, HashMap<String, Object> requiredFields) throws Exception {
+        if (btcAmount != null && amount != null) {
+            System.err.println("btcAmount and amount are mutually exclusive!");
+            return null;
+        }
+        HashMap<String, Object> body = new HashMap<String, Object>();
+        if (btcAmount != null) body.put("btc_amount", btcAmount.toPlainString());
+        if (amount != null) body.put("amount", amount.toPlainString());
+        body.put("currency", currency);
+        body.put("rate", rate.toPlainString());
+        body.put("payment_outlet", paymentOutlet);
+        if (requiredFields != null) {
+            for (Entry<String, Object> e : requiredFields.entrySet()) {
+                body.put(e.getKey(), e.getValue());
+            }
+        }
+        String ret = sendBitsoPost(BITSO_BASE_URL + "transfer_create", body);
+        JSONObject o = Helpers.parseJson(ret);
+        if (o == null || o.has("error")) {
+            System.err.println("Unable to request quote: " + ret);
+            return null;
+        }
+        System.out.println(o.toString(4));
         return null;
     }
 
