@@ -17,6 +17,7 @@ import com.bitso.exchange.BookOrder;
 import com.bitso.exchange.OrderBook;
 import com.bitso.exchange.BookOrder.STATUS;
 import com.bitso.exchange.BookOrder.TYPE;
+import com.bitso.helpers.Helpers;
 import com.bitso.http.BlockingHttpClient;
 
 public class Bitso {
@@ -210,9 +211,8 @@ public class Bitso {
         return false;
     }
 
-    public boolean withdrawMXN(BigDecimal amount, String recipientGivenName,
-            String recipientFamilyName, String clabe, String notesRef, String numericRef)
-            throws Exception {
+    public boolean withdrawMXN(BigDecimal amount, String recipientGivenName, String recipientFamilyName,
+            String clabe, String notesRef, String numericRef) throws Exception {
         if (amount.scale() > 2) {
             System.err.println("MXN withdrawal has incorrect scale " + amount);
             return false;
@@ -237,6 +237,30 @@ public class Bitso {
 
     public String getDepositAddress() throws Exception {
         return quoteEliminator(sendBitsoPost(BITSO_BASE_URL + "bitcoin_deposit_address"));
+    }
+
+    public BitsoTransferQuote requestQuote(BigDecimal btcAmount, BigDecimal amount, String currency,
+            boolean full) throws Exception {
+        if (btcAmount != null && amount != null) {
+            System.err.println("btcAmount and amount are mutually exclusive!");
+            return null;
+        }
+        HashMap<String, String> body = new HashMap<String, String>();
+        if (btcAmount != null) body.put("btc_amount", btcAmount.toPlainString());
+        if (amount != null) body.put("amount", amount.toPlainString());
+        body.put("currency", currency);
+        body.put("full", String.valueOf(full));
+        String ret = sendBitsoPost(BITSO_BASE_URL + "transfer_quote", body);
+        JSONObject o = Helpers.parseJson(ret);
+        if (o == null || o.has("error")) {
+            System.err.println("Unable to request quote: " + ret);
+            return null;
+        }
+        return new BitsoTransferQuote(o);
+    }
+
+    public Object createTransfer() {
+        return null;
     }
 
     private static String quoteEliminator(String input) {
