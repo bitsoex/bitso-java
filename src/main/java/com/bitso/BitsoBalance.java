@@ -14,7 +14,15 @@ public class BitsoBalance {
     public BigDecimal mxnAvailable; // MXN available for trading
     public BigDecimal mxnReserved; // MXN reserved in open order
 
-    public BigDecimal fee; // customer trading fee
+    /**
+     * Customer trading fee, in percentage
+     *
+     * @deprecated use {@link #feePercent} or {@link #feeDecimal} instead.
+     */
+    @Deprecated
+    public BigDecimal fee;
+    public BigDecimal feePercent; // customer trading fee, in percentage
+    public BigDecimal feeDecimal; // customer trading fee, in decimal
 
     public BitsoBalance(JSONObject obj) {
         btcBalance = new BigDecimal(obj.getString("btc_balance"));
@@ -25,7 +33,9 @@ public class BitsoBalance {
         mxnAvailable = new BigDecimal(obj.getString("mxn_available"));
         mxnReserved = new BigDecimal(obj.getString("mxn_reserved"));
 
-        fee = new BigDecimal(obj.getString("fee"));
+        feePercent = new BigDecimal(obj.getString("fee"));
+        feeDecimal = feePercent.divide(new BigDecimal("100"), 8, BigDecimal.ROUND_UP);
+        fee = feePercent;
     }
 
     @Override
@@ -45,6 +55,10 @@ public class BitsoBalance {
         sb.append(mxnBalance.toPlainString());
         sb.append("\n===OTHER===\nFee: ");
         sb.append(fee.toPlainString());
+        sb.append("\nFee (Decimal): ");
+        sb.append(feeDecimal.toPlainString());
+        sb.append("\nFee (Percent): ");
+        sb.append(feePercent.toPlainString());
         return sb.toString();
     }
 }
