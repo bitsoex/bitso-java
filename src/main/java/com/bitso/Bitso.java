@@ -282,8 +282,7 @@ public class Bitso {
             System.err.println("Unable to request quote: " + ret);
             return null;
         }
-        System.out.println(o.toString(4));
-        return null;
+        return new BitsoTransfer(o);
     }
 
     private static String quoteEliminator(String input) {
