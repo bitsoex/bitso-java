@@ -26,6 +26,12 @@ public class BitsoTransfer {
     public BigDecimal currencySettled;
     public long expiresEpoch;
 
+    public enum STATUS {
+        pending, confirming, completed
+    }
+
+    public STATUS status;
+
     public BitsoTransfer(JSONObject json) {
         JSONObject o = json.getJSONObject("order");
         walletAddress = o.getString("wallet_address");
@@ -58,6 +64,9 @@ public class BitsoTransfer {
         }
         currencySettled = new BigDecimal(o.getString("currency_settled"));
         expiresEpoch = o.getLong("currency_settled");
+        if (o.has("status")) {
+            status = STATUS.valueOf(o.getString("status"));
+        }
     }
 
     public String toString() {

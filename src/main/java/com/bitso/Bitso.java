@@ -259,8 +259,8 @@ public class Bitso {
         return new BitsoTransferQuote(o);
     }
 
-    public Object createTransfer(BigDecimal btcAmount, BigDecimal amount, String currency, BigDecimal rate,
-            String paymentOutlet, HashMap<String, Object> requiredFields) throws Exception {
+    public BitsoTransfer createTransfer(BigDecimal btcAmount, BigDecimal amount, String currency,
+            BigDecimal rate, String paymentOutlet, HashMap<String, Object> requiredFields) throws Exception {
         if (btcAmount != null && amount != null) {
             System.err.println("btcAmount and amount are mutually exclusive!");
             return null;
@@ -280,6 +280,16 @@ public class Bitso {
         JSONObject o = Helpers.parseJson(ret);
         if (o == null || o.has("error")) {
             System.err.println("Unable to request quote: " + ret);
+            return null;
+        }
+        return new BitsoTransfer(o);
+    }
+
+    public BitsoTransfer getTransferStatus(String transferId) throws Exception {
+        String ret = client.get(BITSO_BASE_URL + "transfer/" + transferId);
+        JSONObject o = Helpers.parseJson(ret);
+        if (o == null || o.has("error")) {
+            System.err.println("Unable to get transfer status: " + ret);
             return null;
         }
         return new BitsoTransfer(o);
