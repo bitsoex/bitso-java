@@ -46,6 +46,10 @@ public class Bitso {
     public OrderBook getOrderBook() {
         String json = sendGet(BITSO_BASE_URL + "order_book");
         JSONObject o = Helpers.parseJson(json);
+        if (o == null) {
+            System.err.println("Unable to get Bitso Order Book");
+            return null;
+        }
         return new BitsoOrderBook(o);
     }
 
@@ -63,8 +67,14 @@ public class Bitso {
         return new BitsoOpenOrders(sendBitsoPost(BITSO_BASE_URL + "open_orders"));
     }
 
-    public BitsoTicker getTicker() throws Exception {
-        return new BitsoTicker(client.get(BITSO_BASE_URL + "ticker"));
+    public BitsoTicker getTicker() {
+        String json = sendGet(BITSO_BASE_URL + "ticker");
+        JSONObject o = Helpers.parseJson(json);
+        if (o == null) {
+            System.err.println("Unable to get Bitso Ticker");
+            return null;
+        }
+        return new BitsoTicker(o);
     }
 
     public BitsoLookupOrders getLookupOrders(String orderId) throws Exception {
@@ -293,8 +303,8 @@ public class Bitso {
         return new BitsoTransfer(o);
     }
 
-    public BitsoTransfer getTransferStatus(String transferId) throws Exception {
-        String ret = client.get(BITSO_BASE_URL + "transfer/" + transferId);
+    public BitsoTransfer getTransferStatus(String transferId) {
+        String ret = sendGet(BITSO_BASE_URL + "transfer/" + transferId);
         JSONObject o = Helpers.parseJson(ret);
         if (o == null || o.has("error")) {
             System.err.println("Unable to get transfer status: " + ret);

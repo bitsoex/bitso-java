@@ -5,17 +5,27 @@ import java.math.BigDecimal;
 import org.json.JSONObject;
 
 import com.bitso.exchange.Ticker;
+import com.bitso.helpers.Helpers;
 
 public class BitsoTicker extends Ticker {
 
-    public BitsoTicker(String json) {
-        JSONObject o = new JSONObject(json);
-        last = new BigDecimal(o.getString("last"));
-        high = new BigDecimal(o.getString("high"));
-        low = new BigDecimal(o.getString("low"));
-        vwap = new BigDecimal(o.getString("vwap"));
-        volume = new BigDecimal(o.getString("volume"));
-        bid = new BigDecimal(o.getString("bid"));
-        ask = new BigDecimal(o.getString("ask"));
+    public BitsoTicker(JSONObject o) {
+        last = getBD(o, "last");
+        high = getBD(o, "high");
+        low = getBD(o, "low");
+        vwap = getBD(o, "vwap");
+        volume = getBD(o, "volume");
+        bid = getBD(o, "bid");
+        ask = getBD(o, "ask");
+    }
+
+    private BigDecimal getBD(JSONObject o, String key) {
+        if (o.has(key)) {
+            return new BigDecimal(o.getString(key));
+        } else {
+            System.err.println("No " + key + ": " + o);
+            Helpers.printStackTrace();
+        }
+        return null;
     }
 }
