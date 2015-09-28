@@ -57,14 +57,12 @@ public class Helpers {
         if (json == null) {
             return null;
         }
-        JSONObject o;
         try {
-            o = new JSONObject(json);
+            return new JSONObject(json);
         } catch (JSONException e) {
             System.err.println("Unable to parse json: " + json);
             e.printStackTrace();
-            return null;
         }
-        return o;
+        return null;
     }
 }
