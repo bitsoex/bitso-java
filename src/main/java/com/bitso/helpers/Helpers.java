@@ -54,6 +54,9 @@ public class Helpers {
     }
 
     public static JSONObject parseJson(String json) {
+        if (json == null) {
+            return null;
+        }
         JSONObject o;
         try {
             o = new JSONObject(json);
