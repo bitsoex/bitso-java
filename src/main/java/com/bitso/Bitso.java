@@ -28,17 +28,25 @@ public class Bitso {
     private String key;
     private String secret;
     private String clientId;
+    private int retries;
 
     private BlockingHttpClient client = new BlockingHttpClient(false, THROTTLE_MS);
 
     public Bitso(String key, String secret, String clientId) {
+        this(key, secret, clientId, 0);
+    }
+
+    public Bitso(String key, String secret, String clientId, int retries) {
         this.key = key;
         this.secret = secret;
         this.clientId = clientId;
+        this.retries = retries;
     }
 
-    public OrderBook getOrderBook() throws Exception {
-        return new BitsoOrderBook(client.get(BITSO_BASE_URL + "order_book"));
+    public OrderBook getOrderBook() {
+        String json = sendGet(BITSO_BASE_URL + "order_book");
+        JSONObject o = Helpers.parseJson(json);
+        return new BitsoOrderBook(o);
     }
 
     public BitsoBalance getBalance() throws Exception {
@@ -351,5 +359,23 @@ public class Bitso {
 
     private String sendBitsoPost(String url) throws Exception {
         return sendBitsoPost(url, null);
+    }
+
+    private String sendGet(String url) {
+        int counter = 0;
+        String ret = null;
+        while (counter++ <= retries) {
+            try {
+                ret = client.get(url);
+                return ret;
+            } catch (Exception e) {
+                System.err.println("Exception when sending get to: " + url);
+                if (counter == retries) {
+                    System.err.println("Exceeded number of retries to get: " + url);
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
     }
 }
