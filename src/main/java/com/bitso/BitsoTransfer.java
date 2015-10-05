@@ -27,7 +27,7 @@ public class BitsoTransfer {
     public long expiresEpoch;
 
     public enum STATUS {
-        pending, confirming, completed
+        pending, confirming, completed, expired
     }
 
     public STATUS status;
