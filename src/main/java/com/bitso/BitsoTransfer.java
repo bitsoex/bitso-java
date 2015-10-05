@@ -63,7 +63,7 @@ public class BitsoTransfer {
             }
         }
         currencySettled = new BigDecimal(o.getString("currency_settled"));
-        expiresEpoch = o.getLong("currency_settled");
+        expiresEpoch = Long.valueOf(o.getString("expires_epoch"));
         if (o.has("status")) {
             status = STATUS.valueOf(o.getString("status"));
         }

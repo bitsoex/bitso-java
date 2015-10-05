@@ -380,6 +380,7 @@ public class Bitso {
                 return ret;
             } catch (Exception e) {
                 System.err.println("Exception when sending get to: " + url);
+                System.err.println(e.getMessage());
                 if (counter == retries) {
                     System.err.println("Exceeded number of retries to get: " + url);
                     e.printStackTrace();
