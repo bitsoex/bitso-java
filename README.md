@@ -11,7 +11,7 @@ Add the following dependency to your project's Maven pom.xml:
 <dependency>
   <groupId>com.bitso</groupId>
   <artifactId>bitso-java</artifactId>
-  <version>0.0.16</version>
+  <version>0.0.19</version>
 </dependency>
 ```
 
@@ -111,7 +111,7 @@ bitso.cancelOrder(order.id);
 BitsoOrders openOrders = bitso.getOpenOrders();
 ```
 
-### Withdraw 2 BTC to the following address: 17s4n5L9Lz7qciToYjjs5CJGBGRR7MxjUu
+### Withdraw 1.00 BTC to the following address: 17s4n5L9Lz7qciToYjjs5CJGBGRR7MxjUu
 
 ```java
 String btcAddress = "17s4n5L9Lz7qciToYjjs5CJGBGRR7MxjUu";
