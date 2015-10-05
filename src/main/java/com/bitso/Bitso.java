@@ -274,7 +274,14 @@ public class Bitso {
             System.err.println("Unable to request quote: " + ret);
             return null;
         }
-        return new BitsoTransferQuote(o);
+        BitsoTransferQuote btq = null;
+        try {
+            btq = new BitsoTransferQuote(o);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            System.err.println(o);
+        }
+        return btq;
     }
 
     public BitsoTransfer createTransfer(BigDecimal btcAmount, BigDecimal amount, String currency,
@@ -300,7 +307,14 @@ public class Bitso {
             System.err.println("Unable to request quote: " + ret);
             return null;
         }
-        return new BitsoTransfer(o);
+        BitsoTransfer bt = null;
+        try {
+            bt = new BitsoTransfer(o);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            System.err.println(o);
+        }
+        return bt;
     }
 
     public BitsoTransfer getTransferStatus(String transferId) {
