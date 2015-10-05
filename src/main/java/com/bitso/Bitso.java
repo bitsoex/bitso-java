@@ -398,7 +398,14 @@ public class Bitso {
                 if (counter == retries) {
                     System.err.println("Exceeded number of retries to get: " + url);
                     e.printStackTrace();
+                    return null;
                 }
+            }
+            try {
+                Thread.sleep(2000 * counter);
+            } catch (InterruptedException e) {
+                System.err.println("unable to sleep");
+                e.printStackTrace();
             }
         }
         return null;
