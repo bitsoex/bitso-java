@@ -55,8 +55,8 @@ public class Bitso {
 
     public BitsoBalance getBalance() throws Exception {
         String json = sendBitsoPost(BITSO_BASE_URL + "balance");
-        JSONObject o = new JSONObject(json);
-        if (o.has("error")) {
+        JSONObject o = Helpers.parseJson(json);
+        if (o == null || o.has("error")) {
             System.err.println("Error getting Bitso Balance: " + json);
             return null;
         }
@@ -70,8 +70,8 @@ public class Bitso {
     public BitsoTicker getTicker() {
         String json = sendGet(BITSO_BASE_URL + "ticker");
         JSONObject o = Helpers.parseJson(json);
-        if (o == null) {
-            System.err.println("Unable to get Bitso Ticker");
+        if (o == null || o.has("error")) {
+            System.err.println("Unable to get Bitso Ticker: " + json);
             return null;
         }
         return new BitsoTicker(o);
