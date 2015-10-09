@@ -329,11 +329,13 @@ public class Bitso {
 
     private static String quoteEliminator(String input) {
         if (input == null) {
-            throw new IllegalStateException("input to quoteEliminator cannot be null");
+            System.err.println("input to quoteEliminator cannot be null");
+            return null;
         }
         int length = input.length();
         if (input.charAt(0) != '"' || input.charAt(length - 1) != '"') {
-            throw new IllegalStateException("input to quoteEliminator must begin and end with '\"'");
+            System.err.println("invalid input to quoteEliminator: " + input);
+            return null;
         }
         return input.substring(1, length - 1);
     }
