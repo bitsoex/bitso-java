@@ -415,6 +415,10 @@ public class Bitso {
                 if (but == null) {
                     return null;
                 }
+                // We gone through the entire history and didn't find anything...
+                if (but.list.size() == 0) {
+                    return null;
+                }
 
                 for (int i = 0; i < but.list.size(); i++) {
                     BookOrder order = but.list.get(i);
@@ -428,6 +432,7 @@ public class Bitso {
                         break outer;
                     }
                 }
+                limit *= 2;
                 offset += limit;
             }
         }
