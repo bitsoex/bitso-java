@@ -11,8 +11,7 @@ public class BitsoLookupOrders {
 
     public ArrayList<BookOrder> list;
 
-    public BitsoLookupOrders(String lookupOrderJSON) {
-        JSONArray obj = new JSONArray(lookupOrderJSON);
+    public BitsoLookupOrders(JSONArray obj) {
         list = new ArrayList<BookOrder>(obj.length());
 
         for (int i = 0; i < obj.length(); i++) {

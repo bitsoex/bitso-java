@@ -56,6 +56,7 @@ public class Bitso {
         return new BitsoOrderBook(o);
     }
 
+    // Private Functions
     public BitsoBalance getBalance() throws Exception {
         String json = sendBitsoPost(BITSO_BASE_URL + "balance");
         JSONObject o = Helpers.parseJson(json);
@@ -84,6 +85,23 @@ public class Bitso {
         return new BitsoUserTransactions(a);
     }
 
+    @Deprecated
+    public BitsoLookupOrders getLookupOrders(String orderId) {
+        return lookupOrder(orderId);
+    }
+
+    public BitsoLookupOrders lookupOrder(String orderId) {
+        HashMap<String, Object> body = new HashMap<String, Object>();
+        body.put("id", orderId);
+        String json = sendBitsoPost(BITSO_BASE_URL + "lookup_order", body);
+        JSONArray a = Helpers.parseJsonArray(json);
+        if (a == null) {
+            System.err.println("Unable to get Lookup Order" + json);
+            return null;
+        }
+        return new BitsoLookupOrders(a);
+    }
+
     public BitsoOpenOrders getOpenOrders() throws Exception {
         return new BitsoOpenOrders(sendBitsoPost(BITSO_BASE_URL + "open_orders"));
     }
@@ -96,16 +114,6 @@ public class Bitso {
             return null;
         }
         return new BitsoTicker(o);
-    }
-
-    public BitsoLookupOrders getLookupOrders(String orderId) throws Exception {
-        // TODO: idea of when sending just one ID
-        // ArrayList<String> ids = new ArrayList<String>(1);
-        // ids.add(id);
-        // return getLookupOrders(ids);
-        HashMap<String, Object> body = new HashMap<String, Object>();
-        body.put("id", orderId);
-        return new BitsoLookupOrders(sendBitsoPost(BITSO_BASE_URL + "lookup_order", body));
     }
 
     public boolean cancelOrder(String orderId) throws Exception {
@@ -221,17 +229,17 @@ public class Bitso {
             System.err.println(error);
             return null;
         }
-        BigDecimal price = null, amount = null;
+        BigDecimal price = null, major = null;
         if (o.has("price")) {
             price = new BigDecimal(o.getString("price"));
         }
         if (o.has("amount")) {
-            amount = new BigDecimal(o.getString("amount"));
+            major = new BigDecimal(o.getString("amount"));
         }
-        if (price == null || amount == null) {
+        if (price == null || major == null) {
             return null;
         }
-        BookOrder order = new BookOrder(price, amount);
+        BookOrder order = new BookOrder(price, major);
         if (o.has("id")) {
             order.id = o.getString("id");
         }
