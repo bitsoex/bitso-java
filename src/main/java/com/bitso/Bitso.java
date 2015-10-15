@@ -10,9 +10,12 @@ import java.util.Map.Entry;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.bitso.BitsoUserTransactions;
+import com.bitso.BitsoUserTransactions.SORT_ORDER;
 import com.bitso.exchange.BookOrder;
 import com.bitso.exchange.OrderBook;
 import com.bitso.exchange.BookOrder.STATUS;
@@ -63,6 +66,24 @@ public class Bitso {
         return new BitsoBalance(o);
     }
 
+    public BitsoUserTransactions getUserTransactions() {
+        return getUserTransactions(0, 0, null);
+    }
+
+    public BitsoUserTransactions getUserTransactions(int offset, int limit, SORT_ORDER sortOrder) {
+        HashMap<String, Object> body = new HashMap<String, Object>();
+        if (offset > 0) body.put("offset", offset);
+        if (limit > 0) body.put("limit", limit);
+        if (sortOrder != null) body.put("sort", sortOrder.getOrder());
+        String json = sendBitsoPost(BITSO_BASE_URL + "user_transactions", body);
+        JSONArray a = Helpers.parseJsonArray(json);
+        if (a == null) {
+            System.err.println("Unable to get User Transactions: " + json);
+            return null;
+        }
+        return new BitsoUserTransactions(a);
+    }
+
     public BitsoOpenOrders getOpenOrders() throws Exception {
         return new BitsoOpenOrders(sendBitsoPost(BITSO_BASE_URL + "open_orders"));
     }
@@ -101,7 +122,7 @@ public class Bitso {
         return false;
     }
 
-    public BigDecimal placeBuyMarketOrder(BigDecimal mxnAmountToSpend) throws Exception {
+    public BigDecimal placeBuyMarketOrder(BigDecimal mxnAmountToSpend) {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", mxnAmountToSpend.toPlainString());
         System.out.println("Placing the following buy maket order: " + body);
@@ -118,10 +139,33 @@ public class Bitso {
             System.err.println("Unable to place Buy Market Order: " + json);
             return null;
         }
-        return new BigDecimal(o.getString("amount"));
+
+        BookOrder order = findMatchingOrder(o);
+        if (order != null) {
+            return order.major;
+        }
+        return null;
     }
 
-    public BigDecimal placeSellMarketOrder(BigDecimal btcAmountToSpend) throws Exception {
+    private BookOrder findMatchingOrder(JSONObject o) {
+        if (o.has("id")) {
+            String newOrderId = o.getString("id");
+            BitsoUserTransactions but = getUserTransactions(0, 10, null);
+            if (but == null) {
+                return null;
+            }
+            for (BookOrder order : but.list) {
+                if (order.id.equals(newOrderId)) {
+                    return order;
+                }
+            }
+        }
+        System.err.println("Unable to find order in recent transactions");
+        Helpers.printStackTrace();
+        return null;
+    }
+
+    public BigDecimal placeSellMarketOrder(BigDecimal btcAmountToSpend) {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", btcAmountToSpend.toPlainString());
         System.out.println("Placing the following sell maket order: " + body);
@@ -138,7 +182,11 @@ public class Bitso {
             System.err.println("Unable to place Sell Market Order: " + json);
             return null;
         }
-        return new BigDecimal(o.getString("amount"));
+        BookOrder order = findMatchingOrder(o);
+        if (order != null) {
+            return order.minor;
+        }
+        return null;
     }
 
     public BookOrder placeBuyLimitOrder(BigDecimal price, BigDecimal amount) throws Exception {
@@ -362,7 +410,7 @@ public class Bitso {
         return signature;
     }
 
-    private String sendBitsoPost(String url, HashMap<String, Object> bodyExtras) throws Exception {
+    private String sendBitsoPost(String url, HashMap<String, Object> bodyExtras) {
         long nonce = System.currentTimeMillis();
         String message = nonce + key + clientId;
         String signature = signRequest(secret, message);
@@ -380,10 +428,15 @@ public class Bitso {
 
         HashMap<String, String> headers = new HashMap<String, String>();
         headers.put("Content-Type", "application/json");
-        return client.sendPost(url, json.toString(), headers);
+        try {
+            return client.sendPost(url, json.toString(), headers);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    private String sendBitsoPost(String url) throws Exception {
+    private String sendBitsoPost(String url) {
         return sendBitsoPost(url, null);
     }
 

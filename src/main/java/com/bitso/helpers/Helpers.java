@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -61,6 +62,19 @@ public class Helpers {
             return new JSONObject(json);
         } catch (JSONException e) {
             System.err.println("Unable to parse json: " + json);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static JSONArray parseJsonArray(String json) {
+        if (json == null) {
+            return null;
+        }
+        try {
+            return new JSONArray(json);
+        } catch (JSONException e) {
+            System.err.println("Unable to parse json array: " + json);
             e.printStackTrace();
         }
         return null;

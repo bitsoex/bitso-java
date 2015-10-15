@@ -6,7 +6,10 @@ public class BookOrder {
     public String id;
     public String book;
     public BigDecimal price;
+    @Deprecated
     public BigDecimal amount;
+    public BigDecimal major;
+    public BigDecimal minor;
     public TYPE type;
     public STATUS status;
     public String created;
@@ -21,13 +24,14 @@ public class BookOrder {
         ACTIVE, PARTIALLY_FILLED, COMPLETE, CANCELLED
     }
 
-    public BookOrder(BigDecimal price, BigDecimal amount) {
-        this(price, amount, null);
+    public BookOrder(BigDecimal price, BigDecimal major) {
+        this(price, major, null);
     }
 
-    public BookOrder(BigDecimal price, BigDecimal amount, TYPE type) {
+    public BookOrder(BigDecimal price, BigDecimal major, TYPE type) {
         this.price = price;
-        this.amount = amount;
+        this.amount = major;
+        this.major = major;
         this.type = type;
     }
 
@@ -40,8 +44,10 @@ public class BookOrder {
         sb.append(book);
         sb.append("\nprice=");
         sb.append(price);
-        sb.append("\namount=");
-        sb.append(amount);
+        sb.append("\nmajor=");
+        sb.append(major);
+        sb.append("\nminor=");
+        sb.append(minor);
         sb.append("\ntype=");
         sb.append(type);
         sb.append("\nstatus=");
