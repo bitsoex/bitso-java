@@ -158,7 +158,7 @@ public class Bitso {
             return null;
         }
 
-        BookOrder order = findMatchingOrder(o);
+        BookOrder order = findMatchingOrders(o);
         if (order != null) {
             return order.major;
         }
@@ -191,7 +191,7 @@ public class Bitso {
             System.err.println("Unable to place Sell Market Order: " + json);
             return null;
         }
-        BookOrder order = findMatchingOrder(o);
+        BookOrder order = findMatchingOrders(o);
         if (order != null) {
             return order.minor;
         }
@@ -403,22 +403,40 @@ public class Bitso {
         return null;
     }
 
-    private BookOrder findMatchingOrder(JSONObject o) {
+    public BookOrder findMatchingOrders(JSONObject o) {
+        BookOrder toRet = null;
         if (o.has("id")) {
             String newOrderId = o.getString("id");
-            BitsoUserTransactions but = getUserTransactions(0, 10, null);
-            if (but == null) {
-                return null;
-            }
-            for (BookOrder order : but.list) {
-                if (order.id.equals(newOrderId)) {
-                    return order;
+            int offset = 0;
+            int limit = 10;
+            outer:
+            while (true) {
+                BitsoUserTransactions but = getUserTransactions(offset, limit, null);
+                if (but == null) {
+                    return null;
                 }
+
+                for (int i = 0; i < but.list.size(); i++) {
+                    BookOrder order = but.list.get(i);
+                    if (order.id.equals(newOrderId)) {
+                        if (toRet == null) {
+                            toRet = order;
+                        } else {
+                            toRet.minor = toRet.minor.add(order.minor);
+                        }
+                    } else if (toRet != null && i < but.list.size()) {
+                        break outer;
+                    }
+                }
+                offset += limit;
             }
         }
-        System.err.println("Unable to find order in recent transactions");
-        Helpers.printStackTrace();
-        return null;
+        if (toRet == null) {
+            System.err.println("Unable to find order in recent transactions");
+            Helpers.printStackTrace();
+        }
+
+        return toRet;
     }
 
     public static BookOrder processBookOrderJSON(String json) {
