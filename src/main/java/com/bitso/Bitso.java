@@ -46,6 +46,17 @@ public class Bitso {
         this.retries = retries;
     }
 
+    // Public Functions
+    public BitsoTicker getTicker() {
+        String json = sendGet(BITSO_BASE_URL + "ticker");
+        JSONObject o = Helpers.parseJson(json);
+        if (o == null || o.has("error")) {
+            System.err.println("Unable to get Bitso Ticker: " + json);
+            return null;
+        }
+        return new BitsoTicker(o);
+    }
+
     public OrderBook getOrderBook() {
         String json = sendGet(BITSO_BASE_URL + "order_book");
         JSONObject o = Helpers.parseJson(json);
@@ -85,6 +96,10 @@ public class Bitso {
         return new BitsoUserTransactions(a);
     }
 
+    public BitsoOpenOrders getOpenOrders() throws Exception {
+        return new BitsoOpenOrders(sendBitsoPost(BITSO_BASE_URL + "open_orders"));
+    }
+
     @Deprecated
     public BitsoLookupOrders getLookupOrders(String orderId) {
         return lookupOrder(orderId);
@@ -102,20 +117,6 @@ public class Bitso {
         return new BitsoLookupOrders(a);
     }
 
-    public BitsoOpenOrders getOpenOrders() throws Exception {
-        return new BitsoOpenOrders(sendBitsoPost(BITSO_BASE_URL + "open_orders"));
-    }
-
-    public BitsoTicker getTicker() {
-        String json = sendGet(BITSO_BASE_URL + "ticker");
-        JSONObject o = Helpers.parseJson(json);
-        if (o == null || o.has("error")) {
-            System.err.println("Unable to get Bitso Ticker: " + json);
-            return null;
-        }
-        return new BitsoTicker(o);
-    }
-
     public boolean cancelOrder(String orderId) throws Exception {
         System.out.println("Attempting to cancel order: " + orderId);
         HashMap<String, Object> body = new HashMap<String, Object>();
@@ -128,6 +129,15 @@ public class Bitso {
         System.err.println("Unable to cancel order: " + orderId);
         System.err.println(ret);
         return false;
+    }
+
+    public BookOrder placeBuyLimitOrder(BigDecimal price, BigDecimal amount) throws Exception {
+        HashMap<String, Object> body = new HashMap<String, Object>();
+        body.put("amount", amount.toPlainString());
+        body.put("price", price.toPlainString());
+        System.out.println("Placing the following buy order: " + body);
+        String json = sendBitsoPost(BITSO_BASE_URL + "buy", body);
+        return processBookOrderJSON(json);
     }
 
     public BigDecimal placeBuyMarketOrder(BigDecimal mxnAmountToSpend) {
@@ -155,22 +165,13 @@ public class Bitso {
         return null;
     }
 
-    private BookOrder findMatchingOrder(JSONObject o) {
-        if (o.has("id")) {
-            String newOrderId = o.getString("id");
-            BitsoUserTransactions but = getUserTransactions(0, 10, null);
-            if (but == null) {
-                return null;
-            }
-            for (BookOrder order : but.list) {
-                if (order.id.equals(newOrderId)) {
-                    return order;
-                }
-            }
-        }
-        System.err.println("Unable to find order in recent transactions");
-        Helpers.printStackTrace();
-        return null;
+    public BookOrder placeSellLimitOrder(BigDecimal price, BigDecimal amount) throws Exception {
+        HashMap<String, Object> body = new HashMap<String, Object>();
+        body.put("amount", amount.toPlainString());
+        body.put("price", price.toPlainString());
+        System.out.println("Placing the following sell order: " + body);
+        String json = sendBitsoPost(BITSO_BASE_URL + "sell", body);
+        return processBookOrderJSON(json);
     }
 
     public BigDecimal placeSellMarketOrder(BigDecimal btcAmountToSpend) {
@@ -197,76 +198,8 @@ public class Bitso {
         return null;
     }
 
-    public BookOrder placeBuyLimitOrder(BigDecimal price, BigDecimal amount) throws Exception {
-        HashMap<String, Object> body = new HashMap<String, Object>();
-        body.put("amount", amount.toPlainString());
-        body.put("price", price.toPlainString());
-        System.out.println("Placing the following buy order: " + body);
-        String json = sendBitsoPost(BITSO_BASE_URL + "buy", body);
-        return processBookOrderJSON(json);
-    }
-
-    public BookOrder placeSellLimitOrder(BigDecimal price, BigDecimal amount) throws Exception {
-        HashMap<String, Object> body = new HashMap<String, Object>();
-        body.put("amount", amount.toPlainString());
-        body.put("price", price.toPlainString());
-        System.out.println("Placing the following sell order: " + body);
-        String json = sendBitsoPost(BITSO_BASE_URL + "sell", body);
-        return processBookOrderJSON(json);
-    }
-
-    public static BookOrder processBookOrderJSON(String json) {
-        JSONObject o = null;
-        try {
-            o = new JSONObject(json);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            System.err.println(json);
-            return null;
-        }
-        if (o.has("error")) {
-            String error = o.toString(4);
-            System.err.println(error);
-            return null;
-        }
-        BigDecimal price = null, major = null;
-        if (o.has("price")) {
-            price = new BigDecimal(o.getString("price"));
-        }
-        if (o.has("amount")) {
-            major = new BigDecimal(o.getString("amount"));
-        }
-        if (price == null || major == null) {
-            return null;
-        }
-        BookOrder order = new BookOrder(price, major);
-        if (o.has("id")) {
-            order.id = o.getString("id");
-        }
-        if (o.has("book")) {
-            order.book = o.getString("book");
-        }
-        if (o.has("type")) {
-            order.type = TYPE.values()[o.getInt("type")];
-        }
-        if (o.has("status")) {
-            int statusInt = o.getInt("status");
-            // Bitso passes CANCELLED as -1. We put CANCELLED in the STATUS enum in the 4th position
-            if (statusInt == -1) {
-                statusInt = 3;
-            }
-            order.status = STATUS.values()[statusInt];
-        }
-        if (o.has("created")) {
-            order.created = o.getString("created");
-        }
-        if (o.has("updated")) {
-            order.updated = o.getString("updated");
-        }
-        if (o.has("datetime")) {
-            order.dateTime = o.getString("datetime");
-        }
-        return order;
+    public String getDepositAddress() throws Exception {
+        return quoteEliminator(sendBitsoPost(BITSO_BASE_URL + "bitcoin_deposit_address"));
     }
 
     public boolean withdrawBTC(String address, BigDecimal amount) throws Exception {
@@ -307,10 +240,6 @@ public class Bitso {
         System.err.println("Unable to execute MXN withdrawal");
         System.err.println(ret);
         return false;
-    }
-
-    public String getDepositAddress() throws Exception {
-        return quoteEliminator(sendBitsoPost(BITSO_BASE_URL + "bitcoin_deposit_address"));
     }
 
     public BitsoTransferQuote requestQuote(BigDecimal btcAmount, BigDecimal amount, String currency,
@@ -472,5 +401,77 @@ public class Bitso {
             }
         }
         return null;
+    }
+
+    private BookOrder findMatchingOrder(JSONObject o) {
+        if (o.has("id")) {
+            String newOrderId = o.getString("id");
+            BitsoUserTransactions but = getUserTransactions(0, 10, null);
+            if (but == null) {
+                return null;
+            }
+            for (BookOrder order : but.list) {
+                if (order.id.equals(newOrderId)) {
+                    return order;
+                }
+            }
+        }
+        System.err.println("Unable to find order in recent transactions");
+        Helpers.printStackTrace();
+        return null;
+    }
+
+    public static BookOrder processBookOrderJSON(String json) {
+        JSONObject o = null;
+        try {
+            o = new JSONObject(json);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            System.err.println(json);
+            return null;
+        }
+        if (o.has("error")) {
+            String error = o.toString(4);
+            System.err.println(error);
+            return null;
+        }
+        BigDecimal price = null, major = null;
+        if (o.has("price")) {
+            price = new BigDecimal(o.getString("price"));
+        }
+        if (o.has("amount")) {
+            major = new BigDecimal(o.getString("amount"));
+        }
+        if (price == null || major == null) {
+            return null;
+        }
+        BookOrder order = new BookOrder(price, major);
+        if (o.has("id")) {
+            order.id = o.getString("id");
+        }
+        if (o.has("book")) {
+            order.book = o.getString("book");
+        }
+        if (o.has("type")) {
+            order.type = TYPE.values()[o.getInt("type")];
+        }
+        if (o.has("status")) {
+            int statusInt = o.getInt("status");
+            // Bitso passes CANCELLED as -1. We put CANCELLED in the STATUS enum in the 4th position
+            if (statusInt == -1) {
+                statusInt = 3;
+            }
+            order.status = STATUS.values()[statusInt];
+        }
+        if (o.has("created")) {
+            order.created = o.getString("created");
+        }
+        if (o.has("updated")) {
+            order.updated = o.getString("updated");
+        }
+        if (o.has("datetime")) {
+            order.dateTime = o.getString("datetime");
+        }
+        return order;
     }
 }
