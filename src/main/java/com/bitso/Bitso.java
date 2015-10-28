@@ -68,7 +68,7 @@ public class Bitso {
     }
 
     // Private Functions
-    public BitsoBalance getBalance() throws Exception {
+    public BitsoBalance getBalance() {
         String json = sendBitsoPost(BITSO_BASE_URL + "balance");
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
@@ -202,14 +202,13 @@ public class Bitso {
         return quoteEliminator(sendBitsoPost(BITSO_BASE_URL + "bitcoin_deposit_address"));
     }
 
-    public boolean withdrawBTC(String address, BigDecimal amount) throws Exception {
+    public boolean withdrawBTC(String address, BigDecimal amount) {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", amount.toPlainString());
         body.put("address", address);
         System.out.println("Executing the following BTC withdrawal: " + body);
         String ret = sendBitsoPost(BITSO_BASE_URL + "bitcoin_withdrawal", body);
-        System.out.println(ret);
-        if (ret.equals("\"ok\"")) {
+        if (ret != null && ret.equals("\"ok\"")) {
             System.out.println("BTC withdrawal executed");
             return true;
         }
