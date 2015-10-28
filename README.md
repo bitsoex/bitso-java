@@ -11,7 +11,7 @@ Add the following dependency to your project's Maven pom.xml:
 <dependency>
   <groupId>com.bitso</groupId>
   <artifactId>bitso-java</artifactId>
-  <version>0.0.25</version>
+  <version>0.0.26</version>
 </dependency>
 ```
 
