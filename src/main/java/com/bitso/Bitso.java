@@ -32,6 +32,7 @@ public class Bitso {
     private String secret;
     private String clientId;
     private int retries;
+    private boolean log;
 
     private BlockingHttpClient client = new BlockingHttpClient(false, THROTTLE_MS);
 
@@ -40,10 +41,31 @@ public class Bitso {
     }
 
     public Bitso(String key, String secret, String clientId, int retries) {
+        this(key, secret, clientId, retries, true);
+    }
+
+    public Bitso(String key, String secret, String clientId, int retries, boolean log) {
         this.key = key;
         this.secret = secret;
         this.clientId = clientId;
         this.retries = retries;
+        this.log = log;
+    }
+
+    public void setLog(boolean log) {
+        this.log = log;
+    }
+
+    private void logError(String error) {
+        if (log) {
+            System.err.println(error);
+        }
+    }
+
+    private void log(String msg) {
+        if (log) {
+            System.out.println(msg);
+        }
     }
 
     // Public Functions
@@ -51,7 +73,7 @@ public class Bitso {
         String json = sendGet(BITSO_BASE_URL + "ticker");
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
-            System.err.println("Unable to get Bitso Ticker: " + json);
+            logError("Unable to get Bitso Ticker: " + json);
             return null;
         }
         return new BitsoTicker(o);
@@ -61,7 +83,7 @@ public class Bitso {
         String json = sendGet(BITSO_BASE_URL + "order_book");
         JSONObject o = Helpers.parseJson(json);
         if (o == null) {
-            System.err.println("Unable to get Bitso Order Book");
+            logError("Unable to get Bitso Order Book");
             return null;
         }
         return new BitsoOrderBook(o);
@@ -72,7 +94,7 @@ public class Bitso {
         String json = sendBitsoPost(BITSO_BASE_URL + "balance");
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
-            System.err.println("Error getting Bitso Balance: " + json);
+            logError("Error getting Bitso Balance: " + json);
             return null;
         }
         return new BitsoBalance(o);
@@ -90,7 +112,7 @@ public class Bitso {
         String json = sendBitsoPost(BITSO_BASE_URL + "user_transactions", body);
         JSONArray a = Helpers.parseJsonArray(json);
         if (a == null) {
-            System.err.println("Unable to get User Transactions: " + json);
+            logError("Unable to get User Transactions: " + json);
             return null;
         }
         return new BitsoUserTransactions(a);
@@ -111,23 +133,23 @@ public class Bitso {
         String json = sendBitsoPost(BITSO_BASE_URL + "lookup_order", body);
         JSONArray a = Helpers.parseJsonArray(json);
         if (a == null) {
-            System.err.println("Unable to get Lookup Order" + json);
+            logError("Unable to get Lookup Order" + json);
             return null;
         }
         return new BitsoLookupOrders(a);
     }
 
     public boolean cancelOrder(String orderId) throws Exception {
-        System.out.println("Attempting to cancel order: " + orderId);
+        log("Attempting to cancel order: " + orderId);
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("id", orderId);
         String ret = sendBitsoPost(BITSO_BASE_URL + "cancel_order", body);
         if (ret.equals("\"true\"")) {
-            System.out.println("Cancelled Order: " + orderId);
+            log("Cancelled Order: " + orderId);
             return true;
         }
-        System.err.println("Unable to cancel order: " + orderId);
-        System.err.println(ret);
+        logError("Unable to cancel order: " + orderId);
+        logError(ret);
         return false;
     }
 
@@ -135,7 +157,7 @@ public class Bitso {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", amount.toPlainString());
         body.put("price", price.toPlainString());
-        System.out.println("Placing the following buy order: " + body);
+        log("Placing the following buy order: " + body);
         String json = sendBitsoPost(BITSO_BASE_URL + "buy", body);
         return processBookOrderJSON(json);
     }
@@ -143,18 +165,18 @@ public class Bitso {
     public BigDecimal placeBuyMarketOrder(BigDecimal mxnAmountToSpend) {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", mxnAmountToSpend.toPlainString());
-        System.out.println("Placing the following buy maket order: " + body);
+        log("Placing the following buy maket order: " + body);
         String json = sendBitsoPost(BITSO_BASE_URL + "buy", body);
         JSONObject o;
         try {
             o = new JSONObject(json);
         } catch (JSONException e) {
-            System.err.println("Unable to parse json: " + json);
+            logError("Unable to parse json: " + json);
             e.printStackTrace();
             return null;
         }
         if (o.has("error")) {
-            System.err.println("Unable to place Buy Market Order: " + json);
+            logError("Unable to place Buy Market Order: " + json);
             return null;
         }
 
@@ -169,7 +191,7 @@ public class Bitso {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", amount.toPlainString());
         body.put("price", price.toPlainString());
-        System.out.println("Placing the following sell order: " + body);
+        log("Placing the following sell order: " + body);
         String json = sendBitsoPost(BITSO_BASE_URL + "sell", body);
         return processBookOrderJSON(json);
     }
@@ -177,18 +199,18 @@ public class Bitso {
     public BigDecimal placeSellMarketOrder(BigDecimal btcAmountToSpend) {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", btcAmountToSpend.toPlainString());
-        System.out.println("Placing the following sell maket order: " + body);
+        log("Placing the following sell maket order: " + body);
         String json = sendBitsoPost(BITSO_BASE_URL + "sell", body);
         JSONObject o;
         try {
             o = new JSONObject(json);
         } catch (JSONException e) {
-            System.err.println("Unable to parse json: " + json);
+            logError("Unable to parse json: " + json);
             e.printStackTrace();
             return null;
         }
         if (o.has("error")) {
-            System.err.println("Unable to place Sell Market Order: " + json);
+            logError("Unable to place Sell Market Order: " + json);
             return null;
         }
         BookOrder order = findMatchingOrders(o);
@@ -206,21 +228,21 @@ public class Bitso {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", amount.toPlainString());
         body.put("address", address);
-        System.out.println("Executing the following BTC withdrawal: " + body);
+        log("Executing the following BTC withdrawal: " + body);
         String ret = sendBitsoPost(BITSO_BASE_URL + "bitcoin_withdrawal", body);
         if (ret != null && ret.equals("\"ok\"")) {
-            System.out.println("BTC withdrawal executed");
+            log("BTC withdrawal executed");
             return true;
         }
-        System.err.println("Unable to execute BTC withdrawal");
-        System.err.println(ret);
+        logError("Unable to execute BTC withdrawal");
+        logError(ret);
         return false;
     }
 
     public boolean withdrawMXN(BigDecimal amount, String recipientGivenName, String recipientFamilyName,
             String clabe, String notesRef, String numericRef) throws Exception {
         if (amount.scale() > 2) {
-            System.err.println("MXN withdrawal has incorrect scale " + amount);
+            logError("MXN withdrawal has incorrect scale " + amount);
             return false;
         }
         HashMap<String, Object> body = new HashMap<String, Object>();
@@ -230,21 +252,21 @@ public class Bitso {
         body.put("clabe", clabe);
         body.put("notes_ref", notesRef);
         body.put("numeric_ref", numericRef);
-        System.out.println("Executing the following withdrawal: " + body);
+        log("Executing the following withdrawal: " + body);
         String ret = sendBitsoPost(BITSO_BASE_URL + "spei_withdrawal", body);
         if (ret.equals("\"ok\"")) {
-            System.out.println("Withdrawal executed");
+            log("Withdrawal executed");
             return true;
         }
-        System.err.println("Unable to execute MXN withdrawal");
-        System.err.println(ret);
+        logError("Unable to execute MXN withdrawal");
+        logError(ret);
         return false;
     }
 
     public BitsoTransferQuote requestQuote(BigDecimal btcAmount, BigDecimal amount, String currency,
             boolean full) throws Exception {
         if (btcAmount != null && amount != null) {
-            System.err.println("btcAmount and amount are mutually exclusive!");
+            logError("btcAmount and amount are mutually exclusive!");
             return null;
         }
         HashMap<String, Object> body = new HashMap<String, Object>();
@@ -255,7 +277,7 @@ public class Bitso {
         String ret = sendBitsoPost(BITSO_BASE_URL + "transfer_quote", body);
         JSONObject o = Helpers.parseJson(ret);
         if (o == null || o.has("error")) {
-            System.err.println("Unable to request quote: " + ret);
+            logError("Unable to request quote: " + ret);
             return null;
         }
         BitsoTransferQuote btq = null;
@@ -263,7 +285,7 @@ public class Bitso {
             btq = new BitsoTransferQuote(o);
         } catch (JSONException e) {
             e.printStackTrace();
-            System.err.println(o);
+            logError(ret);
         }
         return btq;
     }
@@ -271,7 +293,7 @@ public class Bitso {
     public BitsoTransfer createTransfer(BigDecimal btcAmount, BigDecimal amount, String currency,
             BigDecimal rate, String paymentOutlet, HashMap<String, Object> requiredFields) throws Exception {
         if (btcAmount != null && amount != null) {
-            System.err.println("btcAmount and amount are mutually exclusive!");
+            logError("btcAmount and amount are mutually exclusive!");
             return null;
         }
         HashMap<String, Object> body = new HashMap<String, Object>();
@@ -288,7 +310,7 @@ public class Bitso {
         String ret = sendBitsoPost(BITSO_BASE_URL + "transfer_create", body);
         JSONObject o = Helpers.parseJson(ret);
         if (o == null || o.has("error")) {
-            System.err.println("Unable to request quote: " + ret);
+            logError("Unable to request quote: " + ret);
             return null;
         }
         BitsoTransfer bt = null;
@@ -296,7 +318,7 @@ public class Bitso {
             bt = new BitsoTransfer(o);
         } catch (JSONException e) {
             e.printStackTrace();
-            System.err.println(o);
+            logError(ret);
         }
         return bt;
     }
@@ -305,20 +327,20 @@ public class Bitso {
         String ret = sendGet(BITSO_BASE_URL + "transfer/" + transferId);
         JSONObject o = Helpers.parseJson(ret);
         if (o == null || o.has("error")) {
-            System.err.println("Unable to get transfer status: " + ret);
+            logError("Unable to get transfer status: " + ret);
             return null;
         }
         return new BitsoTransfer(o);
     }
 
-    private static String quoteEliminator(String input) {
+    private String quoteEliminator(String input) {
         if (input == null) {
-            System.err.println("input to quoteEliminator cannot be null");
+            logError("input to quoteEliminator cannot be null");
             return null;
         }
         int length = input.length();
         if (input.charAt(0) != '"' || input.charAt(length - 1) != '"') {
-            System.err.println("invalid input to quoteEliminator: " + input);
+            logError("invalid input to quoteEliminator: " + input);
             return null;
         }
         return input.substring(1, length - 1);
@@ -384,10 +406,10 @@ public class Bitso {
                 ret = client.get(url);
                 return ret;
             } catch (Exception e) {
-                System.err.println("Exception when sending get to: " + url);
-                System.err.println(e.getMessage());
+                logError("Exception when sending get to: " + url);
+                logError(e.getMessage());
                 if (counter == retries) {
-                    System.err.println("Exceeded number of retries to get: " + url);
+                    logError("Exceeded number of retries to get: " + url);
                     e.printStackTrace();
                     return null;
                 }
@@ -395,7 +417,7 @@ public class Bitso {
             try {
                 Thread.sleep(2000 * counter);
             } catch (InterruptedException e) {
-                System.err.println("unable to sleep");
+                logError("unable to sleep");
                 e.printStackTrace();
             }
         }
@@ -408,8 +430,7 @@ public class Bitso {
             String newOrderId = o.getString("id");
             int offset = 0;
             int limit = 10;
-            outer:
-            while (true) {
+            outer: while (true) {
                 BitsoUserTransactions but = getUserTransactions(offset, limit, null);
                 if (but == null) {
                     return null;
@@ -436,7 +457,7 @@ public class Bitso {
             }
         }
         if (toRet == null) {
-            System.err.println("Unable to find order in recent transactions");
+            logError("Unable to find order in recent transactions");
             Helpers.printStackTrace();
         }
 
