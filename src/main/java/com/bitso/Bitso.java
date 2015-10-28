@@ -118,8 +118,14 @@ public class Bitso {
         return new BitsoUserTransactions(a);
     }
 
-    public BitsoOpenOrders getOpenOrders() throws Exception {
-        return new BitsoOpenOrders(sendBitsoPost(BITSO_BASE_URL + "open_orders"));
+    public BitsoOpenOrders getOpenOrders() {
+        String json = sendBitsoPost(BITSO_BASE_URL + "open_orders");
+        JSONArray a = Helpers.parseJsonArray(json);
+        if (a == null) {
+            logError("Unable to get Open Orders: " + json);
+            return null;
+        }
+        return new BitsoOpenOrders(a);
     }
 
     @Deprecated
@@ -139,12 +145,12 @@ public class Bitso {
         return new BitsoLookupOrders(a);
     }
 
-    public boolean cancelOrder(String orderId) throws Exception {
+    public boolean cancelOrder(String orderId) {
         log("Attempting to cancel order: " + orderId);
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("id", orderId);
         String ret = sendBitsoPost(BITSO_BASE_URL + "cancel_order", body);
-        if (ret.equals("\"true\"")) {
+        if (ret != null && ret.equals("\"true\"")) {
             log("Cancelled Order: " + orderId);
             return true;
         }
@@ -153,7 +159,7 @@ public class Bitso {
         return false;
     }
 
-    public BookOrder placeBuyLimitOrder(BigDecimal price, BigDecimal amount) throws Exception {
+    public BookOrder placeBuyLimitOrder(BigDecimal price, BigDecimal amount) {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", amount.toPlainString());
         body.put("price", price.toPlainString());
@@ -187,7 +193,7 @@ public class Bitso {
         return null;
     }
 
-    public BookOrder placeSellLimitOrder(BigDecimal price, BigDecimal amount) throws Exception {
+    public BookOrder placeSellLimitOrder(BigDecimal price, BigDecimal amount) {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", amount.toPlainString());
         body.put("price", price.toPlainString());
@@ -220,7 +226,7 @@ public class Bitso {
         return null;
     }
 
-    public String getDepositAddress() throws Exception {
+    public String getDepositAddress() {
         return quoteEliminator(sendBitsoPost(BITSO_BASE_URL + "bitcoin_deposit_address"));
     }
 
@@ -240,7 +246,7 @@ public class Bitso {
     }
 
     public boolean withdrawMXN(BigDecimal amount, String recipientGivenName, String recipientFamilyName,
-            String clabe, String notesRef, String numericRef) throws Exception {
+            String clabe, String notesRef, String numericRef) {
         if (amount.scale() > 2) {
             logError("MXN withdrawal has incorrect scale " + amount);
             return false;
@@ -254,7 +260,7 @@ public class Bitso {
         body.put("numeric_ref", numericRef);
         log("Executing the following withdrawal: " + body);
         String ret = sendBitsoPost(BITSO_BASE_URL + "spei_withdrawal", body);
-        if (ret.equals("\"ok\"")) {
+        if (ret != null && ret.equals("\"ok\"")) {
             log("Withdrawal executed");
             return true;
         }
@@ -264,7 +270,7 @@ public class Bitso {
     }
 
     public BitsoTransferQuote requestQuote(BigDecimal btcAmount, BigDecimal amount, String currency,
-            boolean full) throws Exception {
+            boolean full) {
         if (btcAmount != null && amount != null) {
             logError("btcAmount and amount are mutually exclusive!");
             return null;
@@ -291,7 +297,7 @@ public class Bitso {
     }
 
     public BitsoTransfer createTransfer(BigDecimal btcAmount, BigDecimal amount, String currency,
-            BigDecimal rate, String paymentOutlet, HashMap<String, Object> requiredFields) throws Exception {
+            BigDecimal rate, String paymentOutlet, HashMap<String, Object> requiredFields) {
         if (btcAmount != null && amount != null) {
             logError("btcAmount and amount are mutually exclusive!");
             return null;

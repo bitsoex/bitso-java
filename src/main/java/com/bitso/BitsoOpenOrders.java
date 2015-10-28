@@ -11,17 +11,7 @@ public class BitsoOpenOrders {
 
     public ArrayList<BookOrder> list;
 
-    public BitsoOpenOrders(String openOrdersJSON) {
-        JSONArray obj;
-        try {
-            obj = new JSONArray(openOrdersJSON);
-        } catch (Exception e) {
-            System.err.println("BitsoOpenOrders cannot parse JSON");
-            System.err.println(openOrdersJSON);
-            System.err.println(e.getMessage());
-            e.printStackTrace();
-            return;
-        }
+    public BitsoOpenOrders(JSONArray obj) {
         list = new ArrayList<BookOrder>(obj.length());
         for (int i = 0; i < obj.length(); i++) {
             JSONObject o = obj.getJSONObject(i);
