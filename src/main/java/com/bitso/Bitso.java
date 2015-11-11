@@ -26,7 +26,7 @@ import com.bitso.http.BlockingHttpClient;
 public class Bitso {
 
     private static final String BITSO_BASE_URL = "https://api.bitso.com/v2/";
-    public static final long THROTTLE_MS = 1000;
+    public static long THROTTLE_MS = 1000;
 
     private String key;
     private String secret;
