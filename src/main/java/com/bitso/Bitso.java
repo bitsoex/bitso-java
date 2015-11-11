@@ -26,7 +26,7 @@ import com.bitso.http.BlockingHttpClient;
 public class Bitso {
 
     private static final String BITSO_BASE_URL = "https://api.bitso.com/v2/";
-    private static final long THROTTLE_MS = 1000;
+    public static final long THROTTLE_MS = 1000;
 
     private String key;
     private String secret;
@@ -163,7 +163,7 @@ public class Bitso {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", amount.toPlainString());
         body.put("price", price.toPlainString());
-        log("Placing the following buy order: " + body);
+        log("Placing the following buy limit order: " + body);
         String json = sendBitsoPost(BITSO_BASE_URL + "buy", body);
         return processBookOrderJSON(json);
     }
@@ -197,7 +197,7 @@ public class Bitso {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", amount.toPlainString());
         body.put("price", price.toPlainString());
-        log("Placing the following sell order: " + body);
+        log("Placing the following sell limit order: " + body);
         String json = sendBitsoPost(BITSO_BASE_URL + "sell", body);
         return processBookOrderJSON(json);
     }
@@ -205,7 +205,7 @@ public class Bitso {
     public BigDecimal placeSellMarketOrder(BigDecimal btcAmountToSpend) {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", btcAmountToSpend.toPlainString());
-        log("Placing the following sell maket order: " + body);
+        log("Placing the following sell market order: " + body);
         String json = sendBitsoPost(BITSO_BASE_URL + "sell", body);
         JSONObject o;
         try {
@@ -430,37 +430,42 @@ public class Bitso {
         return null;
     }
 
+    public BookOrder findMatchingOrders(String id) {
+        BookOrder toRet = null;
+        int offset = 0;
+        int limit = 10;
+        outer: while (true) {
+            BitsoUserTransactions but = getUserTransactions(offset, limit, null);
+            if (but == null) {
+                return null;
+            }
+            // We gone through the entire history and didn't find anything...
+            if (but.list.size() == 0) {
+                return null;
+            }
+
+            for (int i = 0; i < but.list.size(); i++) {
+                BookOrder order = but.list.get(i);
+                if (order.id.equals(id)) {
+                    if (toRet == null) {
+                        toRet = order;
+                    } else {
+                        toRet.minor = toRet.minor.add(order.minor);
+                    }
+                } else if (toRet != null && i < but.list.size()) {
+                    break outer;
+                }
+            }
+            limit *= 2;
+            offset += limit;
+        }
+        return toRet;
+    }
+
     public BookOrder findMatchingOrders(JSONObject o) {
         BookOrder toRet = null;
         if (o.has("id")) {
-            String newOrderId = o.getString("id");
-            int offset = 0;
-            int limit = 10;
-            outer: while (true) {
-                BitsoUserTransactions but = getUserTransactions(offset, limit, null);
-                if (but == null) {
-                    return null;
-                }
-                // We gone through the entire history and didn't find anything...
-                if (but.list.size() == 0) {
-                    return null;
-                }
-
-                for (int i = 0; i < but.list.size(); i++) {
-                    BookOrder order = but.list.get(i);
-                    if (order.id.equals(newOrderId)) {
-                        if (toRet == null) {
-                            toRet = order;
-                        } else {
-                            toRet.minor = toRet.minor.add(order.minor);
-                        }
-                    } else if (toRet != null && i < but.list.size()) {
-                        break outer;
-                    }
-                }
-                limit *= 2;
-                offset += limit;
-            }
+            toRet = findMatchingOrders(o.getString("id"));
         }
         if (toRet == null) {
             logError("Unable to find order in recent transactions");
