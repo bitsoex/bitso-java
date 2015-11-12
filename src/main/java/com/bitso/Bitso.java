@@ -457,8 +457,8 @@ public class Bitso {
                     break outer;
                 }
             }
-            limit *= 2;
-            offset += limit;
+            offset += limit; // increase the offset by the number of orders we just looked at
+            limit *= 2; // increase the limit scope to make searching faster
         }
         return toRet;
     }
