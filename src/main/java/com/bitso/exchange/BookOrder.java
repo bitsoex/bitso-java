@@ -6,6 +6,11 @@ public class BookOrder {
     public String id;
     public String book;
     public BigDecimal price;
+    /**
+     * Used to indicate the amount of major currency
+     *
+     * @deprecated use {@link #major} instead.
+     */
     @Deprecated
     public BigDecimal amount;
     public BigDecimal major;

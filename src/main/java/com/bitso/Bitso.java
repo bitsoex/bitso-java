@@ -128,6 +128,11 @@ public class Bitso {
         return new BitsoOpenOrders(a);
     }
 
+    /**
+     * Used to return a list of orders with the given orderId
+     *
+     * @deprecated use {@link #lookupOrder(String orderId)} instead.
+     */
     @Deprecated
     public BitsoLookupOrders getLookupOrders(String orderId) {
         return lookupOrder(orderId);
@@ -207,15 +212,8 @@ public class Bitso {
         body.put("amount", btcAmountToSpend.toPlainString());
         log("Placing the following sell market order: " + body);
         String json = sendBitsoPost(BITSO_BASE_URL + "sell", body);
-        JSONObject o;
-        try {
-            o = new JSONObject(json);
-        } catch (JSONException e) {
-            logError("Unable to parse json: " + json);
-            e.printStackTrace();
-            return null;
-        }
-        if (o.has("error")) {
+        JSONObject o = Helpers.parseJson(json);
+        if (o == null || o.has("error")) {
             logError("Unable to place Sell Market Order: " + json);
             return null;
         }
@@ -440,19 +438,19 @@ public class Bitso {
                 return null;
             }
             // We gone through the entire history and didn't find anything...
-            if (but.list.size() == 0) {
+            if (but.trades.size() == 0) {
                 return null;
             }
 
-            for (int i = 0; i < but.list.size(); i++) {
-                BookOrder order = but.list.get(i);
+            for (int i = 0; i < but.trades.size(); i++) {
+                BookOrder order = but.trades.get(i);
                 if (order.id.equals(id)) {
                     if (toRet == null) {
                         toRet = order;
                     } else {
                         toRet.minor = toRet.minor.add(order.minor);
                     }
-                } else if (toRet != null && i < but.list.size()) {
+                } else if (toRet != null && i < but.trades.size()) {
                     break outer;
                 }
             }
