@@ -188,15 +188,8 @@ public class Bitso {
         body.put("amount", mxnAmountToSpend.toPlainString());
         log("Placing the following buy maket order: " + body);
         String json = sendBitsoPost(BITSO_BASE_URL + "buy", body);
-        JSONObject o;
-        try {
-            o = new JSONObject(json);
-        } catch (JSONException e) {
-            logError("Unable to parse json: " + json);
-            e.printStackTrace();
-            return null;
-        }
-        if (o.has("error")) {
+        JSONObject o = Helpers.parseJson(json);
+        if (o == null || o.has("error")) {
             logError("Unable to place Buy Market Order: " + json);
             return null;
         }
@@ -484,17 +477,9 @@ public class Bitso {
     }
 
     public static BookOrder processBookOrderJSON(String json) {
-        JSONObject o = null;
-        try {
-            o = new JSONObject(json);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            System.err.println(json);
-            return null;
-        }
-        if (o.has("error")) {
-            String error = o.toString(4);
-            System.err.println(error);
+        JSONObject o = Helpers.parseJson(json);
+        if (o == null || o.has("error")) {
+            System.err.println("Unable to processBookOrderJSON: " + json);
             return null;
         }
         BigDecimal price = null, major = null;
