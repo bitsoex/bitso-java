@@ -89,6 +89,16 @@ public class Bitso {
         return new BitsoOrderBook(o);
     }
 
+    public BitsoTransactions getTransactions() {
+        String json = sendGet(BITSO_BASE_URL + "transactions");
+        JSONArray a = Helpers.parseJsonArray(json);
+        if (a == null) {
+            logError("Unable to get Bitso Transactions");
+            return null;
+        }
+        return new BitsoTransactions(a);
+    }
+
     // Private Functions
     public BitsoBalance getBalance() {
         String json = sendBitsoPost(BITSO_BASE_URL + "balance");
