@@ -2,7 +2,7 @@ package com.bitso.exchange;
 
 import java.math.BigDecimal;
 
-public class BookOrder {
+public class BookOrder implements Comparable<BookOrder> {
     public String id;
     public String book;
     public BigDecimal price;
@@ -63,6 +63,19 @@ public class BookOrder {
         sb.append(updated);
         sb.append("\n=====");
         return sb.toString();
+    }
+
+    @Override
+    public int compareTo(BookOrder o) {
+        if (o.type != this.type) {
+            throw new IllegalStateException("Cannot compare two BookOrders of different types!");
+        }
+        if (this.type == TYPE.BUY) {
+            return o.price.compareTo(this.price);
+        } else if (this.type == TYPE.SELL) {
+            return this.price.compareTo(o.price);
+        }
+        throw new IllegalStateException("Cannot compare BookOrders without type!");
     }
 
 }
