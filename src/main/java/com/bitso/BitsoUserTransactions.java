@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.bitso.exchange.BookOrder;
+import com.bitso.helpers.Helpers;
 
 public class BitsoUserTransactions {
     static enum SORT_ORDER {
@@ -31,28 +32,29 @@ public class BitsoUserTransactions {
     @Deprecated
     public ArrayList<BookOrder> list = new ArrayList<BookOrder>();
     public ArrayList<BookOrder> trades = new ArrayList<BookOrder>();
-    public ArrayList<Deposit> deposits = new ArrayList<Deposit>();
-    public ArrayList<Withdrawal> withdrawals = new ArrayList<Withdrawal>();
+    public ArrayList<Movement> movements = new ArrayList<Movement>();
 
     public BitsoUserTransactions(JSONArray a) {
         for (int i = 0; i < a.length(); i++) {
             JSONObject o = a.getJSONObject(i);
             String dateTime = o.getString("datetime");
             int transactionType = o.getInt("type");
-            if (transactionType == 0) {
-                Deposit d = new Deposit();
-                d.dateTime = dateTime;
-                d.amount = new BigDecimal(o.getString("amount"));
-                d.method = o.getString("method");
-                d.currency = o.getString("currency");
-                deposits.add(d);
-            } else if (transactionType == 1) {
-                Withdrawal w = new Withdrawal();
-                w.dateTime = dateTime;
-                w.amount = new BigDecimal(o.getString("amount"));
-                w.method = o.getString("method");
-                w.currency = o.getString("currency");
-                withdrawals.add(w);
+            if (transactionType == 0 || transactionType == 1) {
+                Movement m = new Movement();
+                if (transactionType == 0) {
+                    m.type = Movement.TYPE.DEPOSIT;
+                }
+                if (transactionType == 1) {
+                    m.type = Movement.TYPE.WITHDRAWAL;
+                }
+                m.dateTime = dateTime;
+                if (o.has("mxn")) {
+                    m.mxn = new BigDecimal(o.getString("mxn"));
+                } else if (o.has("btc")) {
+                    m.btc = new BigDecimal(o.getString("btc"));
+                }
+                m.method = o.getString("method");
+                movements.add(m);
             } else if (transactionType == 2) {
                 BigDecimal price = new BigDecimal(o.getString("rate"));
                 BigDecimal major = new BigDecimal(o.getString("btc"));
@@ -74,14 +76,11 @@ public class BitsoUserTransactions {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Deposits\n");
-        for (Deposit d : deposits) {
-            sb.append(d);
+        sb.append("Movements\n");
+        for (Movement m : movements) {
+            sb.append(m);
         }
-        sb.append("\n\nWithdrawals\n");
-        for (Withdrawal w : withdrawals) {
-            sb.append(w);
-        }
+
         sb.append("\n\nTrades\n");
         for (BookOrder o : trades) {
             sb.append(o);
@@ -89,45 +88,20 @@ public class BitsoUserTransactions {
         return sb.toString();
     }
 
-    public class Deposit {
-        public String dateTime;
-        public BigDecimal amount;
-        public String method;
-        public String currency;
+    public static class Movement {
 
-        public String toString() {
-            StringBuilder sb = new StringBuilder();
-            sb.append("=====\ndateTime=");
-            sb.append(dateTime);
-            sb.append("\namount=");
-            sb.append(amount);
-            sb.append("\ncurrency=");
-            sb.append(currency);
-            sb.append("\nmethod=");
-            sb.append(method);
-            sb.append("\n=====");
-            return sb.toString();
+        public static enum TYPE {
+            DEPOSIT, WITHDRAWAL
         }
-    }
 
-    public class Withdrawal {
         public String dateTime;
-        public BigDecimal amount;
+        public TYPE type;
+        public BigDecimal mxn;
+        public BigDecimal btc;
         public String method;
-        public String currency;
 
         public String toString() {
-            StringBuilder sb = new StringBuilder();
-            sb.append("=====\ndateTime=");
-            sb.append(dateTime);
-            sb.append("\namount=");
-            sb.append(amount);
-            sb.append("\ncurrency=");
-            sb.append(currency);
-            sb.append("\nmethod=");
-            sb.append(method);
-            sb.append("\n=====");
-            return sb.toString();
+            return Helpers.fieldPrinter(this);
         }
     }
 }
