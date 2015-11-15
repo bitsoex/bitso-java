@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.bitso.BitsoTransactions.Transaction.SIDE;
+import com.bitso.helpers.Helpers;
 
 public class BitsoTransactions {
     public ArrayList<Transaction> list;
@@ -48,20 +49,7 @@ public class BitsoTransactions {
         SIDE side;
 
         public String toString() {
-            StringBuilder sb = new StringBuilder();
-            sb.append("=====\ndate=");
-            sb.append(date);
-            sb.append("\ntid=");
-            sb.append(tid);
-            sb.append("\nprice=");
-            sb.append(price);
-            sb.append("\namount=");
-            sb.append(amount);
-            sb.append("\nside=");
-            sb.append(side);
-            sb.append("\n=====");
-
-            return sb.toString();
+            return Helpers.fieldPrinter(this);
         }
     }
 }
