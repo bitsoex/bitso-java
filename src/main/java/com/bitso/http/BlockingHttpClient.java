@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
@@ -84,12 +85,42 @@ public class BlockingHttpClient {
         return response.toString();
     }
 
+    public String sendGet(String url, HashMap<String, String> headers) throws Exception {
+        throttle();
+        HttpGet getRequest = new HttpGet(url);
+
+        // add request headers
+        if (headers != null) {
+            for (Entry<String, String> e : headers.entrySet()) {
+                getRequest.addHeader(e.getKey(), e.getValue());
+            }
+            log("\nHeaders are \n" + headers.toString());
+        }
+
+        log("\nSending 'GET' request to URL : " + url);
+        CloseableHttpResponse response = HttpClients.createDefault().execute(getRequest);
+
+        log("Response Code : " + response.getStatusLine().getStatusCode());
+        BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+
+        String inputLine;
+        StringBuffer responseBody = new StringBuffer();
+
+        while ((inputLine = in.readLine()) != null) {
+            responseBody.append(inputLine);
+        }
+        in.close();
+        log(response);
+        log(responseBody);
+
+        return responseBody.toString();
+    }
+
     public String get(String url) throws Exception {
         return get(url, null);
     }
 
-    public String sendPost(String url, String body, HashMap<String, String> headers)
-            throws Exception {
+    public String sendPost(String url, String body, HashMap<String, String> headers) throws Exception {
         throttle();
         HttpPost postRequest = new HttpPost(url);
         // add request headers
@@ -106,8 +137,7 @@ public class BlockingHttpClient {
 
         CloseableHttpResponse response = HttpClients.createDefault().execute(postRequest);
         log("Response Code : " + response.getStatusLine().getStatusCode());
-        BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity()
-                .getContent()));
+        BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
         String inputLine;
         StringBuffer responseBody = new StringBuffer();
@@ -136,8 +166,7 @@ public class BlockingHttpClient {
         log("\nSending 'DELETE' request to URL : " + url);
         CloseableHttpResponse response = HttpClients.createDefault().execute(deleteRequest);
         log("Response Code : " + response.getStatusLine().getStatusCode());
-        BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity()
-                .getContent()));
+        BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
         String inputLine;
         StringBuffer responseBody = new StringBuffer();
