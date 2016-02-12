@@ -2,6 +2,8 @@ package com.bitso.exchange;
 
 import java.math.BigDecimal;
 
+import com.bitso.helpers.Helpers;
+
 public class BookOrder implements Comparable<BookOrder> {
     public String id;
     public String book;
@@ -42,27 +44,7 @@ public class BookOrder implements Comparable<BookOrder> {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("=====\nid=");
-        sb.append(id);
-        sb.append("\nbook=");
-        sb.append(book);
-        sb.append("\nprice=");
-        sb.append(price);
-        sb.append("\nmajor=");
-        sb.append(major);
-        sb.append("\nminor=");
-        sb.append(minor);
-        sb.append("\ntype=");
-        sb.append(type);
-        sb.append("\nstatus=");
-        sb.append(status);
-        sb.append("\ncreated=");
-        sb.append(created);
-        sb.append("\nupdated=");
-        sb.append(updated);
-        sb.append("\n=====");
-        return sb.toString();
+        return Helpers.fieldPrinter(this);
     }
 
     @Override
