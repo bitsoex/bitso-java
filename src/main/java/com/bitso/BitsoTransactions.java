@@ -42,11 +42,11 @@ public class BitsoTransactions {
             SELL, BUY
         };
 
-        long date;
-        long tid;
-        BigDecimal price;
-        BigDecimal amount;
-        SIDE side;
+        public long date;
+        public long tid;
+        public BigDecimal price;
+        public BigDecimal amount;
+        public SIDE side;
 
         public String toString() {
             return Helpers.fieldPrinter(this);
