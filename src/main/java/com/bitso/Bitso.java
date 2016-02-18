@@ -246,10 +246,10 @@ public class Bitso {
         return false;
     }
 
-    public boolean withdrawMXN(BigDecimal amount, String recipientGivenName, String recipientFamilyName,
+    public boolean speiWithdrawal(BigDecimal amount, String recipientGivenName, String recipientFamilyName,
             String clabe, String notesRef, String numericRef) {
         if (amount.scale() > 2) {
-            logError("MXN withdrawal has incorrect scale " + amount);
+            logError("Spei withdrawal has incorrect scale " + amount);
             return false;
         }
         HashMap<String, Object> body = new HashMap<String, Object>();
@@ -268,6 +268,44 @@ public class Bitso {
         logError("Unable to execute MXN withdrawal");
         logError(ret);
         return false;
+    }
+
+    public String debitCardWithdrawal(BigDecimal amount, String institutionCode, String beneficiary,
+            String cardNumber) {
+        if (amount.scale() > 2) {
+            logError("Debit Card withdrawal has incorrect scale " + amount);
+            return null;
+        }
+        HashMap<String, Object> body = new HashMap<String, Object>();
+        body.put("amount", amount.toPlainString());
+        body.put("institution_code", institutionCode);
+        body.put("beneficiary", beneficiary);
+        body.put("card_number", cardNumber);
+
+        log("Executing the following withdrawal: " + body);
+        String json = sendBitsoPost("https://api.bitso.com/v3/debit_card_withdrawal", body);
+        JSONObject o = Helpers.parseJson(json);
+        if (o == null || o.has("error")) {
+            logError("Unable to execute debit card withdrawal: " + json);
+            return null;
+        }
+        if (o.has("claveRastreo")) {
+            return o.getString("claveRastreo");
+        }
+        System.out.println("unknown debit card withdrawal result: " + json);
+        return null;
+    }
+
+    /**
+     * Used to execute an MXN withdrawal through SPEI
+     *
+     * @deprecated use
+     *             {@link #speiWithdrawal(BigDecimal amount, String recipientGivenName, String recipientFamilyName, String clabe, String notesRef, String numericRef)}
+     *             instead.
+     */
+    public boolean withdrawMXN(BigDecimal amount, String recipientGivenName, String recipientFamilyName,
+            String clabe, String notesRef, String numericRef) {
+        return speiWithdrawal(amount, recipientGivenName, recipientFamilyName, clabe, notesRef, numericRef);
     }
 
     public BitsoTransferQuote requestQuote(BigDecimal btcAmount, BigDecimal amount, String currency,
