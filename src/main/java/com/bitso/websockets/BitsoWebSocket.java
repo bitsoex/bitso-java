@@ -13,7 +13,7 @@ public class BitsoWebSocket extends Observable {
     Vertx vertx;
     String host = "ws.bitso.com";
     String uri = "";
-    WebsocketVersion v = WebsocketVersion.V00;
+    WebsocketVersion v = WebsocketVersion.V08;
     private Buffer textBuf = Buffer.buffer();
     Channels[] channels;
     HttpClient client;
@@ -21,8 +21,7 @@ public class BitsoWebSocket extends Observable {
     public BitsoWebSocket(Channels[] channels) {
         vertx = Vertx.vertx();
         this.channels = channels;
-        HttpClientOptions httpOptions = new HttpClientOptions().setSsl(true).setTrustAll(true)
-                .setVerifyHost(false);
+        HttpClientOptions httpOptions = new HttpClientOptions().setSsl(true);
         client = vertx.createHttpClient(httpOptions);
     }
 
@@ -44,8 +43,8 @@ public class BitsoWebSocket extends Observable {
             }
 
             websocket.closeHandler(vd -> {
-                System.err.println("Websocket Error, Disonnected!...Reconnecting");
-                connectSocket();
+                System.err.println("Websocket Error, Disonnected!");
+                super.notifyObservers("disconnected");
             });
             websocket.frameHandler(frame -> {
                 if (frame.isText()) {
@@ -60,9 +59,8 @@ public class BitsoWebSocket extends Observable {
 
             });
 
-        } , error -> {
-            System.err.println("Websocket Error, Disonnected!...Reconnecting;");
-            connectSocket();
+        } , throwableError -> {
+            System.err.println("Websocket Error: " + throwableError.getMessage());
         });
     }
 
