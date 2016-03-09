@@ -6,3 +6,4 @@ conf/*
 .project
 target/
 pom.xml.versionsBackup
+.DS_Store
