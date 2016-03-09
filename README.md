@@ -11,11 +11,14 @@ Add the following dependency to your project's Maven pom.xml:
 <dependency>
   <groupId>com.bitso</groupId>
   <artifactId>bitso-java</artifactId>
-  <version>0.0.32</version>
+  <version>0.0.33</version>
 </dependency>
 ```
 
 The library will automatically be pulled from Maven Central.
+
+### JDK Requirements
+This library is only supported by OpenJDK 8
 
 ## Usage
 
