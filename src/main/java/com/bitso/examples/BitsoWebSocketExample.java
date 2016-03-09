@@ -17,7 +17,7 @@ public class BitsoWebSocketExample implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println("got a change: " + arg);
+        System.out.println("got a message: " + arg);
 
     }
 
