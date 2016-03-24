@@ -34,7 +34,7 @@ public class BitsoUserTransactions {
     public ArrayList<BookOrder> trades = new ArrayList<BookOrder>();
     public ArrayList<Movement> movements = new ArrayList<Movement>();
 
-    public BitsoUserTransactions(JSONArray a) {
+    public BitsoUserTransactions(JSONArray a, BitsoBook book) {
         for (int i = 0; i < a.length(); i++) {
             JSONObject o = a.getJSONObject(i);
             String dateTime = o.getString("datetime");
@@ -52,18 +52,27 @@ public class BitsoUserTransactions {
                     m.mxn = new BigDecimal(o.getString("mxn"));
                 } else if (o.has("btc")) {
                     m.btc = new BigDecimal(o.getString("btc"));
+                } else if (o.has("eth")) {
+                    m.eth = new BigDecimal(o.getString("eth"));
                 }
                 m.method = o.getString("method");
                 movements.add(m);
             } else if (transactionType == 2) {
                 BigDecimal price = new BigDecimal(o.getString("rate"));
-                BigDecimal major = new BigDecimal(o.getString("btc"));
+                BigDecimal major = null;
+                if (o.has("btc")) {
+                    major = new BigDecimal(o.getString("btc"));
+                } else if (o.has("eth")) {
+                    major = new BigDecimal(o.getString("eth"));
+                }
+
                 BigDecimal minor = new BigDecimal(o.getString("mxn"));
                 BookOrder.TYPE type = BookOrder.TYPE.SELL;
                 if (major.compareTo(BigDecimal.ZERO) > 0) {
                     type = BookOrder.TYPE.BUY;
                 }
                 BookOrder order = new BookOrder(price, major, type);
+                order.book = book.toString();
                 order.id = o.getString("order_id");
                 order.dateTime = dateTime;
                 order.status = BookOrder.STATUS.COMPLETE;
@@ -98,6 +107,7 @@ public class BitsoUserTransactions {
         public TYPE type;
         public BigDecimal mxn;
         public BigDecimal btc;
+        public BigDecimal eth;
         public String method;
 
         public String toString() {

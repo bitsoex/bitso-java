@@ -14,6 +14,10 @@ public class BitsoBalance {
     public BigDecimal mxnAvailable; // MXN available for trading
     public BigDecimal mxnReserved; // MXN reserved in open order
 
+    public BigDecimal ethBalance; // MXN balance
+    public BigDecimal ethAvailable; // MXN available for trading
+    public BigDecimal ethReserved; // MXN reserved in open order
+
     /**
      * Customer trading fee, in percentage
      *
@@ -32,6 +36,10 @@ public class BitsoBalance {
         mxnBalance = new BigDecimal(obj.getString("mxn_balance"));
         mxnAvailable = new BigDecimal(obj.getString("mxn_available"));
         mxnReserved = new BigDecimal(obj.getString("mxn_reserved"));
+
+        ethBalance = new BigDecimal(obj.getString("eth_balance"));
+        ethAvailable = new BigDecimal(obj.getString("eth_available"));
+        ethReserved = new BigDecimal(obj.getString("eth_reserved"));
 
         feePercent = new BigDecimal(obj.getString("fee"));
         feeDecimal = feePercent.divide(new BigDecimal("100"), 8, BigDecimal.ROUND_UP);
@@ -53,6 +61,12 @@ public class BitsoBalance {
         sb.append(mxnReserved.toPlainString());
         sb.append("\n  Balance: ");
         sb.append(mxnBalance.toPlainString());
+        sb.append("\n====ETH====\nAvailable: ");
+        sb.append(ethAvailable.toPlainString());
+        sb.append("\n Reserved: ");
+        sb.append(ethReserved.toPlainString());
+        sb.append("\n  Balance: ");
+        sb.append(ethBalance.toPlainString());
         sb.append("\n===OTHER===\nFee: ");
         sb.append(fee.toPlainString());
         sb.append("\nFee (Decimal): ");

@@ -77,7 +77,11 @@ public class Bitso {
 
     // Public Functions
     public BitsoTicker getTicker() {
-        String json = sendGet(baseUrl + "ticker");
+        return getTicker(BitsoBook.BTC_MXN);
+    }
+
+    public BitsoTicker getTicker(BitsoBook book) {
+        String json = sendGet(baseUrl + "ticker?book=" + book.toString());
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
             logError("Unable to get Bitso Ticker: " + json);
@@ -87,7 +91,11 @@ public class Bitso {
     }
 
     public OrderBook getOrderBook() {
-        String json = sendGet(baseUrl + "order_book");
+        return getOrderBook(BitsoBook.BTC_MXN);
+    }
+
+    public OrderBook getOrderBook(BitsoBook book) {
+        String json = sendGet(baseUrl + "order_book?book=" + book.toString());
         JSONObject o = Helpers.parseJson(json);
         if (o == null) {
             logError("Unable to get Bitso Order Book");
@@ -97,7 +105,11 @@ public class Bitso {
     }
 
     public BitsoTransactions getTransactions() {
-        String json = sendGet(baseUrl + "transactions");
+        return getTransactions(BitsoBook.BTC_MXN);
+    }
+
+    public BitsoTransactions getTransactions(BitsoBook book) {
+        String json = sendGet(baseUrl + "transactions?book=" + book.toString());
         JSONArray a = Helpers.parseJsonArray(json);
         if (a == null) {
             logError("Unable to get Bitso Transactions");
@@ -118,31 +130,47 @@ public class Bitso {
     }
 
     public BitsoUserTransactions getUserTransactions() {
-        return getUserTransactions(0, 0, null);
+        return getUserTransactions(BitsoBook.BTC_MXN);
+    }
+
+    public BitsoUserTransactions getUserTransactions(BitsoBook book) {
+        return getUserTransactions(0, 0, null, book);
     }
 
     public BitsoUserTransactions getUserTransactions(int offset, int limit, SORT_ORDER sortOrder) {
+        return getUserTransactions(offset, limit, sortOrder, BitsoBook.BTC_MXN);
+    }
+
+    public BitsoUserTransactions getUserTransactions(int offset, int limit, SORT_ORDER sortOrder,
+            BitsoBook book) {
         HashMap<String, Object> body = new HashMap<String, Object>();
         if (offset > 0) body.put("offset", offset);
         if (limit > 0) body.put("limit", limit);
         if (sortOrder != null) body.put("sort", sortOrder.getOrder());
+        body.put("book", book.toString());
         String json = sendBitsoPost(baseUrl + "user_transactions", body);
         JSONArray a = Helpers.parseJsonArray(json);
         if (a == null) {
             logError("Unable to get User Transactions: " + json);
             return null;
         }
-        return new BitsoUserTransactions(a);
+        return new BitsoUserTransactions(a, book);
     }
 
     public BitsoOpenOrders getOpenOrders() {
-        String json = sendBitsoPost(baseUrl + "open_orders");
+        return getOpenOrders(BitsoBook.BTC_MXN);
+    }
+
+    public BitsoOpenOrders getOpenOrders(BitsoBook book) {
+        HashMap<String, Object> body = new HashMap<String, Object>();
+        body.put("book", book.toString());
+        String json = sendBitsoPost(baseUrl + "open_orders", body);
         JSONArray a = Helpers.parseJsonArray(json);
         if (a == null) {
             logError("Unable to get Open Orders: " + json);
             return null;
         }
-        return new BitsoOpenOrders(a);
+        return new BitsoOpenOrders(a, book);
     }
 
     /**
@@ -182,17 +210,27 @@ public class Bitso {
     }
 
     public BookOrder placeBuyLimitOrder(BigDecimal price, BigDecimal amount) {
+        return placeBuyLimitOrder(price, amount, BitsoBook.BTC_MXN);
+    }
+
+    public BookOrder placeBuyLimitOrder(BigDecimal price, BigDecimal amount, BitsoBook book) {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", amount.toPlainString());
         body.put("price", price.toPlainString());
+        body.put("book", book.toString());
         log("Placing the following buy limit order: " + body);
         String json = sendBitsoPost(baseUrl + "buy", body);
         return processBookOrderJSON(json);
     }
 
     public BigDecimal placeBuyMarketOrder(BigDecimal mxnAmountToSpend) {
+        return placeBuyMarketOrder(mxnAmountToSpend, BitsoBook.BTC_MXN);
+    }
+
+    public BigDecimal placeBuyMarketOrder(BigDecimal mxnAmountToSpend, BitsoBook book) {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", mxnAmountToSpend.toPlainString());
+        body.put("book", book.toString());
         log("Placing the following buy maket order: " + body);
         String json = sendBitsoPost(baseUrl + "buy", body);
         JSONObject o = Helpers.parseJson(json);
@@ -209,17 +247,27 @@ public class Bitso {
     }
 
     public BookOrder placeSellLimitOrder(BigDecimal price, BigDecimal amount) {
+        return placeSellLimitOrder(price, amount, BitsoBook.BTC_MXN);
+    }
+
+    public BookOrder placeSellLimitOrder(BigDecimal price, BigDecimal amount, BitsoBook book) {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", amount.toPlainString());
         body.put("price", price.toPlainString());
+        body.put("book", book.toString());
         log("Placing the following sell limit order: " + body);
         String json = sendBitsoPost(baseUrl + "sell", body);
         return processBookOrderJSON(json);
     }
 
     public BigDecimal placeSellMarketOrder(BigDecimal btcAmountToSpend) {
+        return placeSellMarketOrder(btcAmountToSpend, BitsoBook.BTC_MXN);
+    }
+
+    public BigDecimal placeSellMarketOrder(BigDecimal btcAmountToSpend, BitsoBook book) {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", btcAmountToSpend.toPlainString());
+        body.put("book", book.toString());
         log("Placing the following sell market order: " + body);
         String json = sendBitsoPost(baseUrl + "sell", body);
         JSONObject o = Helpers.parseJson(json);

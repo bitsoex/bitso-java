@@ -11,11 +11,13 @@ public class BitsoOpenOrders {
 
     public ArrayList<BookOrder> list;
 
-    public BitsoOpenOrders(JSONArray obj) {
+    public BitsoOpenOrders(JSONArray obj, BitsoBook book) {
         list = new ArrayList<BookOrder>(obj.length());
         for (int i = 0; i < obj.length(); i++) {
             JSONObject o = obj.getJSONObject(i);
-            list.add(Bitso.processBookOrderJSON(o.toString()));
+            BookOrder order = Bitso.processBookOrderJSON(o.toString());
+            order.book = book.toString();
+            list.add(order);
         }
     }
 
