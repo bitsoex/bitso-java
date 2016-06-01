@@ -12,6 +12,8 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.AbstractHttpEntity;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 
@@ -122,10 +124,19 @@ public class BlockingHttpClient {
     }
 
     public String sendPost(String url, String body, HashMap<String, String> headers) throws Exception {
-        return sendPost(url, body, headers, Charset.defaultCharset());
+        return sendPost(url, new StringEntity(body), headers);
     }
 
     public String sendPost(String url, String body, HashMap<String, String> headers, Charset charset)
+            throws Exception {
+        return sendPost(url, new StringEntity(body, charset), headers);
+    }
+
+    public String sendPost(String url, byte[] body, HashMap<String, String> headers) throws Exception {
+        return sendPost(url, new ByteArrayEntity(body), headers);
+    }
+
+    private String sendPost(String url, AbstractHttpEntity body, HashMap<String, String> headers)
             throws Exception {
         throttle();
         HttpPost postRequest = new HttpPost(url);
@@ -137,9 +148,10 @@ public class BlockingHttpClient {
             log("\nHeaders are \n" + headers.toString());
         }
 
-        postRequest.setEntity(new StringEntity(body, charset));
+        postRequest.setEntity(body);
+
         log("\nSending 'POST' request to URL : " + url);
-        log("Post parameters : " + body);
+        log("Post parameters : " + body.getContent());
 
         CloseableHttpResponse response = HttpClients.createDefault().execute(postRequest);
         log("Response Code : " + response.getStatusLine().getStatusCode());
