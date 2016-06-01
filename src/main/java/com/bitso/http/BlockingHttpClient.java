@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -121,6 +122,11 @@ public class BlockingHttpClient {
     }
 
     public String sendPost(String url, String body, HashMap<String, String> headers) throws Exception {
+        return sendPost(url, body, headers, Charset.defaultCharset());
+    }
+
+    public String sendPost(String url, String body, HashMap<String, String> headers, Charset charset)
+            throws Exception {
         throttle();
         HttpPost postRequest = new HttpPost(url);
         // add request headers
@@ -131,7 +137,7 @@ public class BlockingHttpClient {
             log("\nHeaders are \n" + headers.toString());
         }
 
-        postRequest.setEntity(new StringEntity(body));
+        postRequest.setEntity(new StringEntity(body, charset));
         log("\nSending 'POST' request to URL : " + url);
         log("Post parameters : " + body);
 
