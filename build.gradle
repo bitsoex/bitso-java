@@ -1,0 +1,13 @@
+apply plugin: 'java'
+dependencies {
+
+    compile group: 'org.json', name: 'json', version: '20141113'
+    compile group: 'io.vertx', name: 'vertx-core', version: '3.2.1'
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.3.6'
+    compile group: 'junit', name: 'junit', version: '4.11'
+    testCompile "org.mockito:mockito-core:1.10.19"
+}
+repositories {
+        mavenCentral()
+jcenter()
+}
