@@ -5,7 +5,8 @@ conf/*
 .classpath
 .project
 target/
-pom.xml.versionsBackup
+pom.xml
+.versionsBackup
 .DS_Store
 .gradle/
 build/
