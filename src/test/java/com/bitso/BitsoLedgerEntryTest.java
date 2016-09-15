@@ -23,7 +23,7 @@ public class BitsoLedgerEntryTest {
     private List<JSONObject> jsonList;
     List<BitsoLedgerEntry> ledgerEntries;
     @InjectMocks
-    public final static String BITSO_LEDGER_ENTRY_FULL_NEW_ACCOUNT = "/Users/Gerardo/Documents/bitso/libraries/bitsoExJava/bitso-java/src/test/java/com/bitso/bitsoLedgerEntryTest.json";
+    public final static String BITSO_LEDGER_ENTRY_FULL_NEW_ACCOUNT = "/Users/[usr]/[path-to-file]/bitso-java/src/test/java/com/bitso/bitsoLedgerEntryTest.json";
 
     @Mock
     JSONObject json;
