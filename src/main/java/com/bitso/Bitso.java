@@ -27,7 +27,7 @@ public class Bitso {
 
     private static final String BITSO_BASE_URL_PRODUCTION = "https://api.bitso.com/v2/";
     private static final String BITSO_BASE_URL_DEV = "https://dev.bitso.com/api/v2/";
-    private static final String BITSO_V3_BASE_URL_PRODUCTION = "https://bitso.com/api/v3/";
+    private static final String BITSO_V3_BASE_URL_PRODUCTION = "https://api.bitso.com/v3/";
     private static final String BITSO_V3_BASE_URL_DEV = "https://dev.bitso.com/api/v3/";
     public static long THROTTLE_MS = 1000;
 
@@ -178,11 +178,32 @@ public class Bitso {
     }
 
     /**
-     * 
-     * @return The Ledger of the user
+     * @param The
+     *            specific endpoint to get from a {@link com.bitso.exchange.BitsoLedgerEntry}.
+     * @return The {@link com.bitso.exchange.BitsoLedgerEntry} of the user.
      */
-    public BitsoLedgerEntry getLedger() {
-        String json = sendBitsoPost(baseUrlV3 + "ledger");
+    public BitsoLedgerEntry getLedger(String endpoint) {
+        String urlSuffix = "";
+        if (endpoint != null) {
+            switch (endpoint.toLowerCase()) {
+                case "trades":
+                    urlSuffix = endpoint + "/";
+                    break;
+                case "fundings":
+                    urlSuffix = endpoint + "/";
+                    break;
+                case "withdrawals":
+                    urlSuffix = endpoint + "/";
+                    break;
+                case "fees":
+                    urlSuffix = endpoint + "/";
+                    break;
+                default:
+                    urlSuffix = endpoint;
+                    break;
+            }
+        }
+        String json = sendBitsoPost(baseUrlV3 + "ledger/" + urlSuffix);
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
             logError("Error getting BitsoLedgerEntry: " + json);
@@ -505,9 +526,7 @@ public class Bitso {
         HashMap<String, String> headers = new HashMap<String, String>();
         headers.put("Content-Type", "application/json");
         try {
-            return client.sendPost(
-                    /* url"https://bitso.com/api/v3/ledger */"https://dev.bitso.com/api/v3/ledger",
-                    json.toString(), headers);
+            return client.sendPost(url, json.toString(), headers);
         } catch (Exception e) {
             e.printStackTrace();
         }
