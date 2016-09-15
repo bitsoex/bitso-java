@@ -12,10 +12,32 @@ import org.json.JSONObject;
 import com.bitso.exchange.BalanceUpdate;
 import com.bitso.exchange.Entry;
 
-public class BitsoLedgerEntry {
+public class BitsoLedger {
     private List<Entry> entries = new ArrayList<Entry>();
 
-    public BitsoLedgerEntry(JSONObject json) {
+    public enum LEDGER_ENDPOINT {
+        FULL, TRADES, FUNDINGS, WITHDRAWALS, FEES;
+
+        public String getEndpoint() {
+            switch (this) {
+                case FULL:
+                    return "";
+                case TRADES:
+                    return "trades";
+                case FUNDINGS:
+                    return "fundings";
+
+                case WITHDRAWALS:
+                    return "withdrawals";
+
+                case FEES:
+                    return "fees";
+            }
+            return null;
+        }
+    }
+
+    public BitsoLedger(JSONObject json) {
         if (json.has("success")) {
             JSONArray obj = (JSONArray) json.get("payload");
             for (int i = 0; i < obj.length(); i++) {

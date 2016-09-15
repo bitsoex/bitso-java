@@ -18,10 +18,10 @@ import org.mockito.Mock;
 import com.bitso.exchange.Entry;
 import com.bitso.utils.Util;
 
-public class BitsoLedgerEntryTest {
+public class BitsoLedgerTest {
     @InjectMocks
     private List<JSONObject> jsonList;
-    List<BitsoLedgerEntry> ledgerEntries;
+    List<BitsoLedger> ledgerEntries;
     @InjectMocks
     public final static String BITSO_LEDGER_ENTRY_FULL_NEW_ACCOUNT = "/Users/[usr]/[path-to-file]/bitso-java/src/test/java/com/bitso/bitsoLedgerEntryTest.json";
 
@@ -32,9 +32,9 @@ public class BitsoLedgerEntryTest {
     public void setUp() {
         jsonList = Util.readFileToJson(BITSO_LEDGER_ENTRY_FULL_NEW_ACCOUNT);
         if (jsonList != null && jsonList.size() > 0) {
-            ledgerEntries = new ArrayList<BitsoLedgerEntry>();
+            ledgerEntries = new ArrayList<BitsoLedger>();
             for (JSONObject obj : jsonList) {
-                ledgerEntries.add(new BitsoLedgerEntry(obj));
+                ledgerEntries.add(new BitsoLedger(obj));
             }
         }
     }
@@ -44,7 +44,7 @@ public class BitsoLedgerEntryTest {
      */
     @Test
     public void testBitsoLedgerEntryList() {
-        for (BitsoLedgerEntry ledgerEntry : ledgerEntries) {
+        for (BitsoLedger ledgerEntry : ledgerEntries) {
             if (ledgerEntry == null) {
                 fail("BitsoLedgerEntry shouldn´t be null.");
             }
@@ -56,14 +56,14 @@ public class BitsoLedgerEntryTest {
 
     /**
      * Method to validate the corresponding BitsoLedgerEntry class and its entries if null or not and how many
-     * entries it has and its values. Tests methods: {@link com.bitso.BitsoLedgerEntry#getEntries()}
+     * entries it has and its values. Tests methods: {@link com.bitso.BitsoLedger#getEntries()}
      * {@link com.bitso.exchange.Entry#getBalanceUpdates()} {@link com.bitso.exchange.Entry#getCreatedAt()}
      * {@link com.bitso.exchange.Entry#getDetailsMap()} {@link com.bitso.exchange.Entry#getOperation()}
      */
     @Test
     public void testBitsoLedgerEntries() {
         int i = 0;
-        for (BitsoLedgerEntry ledgerEntry : ledgerEntries) {
+        for (BitsoLedger ledgerEntry : ledgerEntries) {
             Assert.assertNotNull(ledgerEntry.getEntries());
             switch (i) {
                 case 0:

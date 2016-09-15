@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.bitso.BitsoLedger.LEDGER_ENDPOINT;
 import com.bitso.BitsoUserTransactions;
 import com.bitso.BitsoUserTransactions.SORT_ORDER;
 import com.bitso.exchange.BookOrder;
@@ -179,37 +180,18 @@ public class Bitso {
 
     /**
      * @param The
-     *            specific endpoint to get from a {@link com.bitso.exchange.BitsoLedgerEntry}.
-     * @return The {@link com.bitso.exchange.BitsoLedgerEntry} of the user.
+     *            specific endpoint to get from a {@link com.bitso.exchange.BitsoLedger}.
+     * @return The {@link com.bitso.exchange.BitsoLedger} of the user.
      */
-    public BitsoLedgerEntry getLedger(String endpoint) {
-        String urlSuffix = "";
-        if (endpoint != null) {
-            switch (endpoint.toLowerCase()) {
-                case "trades":
-                    urlSuffix = endpoint + "/";
-                    break;
-                case "fundings":
-                    urlSuffix = endpoint + "/";
-                    break;
-                case "withdrawals":
-                    urlSuffix = endpoint + "/";
-                    break;
-                case "fees":
-                    urlSuffix = endpoint + "/";
-                    break;
-                default:
-                    urlSuffix = endpoint;
-                    break;
-            }
-        }
+    public BitsoLedger getLedger(LEDGER_ENDPOINT endpoint) {
+        String urlSuffix = endpoint.getEndpoint() + "/";
         String json = sendBitsoPost(baseUrlV3 + "ledger/" + urlSuffix);
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
             logError("Error getting BitsoLedgerEntry: " + json);
             return null;
         }
-        return new BitsoLedgerEntry(o);
+        return new BitsoLedger(o);
     }
 
     /**
