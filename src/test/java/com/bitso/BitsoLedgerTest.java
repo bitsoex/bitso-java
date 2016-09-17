@@ -46,16 +46,17 @@ public class BitsoLedgerTest {
     }
 
     /**
-     * Method to validate if the BitsoLedger classes and their entries are not null respectively.
+     * Method to validate if the BitsoLedger classes created from the test file and their entries are not null
+     * respectively.
      */
     @Test
     public void testBitsoLedgerList() {
         for (BitsoLedger ledger : ledgerList) {
             if (ledger == null) {
-                fail("BitsoLedger shouldn´t be null.");
+                fail("BitsoLedger class shouldn´t be null.");
             }
             if (ledger.getEntries() == null) {
-                fail("BitsoLedger shouldn´t be null.");
+                fail("The list of entries of the BitsoLedger class shouldn´t be null.");
             }
         }
     }

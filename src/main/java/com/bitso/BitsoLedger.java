@@ -73,7 +73,7 @@ public class BitsoLedger {
     /**
      * Get the entries of the transactions made by the user.
      * 
-     * @return A entries list.
+     * @return An entries list.
      */
     public List<Entry> getEntries() {
         return entries;
