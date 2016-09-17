@@ -42,34 +42,39 @@ public class BitsoLedger {
             JSONArray obj = (JSONArray) json.get("payload");
             for (int i = 0; i < obj.length(); i++) {
                 Entry entry = new Entry();
-                entry.setEntryId((String) obj.getJSONObject(i).get("eid"));
+                entry.entryId = ((String) obj.getJSONObject(i).get("eid"));
                 JSONArray balances = (JSONArray) obj.getJSONObject(i).get("balance_updates");
                 if (balances != null && balances.length() > 0) {
                     for (int j = 0; j < balances.length(); j++) {
                         BalanceUpdate balance = new BalanceUpdate(
                                 new BigDecimal(balances.getJSONObject(j).getString("amount")),
                                 balances.getJSONObject(j).getString("currency"));
-                        entry.addToBalances(balance);
+                        entry.balances.add(balance);
                     }
                 }
                 String createdAt = (String) obj.getJSONObject(i).get("created_at");
                 ZonedDateTime date = ZonedDateTime.parse(createdAt);
-                entry.setCreatedAt(date);
+                entry.createdAt = date;
                 if (((JSONObject) obj.getJSONObject(i)).has("details")) {
                     JSONObject details = (JSONObject) obj.getJSONObject(i).get("details");
                     Iterator<?> detailsKeys = details.keys();
                     while (detailsKeys.hasNext()) {
                         String detailsKey = (String) detailsKeys.next();
                         Object detailsValue = details.get(detailsKey);
-                        entry.addToDetailsMap(detailsKey, detailsValue);
+                        entry.detailsMap.put(detailsKey, detailsValue);
                     }
                 }
-                entry.setOperation((String) obj.getJSONObject(i).get("operation"));
+                entry.operation = ((String) obj.getJSONObject(i).get("operation"));
                 entries.add(entry);
             }
         }
     }
 
+    /**
+     * Get the entries of the transactions made by the user.
+     * 
+     * @return A entries list.
+     */
     public List<Entry> getEntries() {
         return entries;
     }
