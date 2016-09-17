@@ -27,11 +27,9 @@ public class BitsoLedgerTest {
     private List<BitsoLedger> ledgerList;
     public final static String BITSO_LEDGER_TEST_FILE = "extras/bitsoLedgerTest.json";
     @Mock
-    BitsoLedger mockList;
+    BitsoLedger mockLedgerList;
     @Mock
     List<Entry> mockEntries;
-    @Mock
-    Entry mockEntry;
 
     @Before
     public void setUp() {
@@ -42,7 +40,7 @@ public class BitsoLedgerTest {
                 ledgerList.add(new BitsoLedger(obj));
             }
         }
-        mockList = mock(BitsoLedger.class);
+        mockLedgerList = mock(BitsoLedger.class);
     }
 
     /**
@@ -66,9 +64,9 @@ public class BitsoLedgerTest {
      */
     @Test
     public void testVerifyGetEntries() {
-        mockList.getEntries();
-        verify(mockList).getEntries();
-        when(mockList.getEntries()).thenReturn(ledgerList.get(0).getEntries());
+        mockLedgerList.getEntries();
+        verify(mockLedgerList).getEntries();
+        when(mockLedgerList.getEntries()).thenReturn(ledgerList.get(0).getEntries());
     }
 
     /**
