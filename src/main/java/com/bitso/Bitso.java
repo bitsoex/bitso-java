@@ -571,8 +571,7 @@ public class Bitso {
                     break outer;
                 }
             }
-            offset += limit; // increase the offset by the number of orders we
-                             // just looked at
+            offset += limit; // increase the offset by the number of orders we just looked at
             limit *= 2; // increase the limit scope to make searching faster
         }
         return toRet;
@@ -619,8 +618,7 @@ public class Bitso {
         }
         if (o.has("status")) {
             int statusInt = o.getInt("status");
-            // Bitso passes CANCELLED as -1. We put CANCELLED in the STATUS enum
-            // in the 4th position
+            // Bitso passes CANCELLED as -1. We put CANCELLED in the STATUS enum in the 4th position
             if (statusInt == -1) {
                 statusInt = 3;
             }
