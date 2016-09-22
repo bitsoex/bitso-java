@@ -55,7 +55,7 @@ public class BitsoLedger {
                 String createdAt = (String) obj.getJSONObject(i).get("created_at");
                 ZonedDateTime date = ZonedDateTime.parse(createdAt);
                 entry.createdAt = date;
-                if (((JSONObject) obj.getJSONObject(i)).has("details")) {
+                if ((obj.getJSONObject(i)).has("details")) {
                     JSONObject details = (JSONObject) obj.getJSONObject(i).get("details");
                     Iterator<?> detailsKeys = details.keys();
                     while (detailsKeys.hasNext()) {
