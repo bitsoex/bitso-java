@@ -184,8 +184,8 @@ public class Bitso {
      * @return The {@link com.bitso.exchange.BitsoLedger} of the user.
      */
     public BitsoLedger getLedger(LEDGER_ENDPOINT endpoint) {
-        String urlSuffix = endpoint.getEndpoint() + "/";
-        String json = sendBitsoPost(baseUrlV3 + "ledger/" + urlSuffix);
+        String urlSuffix = endpoint.getEndpoint();
+        String json = sendBitsoPost(baseUrlV3 + "ledger/" + ((urlSuffix == "") ? "" : urlSuffix + "/"));
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
             logError("Error getting BitsoLedgerEntry: " + json);
