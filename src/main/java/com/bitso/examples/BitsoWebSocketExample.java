@@ -27,6 +27,6 @@ public class BitsoWebSocketExample implements Observer {
     }
 
     public static void main(String[] args) {
-        BitsoWebSocketExample wsExample = new BitsoWebSocketExample();
+        new BitsoWebSocketExample();
     }
 }

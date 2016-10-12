@@ -26,11 +26,11 @@ public class BlockingHttpClient {
     private long lastCallTime = 0;
 
     public BlockingHttpClient() {
-        new BlockingHttpClient(false);
+        this(false);
     }
 
     public BlockingHttpClient(boolean log) {
-        new BlockingHttpClient(log, -1);
+        this(log, -1);
     }
 
     public BlockingHttpClient(boolean log, long throttleMs) {
