@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.bitso.BitsoLedger.LEDGER_ENDPOINT;
 import com.bitso.BitsoUserTransactions;
 import com.bitso.BitsoUserTransactions.SORT_ORDER;
 import com.bitso.exchange.BookOrder;
@@ -27,6 +28,8 @@ public class Bitso {
 
     private static final String BITSO_BASE_URL_PRODUCTION = "https://api.bitso.com/v2/";
     private static final String BITSO_BASE_URL_DEV = "https://dev.bitso.com/api/v2/";
+    private static final String BITSO_V3_BASE_URL_PRODUCTION = "https://api.bitso.com/v3/";
+    private static final String BITSO_V3_BASE_URL_DEV = "https://dev.bitso.com/api/v3/";
     public static long THROTTLE_MS = 1000;
 
     private String key;
@@ -35,6 +38,7 @@ public class Bitso {
     private int retries;
     private boolean log;
     private String baseUrl;
+    private String baseUrlV3;
 
     private BlockingHttpClient client = new BlockingHttpClient(false, THROTTLE_MS);
 
@@ -57,6 +61,7 @@ public class Bitso {
         this.retries = retries;
         this.log = log;
         this.baseUrl = production ? BITSO_BASE_URL_PRODUCTION : BITSO_BASE_URL_DEV;
+        this.baseUrlV3 = production ? BITSO_V3_BASE_URL_PRODUCTION : BITSO_V3_BASE_URL_DEV;
     }
 
     public void setLog(boolean log) {
@@ -171,6 +176,22 @@ public class Bitso {
             return null;
         }
         return new BitsoOpenOrders(a, book);
+    }
+
+    /**
+     * @param The
+     *            specific endpoint to get from a {@link com.bitso.exchange.BitsoLedger}.
+     * @return The {@link com.bitso.exchange.BitsoLedger} of the user.
+     */
+    public BitsoLedger getLedger(LEDGER_ENDPOINT endpoint) {
+        String urlSuffix = endpoint.getEndpoint();
+        String json = sendBitsoPost(baseUrlV3 + "ledger/" + ((urlSuffix == "") ? "" : urlSuffix + "/"));
+        JSONObject o = Helpers.parseJson(json);
+        if (o == null || o.has("error")) {
+            logError("Error getting BitsoLedgerEntry: " + json);
+            return null;
+        }
+        return new BitsoLedger(o);
     }
 
     /**
