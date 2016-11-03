@@ -10,6 +10,8 @@ import com.bitso.helpers.Helpers;
 
 public class BitsoTicker extends Ticker {
 
+    public BitsoBook book;
+
     public BitsoTicker(JSONObject o) {
         last = getBD(o, "last");
         high = getBD(o, "high");
@@ -19,7 +21,7 @@ public class BitsoTicker extends Ticker {
         bid = getBD(o, "bid");
         ask = getBD(o, "ask");
         createdAt = ZonedDateTime.parse(getString(o, "created_at"));
-        book = getString(o, "book");
+        book = BitsoBook.valueOf(getString(o, "book").toUpperCase());
     }
 
     private String getString(JSONObject o, String key) {

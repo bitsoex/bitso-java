@@ -15,7 +15,6 @@ public abstract class Ticker {
     public BigDecimal bid;
     public BigDecimal ask;
     public ZonedDateTime createdAt;
-    public String book;
 
     public String toString() {
         return Helpers.fieldPrinter(this);
