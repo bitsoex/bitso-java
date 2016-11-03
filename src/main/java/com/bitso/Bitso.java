@@ -289,7 +289,7 @@ public class Bitso {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("amount", amount.toPlainString());
         body.put("address", address);
-        log("Executing the following BTC withdrawal: " + body);
+        log("Executing the following ETH withdrawal: " + body);
         String ret = sendBitsoPost(baseUrl + "ether_withdrawal", body);
         if (ret != null && ret.equals("\"ok\"")) {
             log("ETH withdrawal executed");
