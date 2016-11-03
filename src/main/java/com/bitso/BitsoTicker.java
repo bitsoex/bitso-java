@@ -1,6 +1,7 @@
 package com.bitso;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 
 import org.json.JSONObject;
 
@@ -17,6 +18,18 @@ public class BitsoTicker extends Ticker {
         volume = getBD(o, "volume");
         bid = getBD(o, "bid");
         ask = getBD(o, "ask");
+        createdAt = ZonedDateTime.parse(getString(o, "created_at"));
+        book = getString(o, "book");
+    }
+
+    private String getString(JSONObject o, String key) {
+        if (o.has(key)) {
+            return o.getString(key);
+        } else {
+            System.err.println("No " + key + ": " + o);
+            Helpers.printStackTrace();
+        }
+        return null;
     }
 
     private BigDecimal getBD(JSONObject o, String key) {
