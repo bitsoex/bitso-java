@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -14,12 +15,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.bitso.BitsoUserTransactions;
 import com.bitso.BitsoUserTransactions.SORT_ORDER;
+import com.bitso.exchange.BookInfo;
 import com.bitso.exchange.BookOrder;
-import com.bitso.exchange.OrderBook;
 import com.bitso.exchange.BookOrder.STATUS;
 import com.bitso.exchange.BookOrder.TYPE;
+import com.bitso.exchange.OrderBook;
 import com.bitso.helpers.Helpers;
 import com.bitso.http.BlockingHttpClient;
 
@@ -76,6 +77,21 @@ public class Bitso {
     }
 
     // Public Functions
+    public ArrayList<BookInfo> availableBooks() {
+        String json = sendGet(baseUrl + "available_books");
+        JSONObject o = Helpers.parseJson(json);
+        if (o == null || o.has("error")) {
+            logError("Unable to get Bitso Ticker: " + json);
+            return null;
+        }
+        ArrayList<BookInfo> books = new ArrayList<BookInfo>();
+        JSONArray arr = o.getJSONArray("payload");
+        for (int i = 0; i < arr.length(); i++) {
+            new BookInfo(arr.getJSONObject(i));
+        }
+        return books;
+    }
+
     public BitsoTicker getTicker() {
         return getTicker(BitsoBook.BTC_MXN);
     }
