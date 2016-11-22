@@ -2,11 +2,34 @@ package com.bitso.exchange;
 
 import java.math.BigDecimal;
 
+import com.bitso.BitsoBook;
 import com.bitso.helpers.Helpers;
 
 public class BookOrder implements Comparable<BookOrder> {
+    // Body parameters: book
+    // {
+    // "success": true,
+    // "payload": {
+    // "asks": [{
+    // "book": "btc_mxn",
+    // "price": "5632.24",
+    // "amount": "1.34491802",
+    // "created_at": "2016-04-08T17:52:31.000+00:00",
+    // "updated_at": null
+    // }],
+    // "bids": [{
+    // "book": "btc_mxn",
+    // "price": "6123.55",
+    // "amount": "1.12560000",
+    // "created_at": "2016-04-08T17:52:31.000+00:00",
+    // "updated_at": null
+    // }],
+    // "created_at": "2016-04-08T17:52:31.000+00:00"
+    // }
+    // }
+
     public String id;
-    public String book;
+    public BitsoBook book;
     public BigDecimal price;
     /**
      * Used to indicate the amount of major currency
@@ -19,8 +42,8 @@ public class BookOrder implements Comparable<BookOrder> {
     public BigDecimal minor;
     public TYPE type;
     public STATUS status;
-    public String created;
-    public String updated;
+    public String createdAt;
+    public String updatedAt;
     public String dateTime;
 
     public static enum TYPE {

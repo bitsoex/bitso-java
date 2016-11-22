@@ -92,10 +92,6 @@ public class Bitso {
         return books;
     }
 
-    public BitsoTicker getTicker() {
-        return getTicker(BitsoBook.BTC_MXN);
-    }
-
     public BitsoTicker getTicker(BitsoBook book) {
         String json = sendGet(baseUrl + "ticker?book=" + book.toString());
         JSONObject o = Helpers.parseJson(json);
@@ -104,10 +100,6 @@ public class Bitso {
             return null;
         }
         return new BitsoTicker(o);
-    }
-
-    public OrderBook getOrderBook() {
-        return getOrderBook(BitsoBook.BTC_MXN);
     }
 
     public OrderBook getOrderBook(BitsoBook book) {
@@ -620,10 +612,10 @@ public class Bitso {
             order.status = STATUS.values()[statusInt];
         }
         if (o.has("created")) {
-            order.created = o.getString("created");
+            order.createdAt = o.getString("created");
         }
         if (o.has("updated")) {
-            order.updated = o.getString("updated");
+            order.updatedAt = o.getString("updated");
         }
         if (o.has("datetime")) {
             order.dateTime = o.getString("datetime");
