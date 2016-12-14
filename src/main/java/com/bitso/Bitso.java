@@ -87,7 +87,7 @@ public class Bitso {
         ArrayList<BookInfo> books = new ArrayList<BookInfo>();
         JSONArray arr = o.getJSONArray("payload");
         for (int i = 0; i < arr.length(); i++) {
-            new BookInfo(arr.getJSONObject(i));
+            books.add(new BookInfo(arr.getJSONObject(i)));
         }
         return books;
     }
@@ -99,7 +99,7 @@ public class Bitso {
             logError("Unable to get Bitso Ticker: " + json);
             return null;
         }
-        return new BitsoTicker(o);
+        return new BitsoTicker(o.getJSONObject("payload"));
     }
 
     public OrderBook getOrderBook(BitsoBook book) {
@@ -598,7 +598,7 @@ public class Bitso {
             order.id = o.getString("id");
         }
         if (o.has("book")) {
-            order.book = o.getString("book");
+            order.book = BitsoBook.valueOf(o.getString("book"));
         }
         if (o.has("type")) {
             order.type = TYPE.values()[o.getInt("type")];
