@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -12,7 +13,6 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.bitso.BitsoUserTransactions.SORT_ORDER;
@@ -20,14 +20,12 @@ import com.bitso.exchange.BookInfo;
 import com.bitso.exchange.BookOrder;
 import com.bitso.exchange.BookOrder.STATUS;
 import com.bitso.exchange.BookOrder.TYPE;
-import com.bitso.exchange.OrderBook;
 import com.bitso.helpers.Helpers;
 import com.bitso.http.BlockingHttpClient;
 
 public class Bitso {
-
-    private static final String BITSO_BASE_URL_PRODUCTION = "https://api.bitso.com/v2/";
-    private static final String BITSO_BASE_URL_DEV = "https://dev.bitso.com/api/v2/";
+    private static final String BITSO_BASE_URL_PRODUCTION = "https://bitso.com/api/v3/";
+    private static final String BITSO_BASE_URL_DEV = "http://bitso.lan/api/v3/";
     public static long THROTTLE_MS = 1000;
 
     private String key;
@@ -78,7 +76,7 @@ public class Bitso {
 
     // Public Functions
     public ArrayList<BookInfo> availableBooks() {
-        String json = sendGet(baseUrl + "available_books");
+        String json = sendGet("available_books");
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
             logError("Unable to get Bitso Ticker: " + json);
@@ -93,7 +91,7 @@ public class Bitso {
     }
 
     public BitsoTicker getTicker(BitsoBook book) {
-        String json = sendGet(baseUrl + "ticker?book=" + book.toString());
+        String json = sendGet("ticker?book=" + book.toString());
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
             logError("Unable to get Bitso Ticker: " + json);
@@ -102,8 +100,8 @@ public class Bitso {
         return new BitsoTicker(o.getJSONObject("payload"));
     }
 
-    public OrderBook getOrderBook(BitsoBook book) {
-        String json = sendGet(baseUrl + "order_book?book=" + book.toString());
+    public BitsoOrderBook getOrderBook(BitsoBook book) {
+        String json = sendGet("order_book?book=" + book.toString());
         JSONObject o = Helpers.parseJson(json);
         if (o == null) {
             logError("Unable to get Bitso Order Book");
@@ -112,12 +110,8 @@ public class Bitso {
         return new BitsoOrderBook(o);
     }
 
-    public BitsoTransactions getTransactions() {
-        return getTransactions(BitsoBook.BTC_MXN);
-    }
-
     public BitsoTransactions getTransactions(BitsoBook book) {
-        String json = sendGet(baseUrl + "transactions?book=" + book.toString());
+        String json = sendGet(baseUrl + "trades?book=" + book.toString());
         JSONArray a = Helpers.parseJsonArray(json);
         if (a == null) {
             logError("Unable to get Bitso Transactions");
@@ -135,6 +129,30 @@ public class Bitso {
             return null;
         }
         return new BitsoBalance(o);
+    }
+
+    public String getUserAccountStatus() {
+        String status = sendBitsoGet("account_status");
+        System.out.println(status);
+        return null;
+        // account_status/
+        //
+        // {
+        // "success": true,
+        // "payload": {
+        // "client_id": "1234",
+        // "status": "active",
+        // "daily_limit": "5300.00",
+        // "monthly_limit": "32000.00",
+        // "daily_remaining": "3300.00",
+        // "monthly_remaining": "31000.00",
+        // "cellphone_number": "verified",
+        // "official_id": "submitted",
+        // "proof_of_residency": "submitted",
+        // "signed_contract": "unsubmitted",
+        // "origin_of_funds": "unsubmitted"
+        // }
+        // }
     }
 
     public BitsoUserTransactions getUserTransactions() {
@@ -156,7 +174,7 @@ public class Bitso {
         if (limit > 0) body.put("limit", limit);
         if (sortOrder != null) body.put("sort", sortOrder.getOrder());
         body.put("book", book.toString());
-        String json = sendBitsoPost(baseUrl + "user_transactions", body);
+        String json = null;// sendBitsoPost(baseUrl + "user_transactions", body);
         JSONArray a = Helpers.parseJsonArray(json);
         if (a == null) {
             logError("Unable to get User Transactions: " + json);
@@ -172,7 +190,7 @@ public class Bitso {
     public BitsoOpenOrders getOpenOrders(BitsoBook book) {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("book", book.toString());
-        String json = sendBitsoPost(baseUrl + "open_orders", body);
+        String json = null;// sendBitsoPost(baseUrl + "open_orders", body);
         JSONArray a = Helpers.parseJsonArray(json);
         if (a == null) {
             logError("Unable to get Open Orders: " + json);
@@ -194,7 +212,7 @@ public class Bitso {
     public BitsoLookupOrders lookupOrder(String orderId) {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("id", orderId);
-        String json = sendBitsoPost(baseUrl + "lookup_order", body);
+        String json = null;// sendBitsoPost(baseUrl + "lookup_order", body);
         JSONArray a = Helpers.parseJsonArray(json);
         if (a == null) {
             logError("Unable to get Lookup Order" + json);
@@ -207,7 +225,7 @@ public class Bitso {
         log("Attempting to cancel order: " + orderId);
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("id", orderId);
-        String ret = sendBitsoPost(baseUrl + "cancel_order", body);
+        String ret = null;// sendBitsoPost(baseUrl + "cancel_order", body);
         if (ret != null && ret.equals("\"true\"")) {
             log("Cancelled Order: " + orderId);
             return true;
@@ -227,7 +245,7 @@ public class Bitso {
         body.put("price", price.toPlainString());
         body.put("book", book.toString());
         log("Placing the following buy limit order: " + body);
-        String json = sendBitsoPost(baseUrl + "buy", body);
+        String json = null;// sendBitsoPost(baseUrl + "buy", body);
         return processBookOrderJSON(json);
     }
 
@@ -240,7 +258,7 @@ public class Bitso {
         body.put("amount", mxnAmountToSpend.toPlainString());
         body.put("book", book.toString());
         log("Placing the following buy maket order: " + body);
-        String json = sendBitsoPost(baseUrl + "buy", body);
+        String json = null;// sendBitsoPost(baseUrl + "buy", body);
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
             logError("Unable to place Buy Market Order: " + json);
@@ -264,7 +282,7 @@ public class Bitso {
         body.put("price", price.toPlainString());
         body.put("book", book.toString());
         log("Placing the following sell limit order: " + body);
-        String json = sendBitsoPost(baseUrl + "sell", body);
+        String json = null;// sendBitsoPost(baseUrl + "sell", body);
         return processBookOrderJSON(json);
     }
 
@@ -277,7 +295,7 @@ public class Bitso {
         body.put("amount", btcAmountToSpend.toPlainString());
         body.put("book", book.toString());
         log("Placing the following sell market order: " + body);
-        String json = sendBitsoPost(baseUrl + "sell", body);
+        String json = null;// sendBitsoPost(baseUrl + "sell", body);
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
             logError("Unable to place Sell Market Order: " + json);
@@ -299,7 +317,7 @@ public class Bitso {
         body.put("amount", amount.toPlainString());
         body.put("address", address);
         log("Executing the following BTC withdrawal: " + body);
-        String ret = sendBitsoPost(baseUrl + "bitcoin_withdrawal", body);
+        String ret = null;// sendBitsoPost(baseUrl + "bitcoin_withdrawal", body);
         if (ret != null && ret.equals("\"ok\"")) {
             log("BTC withdrawal executed");
             return true;
@@ -307,128 +325,6 @@ public class Bitso {
         logError("Unable to execute BTC withdrawal");
         logError(ret);
         return false;
-    }
-
-    public boolean speiWithdrawal(BigDecimal amount, String recipientGivenName, String recipientFamilyName,
-            String clabe, String notesRef, String numericRef) {
-        if (amount.scale() > 2) {
-            logError("Spei withdrawal has incorrect scale " + amount);
-            return false;
-        }
-        HashMap<String, Object> body = new HashMap<String, Object>();
-        body.put("amount", amount.toPlainString());
-        body.put("recipient_given_names", recipientGivenName);
-        body.put("recipient_family_names", recipientFamilyName);
-        body.put("clabe", clabe);
-        body.put("notes_ref", notesRef);
-        body.put("numeric_ref", numericRef);
-        log("Executing the following withdrawal: " + body);
-        String ret = sendBitsoPost(baseUrl + "spei_withdrawal", body);
-        if (ret != null && ret.equals("\"ok\"")) {
-            log("Withdrawal executed");
-            return true;
-        }
-        logError("Unable to execute MXN withdrawal");
-        logError(ret);
-        return false;
-    }
-
-    public String debitCardWithdrawal(BigDecimal amount, String institutionCode, String beneficiary,
-            String cardNumber) {
-        if (amount.scale() > 2) {
-            logError("Debit Card withdrawal has incorrect scale " + amount);
-            return null;
-        }
-        HashMap<String, Object> body = new HashMap<String, Object>();
-        body.put("amount", amount.toPlainString());
-        body.put("institution_code", institutionCode);
-        body.put("beneficiary", beneficiary);
-        body.put("card_number", cardNumber);
-
-        log("Executing the following withdrawal: " + body);
-        String json = sendBitsoPost("https://api.bitso.com/v3/debit_card_withdrawal", body);
-        JSONObject o = Helpers.parseJson(json);
-        if (o == null || o.has("error")) {
-            logError("Unable to execute debit card withdrawal: " + json);
-            return null;
-        }
-        if (o.has("claveRastreo")) {
-            return o.getString("claveRastreo");
-        }
-        System.out.println("unknown debit card withdrawal result: " + json);
-        return null;
-    }
-
-    /**
-     * Used to execute an MXN withdrawal through SPEI
-     *
-     * @deprecated use
-     *             {@link #speiWithdrawal(BigDecimal amount, String recipientGivenName, String recipientFamilyName, String clabe, String notesRef, String numericRef)}
-     *             instead.
-     */
-    public boolean withdrawMXN(BigDecimal amount, String recipientGivenName, String recipientFamilyName,
-            String clabe, String notesRef, String numericRef) {
-        return speiWithdrawal(amount, recipientGivenName, recipientFamilyName, clabe, notesRef, numericRef);
-    }
-
-    public BitsoTransferQuote requestQuote(BigDecimal btcAmount, BigDecimal amount, String currency,
-            boolean full) {
-        if (btcAmount != null && amount != null) {
-            logError("btcAmount and amount are mutually exclusive!");
-            return null;
-        }
-        HashMap<String, Object> body = new HashMap<String, Object>();
-        if (btcAmount != null) body.put("btc_amount", btcAmount.toPlainString());
-        if (amount != null) body.put("amount", amount.toPlainString());
-        body.put("currency", currency);
-        body.put("full", full);
-        String ret = sendBitsoPost(baseUrl + "transfer_quote", body);
-        JSONObject o = Helpers.parseJson(ret);
-        if (o == null || o.has("error")) {
-            logError("Unable to request quote: " + ret);
-            return null;
-        }
-        BitsoTransferQuote btq = null;
-        try {
-            btq = new BitsoTransferQuote(o);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            logError(ret);
-        }
-        return btq;
-    }
-
-    public BitsoTransfer createTransfer(BigDecimal btcAmount, BigDecimal amount, String currency,
-            BigDecimal rate, String paymentOutlet, HashMap<String, Object> requiredFields) {
-        if (btcAmount != null && amount != null) {
-            logError("btcAmount and amount are mutually exclusive!");
-            return null;
-        }
-        HashMap<String, Object> body = new HashMap<String, Object>();
-        if (btcAmount != null) body.put("btc_amount", btcAmount.toPlainString());
-        if (amount != null) body.put("amount", amount.toPlainString());
-        body.put("currency", currency);
-        body.put("rate", rate.toPlainString());
-        body.put("payment_outlet", paymentOutlet);
-        if (requiredFields != null) {
-            for (Entry<String, Object> e : requiredFields.entrySet()) {
-                body.put(e.getKey(), e.getValue());
-            }
-        }
-        String ret = sendBitsoPost(baseUrl + "transfer_create", body);
-        JSONObject o = Helpers.parseJson(ret);
-        if (o == null || o.has("error")) {
-            logError("Unable to request quote: " + ret);
-            return null;
-        }
-        BitsoTransfer bt = null;
-        try {
-            bt = new BitsoTransfer(o);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            logError(ret);
-        }
-        return bt;
     }
 
     public BitsoTransfer getTransferStatus(String transferId) {
@@ -454,15 +350,17 @@ public class Bitso {
         return input.substring(1, length - 1);
     }
 
-    private static String signRequest(String secret, String inputStr) {
+    private static Entry<String, String> buildBitsoAuthHeader(String secretKey, String publicKey, long nonce,
+            String httpMethod, String requestPath, String jsonPayload) {
+        String message = nonce + httpMethod + requestPath + jsonPayload;
         String signature = "";
-        byte[] secretBytes = secret.getBytes();
+        byte[] secretBytes = secretKey.getBytes();
         SecretKeySpec localMac = new SecretKeySpec(secretBytes, "HmacSHA256");
         try {
             Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(localMac);
             // Compute the hmac on input data bytes
-            byte[] arrayOfByte = mac.doFinal(inputStr.getBytes());
+            byte[] arrayOfByte = mac.doFinal(message.getBytes());
             BigInteger localBigInteger = new BigInteger(1, arrayOfByte);
             signature = String.format("%0" + (arrayOfByte.length << 1) + "x",
                     new Object[] { localBigInteger });
@@ -473,61 +371,102 @@ public class Bitso {
         } catch (IllegalStateException e) {
             e.printStackTrace();
         }
-        return signature;
+        String authHeader = String.format("Bitso %s:%s:%s", publicKey, nonce, signature);
+        Entry<String, String> entry = new AbstractMap.SimpleEntry<String, String>("Authorization",
+                authHeader);
+        return entry;
     }
 
-    private String sendBitsoPost(String url, HashMap<String, Object> bodyExtras) {
+    // private static String signRequest(String secret, String inputStr) {
+    // String signature = "";
+    // byte[] secretBytes = secret.getBytes();
+    // SecretKeySpec localMac = new SecretKeySpec(secretBytes, "HmacSHA256");
+    // try {
+    // Mac mac = Mac.getInstance("HmacSHA256");
+    // mac.init(localMac);
+    // // Compute the hmac on input data bytes
+    // byte[] arrayOfByte = mac.doFinal(inputStr.getBytes());
+    // BigInteger localBigInteger = new BigInteger(1, arrayOfByte);
+    // signature = String.format("%0" + (arrayOfByte.length << 1) + "x",
+    // new Object[] { localBigInteger });
+    // } catch (InvalidKeyException e) {
+    // e.printStackTrace();
+    // } catch (NoSuchAlgorithmException e) {
+    // e.printStackTrace();
+    // } catch (IllegalStateException e) {
+    // e.printStackTrace();
+    // }
+    // return signature;
+    // }
+
+    private String sendBitsoPost(String requestPath, JSONObject jsonPayload) {
         long nonce = System.currentTimeMillis();
-        String message = nonce + key + clientId;
-        String signature = signRequest(secret, message);
-
-        JSONObject json = new JSONObject();
-        json.put("key", key);
-        json.put("nonce", nonce);
-        json.put("signature", signature);
-
-        if (bodyExtras != null) {
-            for (Entry<String, Object> e : bodyExtras.entrySet()) {
-                json.put(e.getKey(), e.getValue());
-            }
-        }
-
+        String jsonString = jsonPayload.toString();
+        Entry<String, String> header = buildBitsoAuthHeader(secret, key, nonce, "POST", requestPath,
+                jsonString);
         HashMap<String, String> headers = new HashMap<String, String>();
         headers.put("Content-Type", "application/json");
+        headers.put(header.getKey(), header.getValue());
         try {
-            return client.sendPost(url, json.toString(), headers);
+            return client.sendPost(baseUrl + requestPath, jsonString, headers);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
+    // private String sendBitsoPost(String url, HashMap<String, Object> bodyExtras) {
+    // long nonce = System.currentTimeMillis();
+    // String message = nonce + key + clientId;
+    // String signature = signRequest(secret, message);
+    //
+    // JSONObject json = new JSONObject();
+    // json.put("key", key);
+    // json.put("nonce", nonce);
+    // json.put("signature", signature);
+    //
+    // if (bodyExtras != null) {
+    // for (Entry<String, Object> e : bodyExtras.entrySet()) {
+    // json.put(e.getKey(), e.getValue());
+    // }
+    // }
+    //
+    // HashMap<String, String> headers = new HashMap<String, String>();
+    // headers.put("Content-Type", "application/json");
+    // try {
+    // return client.sendPost(url, json.toString(), headers);
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // }
+    // return null;
+    // }
+
     private String sendBitsoPost(String url) {
         return sendBitsoPost(url, null);
     }
 
-    private String sendGet(String url) {
-        int counter = 0;
-        String ret = null;
-        while (counter++ <= retries) {
-            try {
-                ret = client.get(url);
-                return ret;
-            } catch (Exception e) {
-                logError("Exception when sending get to: " + url);
-                logError(e.getMessage());
-                if (counter == retries) {
-                    logError("Exceeded number of retries to get: " + url);
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-            try {
-                Thread.sleep(2000 * counter);
-            } catch (InterruptedException e) {
-                logError("unable to sleep");
-                e.printStackTrace();
-            }
+    private String sendGet(String requestPath) {
+        HashMap<String, String> headers = new HashMap<String, String>();
+        // headers.put("Content-Type", "application/json");
+        try {
+            return client.sendGet(baseUrl + requestPath, headers);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private String sendBitsoGet(String requestPath) {
+        long nonce = System.currentTimeMillis();
+        Entry<String, String> authHeader = buildBitsoAuthHeader(secret, key, nonce, "GET", requestPath, null);
+        HashMap<String, String> headers = new HashMap<String, String>();
+        headers.put("Content-Type", "application/json");
+        headers.put(authHeader.getKey(), authHeader.getValue());
+        // headers.
+        try {
+            return client.sendGet(baseUrl + requestPath, headers);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }

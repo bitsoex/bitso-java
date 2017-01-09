@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.bitso.exchange.BookInfo;
+import com.bitso.exchange.OrderBook;
 import com.bitso.exchange.Ticker;
 
 public class BitsoTest {
@@ -16,7 +17,11 @@ public class BitsoTest {
 
     @Before
     public void setUp() throws Exception {
-        bitso = new Bitso(null, null, null);
+        // bitso_dev_public_key
+        // bitso_dev_private
+        // String secret = ConfigManager.getMapValue("bitso_dev_private");
+        // String key = ConfigManager.getMapValue("bitso_dev_public_key");
+        bitso = new Bitso("snYcMGwkOT", "e15e750bf59789cb133ab6a1227acab4", null, 0, true, false);
     }
 
     @Test
@@ -33,6 +38,23 @@ public class BitsoTest {
         BitsoTicker bb = bitso.getTicker(BitsoBook.BTC_MXN);
         assertEquals(nullCheck(bb, Ticker.class), true);
         assertEquals(nullCheck(bb, BitsoTicker.class), true);
+    }
+
+    @Test
+    public void testGetOrderBook() {
+        ArrayList<BookInfo> books = bitso.availableBooks();
+        for (BookInfo bi : books) {
+            BitsoOrderBook ob = (BitsoOrderBook) bitso.getOrderBook(bi.book);
+            assertEquals(nullCheck(ob, OrderBook.class), true);
+        }
+    }
+
+    // Private endpoints
+
+    @Test
+    public void testUserAccountStatus() {
+        // unfinished test
+        bitso.getUserAccountStatus();
     }
 
     // need to specify the class because java reflection is bizarre
