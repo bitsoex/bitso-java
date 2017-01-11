@@ -132,7 +132,7 @@ public class Bitso {
     }
 
     public String getUserAccountStatus() {
-        String status = sendBitsoGet("/api/v3/account_status?start_debug=true");
+        String status = sendBitsoGet("/api/v3/account_status");
         System.out.println(status);
         return null;
         // account_status/
