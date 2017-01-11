@@ -50,11 +50,10 @@ public class BitsoTest {
     }
 
     // Private endpoints
-
     @Test
     public void testUserAccountStatus() {
-        // unfinished test
-        bitso.getUserAccountStatus();
+        BitsoAccountStatus status = bitso.getUserAccountStatus();
+        assertEquals(nullCheck(status, BitsoAccountStatus.class), true);
     }
 
     // need to specify the class because java reflection is bizarre

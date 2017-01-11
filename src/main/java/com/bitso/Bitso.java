@@ -131,28 +131,14 @@ public class Bitso {
         return new BitsoBalance(o);
     }
 
-    public String getUserAccountStatus() {
-        String status = sendBitsoGet("/api/v3/account_status");
-        System.out.println(status);
-        return null;
-        // account_status/
-        //
-        // {
-        // "success": true,
-        // "payload": {
-        // "client_id": "1234",
-        // "status": "active",
-        // "daily_limit": "5300.00",
-        // "monthly_limit": "32000.00",
-        // "daily_remaining": "3300.00",
-        // "monthly_remaining": "31000.00",
-        // "cellphone_number": "verified",
-        // "official_id": "submitted",
-        // "proof_of_residency": "submitted",
-        // "signed_contract": "unsubmitted",
-        // "origin_of_funds": "unsubmitted"
-        // }
-        // }
+    public BitsoAccountStatus getUserAccountStatus() {
+        String json = sendBitsoGet("/api/v3/account_status");
+        JSONObject o = Helpers.parseJson(json);
+        if (o == null || o.has("error")) {
+            logError("Error getting Bitso Account Status: " + json);
+            return null;
+        }
+        return new BitsoAccountStatus(o);
     }
 
     public BitsoUserTransactions getUserTransactions() {
