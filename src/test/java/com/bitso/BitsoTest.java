@@ -24,7 +24,7 @@ public class BitsoTest {
         bitso = new Bitso(key, secret, null, 0, true, false);
     }
 
-    @Test
+    // @Test
     public void testAvailableBooks() {
         ArrayList<BookInfo> books = bitso.availableBooks();
         for (BookInfo bi : books) {
@@ -33,14 +33,14 @@ public class BitsoTest {
         assertEquals(books.size() > 0, true);
     }
 
-    @Test
+    // @Test
     public void testTicker() {
         BitsoTicker bb = bitso.getTicker(BitsoBook.BTC_MXN);
         assertEquals(nullCheck(bb, Ticker.class), true);
         assertEquals(nullCheck(bb, BitsoTicker.class), true);
     }
 
-    @Test
+    // @Test
     public void testGetOrderBook() {
         ArrayList<BookInfo> books = bitso.availableBooks();
         for (BookInfo bi : books) {

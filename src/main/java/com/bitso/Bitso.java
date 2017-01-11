@@ -24,8 +24,8 @@ import com.bitso.helpers.Helpers;
 import com.bitso.http.BlockingHttpClient;
 
 public class Bitso {
-    private static final String BITSO_BASE_URL_PRODUCTION = "https://bitso.com/";
-    private static final String BITSO_BASE_URL_DEV = "http://dev.bitso.com/";
+    private static final String BITSO_BASE_URL_PRODUCTION = "https://bitso.com";
+    private static final String BITSO_BASE_URL_DEV = "http://bitso.lan";
     public static long THROTTLE_MS = 1000;
 
     private String key;
@@ -76,7 +76,7 @@ public class Bitso {
 
     // Public Functions
     public ArrayList<BookInfo> availableBooks() {
-        String json = sendGet("api/v3/available_books");
+        String json = sendGet("/api/v3/available_books");
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
             logError("Unable to get Bitso Ticker: " + json);
@@ -91,7 +91,7 @@ public class Bitso {
     }
 
     public BitsoTicker getTicker(BitsoBook book) {
-        String json = sendGet("api/v3/ticker?book=" + book.toString());
+        String json = sendGet("/api/v3/ticker?book=" + book.toString());
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
             logError("Unable to get Bitso Ticker: " + json);
@@ -101,7 +101,7 @@ public class Bitso {
     }
 
     public BitsoOrderBook getOrderBook(BitsoBook book) {
-        String json = sendGet("api/v3/order_book?book=" + book.toString());
+        String json = sendGet("/api/v3/order_book?book=" + book.toString());
         JSONObject o = Helpers.parseJson(json);
         if (o == null) {
             logError("Unable to get Bitso Order Book");
@@ -132,7 +132,7 @@ public class Bitso {
     }
 
     public String getUserAccountStatus() {
-        String status = sendBitsoGet("api/v3/account_status");
+        String status = sendBitsoGet("/api/v3/account_status?start_debug=true");
         System.out.println(status);
         return null;
         // account_status/
@@ -352,7 +352,8 @@ public class Bitso {
 
     private static Entry<String, String> buildBitsoAuthHeader(String secretKey, String publicKey, long nonce,
             String httpMethod, String requestPath, String jsonPayload) {
-        String message = nonce + httpMethod + requestPath + jsonPayload;
+        if (jsonPayload == null) jsonPayload = "";
+        String message = String.valueOf(nonce) + httpMethod + requestPath + jsonPayload;
         String signature = "";
         byte[] secretBytes = secretKey.getBytes();
         SecretKeySpec localMac = new SecretKeySpec(secretBytes, "HmacSHA256");
