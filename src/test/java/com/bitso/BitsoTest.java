@@ -19,9 +19,9 @@ public class BitsoTest {
     public void setUp() throws Exception {
         // bitso_dev_public_key
         // bitso_dev_private
-        // String secret = ConfigManager.getMapValue("bitso_dev_private");
-        // String key = ConfigManager.getMapValue("bitso_dev_public_key");
-        bitso = new Bitso("snYcMGwkOT", "e15e750bf59789cb133ab6a1227acab4", null, 0, true, false);
+        String secret = System.getenv("bitso_dev_private");
+        String key = System.getenv("bitso_dev_public_key");
+        bitso = new Bitso(key, secret, null, 0, true, false);
     }
 
     @Test
