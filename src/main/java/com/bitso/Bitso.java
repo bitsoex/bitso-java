@@ -25,7 +25,7 @@ import com.bitso.http.BlockingHttpClient;
 
 public class Bitso {
     private static final String BITSO_BASE_URL_PRODUCTION = "https://bitso.com";
-    private static final String BITSO_BASE_URL_DEV = "http://bitso.lan";
+    private static final String BITSO_BASE_URL_DEV = "https://dev.bitso.com";
     public static long THROTTLE_MS = 1000;
 
     private String key;
@@ -139,6 +139,26 @@ public class Bitso {
             return null;
         }
         return new BitsoAccountStatus(o);
+    }
+
+    public BitsoBalance getUserAccountBalance(){
+        String json =  sendBitsoGet("/api/v3/balance");
+        JSONObject o = Helpers.parseJson(json);
+        if(o == null || o.has("error")){
+            logError("Error getting account balance");
+            return null;
+        }
+        return new BitsoBalance(o);
+    }
+
+    public BitsoFee getUserFees(){
+        String json =  sendBitsoGet("/api/v3/fees");
+        JSONObject o = Helpers.parseJson(json);
+        if(o == null || o.has("error")){
+            logError("Error getting user fees");
+            return null;
+        }
+        return new BitsoFee(o);
     }
 
     public BitsoUserTransactions getUserTransactions() {
