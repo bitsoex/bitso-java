@@ -16,7 +16,7 @@ public class BitsoOpenOrders {
         for (int i = 0; i < obj.length(); i++) {
             JSONObject o = obj.getJSONObject(i);
             BookOrder order = Bitso.processBookOrderJSON(o.toString());
-            order.book = book.toString();
+            order.book = BitsoBook.valueOf(book.toString());
             list.add(order);
         }
     }

@@ -2,6 +2,7 @@ package com.bitso.helpers;
 
 import java.io.PrintStream;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -76,6 +77,26 @@ public class Helpers {
         } catch (JSONException e) {
             System.err.println("Unable to parse json array: " + json);
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String getString(JSONObject o, String key) {
+        if (o.has(key)) {
+            return o.getString(key);
+        } else {
+            System.err.println("No " + key + ": " + o);
+            Helpers.printStackTrace();
+        }
+        return null;
+    }
+
+    public static BigDecimal getBD(JSONObject o, String key) {
+        if (o.has(key)) {
+            return new BigDecimal(o.getString(key));
+        } else {
+            System.err.println("No " + key + ": " + o);
+            Helpers.printStackTrace();
         }
         return null;
     }
