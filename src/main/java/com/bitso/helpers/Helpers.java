@@ -3,8 +3,11 @@ package com.bitso.helpers;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -99,5 +102,22 @@ public class Helpers {
             Helpers.printStackTrace();
         }
         return null;
+    }
+
+    public static Date getDate(String s){
+        Date date = null;
+
+        // Received string: 2016-04-08T17:52:31.000+00:00
+        int separatorIndex = s.indexOf('T');
+        // String date format: yyyy-MM-dd HH:mm:ss
+        String dateFormat =  s.substring(0, separatorIndex) + " " + s.substring(separatorIndex +  1);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        try {
+            date = formatter.parse(dateFormat);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 }
