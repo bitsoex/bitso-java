@@ -72,7 +72,7 @@ public class BitsoUserTransactions {
                     type = BookOrder.TYPE.BUY;
                 }
                 BookOrder order = new BookOrder(price, major, type);
-                order.book = book.toString();
+                order.book = BitsoBook.valueOf(book.toString());
                 order.id = o.getString("order_id");
                 order.dateTime = dateTime;
                 order.status = BookOrder.STATUS.COMPLETE;
