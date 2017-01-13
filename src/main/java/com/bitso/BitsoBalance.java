@@ -18,7 +18,7 @@ public class BitsoBalance {
 
     private Balance[] retrieveBalances(JSONArray array){
         int totalElements = array.length();
-        Balance balances[] = new Balance[totalElements];
+        Balance[] balances = new Balance[totalElements];
         for(int i=0; i<totalElements; i++){
             balances[i] = new Balance(array.getJSONObject(i));
         }

@@ -6,10 +6,10 @@ import org.json.JSONObject;
 import com.bitso.helpers.Helpers;
 
 public class Balance {
-    String currency;
-    BigDecimal total;
-    BigDecimal locked;
-    BigDecimal available;
+    public String currency;
+    public BigDecimal total;
+    public BigDecimal locked;
+    public BigDecimal available;
 
     public Balance(String currency, BigDecimal total, BigDecimal locked, BigDecimal available) {
         this.currency = currency;

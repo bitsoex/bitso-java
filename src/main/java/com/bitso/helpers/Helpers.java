@@ -3,8 +3,13 @@ package com.bitso.helpers;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -12,6 +17,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Helpers {
+
+    public static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZZ");
 
     private static final List<Field> getAllFields(List<Field> fields, Class<?> type) {
         fields.addAll(Arrays.asList(type.getDeclaredFields()));
@@ -99,5 +106,9 @@ public class Helpers {
             Helpers.printStackTrace();
         }
         return null;
+    }
+
+    public static ZonedDateTime getZonedDatetime(String s){
+        return ZonedDateTime.parse(s, dateTimeFormatter);
     }
 }
