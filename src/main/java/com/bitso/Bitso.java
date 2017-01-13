@@ -161,6 +161,21 @@ public class Bitso {
         return new BitsoFee(o);
     }
 
+    public BitsoLedger getUserLedger(String... specificOperation){
+        String request = "/api/v3/ledger";
+        if(specificOperation.length == 1){
+            request += "/" + specificOperation[0];
+        }
+        log(request);
+        String json =  sendBitsoGet(request);
+        JSONObject o = Helpers.parseJson(json);
+        if(o == null || o.has("error")){
+            logError("Error getting user fees");
+            return null;
+        }
+        return new BitsoLedger(o);
+    }
+
     public BitsoUserTransactions getUserTransactions() {
         return getUserTransactions(BitsoBook.BTC_MXN);
     }

@@ -69,6 +69,17 @@ public class BitsoTest {
         assertEquals(true, nullCheck(fee, BitsoFee.class));
     }
 
+    @Test
+    public void testUserLedgers(){
+        String[] operations = {"trades", "fees", "fundings", "withdrawals"};
+        BitsoLedger fullLedger = bitso.getUserLedger();
+        assertEquals(true, nullCheck(fullLedger, BitsoLedger.class));
+        for(int i=0; i<operations.length; i++){
+            BitsoLedger specificLedger = bitso.getUserLedger(operations[i]);
+            assertEquals(true, nullCheck(specificLedger, BitsoLedger.class));
+        }
+    }
+
     // need to specify the class because java reflection is bizarre
     // and if you want to check the parent class of the object its
     // easier to just specify the class

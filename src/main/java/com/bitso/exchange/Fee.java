@@ -5,9 +5,9 @@ import org.json.JSONObject;
 import com.bitso.helpers.Helpers;
 
 public class Fee {
-    String book;
-    BigDecimal feeDecimal;
-    BigDecimal feePercent;
+    public String book;
+    public BigDecimal feeDecimal;
+    public BigDecimal feePercent;
     
     public Fee(String book, BigDecimal feeDecimal, BigDecimal feePercent) {
         this.book = book;
