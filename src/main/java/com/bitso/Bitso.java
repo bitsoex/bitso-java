@@ -14,12 +14,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.bitso.BitsoUserTransactions;
 import com.bitso.BitsoUserTransactions.SORT_ORDER;
 import com.bitso.exchange.BookOrder;
-import com.bitso.exchange.OrderBook;
 import com.bitso.exchange.BookOrder.STATUS;
 import com.bitso.exchange.BookOrder.TYPE;
+import com.bitso.exchange.OrderBook;
 import com.bitso.helpers.Helpers;
 import com.bitso.http.BlockingHttpClient;
 
@@ -284,6 +283,21 @@ public class Bitso {
 
     public String getDepositAddress() {
         return quoteEliminator(sendBitsoPost(baseUrl + "bitcoin_deposit_address"));
+    }
+
+    public boolean withdrawETH(String address, BigDecimal amount) {
+        HashMap<String, Object> body = new HashMap<String, Object>();
+        body.put("amount", amount.toPlainString());
+        body.put("address", address);
+        log("Executing the following ETH withdrawal: " + body);
+        String ret = sendBitsoPost(baseUrl + "ether_withdrawal", body);
+        if (ret != null && ret.equals("\"ok\"")) {
+            log("ETH withdrawal executed");
+            return true;
+        }
+        logError("Unable to execute ETH withdrawal");
+        logError(ret);
+        return false;
     }
 
     public boolean withdrawBTC(String address, BigDecimal amount) {
