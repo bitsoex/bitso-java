@@ -96,8 +96,25 @@ public class BitsoTest {
         assertEquals(true, nullCheck(specificWithdraw, BitsoWithdrawal.class));
 
         // Multiple withdrawal ids
-        BitsoWithdrawal specificWithdrawal =  bitso.getUserWithdrawals(wids);
-        assertEquals(true, nullCheck(specificWithdrawal, BitsoWithdrawal.class));
+        BitsoWithdrawal multipleWithdraws =  bitso.getUserWithdrawals(wids);
+        assertEquals(true, nullCheck(multipleWithdraws, BitsoWithdrawal.class));
+    }
+
+    @Test
+    public void testUserFundings(){
+        // Testing funding ids
+        String[] fids = {"2ab6b5cccf2be8d1fb8382234203f8e1", "e1b96fe7d22cfbfdb83df51a68eca9b0",
+                "1ae6d8af23111799698a4821b8d1d156", "7a68bac79c89af4bc24dd153f535ad54"};
+        BitsoFunding fullFundings = bitso.getUserFundings();
+        assertEquals(true, nullCheck(fullFundings, BitsoFunding.class));
+
+        // Specific funding id
+        BitsoFunding specificFunding = bitso.getUserFundings(fids[0]);
+        assertEquals(true, nullCheck(specificFunding, BitsoFunding.class));
+
+        // Multiple funding ids
+        BitsoFunding multipleFundings = bitso.getUserFundings(fids);
+        assertEquals(true, nullCheck(multipleFundings, BitsoFunding.class));
     }
 
     // need to specify the class because java reflection is bizarre

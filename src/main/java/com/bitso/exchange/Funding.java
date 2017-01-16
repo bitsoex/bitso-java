@@ -5,22 +5,25 @@ import java.time.ZonedDateTime;
 import org.json.JSONObject;
 import com.bitso.helpers.Helpers;
 
-public class Withdrawal {
-    public String withdrawalId;
+public class Funding {
+    public String fundingId;
     public String status;
-    public ZonedDateTime withdrawalDate;
+    public ZonedDateTime fundingDate;
     public String currency;
     public String method;
     public BigDecimal amount;
     public JSONObject details;
 
-    public Withdrawal(JSONObject o){
-        withdrawalId = Helpers.getString(o, "wid");
+    public Funding(JSONObject o){
+        fundingId = Helpers.getString(o, "fid");
         status = Helpers.getString(o, "status");
-        withdrawalDate = Helpers.getZonedDatetime(Helpers.getString(o, "created_at"));
+        fundingDate = Helpers.getZonedDatetime(Helpers.getString(o, "created_at"));
         currency = Helpers.getString(o, "currency");
         method = Helpers.getString(o, "method");
         amount = Helpers.getBD(o, "amount");
+        // TODO
+        // Error in API, api response is a
+        // JSONArray not a JSONObject
         details = o.getJSONObject("details");
     }
 

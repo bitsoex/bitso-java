@@ -195,6 +195,25 @@ public class Bitso {
         return new BitsoWithdrawal(o);
     }
 
+    public BitsoFunding getUserFundings(String... fundingsIds){
+        String request = "/api/v3/fundings";
+        if(fundingsIds.length > 0){
+            request += "/";
+            for (String string : fundingsIds) {
+                request += string + "-";
+            }
+            request = request.substring(0, request.length() - 1);
+        }
+        log(request);
+        String json = sendBitsoGet(request);
+        JSONObject o = Helpers.parseJson(json);
+        if(o == null || o.has("error")){
+            logError("Error getting user withdrawals");
+            return null;
+        }
+        return new BitsoFunding(o);
+    }
+
     public BitsoUserTransactions getUserTransactions() {
         return getUserTransactions(BitsoBook.BTC_MXN);
     }
