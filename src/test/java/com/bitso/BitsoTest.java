@@ -83,6 +83,23 @@ public class BitsoTest {
         }
     }
 
+    @Test
+    public void testUserWithdrawals(){
+        // Testing withdrawal ids
+        String[] wids = {"65532d428d4c1b2642833b9e78c1b9fd", "ea19499f49aa20a86eaf29ebe6af3f9e",
+                "d5764355792aff733f31ee7bfc38a832", "e7dba07657459c194514d3088d117e18"};
+        BitsoWithdrawal fullWithdraws = bitso.getUserWithdrawals();
+        assertEquals(true, nullCheck(fullWithdraws, BitsoWithdrawal.class));
+
+        // Specific withdrawal id
+        BitsoWithdrawal specificWithdraw = bitso.getUserWithdrawals(wids[0]);
+        assertEquals(true, nullCheck(specificWithdraw, BitsoWithdrawal.class));
+
+        // Multiple withdrawal ids
+        BitsoWithdrawal specificWithdrawal =  bitso.getUserWithdrawals(wids);
+        assertEquals(true, nullCheck(specificWithdrawal, BitsoWithdrawal.class));
+    }
+
     // need to specify the class because java reflection is bizarre
     // and if you want to check the parent class of the object its
     // easier to just specify the class

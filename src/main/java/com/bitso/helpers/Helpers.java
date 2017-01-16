@@ -3,14 +3,14 @@ package com.bitso.helpers;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -110,5 +110,23 @@ public class Helpers {
 
     public static ZonedDateTime getZonedDatetime(String s){
         return ZonedDateTime.parse(s, dateTimeFormatter);
+    }
+
+    public static Map<String, Object> getUnstructuredJSONObjectValues(JSONObject o){
+        Iterator<String> iterator = o.keys();
+        Map<String, Object> map = new HashMap<String, Object>();
+        String currentKey = "";
+        Object currentObject;
+        while(iterator.hasNext()){
+            currentKey = iterator.next();
+            currentObject = o.get(currentKey);
+            if(currentObject instanceof JSONObject){
+                map.put(currentKey,
+                        getUnstructuredJSONObjectValues((JSONObject) currentObject));
+            }else{
+                map.put(currentKey, currentObject);
+            }
+        }
+        return map;
     }
 }

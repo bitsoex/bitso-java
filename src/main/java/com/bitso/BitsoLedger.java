@@ -7,7 +7,7 @@ import com.bitso.exchange.Operation;
 import com.bitso.helpers.Helpers;
 
 public class BitsoLedger {
-    Operation operations[];
+    Operation[] operations;
 
     public BitsoLedger(JSONObject o){
         JSONArray operationsJson = o.getJSONArray("payload");

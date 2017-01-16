@@ -2,10 +2,7 @@ package com.bitso.exchange;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,7 +24,7 @@ public class Operation {
         // Key verification is not needed, this workaround is
         // valid meanwhile there is a server error.
         if(o.has("details")){
-            details = getOperationDetails(o.getJSONObject("details"));
+            details = Helpers.getUnstructuredJSONObjectValues(o.getJSONObject("details"));
         }else{
             details = new HashMap<String, Object>();
         }
@@ -42,9 +39,10 @@ public class Operation {
         return balances;
     }
 
-    private HashMap<String, Object> getOperationDetails(JSONObject o){
-        HashMap<String, Object> detailsMap =  new HashMap<String, Object>();
+    /*
+    private void getOperationDetails(JSONObject o){
         Iterator<String> detailsIterator = o.keys();
+        details =  new HashMap<String, Object>();
         String currentKey = "";
         while(detailsIterator.hasNext()){
             currentKey = detailsIterator.next();
@@ -55,10 +53,10 @@ public class Operation {
             // User usage will be more complicated.
             // Suggestion: change server response to String
             // value.
-            detailsMap.put(currentKey, o.get(currentKey));
+            details.put(currentKey, o.get(currentKey));
         }
-        return detailsMap;
     }
+    */
 
     @Override
     public String toString() {
