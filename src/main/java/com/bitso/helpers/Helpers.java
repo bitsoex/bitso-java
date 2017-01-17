@@ -108,6 +108,16 @@ public class Helpers {
         return null;
     }
 
+    public static Integer getInteger(JSONObject o, String key){
+        if(o.has(key)){
+            return o.getInt(key);
+        }else{
+            System.err.println("No " + key + ": " + o);
+            Helpers.printStackTrace();
+        }
+        return null;
+    }
+
     public static ZonedDateTime getZonedDatetime(String s){
         return ZonedDateTime.parse(s, dateTimeFormatter);
     }
@@ -128,5 +138,15 @@ public class Helpers {
             }
         }
         return map;
+    }
+
+    public static JSONObject expectJSONObject(JSONObject o, String key, Object senderClass){
+        if((o.get(key) instanceof JSONObject)){
+            return o.getJSONObject(key);
+        }
+        System.out.println("On " + senderClass.getClass().getName() + ", key: " + key
+                + " is not a JSONObject as expected"
+                + " returning null");
+        return null;
     }
 }

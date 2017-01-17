@@ -10,16 +10,15 @@ public class BitsoFunding {
 
     public BitsoFunding(JSONObject o) {
         JSONArray fundingJson = o.getJSONArray("payload");
-        fundings = retrieveFundings(fundingJson);
+        retrieveFundings(fundingJson);
     }
 
-    private Funding[] retrieveFundings(JSONArray array){
+    private void retrieveFundings(JSONArray array){
         int totalElements = array.length();
-        Funding[] fundings = new Funding[totalElements];
+        fundings = new Funding[totalElements];
         for(int i=0; i<totalElements; i++){
             fundings[i] =  new Funding(array.getJSONObject(i));
         }
-        return fundings;
     }
 
     @Override

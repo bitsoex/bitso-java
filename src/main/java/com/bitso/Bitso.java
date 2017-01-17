@@ -161,16 +161,25 @@ public class Bitso {
         return new BitsoFee(o);
     }
 
-    public BitsoLedger getUserLedger(String... specificOperation){
+    public BitsoLedger getUserLedger(){
         String request = "/api/v3/ledger";
-        if(specificOperation.length == 1){
-            request += "/" + specificOperation[0];
-        }
         log(request);
         String json =  sendBitsoGet(request);
         JSONObject o = Helpers.parseJson(json);
         if(o == null || o.has("error")){
-            logError("Error getting user fees");
+            logError("Error getting user ledgers");
+            return null;
+        }
+        return new BitsoLedger(o);
+    }
+
+    public BitsoLedger getUserLedger(String specificOperation){
+        String request = "/api/v3/ledger/" + specificOperation;
+        log(request);
+        String json =  sendBitsoGet(request);
+        JSONObject o = Helpers.parseJson(json);
+        if(o == null || o.has("error")){
+            logError("Error getting user ledgers");
             return null;
         }
         return new BitsoLedger(o);
@@ -208,10 +217,30 @@ public class Bitso {
         String json = sendBitsoGet(request);
         JSONObject o = Helpers.parseJson(json);
         if(o == null || o.has("error")){
-            logError("Error getting user withdrawals");
+            logError("Error getting user fundings");
             return null;
         }
         return new BitsoFunding(o);
+    }
+
+    public BitsoTrade getUserTrades(String... tradesIds){
+        String request = "/api/v3/user_trades";
+        if(tradesIds.length > 0){
+            request += "/";
+            for (String string : tradesIds) {
+                request += string + "-";
+            }
+            request = request.substring(0, request.length() - 1);
+        }
+        request += "?book=btc_mxn";
+        log(request);
+        String json = sendBitsoGet(request);
+        JSONObject o = Helpers.parseJson(json);
+        if(o == null || o.has("error")){
+            logError("Error getting user trades");
+            return null;
+        }
+        return new BitsoTrade(o);
     }
 
     public BitsoUserTransactions getUserTransactions() {

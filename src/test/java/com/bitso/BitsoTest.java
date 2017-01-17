@@ -50,13 +50,13 @@ public class BitsoTest {
     }
 
     // Private endpoints
-    @Test
+    // @Test
     public void testUserAccountStatus() {
         BitsoAccountStatus status = bitso.getUserAccountStatus();
         assertEquals(nullCheck(status, BitsoAccountStatus.class), true);
     }
 
-    @Test
+    // @Test
     public void testUserAccountBalance(){
         BitsoBalance balance = bitso.getUserAccountBalance();
         System.out.println(balance);
@@ -86,8 +86,8 @@ public class BitsoTest {
     @Test
     public void testUserWithdrawals(){
         // Testing withdrawal ids
-        String[] wids = {"65532d428d4c1b2642833b9e78c1b9fd", "ea19499f49aa20a86eaf29ebe6af3f9e",
-                "d5764355792aff733f31ee7bfc38a832", "e7dba07657459c194514d3088d117e18"};
+        String[] wids = {"65532d428d4c1b2642833b9e78c1b9fd", "d5764355792aff733f31ee7bfc38a832",
+                "e7dba07657459c194514d3088d117e18"};
         BitsoWithdrawal fullWithdraws = bitso.getUserWithdrawals();
         assertEquals(true, nullCheck(fullWithdraws, BitsoWithdrawal.class));
 
@@ -117,6 +117,22 @@ public class BitsoTest {
         assertEquals(true, nullCheck(multipleFundings, BitsoFunding.class));
     }
 
+    @Test
+    public void testUserTrades(){
+        // Testing funding ids
+        String[] tids = {"1431", "1430", "1429", "1428"};
+        BitsoTrade fullTrades = bitso.getUserTrades();
+        assertEquals(true, nullCheck(fullTrades, BitsoTrade.class));
+
+        // Specific trade id
+        BitsoTrade specificTrade = bitso.getUserTrades(tids[0]);
+        assertEquals(true, nullCheck(specificTrade, BitsoTrade.class));
+
+        // Multiple trade ids
+        BitsoTrade multipleTrades = bitso.getUserTrades(tids);
+        assertEquals(true, nullCheck(multipleTrades, BitsoTrade.class));
+    }
+
     // need to specify the class because java reflection is bizarre
     // and if you want to check the parent class of the object its
     // easier to just specify the class
@@ -124,7 +140,10 @@ public class BitsoTest {
         Field[] fields = genericType.getDeclaredFields();
         for (Field f : fields) {
             try {
-                if (f.get(obj) == null) return false;
+                if (f.get(obj) == null){
+                    System.out.println(f.getName());
+                    return false;
+                }
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

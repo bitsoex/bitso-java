@@ -21,7 +21,11 @@ public class Withdrawal {
         currency = Helpers.getString(o, "currency");
         method = Helpers.getString(o, "method");
         amount = Helpers.getBD(o, "amount");
-        details = o.getJSONObject("details");
+
+        // TODO:
+        // Expected always a JSONObject, sometimes
+        // JSONArray is obtained
+        details = Helpers.expectJSONObject(o, "details", this);
     }
 
     @Override

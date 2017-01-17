@@ -21,10 +21,11 @@ public class Funding {
         currency = Helpers.getString(o, "currency");
         method = Helpers.getString(o, "method");
         amount = Helpers.getBD(o, "amount");
-        // TODO
-        // Error in API, api response is a
-        // JSONArray not a JSONObject
-        details = o.getJSONObject("details");
+
+        // TODO:
+        // Expected always a JSONObject, sometimes
+        // JSONArray is obtained
+        details = Helpers.expectJSONObject(o, "details", this);
     }
 
     @Override
