@@ -17,7 +17,7 @@ public class Funding {
     public Funding(JSONObject o){
         fundingId = Helpers.getString(o, "fid");
         status = Helpers.getString(o, "status");
-        fundingDate = Helpers.getZonedDatetime(Helpers.getString(o, "created_at"));
+        fundingDate = Helpers.getZonedDatetime(o, "created_at");
         currency = Helpers.getString(o, "currency");
         method = Helpers.getString(o, "method");
         amount = Helpers.getBD(o, "amount");

@@ -118,8 +118,14 @@ public class Helpers {
         return null;
     }
 
-    public static ZonedDateTime getZonedDatetime(String s){
-        return ZonedDateTime.parse(s, dateTimeFormatter);
+    public static ZonedDateTime getZonedDatetime(JSONObject o, String key){
+        if(o.has(key)){
+            return ZonedDateTime.parse(o.getString(key), dateTimeFormatter);
+        }else{
+            System.err.println("No " + key + ": " + o);
+            Helpers.printStackTrace();
+        }
+        return null;
     }
 
     public static Map<String, Object> getUnstructuredJSONObjectValues(JSONObject o){
@@ -148,5 +154,14 @@ public class Helpers {
                 + " is not a JSONObject as expected"
                 + " returning null");
         return null;
+    }
+
+    public static String[] parseJSONArray(JSONArray arrray){
+        int totalElements = arrray.length();
+        String[] elements =  new String[totalElements];
+        for(int i=0; i<totalElements; i++){
+            elements[i] = arrray.getString(i);
+        }
+        return elements;
     }
 }

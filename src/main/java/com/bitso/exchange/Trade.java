@@ -21,7 +21,7 @@ public class Trade {
     public Trade(JSONObject o){
         book =  Helpers.getString(o, "book");
         major = Helpers.getBD(o, "major");
-        tradeDate =  Helpers.getZonedDatetime(Helpers.getString(o, "created_at"));
+        tradeDate =  Helpers.getZonedDatetime(o, "created_at");
         minor =  Helpers.getBD(o, "minor");
         feesAmount = Helpers.getBD(o, "fees_amount");
         feesCurrency = Helpers.getString(o, "fees_currency");

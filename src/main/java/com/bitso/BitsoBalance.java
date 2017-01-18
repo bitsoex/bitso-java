@@ -8,7 +8,7 @@ import com.bitso.helpers.Helpers;
 
 public class BitsoBalance {
 
-    Balance balances[];
+    public Balance[] balances;
 
     public BitsoBalance(JSONObject obj) {
         JSONObject payload = obj.getJSONObject("payload");

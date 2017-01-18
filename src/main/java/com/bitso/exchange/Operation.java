@@ -18,7 +18,7 @@ public class Operation {
     public Operation(JSONObject o) {
         entryId = Helpers.getString(o, "eid");
         operationDescription = Helpers.getString(o, "operation");
-        operationDate = Helpers.getZonedDatetime(Helpers.getString(o, "created_at"));
+        operationDate = Helpers.getZonedDatetime(o, "created_at");
         afterOperationBalances = getOperationBalances(o.getJSONArray("balance_updates"));
         // TODO:
         // Key verification is not needed, this workaround is

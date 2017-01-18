@@ -1,14 +1,11 @@
 package com.bitso;
 
 import java.util.ArrayList;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.bitso.exchange.BookOrder;
-
 public class BitsoOpenOrders {
-
+/*
     public ArrayList<BookOrder> list;
 
     public BitsoOpenOrders(JSONArray obj, BitsoBook book) {
@@ -31,4 +28,5 @@ public class BitsoOpenOrders {
         }
         return sb.toString();
     }
+    */
 }

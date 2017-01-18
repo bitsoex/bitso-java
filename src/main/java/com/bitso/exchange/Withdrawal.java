@@ -17,7 +17,7 @@ public class Withdrawal {
     public Withdrawal(JSONObject o){
         withdrawalId = Helpers.getString(o, "wid");
         status = Helpers.getString(o, "status");
-        withdrawalDate = Helpers.getZonedDatetime(Helpers.getString(o, "created_at"));
+        withdrawalDate = Helpers.getZonedDatetime(o, "created_at");
         currency = Helpers.getString(o, "currency");
         method = Helpers.getString(o, "method");
         amount = Helpers.getBD(o, "amount");

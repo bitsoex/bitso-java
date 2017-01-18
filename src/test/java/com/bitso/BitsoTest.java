@@ -3,12 +3,14 @@ package com.bitso;
 import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.bitso.exchange.BookInfo;
+import com.bitso.exchange.Order;
 import com.bitso.exchange.OrderBook;
 import com.bitso.exchange.Ticker;
 
@@ -44,36 +46,35 @@ public class BitsoTest {
     public void testGetOrderBook() {
         ArrayList<BookInfo> books = bitso.availableBooks();
         for (BookInfo bi : books) {
-            BitsoOrderBook ob = (BitsoOrderBook) bitso.getOrderBook(bi.book);
+            BitsoOrder ob = (BitsoOrder) bitso.getOrderBook(bi.book);
             assertEquals(nullCheck(ob, OrderBook.class), true);
         }
     }
 
     // Private endpoints
-    // @Test
+    //@Test
     public void testUserAccountStatus() {
         BitsoAccountStatus status = bitso.getUserAccountStatus();
         assertEquals(nullCheck(status, BitsoAccountStatus.class), true);
     }
 
-    // @Test
+    //@Test
     public void testUserAccountBalance(){
         BitsoBalance balance = bitso.getUserAccountBalance();
-        System.out.println(balance);
         assertEquals(true, nullCheck(balance, BitsoBalance.class));
     }
 
-    @Test
+    //@Test
     public void testUserFees(){
         BitsoFee fee = bitso.getUserFees();
         assertEquals(true, nullCheck(fee, BitsoFee.class));
     }
 
-    @Test
+    //@Test
     public void testUserLedgers(){
         String[] operations = {"trades", "fees", "fundings", "withdrawals"};
         // Global ledger request
-        BitsoLedger fullLedger = bitso.getUserLedger();
+        BitsoLedger fullLedger = bitso.getUserLedger(null);
         assertEquals(true, nullCheck(fullLedger, BitsoLedger.class));
 
         // Specific operation type request
@@ -83,7 +84,7 @@ public class BitsoTest {
         }
     }
 
-    @Test
+    //@Test
     public void testUserWithdrawals(){
         // Testing withdrawal ids
         String[] wids = {"65532d428d4c1b2642833b9e78c1b9fd", "d5764355792aff733f31ee7bfc38a832",
@@ -100,7 +101,7 @@ public class BitsoTest {
         assertEquals(true, nullCheck(multipleWithdraws, BitsoWithdrawal.class));
     }
 
-    @Test
+    //@Test
     public void testUserFundings(){
         // Testing funding ids
         String[] fids = {"2ab6b5cccf2be8d1fb8382234203f8e1", "e1b96fe7d22cfbfdb83df51a68eca9b0",
@@ -117,9 +118,9 @@ public class BitsoTest {
         assertEquals(true, nullCheck(multipleFundings, BitsoFunding.class));
     }
 
-    @Test
+    //@Test
     public void testUserTrades(){
-        // Testing funding ids
+        // Testing trades ids
         String[] tids = {"1431", "1430", "1429", "1428"};
         BitsoTrade fullTrades = bitso.getUserTrades();
         assertEquals(true, nullCheck(fullTrades, BitsoTrade.class));
@@ -131,6 +132,46 @@ public class BitsoTest {
         // Multiple trade ids
         BitsoTrade multipleTrades = bitso.getUserTrades(tids);
         assertEquals(true, nullCheck(multipleTrades, BitsoTrade.class));
+    }
+
+    // @Test
+    public void testOpenOrders(){
+        BitsoOrder orders = bitso.getOpenOrders();
+        assertEquals(true, nullCheck(orders, BitsoOrder.class));
+    }
+
+    // @Test
+    public void testlookupOrders(){
+        String[] values = {"kRrcjsp5n9og98qa", "V4RVg7OJ1jl5O5Om", "4fVvpQrR59M26ojl",
+                "Rhvak2cOOX552s69", "n8JvMOl4iO8s22r2"};
+
+        BitsoOrder specificOrder = bitso.lookupOrders(values[0]);
+        assertEquals(true, nullCheck(specificOrder, BitsoOrder.class));
+
+        BitsoOrder multipleOrders = bitso.lookupOrders(values);
+        assertEquals(true, nullCheck(multipleOrders, BitsoOrder.class));
+    }
+
+    @Test
+    public void testPlaceUserOrder(){
+        String orderId = bitso.placeOrder(BitsoBook.BTC_MXN, Order.SIDE.BUY,
+                Order.TYPE.LIMIT, new BigDecimal("15.4"), null,
+                new BigDecimal("20854.4"));
+        assertEquals(true, ((orderId != null) && (orderId.length() > 0)));
+    }
+
+    // @Test
+    public void testCancelUserOrder() {
+        String[] orders = { "pj251R8m6im5lO82", "4nQl95irVlfQRkXp", "vdfVrXVQJ0iJdV6h" };
+
+        String[] cancelParticularOrder = bitso.cancelOrder(orders[0]);
+        assertEquals(true, (cancelParticularOrder != null));
+
+        String[] cancelMultipleOrders = bitso.cancelOrder(orders);
+        assertEquals(true, (cancelMultipleOrders != null));
+
+        String[] cancelAllOrders = bitso.cancelOrder("all");
+        assertEquals(true, (cancelAllOrders != null));
     }
 
     // need to specify the class because java reflection is bizarre
