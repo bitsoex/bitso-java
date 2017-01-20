@@ -134,24 +134,6 @@ public class Helpers {
         return null;
     }
 
-    public static Map<String, Object> getUnstructuredJSONObjectValues(JSONObject o){
-        Iterator<String> iterator = o.keys();
-        Map<String, Object> map = new HashMap<String, Object>();
-        String currentKey = "";
-        Object currentObject;
-        while(iterator.hasNext()){
-            currentKey = iterator.next();
-            currentObject = o.get(currentKey);
-            if(currentObject instanceof JSONObject){
-                map.put(currentKey,
-                        getUnstructuredJSONObjectValues((JSONObject) currentObject));
-            }else{
-                map.put(currentKey, currentObject);
-            }
-        }
-        return map;
-    }
-
     public static JSONObject expectJSONObject(JSONObject o, String key, Object senderClass){
         if((o.get(key) instanceof JSONObject)){
             return o.getJSONObject(key);

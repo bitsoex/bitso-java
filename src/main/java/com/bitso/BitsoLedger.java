@@ -3,22 +3,21 @@ package com.bitso;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.bitso.exchange.Operation;
 import com.bitso.helpers.Helpers;
 
 public class BitsoLedger {
-    Operation[] operations;
+    BitsoOperation[] operations;
 
     public BitsoLedger(JSONObject o){
         JSONArray operationsJson = o.getJSONArray("payload");
         operations = retrieveOperations(operationsJson);
     }
 
-    private Operation[] retrieveOperations(JSONArray array){
+    private BitsoOperation[] retrieveOperations(JSONArray array){
         int totalElements = array.length();
-        Operation[] operations = new Operation[totalElements];
+        BitsoOperation[] operations = new BitsoOperation[totalElements];
         for(int i=0; i<totalElements; i++){
-            operations[i] =  new Operation(array.getJSONObject(i));
+            operations[i] =  new BitsoOperation(array.getJSONObject(i));
         }
         return operations;
     }

@@ -1,29 +1,26 @@
 package com.bitso;
 
-import org.json.JSONArray;
+import java.math.BigDecimal;
 import org.json.JSONObject;
-import com.bitso.exchange.Fee;
 import com.bitso.helpers.Helpers;
 
 public class BitsoFee {
+    public String book;
+    public BigDecimal feeDecimal;
+    public BigDecimal feePercent;
     
-    Fee fees[];
-    
-    public BitsoFee(JSONObject obj) {
-        JSONObject payload = obj.getJSONObject("payload");
-        JSONArray jsonFees = payload.getJSONArray("fees");
-        fees = retrieveFees(jsonFees);
+    public BitsoFee(String book, BigDecimal feeDecimal, BigDecimal feePercent) {
+        this.book = book;
+        this.feeDecimal = feeDecimal;
+        this.feePercent = feePercent;
     }
     
-    private Fee[] retrieveFees(JSONArray array){
-        int totalElements = array.length();
-        Fee fees[] = new Fee[totalElements];
-        for(int i=0; i<totalElements; i++){
-            fees[i] = new Fee(array.getJSONObject(i));
-        }
-        return fees;
+    public BitsoFee(JSONObject o){
+        this.book = Helpers.getString(o, "book");
+        this.feeDecimal = Helpers.getBD(o, "fee_decimal");
+        this.feePercent =  Helpers.getBD(o, "fee_percent");
     }
-    
+
     @Override
     public String toString() {
         return Helpers.fieldPrinter(this);

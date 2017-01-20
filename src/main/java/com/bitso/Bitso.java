@@ -14,8 +14,6 @@ import javax.crypto.spec.SecretKeySpec;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.bitso.exchange.BookInfo;
-import com.bitso.exchange.Order;
-import com.bitso.exchange.Withdrawal;
 import com.bitso.helpers.Helpers;
 import com.bitso.http.BlockingHttpClient;
 
@@ -104,14 +102,17 @@ public class Bitso {
         return new BitsoTicker(o.getJSONObject("payload"));
     }
 
-    public BitsoOrder getOrderBook(BitsoBook book) {
+    public BitsoOrderBook getOrderBook(BitsoBook book) {
         String json = sendGet("/api/v3/order_book?book=" + book.toString());
         JSONObject o = Helpers.parseJson(json);
         if (o == null) {
             logError("Unable to get Bitso Order Book");
             return null;
         }
-        return new BitsoOrder(o);
+        if(o.has("payload")){
+            return new BitsoOrderBook(o.getJSONObject("payload"));
+        }
+        return null;
     }
 
     public BitsoTransactions getTransactions(BitsoBook book) {
@@ -125,16 +126,6 @@ public class Bitso {
     }
 
     // Private Functions
-    public BitsoBalance getBalance() {
-        String json = sendBitsoPost(baseUrl + "balance");
-        JSONObject o = Helpers.parseJson(json);
-        if (o == null || o.has("error")) {
-            logError("Error getting Bitso Balance: " + json);
-            return null;
-        }
-        return new BitsoBalance(o);
-    }
-
     public BitsoAccountStatus getUserAccountStatus() {
         String json = sendBitsoGet("/api/v3/account_status");
         JSONObject o = Helpers.parseJson(json);
@@ -145,27 +136,47 @@ public class Bitso {
         return new BitsoAccountStatus(o);
     }
 
-    public BitsoBalance getUserAccountBalance(){
+    public BitsoBalance[] getUserAccountBalance(){
         String json =  sendBitsoGet("/api/v3/balance");
         JSONObject o = Helpers.parseJson(json);
         if(o == null || o.has("error")){
             logError("Error getting account balance: " + json);
             return null;
         }
-        return new BitsoBalance(o);
+        if(o.has("payload")){
+            JSONObject payload = o.getJSONObject("payload");
+            JSONArray jsonBalances = payload.getJSONArray("balances");
+            int totalElements = jsonBalances.length();
+            BitsoBalance[] balances = new BitsoBalance[totalElements];
+            for(int i=0; i<totalElements; i++){
+                balances[i] = new BitsoBalance(jsonBalances.getJSONObject(i));
+            }
+            return balances;
+        }
+        return null;
     }
 
-    public BitsoFee getUserFees(){
+    public BitsoFee[] getUserFees(){
         String json =  sendBitsoGet("/api/v3/fees");
         JSONObject o = Helpers.parseJson(json);
         if(o == null || o.has("error")){
             logError("Error getting user fees: " + json);
             return null;
         }
-        return new BitsoFee(o);
+        if(o.has("payload")){
+            JSONObject payload = o.getJSONObject("payload");
+            JSONArray jsonBalances = payload.getJSONArray("fees");
+            int totalElements = jsonBalances.length();
+            BitsoFee[] fees = new BitsoFee[totalElements];
+            for(int i=0; i<totalElements; i++){
+                fees[i] = new BitsoFee(jsonBalances.getJSONObject(i));
+            }
+            return fees;
+        }
+        return null;
     }
 
-    public BitsoLedger getUserLedger(String specificOperation){
+    public BitsoOperation[] getUserLedger(String specificOperation){
         String request = "/api/v3/ledger";
         if(specificOperation != null){
             request += "/" + specificOperation;
@@ -177,10 +188,19 @@ public class Bitso {
             logError("Error getting user ledgers: " + json);
             return null;
         }
-        return new BitsoLedger(o);
+        if(o.has("payload")){
+            JSONArray payload = o.getJSONArray("payload");
+            int totalElements = payload.length();
+            BitsoOperation[] operations = new BitsoOperation[totalElements];
+            for(int i=0; i<totalElements; i++){
+                operations[i] = new BitsoOperation(payload.getJSONObject(i));
+            }
+            return operations;
+        }
+        return null;
     }
 
-    public BitsoWithdrawal getUserWithdrawals(String... withdrawalsIds) {
+    public BitsoWithdrawal[] getUserWithdrawals(String... withdrawalsIds) {
         String request = "/api/v3/withdrawals/";
         request += buildDynamicURLParameters(withdrawalsIds);
         log(request);
@@ -190,10 +210,19 @@ public class Bitso {
             logError("Error getting user withdrawals: " + json);
             return null;
         }
-        return new BitsoWithdrawal(o);
+        if(o.has("payload")){
+            JSONArray payload = o.getJSONArray("payload");
+            int totalElements = payload.length();
+            BitsoWithdrawal[] withdrawals = new BitsoWithdrawal[totalElements];
+            for(int i=0; i<totalElements; i++){
+                withdrawals[i] = new BitsoWithdrawal(payload.getJSONObject(i));
+            }
+            return withdrawals;
+        }
+        return null;
     }
 
-    public BitsoFunding getUserFundings(String... fundingsIds){
+    public BitsoFunding[] getUserFundings(String... fundingsIds){
         String request = "/api/v3/fundings/";
         request += buildDynamicURLParameters(fundingsIds);
         log(request);
@@ -203,10 +232,19 @@ public class Bitso {
             logError("Error getting user fundings: " + json);
             return null;
         }
-        return new BitsoFunding(o);
+        if(o.has("payload")){
+            JSONArray payload = o.getJSONArray("payload");
+            int totalElements = payload.length();
+            BitsoFunding[] fundings = new BitsoFunding[totalElements];
+            for(int i=0; i<totalElements; i++){
+                fundings[i] = new BitsoFunding(payload.getJSONObject(i));
+            }
+            return fundings;
+        }
+        return null;
     }
 
-    public BitsoTrade getUserTrades(String... tradesIds){
+    public BitsoTrade[] getUserTrades(String... tradesIds){
         String request = "/api/v3/user_trades/";
         request += buildDynamicURLParameters(tradesIds);
         log(request);
@@ -216,10 +254,19 @@ public class Bitso {
             logError("Error getting user trades: " + json);
             return null;
         }
-        return new BitsoTrade(o);
+        if(o.has("payload")){
+            JSONArray payload = o.getJSONArray("payload");
+            int totalElements = payload.length();
+            BitsoTrade[] trades = new BitsoTrade[totalElements];
+            for(int i=0; i<totalElements; i++){
+                trades[i] = new BitsoTrade(payload.getJSONObject(i));
+            }
+            return trades;
+        }
+        return null;
     }
 
-    public BitsoOrder getOpenOrders(){
+    public BitsoOrder[] getOpenOrders(){
         String request = "/api/v3/open_orders?book=btc_mxn";
         String json = sendBitsoGet(request);
         JSONObject o = Helpers.parseJson(json);
@@ -227,10 +274,19 @@ public class Bitso {
             logError("Error in Open Orders: " + json);
             return null;
         }
-        return new BitsoOrder(o);
+        if(o.has("payload")){
+            JSONArray payload = o.getJSONArray("payload");
+            int totalElements = payload.length();
+            BitsoOrder[] orders = new BitsoOrder[totalElements];
+            for(int i=0; i<totalElements; i++){
+                orders[i] = new BitsoOrder(payload.getJSONObject(i));
+            }
+            return orders;
+        }
+        return null;
     }
 
-    public BitsoOrder lookupOrders(String... ordersId){
+    public BitsoOrder[] lookupOrders(String... ordersId){
         String request = "/api/v3/orders/";
         request += buildDynamicURLParameters(ordersId);
         log(request);
@@ -240,10 +296,19 @@ public class Bitso {
             logError("Error in lookupOrders: " + json);
             return null;
         }
-        return new BitsoOrder(o);
+        if(o.has("payload")){
+            JSONArray payload = o.getJSONArray("payload");
+            int totalElements = payload.length();
+            BitsoOrder[] orders = new BitsoOrder[totalElements];
+            for(int i=0; i<totalElements; i++){
+                orders[i] = new BitsoOrder(payload.getJSONObject(i));
+            }
+            return orders;
+        }
+        return null;
     }
 
-    public String placeOrder(BitsoBook book, Order.SIDE side, Order.TYPE type, BigDecimal major,
+    public String placeOrder(BitsoBook book, BitsoOrder.SIDE side, BitsoOrder.TYPE type, BigDecimal major,
             BigDecimal minor, BigDecimal price) {
         String request = "/api/v3/orders";
         JSONObject parameters = new JSONObject();
@@ -253,7 +318,7 @@ public class Bitso {
             return null;
         }
 
-        if ((type.compareTo(Order.TYPE.LIMIT) == 0) && (price != null)) {
+        if ((type.compareTo(BitsoOrder.TYPE.LIMIT) == 0) && (price != null)) {
             parameters.put("price", price.toString());
         } else {
             log("Price must be specified on limit orders.");
@@ -317,15 +382,15 @@ public class Bitso {
         return null;
     }
 
-    public Withdrawal bitcoinWithdrawal(BigDecimal amount, String address){
+    public BitsoWithdrawal bitcoinWithdrawal(BigDecimal amount, String address){
         return currencyWithdrawal(CURRENCY_WITHDRAWALS.BITCOIN_WITHDRAWAL, amount, address);
     }
 
-    public Withdrawal etherWithdrawal(BigDecimal amount, String address){
+    public BitsoWithdrawal etherWithdrawal(BigDecimal amount, String address){
         return currencyWithdrawal(CURRENCY_WITHDRAWALS.ETHER_WITHDRAWAL, amount, address);
     }
 
-    public Withdrawal speiWithdrawal(BigDecimal amount, String recipientGivenNames,
+    public BitsoWithdrawal speiWithdrawal(BigDecimal amount, String recipientGivenNames,
             String recipientFamilyNames, String clabe, String notesReference,
             String numericReference){
         String request = "/api/v3/spei_withdrawal";
@@ -336,7 +401,7 @@ public class Bitso {
         // TODO:
         // CLABE is espected in uppercase it should be expected indiferently
         // Check on server side
-        parameters.put("CLABE", clabe);
+        parameters.put("clabe", clabe);
         parameters.put("notes_ref", notesReference);
         parameters.put("numeric_ref", numericReference);
         String json = sendBitsoPost(request, parameters);
@@ -350,7 +415,7 @@ public class Bitso {
         // and it should contain it
         if (o.has("payload")) {
             JSONObject payload = o.getJSONObject("payload");
-            return new Withdrawal(payload);
+            return new BitsoWithdrawal(payload);
         }
         return null;
     }
@@ -376,7 +441,7 @@ public class Bitso {
         return null;
     }
 
-    public Withdrawal debitCardWithdrawal(BigDecimal amount, String recipientGivenNames,
+    public BitsoWithdrawal debitCardWithdrawal(BigDecimal amount, String recipientGivenNames,
             String recipientFamilyNames, String cardNumber, String bankCode){
         String request = "/api/v3/debit_card_withdrawal";
         JSONObject parameters = new JSONObject();
@@ -393,12 +458,12 @@ public class Bitso {
         }
         if (o.has("payload")) {
             JSONObject payload = o.getJSONObject("payload");
-            return new Withdrawal(payload);
+            return new BitsoWithdrawal(payload);
         }
         return null;
     }
 
-    public Withdrawal phoneWithdrawal(BigDecimal amount, String recipientGivenNames,
+    public BitsoWithdrawal phoneWithdrawal(BigDecimal amount, String recipientGivenNames,
             String recipientFamilyNames, String phoneNumber, String bankCode){
         String request = "/api/v3/phone_withdrawal";
         JSONObject parameters = new JSONObject();
@@ -415,12 +480,12 @@ public class Bitso {
         }
         if (o.has("payload")) {
             JSONObject payload = o.getJSONObject("payload");
-            return new Withdrawal(payload);
+            return new BitsoWithdrawal(payload);
         }
         return null;
     }
 
-    private Withdrawal currencyWithdrawal(CURRENCY_WITHDRAWALS withdrawal, BigDecimal amount, String address){
+    private BitsoWithdrawal currencyWithdrawal(CURRENCY_WITHDRAWALS withdrawal, BigDecimal amount, String address){
         String request = "/api/v3/" + withdrawal.toString();
         JSONObject parameters = new JSONObject();
         parameters.put("amount", amount.toString());
@@ -433,7 +498,7 @@ public class Bitso {
         }
         if (o.has("payload")) {
             JSONObject payload = o.getJSONObject("payload");
-            return new Withdrawal(payload);
+            return new BitsoWithdrawal(payload);
         }
         return null;
     }
