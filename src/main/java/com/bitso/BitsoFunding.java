@@ -1,24 +1,31 @@
 package com.bitso;
 
-import org.json.JSONArray;
+import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import org.json.JSONObject;
-import com.bitso.exchange.Funding;
 import com.bitso.helpers.Helpers;
 
 public class BitsoFunding {
-    Funding[] fundings;
+    public String fundingId;
+    public String status;
+    public ZonedDateTime fundingDate;
+    public String currency;
+    public String method;
+    public BigDecimal amount;
+    public JSONObject details;
 
-    public BitsoFunding(JSONObject o) {
-        JSONArray fundingJson = o.getJSONArray("payload");
-        retrieveFundings(fundingJson);
-    }
+    public BitsoFunding(JSONObject o){
+        fundingId = Helpers.getString(o, "fid");
+        status = Helpers.getString(o, "status");
+        fundingDate = Helpers.getZonedDatetime(o, "created_at");
+        currency = Helpers.getString(o, "currency");
+        method = Helpers.getString(o, "method");
+        amount = Helpers.getBD(o, "amount");
 
-    private void retrieveFundings(JSONArray array){
-        int totalElements = array.length();
-        fundings = new Funding[totalElements];
-        for(int i=0; i<totalElements; i++){
-            fundings[i] =  new Funding(array.getJSONObject(i));
-        }
+        // TODO:
+        // Expected always a JSONObject, sometimes
+        // JSONArray is obtained
+        details = Helpers.expectJSONObject(o, "details", this);
     }
 
     @Override

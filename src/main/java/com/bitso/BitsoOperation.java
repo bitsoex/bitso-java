@@ -1,21 +1,19 @@
-package com.bitso.exchange;
+package com.bitso;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
-import java.util.HashMap;
-import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.bitso.helpers.Helpers;
 
-public class Operation {
+public class BitsoOperation {
     public String entryId;
     public String operationDescription;
     public ZonedDateTime operationDate;
     public BalanceUpdate[] afterOperationBalances;
-    public Map<String, Object> details;
+    public JSONObject details;
 
-    public Operation(JSONObject o) {
+    public BitsoOperation(JSONObject o) {
         entryId = Helpers.getString(o, "eid");
         operationDescription = Helpers.getString(o, "operation");
         operationDate = Helpers.getZonedDatetime(o, "created_at");
@@ -24,9 +22,9 @@ public class Operation {
         // Key verification is not needed, this workaround is
         // valid meanwhile there is a server error.
         if(o.has("details")){
-            details = Helpers.getUnstructuredJSONObjectValues(o.getJSONObject("details"));
+            details = o.getJSONObject("details");
         }else{
-            details = new HashMap<String, Object>();
+            details = null;
         }
     }
 

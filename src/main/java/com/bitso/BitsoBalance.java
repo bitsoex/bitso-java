@@ -1,28 +1,28 @@
 package com.bitso;
 
-import org.json.JSONArray;
+import java.math.BigDecimal;
 import org.json.JSONObject;
 
-import com.bitso.exchange.Balance;
 import com.bitso.helpers.Helpers;
 
 public class BitsoBalance {
+    public String currency;
+    public BigDecimal total;
+    public BigDecimal locked;
+    public BigDecimal available;
 
-    public Balance[] balances;
-
-    public BitsoBalance(JSONObject obj) {
-        JSONObject payload = obj.getJSONObject("payload");
-        JSONArray jsonBalances = payload.getJSONArray("balances");
-        balances = retrieveBalances(jsonBalances);
+    public BitsoBalance(String currency, BigDecimal total, BigDecimal locked, BigDecimal available) {
+        this.currency = currency;
+        this.total = total;
+        this.locked = locked;
+        this.available = available;
     }
 
-    private Balance[] retrieveBalances(JSONArray array){
-        int totalElements = array.length();
-        Balance[] balances = new Balance[totalElements];
-        for(int i=0; i<totalElements; i++){
-            balances[i] = new Balance(array.getJSONObject(i));
-        }
-        return balances;
+    public BitsoBalance(JSONObject o) {
+        this.currency = Helpers.getString(o, "currency");
+        this.total = Helpers.getBD(o, "total");
+        this.locked = Helpers.getBD(o, "locked");
+        this.available = Helpers.getBD(o, "available");
     }
 
     @Override

@@ -1,26 +1,37 @@
 package com.bitso;
 
-import org.json.JSONArray;
+import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import org.json.JSONObject;
-import com.bitso.exchange.Trade;
 import com.bitso.helpers.Helpers;
 
 public class BitsoTrade {
-    Trade[] trades;
-    
-    public BitsoTrade(JSONObject o){
-        JSONArray tradesJson = o.getJSONArray("payload");
-        retrieveTrades(tradesJson);
-    }
-    
-    private void retrieveTrades(JSONArray array){
-        int totalElements = array.length();
-        trades = new Trade[totalElements];
-        for(int i=0; i<totalElements; i++){
-            trades[i] =  new Trade(array.getJSONObject(i));
-        }
-    }
+    public String book;
+    public BigDecimal major;
+    public ZonedDateTime tradeDate;
+    public BigDecimal minor;
+    public BigDecimal feesAmount;
+    public String feesCurrency;
+    public BigDecimal price;
+    // TODO:
+    // API returns an int, String is expected
+    public int tradeId;
+    public String oid;
+    public String side;
 
+    public BitsoTrade(JSONObject o){
+        book =  Helpers.getString(o, "book");
+        major = Helpers.getBD(o, "major");
+        tradeDate =  Helpers.getZonedDatetime(o, "created_at");
+        minor =  Helpers.getBD(o, "minor");
+        feesAmount = Helpers.getBD(o, "fees_amount");
+        feesCurrency = Helpers.getString(o, "fees_currency");
+        price = Helpers.getBD(o, "price");
+        tradeId = Helpers.getInteger(o, "tid");
+        oid = Helpers.getString(o, "oid");
+        side = Helpers.getString(o, "side");
+    }
+    
     @Override
     public String toString() {
         return Helpers.fieldPrinter(this);
