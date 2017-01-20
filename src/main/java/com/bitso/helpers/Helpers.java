@@ -3,6 +3,7 @@ package com.bitso.helpers;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.time.DateTimeException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -18,7 +19,8 @@ import org.json.JSONObject;
 
 public class Helpers {
 
-    public static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZZ");
+    public static final DateTimeFormatter dateTimeFormatterZOffset = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZZ");
+    public static final DateTimeFormatter dateTimeFormatterXOffset = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
 
     private static final List<Field> getAllFields(List<Field> fields, Class<?> type) {
         fields.addAll(Arrays.asList(type.getDeclaredFields()));
@@ -120,7 +122,11 @@ public class Helpers {
 
     public static ZonedDateTime getZonedDatetime(JSONObject o, String key){
         if(o.has(key)){
-            return ZonedDateTime.parse(o.getString(key), dateTimeFormatter);
+            try {
+                return ZonedDateTime.parse(o.getString(key), dateTimeFormatterZOffset);
+            } catch (DateTimeException e) {
+                return ZonedDateTime.parse(o.getString(key), dateTimeFormatterXOffset);
+            }
         }else{
             System.err.println("No " + key + ": " + o);
             Helpers.printStackTrace();

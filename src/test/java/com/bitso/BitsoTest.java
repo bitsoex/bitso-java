@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,14 +14,13 @@ import com.bitso.exchange.BookInfo;
 import com.bitso.exchange.Order;
 import com.bitso.exchange.OrderBook;
 import com.bitso.exchange.Ticker;
+import com.bitso.exchange.Withdrawal;
 
 public class BitsoTest {
     Bitso bitso;
 
     @Before
     public void setUp() throws Exception {
-        // bitso_dev_public_key
-        // bitso_dev_private
         String secret = System.getenv("bitso_dev_private");
         String key = System.getenv("bitso_dev_public_key");
         bitso = new Bitso(key, secret, null, 0, true, false);
@@ -52,25 +52,25 @@ public class BitsoTest {
     }
 
     // Private endpoints
-    //@Test
+    // @Test
     public void testUserAccountStatus() {
         BitsoAccountStatus status = bitso.getUserAccountStatus();
         assertEquals(nullCheck(status, BitsoAccountStatus.class), true);
     }
 
-    //@Test
+    // @Test
     public void testUserAccountBalance(){
         BitsoBalance balance = bitso.getUserAccountBalance();
         assertEquals(true, nullCheck(balance, BitsoBalance.class));
     }
 
-    //@Test
+    // @Test
     public void testUserFees(){
         BitsoFee fee = bitso.getUserFees();
         assertEquals(true, nullCheck(fee, BitsoFee.class));
     }
 
-    //@Test
+    // @Test
     public void testUserLedgers(){
         String[] operations = {"trades", "fees", "fundings", "withdrawals"};
         // Global ledger request
@@ -84,7 +84,7 @@ public class BitsoTest {
         }
     }
 
-    //@Test
+    // @Test
     public void testUserWithdrawals(){
         // Testing withdrawal ids
         String[] wids = {"65532d428d4c1b2642833b9e78c1b9fd", "d5764355792aff733f31ee7bfc38a832",
@@ -101,7 +101,7 @@ public class BitsoTest {
         assertEquals(true, nullCheck(multipleWithdraws, BitsoWithdrawal.class));
     }
 
-    //@Test
+    // @Test
     public void testUserFundings(){
         // Testing funding ids
         String[] fids = {"2ab6b5cccf2be8d1fb8382234203f8e1", "e1b96fe7d22cfbfdb83df51a68eca9b0",
@@ -118,7 +118,7 @@ public class BitsoTest {
         assertEquals(true, nullCheck(multipleFundings, BitsoFunding.class));
     }
 
-    //@Test
+    // @Test
     public void testUserTrades(){
         // Testing trades ids
         String[] tids = {"1431", "1430", "1429", "1428"};
@@ -152,14 +152,6 @@ public class BitsoTest {
         assertEquals(true, nullCheck(multipleOrders, BitsoOrder.class));
     }
 
-    @Test
-    public void testPlaceUserOrder(){
-        String orderId = bitso.placeOrder(BitsoBook.BTC_MXN, Order.SIDE.BUY,
-                Order.TYPE.LIMIT, new BigDecimal("15.4"), null,
-                new BigDecimal("20854.4"));
-        assertEquals(true, ((orderId != null) && (orderId.length() > 0)));
-    }
-
     // @Test
     public void testCancelUserOrder() {
         String[] orders = { "pj251R8m6im5lO82", "4nQl95irVlfQRkXp", "vdfVrXVQJ0iJdV6h" };
@@ -173,6 +165,76 @@ public class BitsoTest {
         String[] cancelAllOrders = bitso.cancelOrder("all");
         assertEquals(true, (cancelAllOrders != null));
     }
+
+    @Test
+    public void testPlaceUserOrder(){
+        String orderId = bitso.placeOrder(BitsoBook.BTC_MXN, Order.SIDE.BUY,
+                Order.TYPE.LIMIT, new BigDecimal("15.4"), null,
+                new BigDecimal("20854.4"));
+        assertEquals(true, ((orderId != null) && (orderId.length() > 0)));
+    }
+
+    @Test
+    public void testFundingDestination(){
+        Map<String, String> btcFundingDestination = bitso.fundingDestination("btc");
+        assertEquals(true, (btcFundingDestination != null));
+        assertEquals(true, (btcFundingDestination.containsKey("accountIdentifierName") &&
+                btcFundingDestination.containsKey("accountIdentifier")));
+
+        Map<String, String> ethFundingDestination = bitso.fundingDestination("eth");
+        assertEquals(true, (ethFundingDestination != null));
+        assertEquals(true, (ethFundingDestination.containsKey("accountIdentifierName") &&
+                ethFundingDestination.containsKey("accountIdentifier")));
+
+        Map<String, String> mxnFundingDestination = bitso.fundingDestination("mxn");
+        assertEquals(true, (mxnFundingDestination != null));
+        assertEquals(true, (mxnFundingDestination.containsKey("accountIdentifierName") &&
+                mxnFundingDestination.containsKey("accountIdentifier")));
+    }
+
+    @Test
+    public void testCurrencyWithdrawals(){
+        Withdrawal btcWithdrawal =  bitso.bitcoinWithdrawal(new BigDecimal("0.001"),
+                "31yTCKDHTqNXF5eZcsddJDe76BzBh8pVLb");
+        assertEquals(true, nullCheck(btcWithdrawal, Withdrawal.class));
+
+        // TODO:
+        // Check server response, json wiht null values
+        // Withdrawal ethWithdrawal =  bitso.etherWithdrawal(new BigDecimal("0.001"),
+        //        "0xc83adea9e8fea3797139942a5939b961f67abfb8");
+        // assertEquals(true, nullCheck(ethWithdrawal, Withdrawal.class));
+    }
+
+/*    // TODO:
+    // Error in JSON missing details key on payload
+    @Test
+    public void testSPEIWithdrawal(){
+        Withdrawal speiWithdrawal =  bitso.speiWithdrawal(new BigDecimal("50"),
+                "name", "surname", "044180001059660729", "testing reference", "5706");
+        assertEquals(true, nullCheck(speiWithdrawal, Withdrawal.class));
+    }*/
+
+    @Test
+    public void testGetBanks(){
+        BitsoBank bitsoBanks[] = bitso.getBanks();
+        assertEquals(true, (bitsoBanks != null));
+    }
+
+    @Test
+    public void testDebitCardWithdrawal(){
+        Withdrawal debitCardWithdrawal = bitso.debitCardWithdrawal(new BigDecimal("50"),
+                "name test", "surname test", "5579209071039769", "40044");
+        assertEquals(true, nullCheck(debitCardWithdrawal, Withdrawal.class));
+    }
+
+/*    // TODO:
+    // Get a valid phone number that receives a SPEI transaction
+    @Test
+    public void testphoneWithdrawal(){
+        Withdrawal phoneWithdrawal = bitso.phoneWithdrawal(new BigDecimal("50"),
+                "name test", "surname test", "phone number", "40044");
+        assertEquals(true, nullCheck(phoneWithdrawal, Withdrawal.class));
+    }*/
 
     // need to specify the class because java reflection is bizarre
     // and if you want to check the parent class of the object its

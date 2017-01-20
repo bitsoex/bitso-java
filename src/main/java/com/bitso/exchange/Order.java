@@ -52,7 +52,7 @@ public class Order {
         unfilledAmount = Helpers.getBD(o, "unfilled_amount");
         originalValue = Helpers.getBD(o, "original_value");
         orderDate = Helpers.getZonedDatetime(o, "created_at");
-        updateDate = verifyUpdateDate(o.get("updated_at"));
+        updateDate = Helpers.getZonedDatetime(o, "updated_at");
         price = Helpers.getBD(o, "price");
         oid = Helpers.getString(o, "oid");
         side = getSide(Helpers.getString(o, "side"));
@@ -67,13 +67,13 @@ public class Order {
             case "eth_mxn":
                 return BitsoBook.ETH_MXN;
             default:
-                String exceptionMessage = book + "is not a supported value";
+                String exceptionMessage = book + "is not a supported book";
                 throw new NotExpectedValue(exceptionMessage);
         }
     }
 
     private Order.SIDE getSide(String side) {
-        if (side.compareTo("buy") == 0) {
+        if (side.equals("buy")) {
             return Order.SIDE.BUY;
         }
         return Order.SIDE.SELL;
@@ -90,7 +90,7 @@ public class Order {
             case "cancelled":
                 return Order.STATUS.CANCELLED;
             default:
-                String exceptionMessage = status + "is not a supported value";
+                String exceptionMessage = status + "is not a supported order status";
                 throw new NotExpectedValue(exceptionMessage);
         }
     }
@@ -102,16 +102,9 @@ public class Order {
             case "market":
                 return Order.TYPE.MARKET;
             default:
-                String exceptionMessage = type + "is not a supported value";
+                String exceptionMessage = type + "is not a supported order type";
                 throw new NotExpectedValue(exceptionMessage);
         }
-    }
-
-    private ZonedDateTime verifyUpdateDate(Object o) {
-        if (o != null) {
-            return ZonedDateTime.parse((String) o, Helpers.dateTimeFormatter);
-        }
-        return null;
     }
 
     @Override
