@@ -14,8 +14,9 @@ public class BitsoTrade {
     public String feesCurrency;
     public BigDecimal price;
     // TODO:
-    // API returns an int, String is expected
-    public int tradeId;
+    // Check how long the tradeId would be, inr order
+    // to save it in an int or long type
+    public int tid;
     public String oid;
     public String side;
 
@@ -27,7 +28,7 @@ public class BitsoTrade {
         feesAmount = Helpers.getBD(o, "fees_amount");
         feesCurrency = Helpers.getString(o, "fees_currency");
         price = Helpers.getBD(o, "price");
-        tradeId = Helpers.getInteger(o, "tid");
+        tid = Helpers.getInteger(o, "tid");
         oid = Helpers.getString(o, "oid");
         side = Helpers.getString(o, "side");
     }

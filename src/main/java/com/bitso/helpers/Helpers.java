@@ -134,16 +134,6 @@ public class Helpers {
         return null;
     }
 
-    public static JSONObject expectJSONObject(JSONObject o, String key, Object senderClass){
-        if((o.get(key) instanceof JSONObject)){
-            return o.getJSONObject(key);
-        }
-        System.out.println("On " + senderClass.getClass().getName() + ", key: " + key
-                + " is not a JSONObject as expected"
-                + " returning null");
-        return null;
-    }
-
     public static String[] parseJSONArray(JSONArray arrray){
         int totalElements = arrray.length();
         String[] elements =  new String[totalElements];

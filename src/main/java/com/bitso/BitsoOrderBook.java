@@ -10,8 +10,8 @@ import com.bitso.helpers.Helpers;
 public class BitsoOrderBook {
     public ZonedDateTime orderDate;
     public String sequence;
-    public OrderResume[] asks;
-    public OrderResume[] bids;
+    public PulicOrder[] asks;
+    public PulicOrder[] bids;
 
     public BitsoOrderBook(JSONObject o){
         orderDate = Helpers.getZonedDatetime(o, "updated_at");
@@ -24,9 +24,9 @@ public class BitsoOrderBook {
         if (o.has("asks")) {
             JSONArray asksArray = o.getJSONArray("asks");
             int totalAsks = asksArray.length();
-            asks = new OrderResume[totalAsks];
+            asks = new PulicOrder[totalAsks];
             for (int i = 0; i < totalAsks; i++) {
-                asks[i] = new OrderResume(asksArray.getJSONObject(i));
+                asks[i] = new PulicOrder(asksArray.getJSONObject(i));
             }
         }
 
@@ -34,9 +34,9 @@ public class BitsoOrderBook {
         if (o.has("bids")) {
             JSONArray bidsArray = o.getJSONArray("bids");
             int totalBids = bidsArray.length();
-            bids = new OrderResume[totalBids];
+            bids = new PulicOrder[totalBids];
             for (int i = 0; i < totalBids; i++) {
-                bids[i] = new OrderResume(bidsArray.getJSONObject(i));
+                bids[i] = new PulicOrder(bidsArray.getJSONObject(i));
             }
         }
 
@@ -47,12 +47,12 @@ public class BitsoOrderBook {
         return Helpers.fieldPrinter(this);
     }
     
-    public class OrderResume{
+    public class PulicOrder{
         public BitsoBook book;
         public BigDecimal price;
         public BigDecimal amount;
         
-        public OrderResume(JSONObject o){
+        public PulicOrder(JSONObject o){
             book = BitsoOrder.getBook(Helpers.getString(o, "book"));
             price = Helpers.getBD(o, "price");
             amount = Helpers.getBD(o, "amount");
