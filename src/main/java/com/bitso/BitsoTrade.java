@@ -14,7 +14,7 @@ public class BitsoTrade {
     public String feesCurrency;
     public BigDecimal price;
     // TODO:
-    // Check how long the tradeId would be, inr order
+    // Check how long the tradeId would be, in order
     // to save it in an int or long type
     public int tid;
     public String oid;
