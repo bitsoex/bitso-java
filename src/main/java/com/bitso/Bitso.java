@@ -420,7 +420,7 @@ public class Bitso {
         return null;
     }
 
-    public BitsoBank[] getBanks(){
+    public Map<String, String> getBanks(){
         String request = "/api/v3/mx_bank_codes";
         log(request);
         String json = sendBitsoGet(request);
@@ -429,14 +429,20 @@ public class Bitso {
             logError("Error in lookupOrders: " + json);
             return null;
         }
-        if (o.has("payload")) {
+        if (o.has("payload")){
+            Map<String, String> banks = new HashMap<String, String>();
             JSONArray payload = o.getJSONArray("payload");
+            String currentBankCode = "";
+            String currentBankName = "";
+            JSONObject currentJSON = null;;
             int totalElements = payload.length();
-            BitsoBank[] elements =  new BitsoBank[totalElements];
             for(int i=0; i<totalElements; i++){
-                elements[i] = new BitsoBank(payload.getJSONObject(i));
+                currentJSON = payload.getJSONObject(i);
+                currentBankCode = Helpers.getString(currentJSON, "code");
+                currentBankName = Helpers.getString(currentJSON, "name");
+                banks.put(currentBankCode, currentBankName);
             }
-            return elements;
+            return banks;
         }
         return null;
     }
