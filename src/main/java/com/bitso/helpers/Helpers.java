@@ -3,15 +3,24 @@ package com.bitso.helpers;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.time.DateTimeException;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Helpers {
+
+    public static final DateTimeFormatter dateTimeFormatterZOffset = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZZ");
+    public static final DateTimeFormatter dateTimeFormatterXOffset = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
 
     private static final List<Field> getAllFields(List<Field> fields, Class<?> type) {
         fields.addAll(Arrays.asList(type.getDeclaredFields()));
@@ -99,5 +108,38 @@ public class Helpers {
             Helpers.printStackTrace();
         }
         return null;
+    }
+
+    public static Integer getInteger(JSONObject o, String key){
+        if(o.has(key)){
+            return o.getInt(key);
+        }else{
+            System.err.println("No " + key + ": " + o);
+            Helpers.printStackTrace();
+        }
+        return null;
+    }
+
+    public static ZonedDateTime getZonedDatetime(JSONObject o, String key){
+        if(o.has(key)){
+            try {
+                return ZonedDateTime.parse(o.getString(key), dateTimeFormatterZOffset);
+            } catch (DateTimeException e) {
+                return ZonedDateTime.parse(o.getString(key), dateTimeFormatterXOffset);
+            }
+        }else{
+            System.err.println("No " + key + ": " + o);
+            Helpers.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String[] parseJSONArray(JSONArray arrray){
+        int totalElements = arrray.length();
+        String[] elements =  new String[totalElements];
+        for(int i=0; i<totalElements; i++){
+            elements[i] = arrray.getString(i);
+        }
+        return elements;
     }
 }
