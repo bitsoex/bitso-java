@@ -18,14 +18,7 @@ public class BitsoOperation {
         operationDescription = Helpers.getString(o, "operation");
         operationDate = Helpers.getZonedDatetime(o, "created_at");
         afterOperationBalances = getOperationBalances(o.getJSONArray("balance_updates"));
-        // TODO:
-        // Key verification is not needed, this workaround is
-        // valid meanwhile there is a server error.
-        if(o.has("details")){
-            details = o.getJSONObject("details");
-        }else{
-            details = null;
-        }
+        details = o.getJSONObject("details");
     }
 
     private BalanceUpdate[] getOperationBalances(JSONArray array){
@@ -36,25 +29,6 @@ public class BitsoOperation {
         }
         return balances;
     }
-
-    /*
-    private void getOperationDetails(JSONObject o){
-        Iterator<String> detailsIterator = o.keys();
-        details =  new HashMap<String, Object>();
-        String currentKey = "";
-        while(detailsIterator.hasNext()){
-            currentKey = detailsIterator.next();
-            // TODO:
-            // With operation: trade or fee
-            // in details tid key value is a number
-            // Workaround, change HashMap values to object
-            // User usage will be more complicated.
-            // Suggestion: change server response to String
-            // value.
-            details.put(currentKey, o.get(currentKey));
-        }
-    }
-    */
 
     @Override
     public String toString() {

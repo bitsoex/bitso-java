@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
+
 import com.bitso.exchange.BookInfo;
 import com.bitso.exchange.Ticker;
 
@@ -216,21 +217,17 @@ public class BitsoTest {
                 "31yTCKDHTqNXF5eZcsddJDe76BzBh8pVLb");
         assertEquals(true, nullCheck(btcWithdrawal, BitsoWithdrawal.class));
 
-        // TODO:
-        // Check server response, json wiht null values
-        // Withdrawal ethWithdrawal =  bitso.etherWithdrawal(new BigDecimal("0.001"),
-        //        "0xc83adea9e8fea3797139942a5939b961f67abfb8");
-        // assertEquals(true, nullCheck(ethWithdrawal, Withdrawal.class));
+        BitsoWithdrawal ethWithdrawal =  bitso.etherWithdrawal(new BigDecimal("0.001"),
+                "0xc83adea9e8fea3797139942a5939b961f67abfb8");
+         assertEquals(true, nullCheck(ethWithdrawal, BitsoWithdrawal.class));
     }
 
-/*    // TODO:
-    // Error in JSON missing details key on payload
     @Test
     public void testSPEIWithdrawal(){
-        Withdrawal speiWithdrawal =  bitso.speiWithdrawal(new BigDecimal("50"),
+        BitsoWithdrawal speiWithdrawal =  bitso.speiWithdrawal(new BigDecimal("50"),
                 "name", "surname", "044180001059660729", "testing reference", "5706");
-        assertEquals(true, nullCheck(speiWithdrawal, Withdrawal.class));
-    }*/
+        assertEquals(true, nullCheck(speiWithdrawal, BitsoWithdrawal.class));
+    }
 
     @Test
     public void testGetBanks(){
@@ -246,7 +243,7 @@ public class BitsoTest {
         assertEquals(true, nullCheck(debitCardWithdrawal, BitsoWithdrawal.class));
     }
 
-/*    // TODO:
+/*  // TODO:
     // Get a valid phone number that receives a SPEI transaction
     @Test
     public void testphoneWithdrawal(){

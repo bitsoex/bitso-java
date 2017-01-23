@@ -71,14 +71,14 @@ public class BitsoOrder {
         type = getType(Helpers.getString(o, "type"));
     }
 
-    private BitsoOrder.SIDE getSide(String side) {
+    public BitsoOrder.SIDE getSide(String side) {
         if (side.equals("buy")) {
             return BitsoOrder.SIDE.BUY;
         }
         return BitsoOrder.SIDE.SELL;
     }
 
-    private BitsoOrder.STATUS getStatus(String status) {
+    public BitsoOrder.STATUS getStatus(String status) {
         switch (status) {
             case "open":
                 return BitsoOrder.STATUS.OPEN;
@@ -94,7 +94,7 @@ public class BitsoOrder {
         }
     }
 
-    private BitsoOrder.TYPE getType(String type) {
+    public BitsoOrder.TYPE getType(String type) {
         switch (type) {
             case "limit":
                 return BitsoOrder.TYPE.LIMIT;

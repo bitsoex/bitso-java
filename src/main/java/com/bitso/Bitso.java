@@ -133,7 +133,11 @@ public class Bitso {
             logError("Error getting Bitso Account Status: " + json);
             return null;
         }
-        return new BitsoAccountStatus(o);
+        if(o.has("payload")){
+            JSONObject payload = o.getJSONObject("payload");
+            return new BitsoAccountStatus(payload);
+        }
+        return null;
     }
 
     public BitsoBalance[] getUserAccountBalance(){
@@ -398,9 +402,6 @@ public class Bitso {
         parameters.put("amount", amount.toString());
         parameters.put("recipient_given_names", recipientGivenNames);
         parameters.put("recipient_family_names", recipientFamilyNames);
-        // TODO:
-        // CLABE is espected in uppercase it should be expected indiferently
-        // Check on server side
         parameters.put("clabe", clabe);
         parameters.put("notes_ref", notesReference);
         parameters.put("numeric_ref", numericReference);
@@ -410,9 +411,6 @@ public class Bitso {
             logError("Error executing withdrawal" + json);
             return null;
         }
-        // TODO:
-        // Error in JSON payload, does not contains "details" key
-        // and it should contain it
         if (o.has("payload")) {
             JSONObject payload = o.getJSONObject("payload");
             return new BitsoWithdrawal(payload);

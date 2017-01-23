@@ -21,11 +21,7 @@ public class BitsoWithdrawal {
         currency = Helpers.getString(o, "currency");
         method = Helpers.getString(o, "method");
         amount = Helpers.getBD(o, "amount");
-
-        // TODO:
-        // Expected always a JSONObject, sometimes
-        // JSONArray is obtained
-        details = Helpers.expectJSONObject(o, "details", this);
+        details = o.getJSONObject("details");
     }
 
     @Override
