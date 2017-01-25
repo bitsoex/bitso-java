@@ -1,0 +1,20 @@
+{
+    "success": true,
+    "payload": {
+        "wid": "p4u8d7f0768ee91d3b33bee6483132i8",
+        "status": "pending",
+        "created_at": "2016-04-08T17:52:31.000+00:00",
+        "currency": "mxn",
+        "method": "SPEI Transfer",
+        "amount": "300.15",
+        "details": {
+            "sender_name": "JUAN ESCUTIA",
+            "receive_clabe": "012610001967722183",
+            "sender_clabe": "646180115400467548",
+            "numeric_reference": "80416",
+            "concepto": "Tacos del viernes",
+            "clave_rastreo": null,
+            "beneficiary_name": "FRANCISCO MARQUEZ"
+        }
+    }
+}

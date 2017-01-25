@@ -1,0 +1,15 @@
+{
+    "success": true,
+    "payload": {
+        "wid": "c5b8d7f0768ee91d3b33bee648318688",
+        "status": "pending",
+        "created_at": "2016-04-08T17:52:31+00:00",
+        "currency": "btc",
+        "method": "Bitcoin",
+        "amount": "0.48650929",
+        "details": {
+            "withdrawal_address": "3EW92Ajg6sMT4hxK8ngEc7Ehrqkr9RoDt7",
+            "tx_hash": null
+        }
+    }
+}

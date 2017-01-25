@@ -1,0 +1,10 @@
+{
+    "success": true,
+    "payload": [{
+        "code": "01",
+        "name": "Banregio"
+    }, {
+        "code": "02",
+        "name": "BBVA"
+    }]
+}

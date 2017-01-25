@@ -1,0 +1,102 @@
+{
+    "success": true,
+    "payload": [{
+        "wid": "c5b8d7f0768ee91d3b33bee648318688",
+        "status": "pending",
+        "created_at": "2016-04-08T17:52:31+00:00",
+        "currency": "btc",
+        "method": "Bitcoin",
+        "amount": "0.48650929",
+        "details": {
+            "withdrawal_address": "18MsnATiNiKLqUHDTRKjurwMg7inCrdNEp",
+            "tx_hash": "d4f28394693e9fb5fffcaf730c11f32d1922e5837f76ca82189d3bfe30ded433"
+        }
+    }, {
+        "wid": "p4u8d7f0768ee91d3b33bee6483132i8",
+        "status": "complete",
+        "created_at": "2016-04-08T17:52:31+00:00",
+        "currency": "mxn",
+        "method": "SPEI Transfer",
+        "amount": "2612.70",
+        "details": {
+            "beneficiary_name": "BERTRAND RUSSELL",
+            "beneficiary_bank": "BANAMEX",
+            "beneficiary_clabe": "002320700708015728",
+            "numeric_reference": "99548",
+            "concepto": "Por los 🌮 del viernes",
+            "clave_rastreo": "BNET01001604080002076841",
+            "cep": {
+                "return": {
+                    "cda": {
+                        "cadenaOriginal": "||1|13062016|13062016|172053|40002|STP|Bitso - BERTRAND RUSSELL|40|646180115400000002|BIT140123U70|BANAMEX|BERTRAND RUSSELL|40|002320700708015728|ND|-|0.00|2612.70|00001000000401205824||",
+                        "conceptoPago": "-",
+                        "cuentaBeneficiario": "002320700708015728",
+                        "cuentaOrdenante": "646180115400000002",
+                        "fechaCaptura": "20160613",
+                        "fechaOperacion": "20160613",
+                        "hora": "17:08:42",
+                        "iva": "0.00",
+                        "monto": "2612.70",
+                        "nombreBeneficiario": "BERTRAND RUSSELL",
+                        "nombreInstBeneficiaria": "BANAMEX",
+                        "nombreInstOrdenante": "STP",
+                        "nombreOrdenante": "Bitso - Russell",
+                        "referenciaNumerica": "99548",
+                        "rfcCurpBeneficiario": "ND",
+                        "rfcCurpOrdenante": "BIT140123U70",
+                        "selloDigital": "cd7yUrnmUQ7CG6M+LX7WOZeizOpkTyMlEAunJaP2j5MAaNPZxy+vAJtgiVL73i1LNSrwK10eBb66Rh4\/RxU6AT2S03chQ\/BS1beknH5xPpGQg+wEXeANtnF2lp71lAD6QZ2O0NE4MIDvLhGGjTGklSP+2fS6joTAaV+tLbtrIp8JiR0MOX1rGPC5h+0ZHNvXQkcHJz3s68+iUAvDnQBiSu768b2C4zpHzteGEnJhU8sAdk83spiWogKALAVAuN4xfSXni7GTk9HObTTRdY+zehfWVPdE\/7uQSmMTzOKfPbQU02Jn\/5DdE3gYk6JZ5m70JsUSFBTF\/EVX8hhg0pu2iA==",
+                        "serieCertificado": "",
+                        "tipoOperacion": "C",
+                        "tipoPago": "1"
+                    },
+                    "estadoConsulta": "1",
+                    "url": "http:\/\/www.banxico.org.mx\/cep?i=90646&s=20150825&d=viAKjS0GVYB8qihmG9I%2B9O1VUvrR2td%2Fuo3GyVDn8vBp371tVx5ltRnk4QsWP6KP%2BQvlWjT%2BzfwWWTA3TMk4tg%3D%3D"
+                }
+            }
+        }
+    }, {
+        "wid": "of40d7f0768ee91d3b33bee64831jg73",
+        "status": "complete",
+        "created_at": "2016-04-08T17:52:31+00:00",
+        "currency": "mxn",
+        "method": "SPEI Transfer",
+        "amount": "500.00",
+        "details": {
+            "beneficiary_name": "ALFRED NORTH WHITEHEAD",
+            "beneficiary_bank": "BANAMEX",
+            "beneficiary_clabe": "5204165009315197",
+            "numeric_reference": "30535",
+            "concepto": "-",
+            "clave_rastreo": "BNET01001604080002076841",
+            "cep": {
+                "return": {
+                    "cda": {
+                        "cadenaOriginal": "||1|07042016|07042016|095656|40002|STP|Bitso - Al|40|646180115400000002|BIT140123U70|BANAMEX|ALFRED NORTH WHITEHEAD|3|5204165009315197|ND|-|0.00|500.00|00001000000401205824||",
+                        "conceptoPago": "-",
+                        "cuentaBeneficiario": "5204165009315197",
+                        "cuentaOrdenante": "646180115400000002",
+                        "fechaCaptura": "20160407",
+                        "fechaOperacion": "20160407",
+                        "hora": "09:56:51",
+                        "iva": "0.00",
+                        "monto": "500.00",
+                        "nombreBeneficiario": "ALFRED NORTH WHITEHEAD",
+                        "nombreInstBeneficiaria": "BANAMEX",
+                        "nombreInstOrdenante": "STP",
+                        "nombreOrdenante": "Bitso - RUSSELL",
+                        "referenciaNumerica": "30535",
+                        "rfcCurpBeneficiario": "ND",
+                        "rfcCurpOrdenante": "BIT140123U70",
+                        "selloDigital": "GaXpeaKgkc+gc0w9XgBbRCMmKWLNdSTV5C4CNQ4DL4ZVT+1OBSqNtX\/pv2IGjI7bKjCkaNrKUdaCdFwG6SdZ0nS9KtYSx1Ewg2Irg6x4kSzeHdlzBDr6ygT+bb+weizxcXMARKkciPuSQlyltCrEwSi07yVzachKfcEN8amj2fsEzim7gSyUc3ecKA1n8DX89158fwukKTIg4ECfOLsgueKF8unwbICWHXwRaaxIAA6PVw7O6WwGXxMtMBTCdiT202c8I2SnULFqK9QVJlQ\/YDRXFI4IMMAwGQZWbbmk8gf\/J3Fixy+0lcQV35TBBrbHyFPiaHaRN95yK\/BUxPOhag==",
+                        "serieCertificado": "",
+                        "tipoOperacion": "C",
+                        "tipoPago": "1"
+                    },
+                    "estadoConsulta": "1",
+                    "url": "http:\/\/www.banxico.org.mx\/cep?i=90646&s=20150825&d=3AeATtn9mM9yySMqwClgSTnKIddFN7JVwo38kDBVjOBRtcYVENx1LblV%2BXOHnKEGTfp0g%2BVLM76C3ewQ0c9vpA%3D%3D"
+                }
+            },
+            "folio_origen": "BITSO4405016499736144"
+        }
+    }]
+}
