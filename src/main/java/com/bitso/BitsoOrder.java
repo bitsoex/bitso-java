@@ -5,7 +5,7 @@ import java.time.ZonedDateTime;
 
 import org.json.JSONObject;
 
-import com.bitso.exceptions.NotExpectedValue;
+import com.bitso.exceptions.BitsoExceptionNotExpectedValue;
 import com.bitso.helpers.Helpers;
 
 public class BitsoOrder {
@@ -41,7 +41,7 @@ public class BitsoOrder {
                 return BitsoBook.ETH_MXN;
             default:
                 String exceptionMessage = book + "is not a supported book";
-                throw new NotExpectedValue(exceptionMessage);
+                throw new BitsoExceptionNotExpectedValue(exceptionMessage);
         }
     }
 
@@ -90,7 +90,7 @@ public class BitsoOrder {
                 return BitsoOrder.STATUS.CANCELLED;
             default:
                 String exceptionMessage = status + "is not a supported order status";
-                throw new NotExpectedValue(exceptionMessage);
+                throw new BitsoExceptionNotExpectedValue(exceptionMessage);
         }
     }
 
@@ -102,7 +102,7 @@ public class BitsoOrder {
                 return BitsoOrder.TYPE.MARKET;
             default:
                 String exceptionMessage = type + "is not a supported order type";
-                throw new NotExpectedValue(exceptionMessage);
+                throw new BitsoExceptionNotExpectedValue(exceptionMessage);
         }
     }
 

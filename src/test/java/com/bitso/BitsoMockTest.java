@@ -18,8 +18,8 @@ public class BitsoMockTest extends BitsoTest{
     private BitsoTicker mockTicker;
     private BitsoOrderBook mockOrderBook;
     private BitsoAccountStatus mockAccountStatus;
-    private BitsoBalance[] mockBalances;
-    private BitsoFee[] mockFees;
+    private BitsoBalance mockBalance;
+    private BitsoFee mockFee;
     private BitsoOrder[] mockOpenOrders;
     private String mockOpenOrderId;
     private BitsoWithdrawal mockBtcWithdrawal;
@@ -70,8 +70,8 @@ public class BitsoMockTest extends BitsoTest{
         Mockito.when(mBitso.getTicker(BitsoBook.BTC_MXN)).thenReturn(mockTicker);
         Mockito.when(mBitso.getOrderBook(BitsoBook.BTC_MXN)).thenReturn(mockOrderBook);
         Mockito.when(mBitso.getUserAccountStatus()).thenReturn(mockAccountStatus);
-        Mockito.when(mBitso.getUserAccountBalance()).thenReturn(mockBalances);
-        Mockito.when(mBitso.getUserFees()).thenReturn(mockFees);
+        Mockito.when(mBitso.getUserAccountBalance()).thenReturn(mockBalance);
+        Mockito.when(mBitso.getUserFees()).thenReturn(mockFee);
         Mockito.when(mBitso.getOpenOrders()).thenReturn(mockOpenOrders);
         Mockito.when(mBitso.placeOrder(BitsoBook.BTC_MXN, BitsoOrder.SIDE.BUY,
                 BitsoOrder.TYPE.LIMIT, new BigDecimal("15.4"), null,
@@ -124,27 +124,11 @@ public class BitsoMockTest extends BitsoTest{
     }
 
     private void setUpAccountBalance(JSONObject o){
-        if(o.has("payload")){
-            JSONObject payload = o.getJSONObject("payload");
-            JSONArray jsonBalances = payload.getJSONArray("balances");
-            int totalElements = jsonBalances.length();
-            mockBalances = new BitsoBalance[totalElements];
-            for(int i=0; i<totalElements; i++){
-                mockBalances[i] = new BitsoBalance(jsonBalances.getJSONObject(i));
-            }
-        }
+        mockBalance = new BitsoBalance(o);
    }
 
     private void setUpFees(JSONObject o){
-        if(o.has("payload")){
-            JSONObject payload = o.getJSONObject("payload");
-            JSONArray jsonBalances = payload.getJSONArray("fees");
-            int totalElements = jsonBalances.length();
-            mockFees = new BitsoFee[totalElements];
-            for(int i=0; i<totalElements; i++){
-                mockFees[i] = new BitsoFee(jsonBalances.getJSONObject(i));
-            }
-        }
+        mockFee = new BitsoFee(o);
     }
 
     private void setUpOpenOrders(JSONObject o){

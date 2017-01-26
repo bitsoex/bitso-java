@@ -140,44 +140,24 @@ public class Bitso {
         return null;
     }
 
-    public BitsoBalance[] getUserAccountBalance(){
+    public BitsoBalance getUserAccountBalance(){
         String json =  sendBitsoGet("/api/v3/balance");
         JSONObject o = Helpers.parseJson(json);
         if(o == null || o.has("error")){
             logError("Error getting account balance: " + json);
             return null;
         }
-        if(o.has("payload")){
-            JSONObject payload = o.getJSONObject("payload");
-            JSONArray jsonBalances = payload.getJSONArray("balances");
-            int totalElements = jsonBalances.length();
-            BitsoBalance[] balances = new BitsoBalance[totalElements];
-            for(int i=0; i<totalElements; i++){
-                balances[i] = new BitsoBalance(jsonBalances.getJSONObject(i));
-            }
-            return balances;
-        }
-        return null;
+        return new BitsoBalance(o);
     }
 
-    public BitsoFee[] getUserFees(){
+    public BitsoFee getUserFees(){
         String json =  sendBitsoGet("/api/v3/fees");
         JSONObject o = Helpers.parseJson(json);
         if(o == null || o.has("error")){
             logError("Error getting user fees: " + json);
             return null;
         }
-        if(o.has("payload")){
-            JSONObject payload = o.getJSONObject("payload");
-            JSONArray jsonBalances = payload.getJSONArray("fees");
-            int totalElements = jsonBalances.length();
-            BitsoFee[] fees = new BitsoFee[totalElements];
-            for(int i=0; i<totalElements; i++){
-                fees[i] = new BitsoFee(jsonBalances.getJSONObject(i));
-            }
-            return fees;
-        }
-        return null;
+        return new BitsoFee(o);
     }
 
     public BitsoOperation[] getUserLedger(String specificOperation){

@@ -54,18 +54,15 @@ public abstract class BitsoTest {
 
     @Test
     public void testUserAccountBalance(){
-        BitsoBalance[] balances = mBitso.getUserAccountBalance();
-        for (BitsoBalance bitsoBalance : balances) {
-            assertEquals(true, nullCheck(bitsoBalance, BitsoBalance.class));
-        }
+        BitsoBalance balance = mBitso.getUserAccountBalance();
+        assertEquals(true, nullCheck(balance, BitsoBalance.class));
     }
 
     @Test
-    public void testUserFees(){
-        BitsoFee[] fees = mBitso.getUserFees();
-        for (BitsoFee bitsoFee : fees) {
-            assertEquals(true, nullCheck(bitsoFee, BitsoFee.class));
-        }
+    public void testUserFees() {
+        BitsoFee fee = mBitso.getUserFees();
+        assertEquals(true, nullCheck(fee, BitsoFee.class));
+
     }
 
     @Test
