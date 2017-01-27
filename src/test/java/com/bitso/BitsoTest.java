@@ -39,10 +39,12 @@ public abstract class BitsoTest {
         assertEquals(true, nullCheck(orderBook, BitsoOrderBook.class));
     }
 
-    // @Test
+    @Test
     public void testOpenOrders(){
         BitsoOrder[] orders = mBitso.getOpenOrders();
-        assertEquals(true, nullCheck(orders, BitsoOrder.class));
+        for (BitsoOrder bitsoOrder : orders) {
+            assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
+        }
     }
 
     // Test private endpoints
@@ -129,10 +131,12 @@ public abstract class BitsoTest {
         }
     }
 
-    // @Test
+    @Test
     public void testLookUpOrders(){
         BitsoOrder[] specificOrder = mBitso.lookupOrders("kRrcjsp5n9og98qa");
-        assertEquals(true, nullCheck(specificOrder, BitsoOrder.class));
+        for (BitsoOrder bitsoOrder : specificOrder) {
+            assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
+        }
     }
 
     @Test

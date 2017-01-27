@@ -8,15 +8,19 @@ import org.junit.runner.notification.Failure;
 
 public class BitsoTestAPI {
     public static void main(String[] args){
-        boolean mockEnabled = System.getenv("mock_enabled").equals("enabled") ? true:false;
+        String serverRequest = System.getenv("SERVER_REQUEST");
         JUnitCore core = new JUnitCore();
+        boolean mocksEnabled = Boolean.TRUE;
         Result result =  null;
-        if(mockEnabled){
-            result = core.run(BitsoMockTest.class);
-        }else{
+        if(serverRequest != null){
+            System.out.println("No mocks enabled, real petitions done to server");
+            mocksEnabled = Boolean.FALSE;
             result = core.run(BitsoServerTest.class);
+        }else{
+            System.out.println("Mocks enabled for tests");
+            result = core.run(BitsoMockTest.class);
         }
-        getResultInfo(result, mockEnabled);
+        getResultInfo(result, mocksEnabled);
     }
 
     private static void getResultInfo(Result result, boolean mockEnabled){

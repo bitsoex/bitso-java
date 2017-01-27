@@ -11,7 +11,7 @@ public class BitsoServerTest extends BitsoTest {
     public void setUp() throws Exception {
         String secret = System.getenv("bitso_dev_private");
         String key = System.getenv("bitso_dev_public_key");
-        mBitso = new Bitso(key, secret, null, 0, true, false);
+        mBitso = new Bitso(key, secret, 0, true, false);
     }
 
     @Test
@@ -106,10 +106,14 @@ public class BitsoServerTest extends BitsoTest {
                 "n8JvMOl4iO8s22r2" };
 
         BitsoOrder[] specificOrder = mBitso.lookupOrders(values[0]);
-        assertEquals(true, nullCheck(specificOrder, BitsoOrder.class));
+        for (BitsoOrder bitsoOrder : specificOrder) {
+            assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
+        }
 
         BitsoOrder[] multipleOrders = mBitso.lookupOrders(values);
-        assertEquals(true, nullCheck(multipleOrders, BitsoOrder.class));
+        for (BitsoOrder bitsoOrder : multipleOrders) {
+            assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
+        }
     }
 
     @Test
