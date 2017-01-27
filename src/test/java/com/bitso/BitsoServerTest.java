@@ -147,11 +147,4 @@ public class BitsoServerTest extends BitsoTest {
         assertEquals(true, (mxnFundingDestination.containsKey("accountIdentifierName")
                 && mxnFundingDestination.containsKey("accountIdentifier")));
     }
-
-    @Test
-    public void testSPEIWithdrawal() {
-        BitsoWithdrawal speiWithdrawal = mBitso.speiWithdrawal(new BigDecimal("50"), "name", "surname",
-                "044180001059660729", "testing reference", "5706");
-        assertEquals(true, nullCheck(speiWithdrawal, BitsoWithdrawal.class));
-    }
 }

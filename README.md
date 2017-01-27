@@ -218,11 +218,10 @@ There are two ways of testing the api, through mocks or by doing server requests
 To mock up server request [mockito](http://site.mockito.org/) framework is used.
 
 ```java
-// To use the API tests
 JUnitCore core = new JUnitCore();
 Result result = core.run(BitsoMockTest.class);
 
-// To set you own tests the fowllowing code shows
+// The following code shows
 // how to test an account status request
 private BitsoAccountStatus mockAccountStatus;
 
@@ -257,7 +256,7 @@ To do this you need the HMAC authentication. If you haven't got the API keys ref
 public void setUp() throws Exception {
     String secret = System.getenv("BITSO_DEV_PRIVATE");
     String key = System.getenv("BITSO_DEV_PUBLIC_KEY");
-    // This is an overload constructor for the bitso class
+    // This is an overload constructor of the bitso class
     mBitso = new Bitso(key, secret, 0, true, false);
 }
 
@@ -274,10 +273,10 @@ public void setUp() throws Exception {
 
 ```
 
-API V3 has it's own unit and integration test suite, located under BitsoServerTest.java and BitsoMockTest.java
+API V3 has it's own unit and integration test suite, located on BitsoServerTest.java and BitsoMockTest.java.
 You can run it it with BitsoTestAPI.java class.
 
-Keep in mind that environment variable configurations are needed to test against server
-You need  to setup the following environmant variables: "SERVER_REQUEST", BITSO_DEV_PRIVATE, BITSO_DEV_PUBLIC_KEY.
+Keep in mind that environment variable configurations are needed to test against server.
+The following environmant variables are required: SERVER_REQUEST, BITSO_DEV_PRIVATE, BITSO_DEV_PUBLIC_KEY.
 
 If no environment variables are setup all test cases will be run with mocks.

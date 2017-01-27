@@ -34,12 +34,6 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testGetOrderBook() {
-        BitsoOrderBook orderBook = mBitso.getOrderBook(BitsoBook.BTC_MXN);
-        assertEquals(true, nullCheck(orderBook, BitsoOrderBook.class));
-    }
-
-    @Test
     public void testOpenOrders(){
         BitsoOrder[] orders = mBitso.getOpenOrders();
         for (BitsoOrder bitsoOrder : orders) {
@@ -48,12 +42,6 @@ public abstract class BitsoTest {
     }
 
     // Test private endpoints
-    @Test
-    public void testUserAccountStatus() {
-        BitsoAccountStatus status = mBitso.getUserAccountStatus();
-        assertEquals(nullCheck(status, BitsoAccountStatus.class), true);
-    }
-
     @Test
     public void testUserAccountBalance(){
         BitsoBalance balance = mBitso.getUserAccountBalance();
@@ -92,13 +80,6 @@ public abstract class BitsoTest {
         BitsoWithdrawal ethWithdrawal =  mBitso.etherWithdrawal(new BigDecimal("0.001"),
                 "0xc83adea9e8fea3797139942a5939b961f67abfb8");
          assertEquals(true, nullCheck(ethWithdrawal, BitsoWithdrawal.class));
-    }
-
-    @Test
-    public void testSPEIWithdrawal(){
-        BitsoWithdrawal speiWithdrawal =  mBitso.speiWithdrawal(new BigDecimal("50"),
-                "name", "surname", "044180001059660729", "testing reference", "5706");
-        assertEquals(true, nullCheck(speiWithdrawal, BitsoWithdrawal.class));
     }
 
     @Test
