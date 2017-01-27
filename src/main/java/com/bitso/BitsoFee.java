@@ -13,8 +13,6 @@ public class BitsoFee {
     public BigDecimal mxnBtcFeePercent;
     public BigDecimal mxnEthFeeDecimal;
     public BigDecimal mxnEthFeePercent;
-    public BigDecimal copBtcFeeDecimal;
-    public BigDecimal copBtcFeePercent;
 
     public BitsoFee(JSONObject o) {
         String book = "";
@@ -26,17 +24,13 @@ public class BitsoFee {
                 JSONObject fee = jsonFees.getJSONObject(i);
                 book = Helpers.getString(fee, "book");
                 switch (book) {
-                    case "mxn_btc":
+                    case "btc_mxn":
                         mxnBtcFeeDecimal = Helpers.getBD(fee, "fee_decimal");
                         mxnBtcFeePercent = Helpers.getBD(fee, "fee_percent");
                         break;
-                    case "mxn_eth":
+                    case "eth_mxn":
                         mxnEthFeeDecimal = Helpers.getBD(fee, "fee_decimal");
                         mxnEthFeePercent = Helpers.getBD(fee, "fee_percent");
-                        break;
-                    case "cop_btc":
-                        copBtcFeeDecimal = Helpers.getBD(fee, "fee_decimal");
-                        copBtcFeePercent = Helpers.getBD(fee, "fee_percent");
                         break;
                     default:
                         System.out.println(book + " is not an expected book");

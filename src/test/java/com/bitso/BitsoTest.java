@@ -34,24 +34,14 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testGetOrderBook() {
-        BitsoOrderBook orderBook = mBitso.getOrderBook(BitsoBook.BTC_MXN);
-        assertEquals(true, nullCheck(orderBook, BitsoOrderBook.class));
-    }
-
-    // @Test
     public void testOpenOrders(){
         BitsoOrder[] orders = mBitso.getOpenOrders();
-        assertEquals(true, nullCheck(orders, BitsoOrder.class));
+        for (BitsoOrder bitsoOrder : orders) {
+            assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
+        }
     }
 
     // Test private endpoints
-    @Test
-    public void testUserAccountStatus() {
-        BitsoAccountStatus status = mBitso.getUserAccountStatus();
-        assertEquals(nullCheck(status, BitsoAccountStatus.class), true);
-    }
-
     @Test
     public void testUserAccountBalance(){
         BitsoBalance balance = mBitso.getUserAccountBalance();
@@ -93,13 +83,6 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testSPEIWithdrawal(){
-        BitsoWithdrawal speiWithdrawal =  mBitso.speiWithdrawal(new BigDecimal("50"),
-                "name", "surname", "044180001059660729", "testing reference", "5706");
-        assertEquals(true, nullCheck(speiWithdrawal, BitsoWithdrawal.class));
-    }
-
-    @Test
     public void testGetBanks(){
         Map<String, String> bitsoBanks = mBitso.getBanks();
         assertEquals(true, (bitsoBanks != null));
@@ -129,10 +112,12 @@ public abstract class BitsoTest {
         }
     }
 
-    // @Test
+    @Test
     public void testLookUpOrders(){
         BitsoOrder[] specificOrder = mBitso.lookupOrders("kRrcjsp5n9og98qa");
-        assertEquals(true, nullCheck(specificOrder, BitsoOrder.class));
+        for (BitsoOrder bitsoOrder : specificOrder) {
+            assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
+        }
     }
 
     @Test

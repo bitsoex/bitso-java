@@ -1,7 +1,6 @@
 package com.bitso;
 
 import static org.junit.Assert.assertEquals;
-import java.math.BigDecimal;
 import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,9 +8,9 @@ import org.junit.Test;
 public class BitsoServerTest extends BitsoTest {
     @Before
     public void setUp() throws Exception {
-        String secret = System.getenv("bitso_dev_private");
-        String key = System.getenv("bitso_dev_public_key");
-        mBitso = new Bitso(key, secret, null, 0, true, false);
+        String secret = System.getenv("BITSO_DEV_PRIVATE");
+        String key = System.getenv("BITSO_DEV_PUBLIC_KEY");
+        mBitso = new Bitso(key, secret, 0, true, false);
     }
 
     @Test
@@ -106,10 +105,14 @@ public class BitsoServerTest extends BitsoTest {
                 "n8JvMOl4iO8s22r2" };
 
         BitsoOrder[] specificOrder = mBitso.lookupOrders(values[0]);
-        assertEquals(true, nullCheck(specificOrder, BitsoOrder.class));
+        for (BitsoOrder bitsoOrder : specificOrder) {
+            assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
+        }
 
         BitsoOrder[] multipleOrders = mBitso.lookupOrders(values);
-        assertEquals(true, nullCheck(multipleOrders, BitsoOrder.class));
+        for (BitsoOrder bitsoOrder : multipleOrders) {
+            assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
+        }
     }
 
     @Test
@@ -142,12 +145,5 @@ public class BitsoServerTest extends BitsoTest {
         assertEquals(true, (mxnFundingDestination != null));
         assertEquals(true, (mxnFundingDestination.containsKey("accountIdentifierName")
                 && mxnFundingDestination.containsKey("accountIdentifier")));
-    }
-
-    @Test
-    public void testSPEIWithdrawal() {
-        BitsoWithdrawal speiWithdrawal = mBitso.speiWithdrawal(new BigDecimal("50"), "name", "surname",
-                "044180001059660729", "testing reference", "5706");
-        assertEquals(true, nullCheck(speiWithdrawal, BitsoWithdrawal.class));
     }
 }
