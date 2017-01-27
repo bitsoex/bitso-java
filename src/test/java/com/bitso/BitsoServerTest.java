@@ -1,7 +1,6 @@
 package com.bitso;
 
 import static org.junit.Assert.assertEquals;
-import java.math.BigDecimal;
 import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
