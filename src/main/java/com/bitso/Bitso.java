@@ -573,21 +573,6 @@ public class Bitso {
         return quoteEliminator(sendBitsoPost(baseUrl + "bitcoin_deposit_address"));
     }
 
-    public boolean withdrawBTC(String address, BigDecimal amount) {
-        HashMap<String, Object> body = new HashMap<String, Object>();
-        body.put("amount", amount.toPlainString());
-        body.put("address", address);
-        log("Executing the following BTC withdrawal: " + body);
-        String ret = null;// sendBitsoPost(baseUrl + "bitcoin_withdrawal", body);
-        if (ret != null && ret.equals("\"ok\"")) {
-            log("BTC withdrawal executed");
-            return true;
-        }
-        logError("Unable to execute BTC withdrawal");
-        logError(ret);
-        return false;
-    }
-
     public BitsoTransfer getTransferStatus(String transferId) {
         String ret = sendGet(baseUrl + "transfer/" + transferId);
         JSONObject o = Helpers.parseJson(ret);
