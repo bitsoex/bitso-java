@@ -90,13 +90,6 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testDebitCardWithdrawal(){
-        BitsoWithdrawal debitCardWithdrawal = mBitso.debitCardWithdrawal(new BigDecimal("50"),
-                "name test", "surname test", "5579209071039769", "40044");
-        assertEquals(true, nullCheck(debitCardWithdrawal, BitsoWithdrawal.class));
-    }
-
-    @Test
     public void testUserFundings(){
         BitsoFunding[] fullFundings = mBitso.getUserFundings();
         for (BitsoFunding bitsoFunding : fullFundings) {

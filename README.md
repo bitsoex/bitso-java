@@ -213,9 +213,17 @@ When working with currency values in your application, it's important to remembe
 
 There are two ways of testing the api, through mocks or by doing server requests
 
-### Testing through mocks
+### Testing by mocking reponse
 
 To mock up server request [mockito](http://site.mockito.org/) framework is used.
+
+To execute mock tests run the following command:
+
+```shell
+mvn -Dtest=**/BitsoMockTest.java test
+```
+
+Here is an example to crete a test using mockito.
 
 ```java
 JUnitCore core = new JUnitCore();
@@ -251,6 +259,37 @@ public void testUserAccountStatus() {
 
 To do this you need the HMAC authentication. If you haven't got the API keys refer tu HMAC Authentication section.
 
+To execute server tests run the following command:
+
+```shell
+mvn -Dtest=**/BitsoServerTest.java test
+```
+
+Keep in mind that environment variable configurations are needed to execute server tests.
+The following environmant variables are required
+BITSO_DEV_PRIVATE and BITSO_DEV_PUBLIC_KEY.
+
+If no environment variables are setup, tests will fail with an error similar as follows:
+
+```java
+testCurrencyWithdrawals(com.bitso.BitsoServerTest)  Time elapsed: 0.001 sec  <<< ERROR!
+java.lang.NullPointerException: null
+    at com.bitso.Bitso.buildBitsoAuthHeader(Bitso.java:518)
+    at com.bitso.Bitso.sendBitsoPost(Bitso.java:590)
+    at com.bitso.Bitso.currencyWithdrawal(Bitso.java:473)
+    at com.bitso.Bitso.bitcoinWithdrawal(Bitso.java:366)
+    at com.bitso.BitsoTest.testCurrencyWithdrawals(BitsoTest.java:88)
+    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    at java.lang.reflect.Method.invoke(Method.java:498)
+    at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:47)
+    ...
+    ...
+```
+
+Server response example test.
+
 ```java
 @Before
 public void setUp() throws Exception {
@@ -272,11 +311,3 @@ public void setUp() throws Exception {
     }
 
 ```
-
-API V3 has it's own unit and integration test suite, located on BitsoServerTest.java and BitsoMockTest.java.
-You can run it it with BitsoTestAPI.java class.
-
-Keep in mind that environment variable configurations are needed to test against server.
-The following environmant variables are required: SERVER_REQUEST, BITSO_DEV_PRIVATE, BITSO_DEV_PUBLIC_KEY.
-
-If no environment variables are setup all test cases will be run with mocks.

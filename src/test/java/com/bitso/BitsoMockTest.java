@@ -273,4 +273,11 @@ public class BitsoMockTest extends BitsoTest{
                 "name", "surname", "044180001059660729", "testing reference", "5706");
         assertEquals(true, nullCheck(speiWithdrawal, BitsoWithdrawal.class));
     }
+
+    @Test
+    public void testDebitCardWithdrawal(){
+        BitsoWithdrawal debitCardWithdrawal = mBitso.debitCardWithdrawal(new BigDecimal("50"),
+                "name test", "surname test", "5579209071039769", "40044");
+        assertEquals(true, nullCheck(debitCardWithdrawal, BitsoWithdrawal.class));
+    }
 }
