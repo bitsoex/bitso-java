@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public abstract class OrderBook {
 
     public long timestamp;
+    /*
     public ArrayList<BookOrder> bids;
     public ArrayList<BookOrder> asks;
 
@@ -38,5 +39,5 @@ public abstract class OrderBook {
         }
         return sb.toString();
     }
-
+*/
 }

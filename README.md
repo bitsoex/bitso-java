@@ -1,5 +1,5 @@
 # bitso-java
-[Bitso's](https://bitso.com) official Java wrapper to interact with the [Bitso REST API v2](https://bitso.com/api_info).
+[Bitso's](https://bitso.com) official Java wrapper to interact with the [Bitso REST API v3](https://bitso.com/api_info).
 
 ## Installation
 
@@ -36,95 +36,170 @@ Bitso bitso = new Bitso(System.getenv("BITSO_API_KEY"), System.getenv("BITSO_API
 
 Notice here that we did not hard code the API keys into our codebase, but set them in environment variables instead. This is just one example, but keeping your credentials separate from your code base is a good security practice.
 
-## Examples
-
 ### Print your balance
 
 ```java
 System.out.println(bitso.getBalance());
 ```
 
-### Get your available BTC balance
+### Print Available books
 
 ```java
-BigDecimal btcAvailable = bitso.getBalance().btcAvailable;
-```
-
-### Get your available MXN balance
-
-```java
-BigDecimal mxnAvailable = bitso.getBalance().mxnAvailable;
-```
-
-### Get your trading fee
-
-```java
-BigDecimal fee = bitso.getBalance().fee;
-```
-
-### Iterate through the order book
-
-```java
-OrderBook orderBook = bitso.getOrderBook();
-for (BookOrder bid : orderBook.bids) {
-    System.out.println(bid);
+ArrayList<BookInfo> books = mBitso.availableBooks();
+for (BookInfo bookInfo : books) {
+    System.out.println(bookInfo.toString());
 }
 ```
 
-### Get your deposit address
+### Print trading information from a specified book
 
 ```java
-String depositAddress = bitso.getDepositAddress();
+BitsoTicker ticker = mBitso.getTicker(BitsoBook.BTC_MXN);
+System.out.println(ticker.toString());
 ```
 
-### Place a market order to sell 1.23456789 BTC (returns the amount of MXN received)
+### Get order books
 
 ```java
-BigDecimal mxnBought = bitso.placeSellMarketOrder(new BigDecimal("1.23456789"));
+BitsoOrderBook orderBook = mBitso.getOrderBook(BitsoBook.BTC_MXN);
+PublicOrder[] asks = orderBook.asks;
+PublicOrder[] bids = orderBook.bids;
 ```
 
-### Place a market order to sell $100 MXN (returns the amount of BTC received)
+### Iterate over open orders
 
 ```java
-BigDecimal btcBought = bitso.placeBuyMarketOrder(new BigDecimal("100.00"));
-```
-
-### Place a buy limit order to buy 3 BTC at a price of $2,000 MXN/BTC
-
-```java
-BookOrder order = bitso.placeBuyLimitOrder(new BigDecimal("2000.00"), new BigDecimal("3"));
-```
-
-### Place a sell limit order to sell 1 BTC at a price of $10,000 MXN/BTC
-
-```java
-BookOrder order = bitso.placeSellLimitOrder(new BigDecimal("10000.00"), new BigDecimal("1"));
-```
-
-### Place a sell limit order and then cancel it (assuming it wasn't matched)
-
-```java
-BookOrder order = bitso.placeSellLimitOrder(new BigDecimal("10000.00"), new BigDecimal("1"));
-bitso.cancelOrder(order.id);
-```
-
-### Get a list of open orders
-
-```java
-BitsoOrders openOrders = bitso.getOpenOrders();
-```
-
-### Withdraw 1.00 BTC to the following address: 17s4n5L9Lz7qciToYjjs5CJGBGRR7MxjUu
-
-```java
-String btcAddress = "17s4n5L9Lz7qciToYjjs5CJGBGRR7MxjUu";
-BigDecimal btcAmount = new BigDecimal("1.00");
-boolean success = bitso.withdrawBTC(btcAddress, btcAmount);
-if (success) {
-  System.out.println("Successfully sent " + btcAmount + "BTC to " + btcAddress);
-} else {
-  System.out.println("An error ocurred");
+BitsoOrder[] orders = mBitso.getOpenOrders();
+for(BitsoOrder order : orders){
+    System.out.println(order.toString());
 }
+```
+
+### Get user account status
+
+```java
+BitsoAccountStatus status = mBitso.getUserAccountStatus();
+System.out.printl(status);
+```
+
+### Get user account balance
+
+```java
+BitsoBalance balance = mBitso.getUserAccountBalance();
+System.out.printl(balance);
+```
+
+### Get user fees
+
+```java
+BitsoFee fees = mBitso.getUserFees();
+System.out.println(fees);
+```
+
+### Iterate over all user ledgers
+
+```java
+BitsoOperation[] ledger = mBitso.getUserLedger(null);
+for (BitsoOperation bitsoOperation : fullLedger) {
+    System.out.println(bitsoOperation.toString());
+}
+```
+
+### Iterate over particular user ledger operation
+
+```java
+String[] operations = { "trades", "fees", "fundings", "withdrawals" };
+for (String operationType : operations) {
+    BitsoOperation[] specificLedger = mBitso.getUserLedger(operationType);
+    for (BitsoOperation bitsoOperation : specificLedger) {
+        System.out.println(bitsoOperation.toString());       
+    }
+}
+```
+
+### Iterate over user withdrawals
+
+```java
+BitsoWithdrawal[] withdrawals = mBitso.getUserWithdrawals();
+for (BitsoWithdrawal bitsoWithdrawal : withdrawals) {
+    System.out.println(bitsoWithdrawal.toString());
+}
+```
+
+### Withdrawal 1.00 BTC to the following address: 31yTCKDHTqNXF5eZcsddJDe76BzBh8pVLb
+
+```java
+String address = "31yTCKDHTqNXF5eZcsddJDe76BzBh8pVLb";
+BitsoWithdrawal btcWithdrawal =  mBitso.bitcoinWithdrawal(new BigDecimal("1.0"), address);
+```
+
+### Withdrawal 1.00 ETH to the following address: 0xc83adea9e8fea3797139942a5939b961f67abfb8
+
+```java
+String address = "0xc83adea9e8fea3797139942a5939b961f67abfb8");
+BitsoWithdrawal ethWithdrawal =  mBitso.etherWithdrawal(new BigDecimal("1.0"), address);
+```
+
+### Withdrawal 50.00 MXN through SPEI to the following CLABE: 044180001059660729
+
+```java
+BitsoWithdrawal speiWithdrawal =  mBitso.speiWithdrawal(new BigDecimal("50"),
+    "Name", "Surname", "044180001059660729", "Reference", "5706");
+```
+
+### Withdrawal 50.00 MXN to the following card number: 5579209071039769
+
+```java
+// Get available banks
+Map<String, String> bitsoBanks = mBitso.getBanks();
+String bankCode = bitsoBanks.get("Banregio");
+
+// Debit card withdrawal
+BitsoWithdrawal debitCardWithdrawal = mBitso.debitCardWithdrawal(new BigDecimal("50"),
+                "name test", "surname test", "5579209071039769", bankCode);
+```
+
+### Iterate over user fundings
+
+```java
+BitsoFunding[] fundings = mBitso.getUserFundings();
+for (BitsoFunding bitsoFunding : fundings) {
+    System.out.println(bitsoFunding.toString());
+}
+```
+
+### Iterate over user trades
+
+```java
+BitsoTrade[] trades = mBitso.getUserTrades();
+for (BitsoTrade bitsoTrade : trades) {
+    System.out.println(bitsoTrade.toString());
+}
+```
+
+### Lookup orders
+
+```java
+// Get detail of an specific order
+String[] values = { "kRrcjsp5n9og98qa", "V4RVg7OJ1jl5O5Om", "4fVvpQrR59M26ojl", "Rhvak2cOOX552s69", "n8JvMOl4iO8s22r2" };
+BitsoOrder[] specificOrder = mBitso.lookupOrders(values[0]);
+
+// Get details of multiple orders
+BitsoOrder[] multipleOrders = mBitso.lookupOrders(values);
+```
+
+### Cancel an order
+
+```java
+String[] cancelParticularOrder = mBitso.cancelOrder("pj251R8m6im5lO82");
+```
+
+### Place an order
+
+```java
+String orderId = mBitso.placeOrder(BitsoBook.BTC_MXN, BitsoOrder.SIDE.BUY,
+                BitsoOrder.TYPE.LIMIT, new BigDecimal("15.4"), null,
+                new BigDecimal("20854.4"));
 ```
 
 ## Decimal precision

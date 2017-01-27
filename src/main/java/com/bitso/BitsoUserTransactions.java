@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.bitso.exchange.BookOrder;
 import com.bitso.helpers.Helpers;
 
 public class BitsoUserTransactions {
@@ -28,7 +27,7 @@ public class BitsoUserTransactions {
      * Old list of trades
      *
      * @deprecated use {@link #trades} instead.
-     */
+
     @Deprecated
     public ArrayList<BookOrder> list = new ArrayList<BookOrder>();
     public ArrayList<BookOrder> trades = new ArrayList<BookOrder>();
@@ -72,7 +71,7 @@ public class BitsoUserTransactions {
                     type = BookOrder.TYPE.BUY;
                 }
                 BookOrder order = new BookOrder(price, major, type);
-                order.book = book.toString();
+                order.book = BitsoBook.valueOf(book.toString());
                 order.id = o.getString("order_id");
                 order.dateTime = dateTime;
                 order.status = BookOrder.STATUS.COMPLETE;
@@ -114,4 +113,5 @@ public class BitsoUserTransactions {
             return Helpers.fieldPrinter(this);
         }
     }
+    */
 }

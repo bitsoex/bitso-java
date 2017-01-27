@@ -2,77 +2,61 @@ package com.bitso;
 
 import java.math.BigDecimal;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.bitso.exceptions.BitsoExceptionJSONPayload;
+import com.bitso.helpers.Helpers;
+
 public class BitsoBalance {
+    public BigDecimal mxnTotal;
+    public BigDecimal ethTotal;
+    public BigDecimal btcTotal;
+    public BigDecimal mxnLocked;
+    public BigDecimal ethLocked;
+    public BigDecimal btcLocked;
+    public BigDecimal mxnAvailable;
+    public BigDecimal ethAvailable;
+    public BigDecimal btcAvailable;
 
-    public BigDecimal btcBalance; // BTC balance
-    public BigDecimal btcAvailable; // BTC available for trading
-    public BigDecimal btcReserved; // BTC reserved in open orders
-
-    public BigDecimal mxnBalance; // MXN balance
-    public BigDecimal mxnAvailable; // MXN available for trading
-    public BigDecimal mxnReserved; // MXN reserved in open order
-
-    public BigDecimal ethBalance; // MXN balance
-    public BigDecimal ethAvailable; // MXN available for trading
-    public BigDecimal ethReserved; // MXN reserved in open order
-
-    /**
-     * Customer trading fee, in percentage
-     *
-     * @deprecated use {@link #feePercent} or {@link #feeDecimal} instead.
-     */
-    @Deprecated
-    public BigDecimal fee;
-    public BigDecimal feePercent; // customer trading fee, in percentage
-    public BigDecimal feeDecimal; // customer trading fee, in decimal
-
-    public BitsoBalance(JSONObject obj) {
-        btcBalance = new BigDecimal(obj.getString("btc_balance"));
-        btcAvailable = new BigDecimal(obj.getString("btc_available"));
-        btcReserved = new BigDecimal(obj.getString("btc_reserved"));
-
-        mxnBalance = new BigDecimal(obj.getString("mxn_balance"));
-        mxnAvailable = new BigDecimal(obj.getString("mxn_available"));
-        mxnReserved = new BigDecimal(obj.getString("mxn_reserved"));
-
-        ethBalance = new BigDecimal(obj.getString("eth_balance"));
-        ethAvailable = new BigDecimal(obj.getString("eth_available"));
-        ethReserved = new BigDecimal(obj.getString("eth_reserved"));
-
-        feePercent = new BigDecimal(obj.getString("fee"));
-        feeDecimal = feePercent.divide(new BigDecimal("100"), 8, BigDecimal.ROUND_UP);
-        fee = feePercent;
+    public BitsoBalance(JSONObject o) {
+        String currency = "";
+        if(o.has("payload")){
+            JSONObject payload = o.getJSONObject("payload");
+            JSONArray jsonBalances = payload.getJSONArray("balances");
+            int totalElements = jsonBalances.length();
+            for(int i=0; i<totalElements; i++){
+                JSONObject balance = jsonBalances.getJSONObject(i);
+                currency = Helpers.getString(balance, "currency");
+                switch (currency) {
+                    case "mxn":
+                        mxnTotal = Helpers.getBD(balance, "total");
+                        mxnLocked = Helpers.getBD(balance, "locked");;
+                        mxnAvailable = Helpers.getBD(balance, "available");
+                        break;
+                    case "btc":
+                        btcTotal = Helpers.getBD(balance, "total");
+                        btcLocked = Helpers.getBD(balance, "locked");;
+                        btcAvailable = Helpers.getBD(balance, "available");
+                        break;
+                    case "eth":
+                        ethTotal = Helpers.getBD(balance, "total");
+                        ethLocked = Helpers.getBD(balance, "locked");;
+                        ethAvailable = Helpers.getBD(balance, "available");
+                        break;
+                    default:
+                        System.out.println(currency +
+                                " is not an expected currency");
+                }
+            }
+        }else{
+            throw new BitsoExceptionJSONPayload(o.toString() +
+                    "does not contains payload key");
+        }
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("====BTC====\nAvailable: ");
-        sb.append(btcAvailable.toPlainString());
-        sb.append("\n Reserved: ");
-        sb.append(btcReserved.toPlainString());
-        sb.append("\n  Balance: ");
-        sb.append(btcBalance.toPlainString());
-        sb.append("\n====MXN====\nAvailable: ");
-        sb.append(mxnAvailable.toPlainString());
-        sb.append("\n Reserved: ");
-        sb.append(mxnReserved.toPlainString());
-        sb.append("\n  Balance: ");
-        sb.append(mxnBalance.toPlainString());
-        sb.append("\n====ETH====\nAvailable: ");
-        sb.append(ethAvailable.toPlainString());
-        sb.append("\n Reserved: ");
-        sb.append(ethReserved.toPlainString());
-        sb.append("\n  Balance: ");
-        sb.append(ethBalance.toPlainString());
-        sb.append("\n===OTHER===\nFee: ");
-        sb.append(fee.toPlainString());
-        sb.append("\nFee (Decimal): ");
-        sb.append(feeDecimal.toPlainString());
-        sb.append("\nFee (Percent): ");
-        sb.append(feePercent.toPlainString());
-        return sb.toString();
+        return Helpers.fieldPrinter(this);
     }
 }
