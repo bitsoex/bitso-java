@@ -33,4 +33,8 @@ public class BitsoAccountStatus {
         originOfFunds = Helpers.getString(o, "origin_of_funds");
     }
 
+    @Override
+    public String toString() {
+        return Helpers.fieldPrinter(this);
+    }
 }

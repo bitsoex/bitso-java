@@ -6,7 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.bitso.exceptions.BitsoExceptionJSONPayload;
-import com.bitso.exceptions.BitsoExceptionNotExpectedCurrency;
 import com.bitso.helpers.Helpers;
 
 public class BitsoFee {
