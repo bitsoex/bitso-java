@@ -9,8 +9,8 @@ import org.junit.Test;
 public class BitsoServerTest extends BitsoTest {
     @Before
     public void setUp() throws Exception {
-        String secret = System.getenv("bitso_dev_private");
-        String key = System.getenv("bitso_dev_public_key");
+        String secret = System.getenv("BITSO_DEV_PRIVATE");
+        String key = System.getenv("BITSO_DEV_PUBLIC_KEY");
         mBitso = new Bitso(key, secret, 0, true, false);
     }
 
