@@ -1,5 +1,5 @@
 # bitso-java
-[Bitso's](https://bitso.com) official Java wrapper to interact with the [Bitso REST API v3](https://bitso.com/api_info).
+[Bitso's](htt ps://bitso.com) official Java wrapper to interact with the [Bitso REST API v3](https://bitso.com/api_info).
 
 ## Installation
 
@@ -31,7 +31,7 @@ Next, build an instance of the client by passing your Client ID, API Key, and Se
 ```java
 import com.bitso.Bitso;
 
-Bitso bitso = new Bitso(System.getenv("BITSO_API_KEY"), System.getenv("BITSO_API_SECRET"), System.getenv("BITSO_CLIENT_ID"));
+Bitso bitso = new Bitso(System.getenv("BITSO_API_KEY"), System.getenv("BITSO_API_SECRET"));
 ```
 
 Notice here that we did not hard code the API keys into our codebase, but set them in environment variables instead. This is just one example, but keeping your credentials separate from your code base is a good security practice.
@@ -66,7 +66,7 @@ PublicOrder[] asks = orderBook.asks;
 PublicOrder[] bids = orderBook.bids;
 ```
 
-### Iterate over open orders
+### Iterate over Open orders
 
 ```java
 BitsoOrder[] orders = mBitso.getOpenOrders();
@@ -86,14 +86,14 @@ System.out.printl(status);
 
 ```java
 BitsoBalance balance = mBitso.getUserAccountBalance();
-System.out.printl(balance);
+System.out.printl(balance.toString());
 ```
 
 ### Get user fees
 
 ```java
 BitsoFee fees = mBitso.getUserFees();
-System.out.println(fees);
+System.out.println(fees.toString());
 ```
 
 ### Iterate over all user ledgers
@@ -108,6 +108,7 @@ for (BitsoOperation bitsoOperation : fullLedger) {
 ### Iterate over particular user ledger operation
 
 ```java
+// Ledger operations
 String[] operations = { "trades", "fees", "fundings", "withdrawals" };
 for (String operationType : operations) {
     BitsoOperation[] specificLedger = mBitso.getUserLedger(operationType);
@@ -130,24 +131,24 @@ for (BitsoWithdrawal bitsoWithdrawal : withdrawals) {
 
 ```java
 String address = "31yTCKDHTqNXF5eZcsddJDe76BzBh8pVLb";
-BitsoWithdrawal btcWithdrawal =  mBitso.bitcoinWithdrawal(new BigDecimal("1.0"), address);
+BitsoWithdrawal btcWithdrawal =  mBitso.bitcoinWithdrawal(new BigDecimal("1.00"), address);
 ```
 
 ### Withdrawal 1.00 ETH to the following address: 0xc83adea9e8fea3797139942a5939b961f67abfb8
 
 ```java
 String address = "0xc83adea9e8fea3797139942a5939b961f67abfb8");
-BitsoWithdrawal ethWithdrawal =  mBitso.etherWithdrawal(new BigDecimal("1.0"), address);
+BitsoWithdrawal ethWithdrawal =  mBitso.etherWithdrawal(new BigDecimal("1.00"), address);
 ```
 
-### Withdrawal 50.00 MXN through SPEI to the following CLABE: 044180001059660729
+### Withdrawal 50.00 MXN through SPEI to the following CLABE: 044180801959660729
 
 ```java
-BitsoWithdrawal speiWithdrawal =  mBitso.speiWithdrawal(new BigDecimal("50"),
-    "Name", "Surname", "044180001059660729", "Reference", "5706");
+BitsoWithdrawal speiWithdrawal =  mBitso.speiWithdrawal(new BigDecimal("50.00"),
+    "Name", "Surname", "044180801959660729", "Reference", "5706");
 ```
 
-### Withdrawal 50.00 MXN to the following card number: 5579209071039769
+### Withdrawal 50.00 MXN to the following card number: 5579214571039769
 
 ```java
 // Get available banks
@@ -155,8 +156,8 @@ Map<String, String> bitsoBanks = mBitso.getBanks();
 String bankCode = bitsoBanks.get("Banregio");
 
 // Debit card withdrawal
-BitsoWithdrawal debitCardWithdrawal = mBitso.debitCardWithdrawal(new BigDecimal("50"),
-                "name test", "surname test", "5579209071039769", bankCode);
+BitsoWithdrawal debitCardWithdrawal = mBitso.debitCardWithdrawal(new BigDecimal("50.00"),
+                "name test", "surname test", "5579214571039769", bankCode);
 ```
 
 ### Iterate over user fundings
@@ -207,3 +208,33 @@ String orderId = mBitso.placeOrder(BitsoBook.BTC_MXN, BitsoOrder.SIDE.BUY,
 This artifact relies on the [JDK BigDecimal](http://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html) class for arithmetic to maintain decimal precision for all values returned.
 
 When working with currency values in your application, it's important to remember that floating point arithmetic is prone to [rounding errors](http://en.wikipedia.org/wiki/Round-off_error). We recommend you always use BigDecimal.
+
+## Tests
+
+Tests for this java can run against the actual server or using mocked responses.
+
+### Testing with mocked reponses
+
+Server responses are mocked using the [mockito](http://site.mockito.org/) framework.
+
+To run mocked tests, use the following command:
+
+```shell
+mvn -Dtest=**/BitsoMockTest.java test
+```
+
+
+### Testing with actual server responses
+
+To run many of these tests against the server, you will need to identify using an API Keey/Secret. Refer to the "HMAC Authentication section" for more information.
+
+To run tests against the server, use the following command:
+
+```shell
+mvn -Dtest=**/BitsoServerTest.java test
+```
+
+Keep in mind that a couple of environment variables are required to run the tests against the server:
+- BITSO_DEV_PUBLIC_KEY
+- BITSO_DEV_PRIVATE  
+
