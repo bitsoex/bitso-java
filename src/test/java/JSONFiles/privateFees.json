@@ -2,17 +2,13 @@
     "success": true,
     "payload": {
         "fees": [{
-            "book": "mxn_btc",
+            "book": "btc_mxn",
             "fee_decimal": "0.0001",
             "fee_percent": "0.01"
         }, {
-            "book": "mxn_eth",
+            "book": "eth_mxn",
             "fee_decimal": "0.001",
             "fee_percent": "0.1"
-        }, {
-            "book": "cop_btc",
-            "fee_decimal": "0.01",
-            "fee_percent": "1"
         }]
     }
 }

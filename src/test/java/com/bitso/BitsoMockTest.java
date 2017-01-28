@@ -1,5 +1,7 @@
 package com.bitso;
 
+import static org.junit.Assert.assertEquals;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +10,7 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.bitso.exchange.BookInfo;
@@ -262,5 +265,12 @@ public class BitsoMockTest extends BitsoTest{
             mockFundingDestination.put("accountIdentifier",
                     Helpers.getString(payload, "account_identifier"));
         }
+    }
+    
+    @Test
+    public void testSPEIWithdrawal(){
+        BitsoWithdrawal speiWithdrawal =  mBitso.speiWithdrawal(new BigDecimal("50"),
+                "name", "surname", "044180001059660729", "testing reference", "5706");
+        assertEquals(true, nullCheck(speiWithdrawal, BitsoWithdrawal.class));
     }
 }
