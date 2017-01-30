@@ -211,103 +211,30 @@ When working with currency values in your application, it's important to remembe
 
 ## Tests
 
-There are two ways of testing the api, through mocks or by doing server requests
+Tests for this java can run against the actual server or using mocked responses.
 
-### Testing by mocking reponse
+### Testing with mocked reponses
 
-To mock up server request [mockito](http://site.mockito.org/) framework is used.
+Server responses are mocked using the [mockito](http://site.mockito.org/) framework.
 
-To execute mock tests run the following command:
+To run mocked tests, use the following command:
 
 ```shell
 mvn -Dtest=**/BitsoMockTest.java test
 ```
 
-Here is an example to crete a test using mockito.
 
-```java
-JUnitCore core = new JUnitCore();
-Result result = core.run(BitsoMockTest.class);
+### Testing with actual server responses
 
-// The following code shows
-// how to test an account status request
-private BitsoAccountStatus mockAccountStatus;
+To run many of these tests against the server, you will need to identify using an API Keey/Secret. Refer to the "HMAC Authentication section" for more information.
 
-@Before
-public void setUp() throws Exception{
-    mBitso = Mockito.mock(Bitso.class);
-    setUpTestMocks();
-    setUpMockitoActions();
-}
-
-private void setUpTestMocks(){
-    setUpAccountStatus(Helpers.getJSONFromFile("privateAccountStatus.json"));
-}
-
-private void setUpMockitoActions(){
-    Mockito.when(mBitso.getUserAccountStatus()).thenReturn(mockAccountStatus);
-}
-
-@Test
-public void testUserAccountStatus() {
-    BitsoAccountStatus status = mBitso.getUserAccountStatus();
-    assertEquals(nullCheck(status, BitsoAccountStatus.class), true);
-}
-```
-
-### Testing through real server request
-
-To do this you need the HMAC authentication. If you haven't got the API keys refer tu HMAC Authentication section.
-
-To execute server tests run the following command:
+To run tests against the server, use the following command:
 
 ```shell
 mvn -Dtest=**/BitsoServerTest.java test
 ```
 
-Keep in mind that environment variable configurations are needed to execute server tests.
-The following environmant variables are required
-BITSO_DEV_PRIVATE and BITSO_DEV_PUBLIC_KEY.
+Keep in mind that a couple of environment variables are required to run the tests against the server:
+- BITSO_DEV_PUBLIC_KEY
+- BITSO_DEV_PRIVATE  
 
-If no environment variables are setup, tests will fail with an error similar as follows:
-
-```java
-testCurrencyWithdrawals(com.bitso.BitsoServerTest)  Time elapsed: 0.001 sec  <<< ERROR!
-java.lang.NullPointerException: null
-    at com.bitso.Bitso.buildBitsoAuthHeader(Bitso.java:518)
-    at com.bitso.Bitso.sendBitsoPost(Bitso.java:590)
-    at com.bitso.Bitso.currencyWithdrawal(Bitso.java:473)
-    at com.bitso.Bitso.bitcoinWithdrawal(Bitso.java:366)
-    at com.bitso.BitsoTest.testCurrencyWithdrawals(BitsoTest.java:88)
-    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-    at java.lang.reflect.Method.invoke(Method.java:498)
-    at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:47)
-    ...
-    ...
-```
-
-Server response example test.
-
-```java
-@Before
-public void setUp() throws Exception {
-    String secret = System.getenv("BITSO_DEV_PRIVATE");
-    String key = System.getenv("BITSO_DEV_PUBLIC_KEY");
-    // This is an overload constructor of the bitso class
-    mBitso = new Bitso(key, secret, 0, true, false);
-}
-
-@Test
-    public void testUserWithdrawals() {
-        // Testing withdrawal ids
-        String[] wids = { "65532d428d4c1b2642833b9e78c1b9fd", "d5764355792aff733f31ee7bfc38a832",
-                "e7dba07657459c194514d3088d117e18" };
-        BitsoWithdrawal[] fullWithdraws = mBitso.getUserWithdrawals();
-        for (BitsoWithdrawal bitsoWithdrawal : fullWithdraws) {
-            assertEquals(true, nullCheck(bitsoWithdrawal, BitsoWithdrawal.class));
-        }
-    }
-
-```
