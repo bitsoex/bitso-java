@@ -1,5 +1,6 @@
 # bitso-java
-[Bitso's](https://bitso.com) official Java wrapper to interact with the [Bitso REST API v2](https://bitso.com/api_info).
+[Bitso's](https://bitso.com) official Java wrapper to interact with the [Bitso REST API v2](https://bitso.com/api_info/v2).
+*We recommend you migrate to [Bitso's](https://bitso.com) new [Bitso REST API v3](https://bitso.com/api_info).*
 
 ## Installation
 
@@ -11,7 +12,7 @@ Add the following dependency to your project's Maven pom.xml:
 <dependency>
   <groupId>com.bitso</groupId>
   <artifactId>bitso-java</artifactId>
-  <version>0.0.36</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
