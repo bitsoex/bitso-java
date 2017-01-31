@@ -26,7 +26,7 @@ This library is only supported by OpenJDK 8
 
 Start by [enabling an API Key on your account](https://bitso.com/api_setup)
 
-Next, build an instance of the client by passing your Client ID, API Key, and Secret to a Bitso object.
+Next, build an instance of the client by passing your API Key, and Secret to a Bitso object.
 
 ```java
 import com.bitso.Bitso;
@@ -45,23 +45,23 @@ System.out.println(bitso.getBalance());
 ### Print Available books
 
 ```java
-ArrayList<BookInfo> books = mBitso.availableBooks();
+ArrayList<BookInfo> books = bitso.availableBooks();
 for (BookInfo bookInfo : books) {
-    System.out.println(bookInfo.toString());
+    System.out.println(bookInfo);
 }
 ```
 
 ### Print trading information from a specified book
 
 ```java
-BitsoTicker ticker = mBitso.getTicker(BitsoBook.BTC_MXN);
-System.out.println(ticker.toString());
+BitsoTicker ticker = bitso.getTicker(BitsoBook.BTC_MXN);
+System.out.println(ticker);
 ```
 
 ### Get order books
 
 ```java
-BitsoOrderBook orderBook = mBitso.getOrderBook(BitsoBook.BTC_MXN);
+BitsoOrderBook orderBook = bitso.getOrderBook(BitsoBook.BTC_MXN);
 PublicOrder[] asks = orderBook.asks;
 PublicOrder[] bids = orderBook.bids;
 ```
@@ -69,39 +69,39 @@ PublicOrder[] bids = orderBook.bids;
 ### Iterate over Open orders
 
 ```java
-BitsoOrder[] orders = mBitso.getOpenOrders();
+BitsoOrder[] orders = bitso.getOpenOrders();
 for(BitsoOrder order : orders){
-    System.out.println(order.toString());
+    System.out.println(order);
 }
 ```
 
 ### Get user account status
 
 ```java
-BitsoAccountStatus status = mBitso.getUserAccountStatus();
-System.out.printl(status);
+BitsoAccountStatus status = bitso.getUserAccountStatus();
+System.out.println(status);
 ```
 
 ### Get user account balance
 
 ```java
-BitsoBalance balance = mBitso.getUserAccountBalance();
-System.out.printl(balance.toString());
+BitsoBalance balance = bitso.getUserAccountBalance();
+System.out.println(balance);
 ```
 
 ### Get user fees
 
 ```java
-BitsoFee fees = mBitso.getUserFees();
-System.out.println(fees.toString());
+BitsoFee fees = bitso.getUserFees();
+System.out.println(fees);
 ```
 
 ### Iterate over all user ledgers
 
 ```java
-BitsoOperation[] ledger = mBitso.getUserLedger(null);
+BitsoOperation[] ledger = bitso.getUserLedger(null);
 for (BitsoOperation bitsoOperation : fullLedger) {
-    System.out.println(bitsoOperation.toString());
+    System.out.println(bitsoOperation);
 }
 ```
 
@@ -111,9 +111,9 @@ for (BitsoOperation bitsoOperation : fullLedger) {
 // Ledger operations
 String[] operations = { "trades", "fees", "fundings", "withdrawals" };
 for (String operationType : operations) {
-    BitsoOperation[] specificLedger = mBitso.getUserLedger(operationType);
+    BitsoOperation[] specificLedger = bitso.getUserLedger(operationType);
     for (BitsoOperation bitsoOperation : specificLedger) {
-        System.out.println(bitsoOperation.toString());       
+        System.out.println(bitsoOperation);
     }
 }
 ```
@@ -121,60 +121,60 @@ for (String operationType : operations) {
 ### Iterate over user withdrawals
 
 ```java
-BitsoWithdrawal[] withdrawals = mBitso.getUserWithdrawals();
+BitsoWithdrawal[] withdrawals = bitso.getUserWithdrawals();
 for (BitsoWithdrawal bitsoWithdrawal : withdrawals) {
-    System.out.println(bitsoWithdrawal.toString());
+    System.out.println(bitsoWithdrawal);
 }
 ```
 
-### Withdrawal 1.00 BTC to the following address: 31yTCKDHTqNXF5eZcsddJDe76BzBh8pVLb
+### Withdraw 1.00 BTC to the following address: 31yTCKDHTqNXF5eZcsddJDe76BzBh8pVLb
 
 ```java
 String address = "31yTCKDHTqNXF5eZcsddJDe76BzBh8pVLb";
-BitsoWithdrawal btcWithdrawal =  mBitso.bitcoinWithdrawal(new BigDecimal("1.00"), address);
+BitsoWithdrawal btcWithdrawal =  bitso.bitcoinWithdrawal(new BigDecimal("1.00"), address);
 ```
 
-### Withdrawal 1.00 ETH to the following address: 0xc83adea9e8fea3797139942a5939b961f67abfb8
+### Withdraw 1.00 ETH to the following address: 0xc83adea9e8fea3797139942a5939b961f67abfb8
 
 ```java
 String address = "0xc83adea9e8fea3797139942a5939b961f67abfb8");
-BitsoWithdrawal ethWithdrawal =  mBitso.etherWithdrawal(new BigDecimal("1.00"), address);
+BitsoWithdrawal ethWithdrawal =  bitso.etherWithdrawal(new BigDecimal("1.00"), address);
 ```
 
-### Withdrawal 50.00 MXN through SPEI to the following CLABE: 044180801959660729
+### Withdraw 50.00 MXN through SPEI to the following CLABE: 044180801959660729
 
 ```java
-BitsoWithdrawal speiWithdrawal =  mBitso.speiWithdrawal(new BigDecimal("50.00"),
+BitsoWithdrawal speiWithdrawal =  bitso.speiWithdrawal(new BigDecimal("50.00"),
     "Name", "Surname", "044180801959660729", "Reference", "5706");
 ```
 
-### Withdrawal 50.00 MXN to the following card number: 5579214571039769
+### Withdraw 50.00 MXN to the following card number: 5579214571039769
 
 ```java
 // Get available banks
-Map<String, String> bitsoBanks = mBitso.getBanks();
+Map<String, String> bitsoBanks = bitso.getBanks();
 String bankCode = bitsoBanks.get("Banregio");
 
 // Debit card withdrawal
-BitsoWithdrawal debitCardWithdrawal = mBitso.debitCardWithdrawal(new BigDecimal("50.00"),
+BitsoWithdrawal debitCardWithdrawal = bitso.debitCardWithdrawal(new BigDecimal("50.00"),
                 "name test", "surname test", "5579214571039769", bankCode);
 ```
 
 ### Iterate over user fundings
 
 ```java
-BitsoFunding[] fundings = mBitso.getUserFundings();
+BitsoFunding[] fundings = bitso.getUserFundings();
 for (BitsoFunding bitsoFunding : fundings) {
-    System.out.println(bitsoFunding.toString());
+    System.out.println(bitsoFunding);
 }
 ```
 
 ### Iterate over user trades
 
 ```java
-BitsoTrade[] trades = mBitso.getUserTrades();
+BitsoTrade[] trades = bitso.getUserTrades();
 for (BitsoTrade bitsoTrade : trades) {
-    System.out.println(bitsoTrade.toString());
+    System.out.println(bitsoTrade);
 }
 ```
 
@@ -183,22 +183,22 @@ for (BitsoTrade bitsoTrade : trades) {
 ```java
 // Get detail of an specific order
 String[] values = { "kRrcjsp5n9og98qa", "V4RVg7OJ1jl5O5Om", "4fVvpQrR59M26ojl", "Rhvak2cOOX552s69", "n8JvMOl4iO8s22r2" };
-BitsoOrder[] specificOrder = mBitso.lookupOrders(values[0]);
+BitsoOrder[] specificOrder = bitso.lookupOrders(values[0]);
 
 // Get details of multiple orders
-BitsoOrder[] multipleOrders = mBitso.lookupOrders(values);
+BitsoOrder[] multipleOrders = bitso.lookupOrders(values);
 ```
 
 ### Cancel an order
 
 ```java
-String[] cancelParticularOrder = mBitso.cancelOrder("pj251R8m6im5lO82");
+String[] cancelParticularOrder = bitso.cancelOrder("pj251R8m6im5lO82");
 ```
 
 ### Place an order
 
 ```java
-String orderId = mBitso.placeOrder(BitsoBook.BTC_MXN, BitsoOrder.SIDE.BUY,
+String orderId = bitso.placeOrder(BitsoBook.BTC_MXN, BitsoOrder.SIDE.BUY,
                 BitsoOrder.TYPE.LIMIT, new BigDecimal("15.4"), null,
                 new BigDecimal("20854.4"));
 ```
@@ -236,5 +236,4 @@ mvn -Dtest=**/BitsoServerTest.java test
 
 Keep in mind that a couple of environment variables are required to run the tests against the server:
 - BITSO_DEV_PUBLIC_KEY
-- BITSO_DEV_PRIVATE  
-
+- BITSO_DEV_PRIVATE
