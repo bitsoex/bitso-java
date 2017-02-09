@@ -33,18 +33,6 @@ public class BitsoOrder {
         }
     }
 
-    public static BitsoBook getBook(String book) {
-        switch (book) {
-            case "btc_mxn":
-                return BitsoBook.BTC_MXN;
-            case "eth_mxn":
-                return BitsoBook.ETH_MXN;
-            default:
-                String exceptionMessage = book + "is not a supported book";
-                throw new BitsoExceptionNotExpectedValue(exceptionMessage);
-        }
-    }
-
     public BitsoBook book;
     public BigDecimal originalAmount;
     public BigDecimal unfilledAmount;
@@ -58,7 +46,7 @@ public class BitsoOrder {
     public TYPE type;
 
     public BitsoOrder(JSONObject o) {
-        book = getBook(Helpers.getString(o, "book"));
+        book = Helpers.getBook(Helpers.getString(o, "book"));
         originalAmount = Helpers.getBD(o, "original_amount");
         unfilledAmount = Helpers.getBD(o, "unfilled_amount");
         originalValue = Helpers.getBD(o, "original_value");

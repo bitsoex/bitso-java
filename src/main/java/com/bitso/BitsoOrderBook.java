@@ -53,7 +53,7 @@ public class BitsoOrderBook {
         public BigDecimal amount;
         
         public PulicOrder(JSONObject o){
-            book = BitsoOrder.getBook(Helpers.getString(o, "book"));
+            book = Helpers.getBook(Helpers.getString(o, "book"));
             price = Helpers.getBD(o, "price");
             amount = Helpers.getBD(o, "amount");
         }

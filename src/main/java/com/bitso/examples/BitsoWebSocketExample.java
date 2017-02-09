@@ -1,7 +1,10 @@
 package com.bitso.examples;
 
+import java.net.URISyntaxException;
 import java.util.Observable;
 import java.util.Observer;
+
+import javax.net.ssl.SSLException;
 
 import com.bitso.websockets.BitsoWebSocket;
 import com.bitso.websockets.Channels;
@@ -9,7 +12,7 @@ import com.bitso.websockets.Channels;
 public class BitsoWebSocketExample implements Observer {
     BitsoWebSocket ws;
 
-    public BitsoWebSocketExample() {
+    public BitsoWebSocketExample() throws InterruptedException, SSLException, URISyntaxException {
         Channels[] subscribeTo = { Channels.TRADES, Channels.DIFF_ORDERS, Channels.ORDERS };
         ws = new BitsoWebSocket(subscribeTo);
         ws.addObserver(this);
@@ -21,12 +24,17 @@ public class BitsoWebSocketExample implements Observer {
         String message = arg.toString();
         if (message.equals("disconnected")) {
             System.out.println("The websocket got disconnected, reconnecting.");
-            ws.connect();
+            try {
+                ws.connect();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         System.out.println("got a message: " + arg);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SSLException,
+        InterruptedException, URISyntaxException {
         new BitsoWebSocketExample();
     }
 }
