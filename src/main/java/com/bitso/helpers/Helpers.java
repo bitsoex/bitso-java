@@ -92,6 +92,16 @@ public class Helpers {
         }
         return null;
     }
+    
+    public static int getInt(JSONObject o, String key) {
+        if (o.has(key)) {
+            return o.getInt(key);
+        } else {
+            System.err.println("No " + key + ": " + o);
+            Helpers.printStackTrace();
+        }
+        return -1;
+    }
 
     public static String getString(JSONObject o, String key) {
         if (o.has(key)) {

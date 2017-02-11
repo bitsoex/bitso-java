@@ -7,11 +7,11 @@ import com.bitso.exceptions.BitsoExceptionNotExpectedValue;
 import com.bitso.helpers.Helpers;
 
 public class BitsoStreamUpdate {
-    protected BitsoStreams bitsoStream;
+    protected BitsoChannels bitsoChannel;
     protected BitsoBook bitsoBook;
 
-    public BitsoStreams getBitsoStream() {
-        return bitsoStream;
+    public BitsoChannels getBitsoChannel() {
+        return bitsoChannel;
     }
         
     public BitsoBook getBitsoBook() {
@@ -19,18 +19,18 @@ public class BitsoStreamUpdate {
     }
     
     public BitsoStreamUpdate(JSONObject jsonObject){
-        bitsoStream = getStream(Helpers.getString(jsonObject, "type"));
+        bitsoChannel = getStream(Helpers.getString(jsonObject, "type"));
         bitsoBook = Helpers.getBook(Helpers.getString(jsonObject, "book"));
     }
     
-    protected BitsoStreams getStream(String stream) {
+    protected BitsoChannels getStream(String stream) {
         switch (stream) {
             case "diff-orders":
-                return BitsoStreams.DIFF_ORDERS;
+                return BitsoChannels.DIFF_ORDERS;
             case "orders":
-                return BitsoStreams.ORDERS;
+                return BitsoChannels.ORDERS;
             case "trades":
-                return BitsoStreams.TRADES;
+                return BitsoChannels.TRADES;
             default:
                 String exceptionMessage = stream + "is not a supported stream";
                 throw new BitsoExceptionNotExpectedValue(exceptionMessage);

@@ -4,24 +4,40 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.json.JSONObject;
-
 public class BitsoWebSocketObserver implements Observer{
-    
-    private ArrayList<String> mStreamUpdates;
+    private ArrayList<String> mMessagesReceived;
+    private Boolean mWSConnected;
 
-    public BitsoWebSocketObserver() {
-        mStreamUpdates = new ArrayList<String>();
+    public BitsoWebSocketObserver() {        
+        this.mMessagesReceived = new ArrayList<String>();
+        this.mWSConnected = Boolean.FALSE;
     }
-    
-    @Override
+
     public void update(Observable o, Object arg) {
-        String response =  (String) arg;
-        System.out.println(response);
-        mStreamUpdates.add(response);
+        // Update message
+        if(arg instanceof String){
+            String messageReceived = ((String) arg);
+            System.out.println(messageReceived);
+            mMessagesReceived.add(messageReceived);
+        }
+        
+        // On connect/disconnect
+        if(arg instanceof Boolean){
+            mWSConnected = ((Boolean) arg);
+            if(mWSConnected){
+                System.out.println("Web socket is now connected");
+            }else{
+                System.out.println("Web socket is now disconnected");
+            }
+            
+        }
     }
-
-    public ArrayList<String> getStreamUpdates() {
-        return mStreamUpdates;
+    
+    public ArrayList<String> getMessagesReceived(){
+        return mMessagesReceived;
+    }
+    
+    public Boolean isWSConnected(){
+        return mWSConnected;
     }
 }

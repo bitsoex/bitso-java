@@ -18,16 +18,16 @@ import com.bitso.websockets.BitsoStreamOrders;
 import com.bitso.websockets.BitsoStreamTrades;
 import com.bitso.websockets.BitsoWebSocket;
 import com.bitso.websockets.BitsoWebSocketObserver;
-import com.bitso.websockets.Channels;
+import com.bitso.websockets.BitsoChannels;
 
 public class BitsoWebSocketTest {
-    private final Channels[] channels = { Channels.TRADES, Channels.DIFF_ORDERS, Channels.ORDERS };
-    BitsoWebSocket bitsoWebSocket;
-    BitsoWebSocketObserver bitsoWebSocketObserver;
+    private final BitsoChannels[] bitsoChannels = { BitsoChannels.TRADES, BitsoChannels.DIFF_ORDERS, BitsoChannels.ORDERS };
+    private BitsoWebSocket bitsoWebSocket;
+    private BitsoWebSocketObserver bitsoWebSocketObserver;
     
     @Before
     public void setUp() throws Exception{
-        bitsoWebSocket = new BitsoWebSocket(channels);
+        bitsoWebSocket = new BitsoWebSocket();
         bitsoWebSocketObserver = new BitsoWebSocketObserver();
         bitsoWebSocket.addObserver(bitsoWebSocketObserver);
     }
@@ -39,13 +39,16 @@ public class BitsoWebSocketTest {
         String action = "";
         String response = "";
 
-        bitsoWebSocket.connect();
+        bitsoWebSocket.openConnection();
+        for (BitsoChannels bitsoChannel : bitsoChannels) {
+            bitsoWebSocket.subscribeBitsoChannel(bitsoChannel.toString());
+        }
 
         Thread.sleep(20000);
 
-        bitsoWebSocket.close();
+        bitsoWebSocket.closeConnection();
 
-        receivedMessages = bitsoWebSocketObserver.getStreamUpdates();
+        receivedMessages = bitsoWebSocketObserver.getMessagesReceived();
         totalMessagesReceived = receivedMessages.size();
 
         // Check channel subscription

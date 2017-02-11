@@ -6,6 +6,8 @@ import java.util.Observable;
 
 import javax.net.ssl.SSLException;
 
+import com.bitso.exceptions.BitsoWebSocketExeption;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -36,7 +38,6 @@ import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import io.netty.util.CharsetUtil;
 
 public class BitsoWebSocket extends Observable{
-    private final String HOST = "ws.bitso.com";
     private final String URL = "wss://ws.bitso.com";
     private final int PORT = 443;
 
@@ -44,20 +45,32 @@ public class BitsoWebSocket extends Observable{
     private SslContext mSslContext;
     private Channel mChannel;
     private EventLoopGroup mGroup;
-    private Channels[] mBitsoChannels;
     private String mMessageReceived;
+    private Boolean mConnected;
     
-    public BitsoWebSocket(Channels[] bitsoChannels) throws SSLException,
+    public BitsoWebSocket() throws SSLException,
         URISyntaxException{
         mUri = new URI(URL);
         mSslContext = SslContextBuilder.forClient().
                 trustManager(InsecureTrustManagerFactory.INSTANCE).build();
         mGroup = new NioEventLoopGroup();
-        mBitsoChannels = bitsoChannels;
         mMessageReceived = "";
+        mConnected = Boolean.FALSE;
+    }
+    
+    public void setConnected(Boolean connected){
+        mConnected = connected;
+        setChanged();
+        notifyObservers(mConnected);
+    }
+    
+    public void setMessageReceived(String messageReceived){
+        mMessageReceived = messageReceived;
+        setChanged();
+        notifyObservers(mMessageReceived);
     }
 
-    public void open() throws InterruptedException{
+    public void openConnection() throws InterruptedException{
         Bootstrap bootstrap = new Bootstrap();
 
         final WebSocketClientHandler handler =
@@ -73,7 +86,8 @@ public class BitsoWebSocket extends Observable{
                     public void initChannel(SocketChannel socketChannel){
                         ChannelPipeline channelPipeline =
                                 socketChannel.pipeline();
-                        channelPipeline.addLast(mSslContext.newHandler(socketChannel.alloc(),
+                        channelPipeline.addLast(mSslContext.newHandler(
+                                socketChannel.alloc(),
                                 mUri.getHost(),
                                 PORT));
                         channelPipeline.addLast(new HttpClientCodec(),
@@ -82,40 +96,28 @@ public class BitsoWebSocket extends Observable{
                     }
                 });
 
-        System.out.println("WebSocket Client connecting");
-        mChannel = bootstrap.connect(HOST, PORT).sync().channel();
+        mChannel = bootstrap.connect(mUri.getHost(), PORT).sync().channel();
         handler.handshakeFuture().sync();
-        System.out.println("WebSocket Client connected");
+        setConnected(Boolean.TRUE);
     }
     
-    public void connectBitsoChannels(){
-        int totalBitsoChannels = mBitsoChannels.length;
-        String frameMessage = "";
-        for (int i=0; i<totalBitsoChannels; i++) {
-            frameMessage = "{ \"action\": \"subscribe\", \"book\": \"btc_mxn\", \"type\": \""
-                    + mBitsoChannels[i].toString() + "\" }";
+    public void subscribeBitsoChannel(String channel){
+        if(mConnected){
+            String frameMessage = "{ \"action\": \"subscribe\", \"book\": \"btc_mxn\", \"type\": \""
+                        + channel + "\" }";
             mChannel.writeAndFlush(new TextWebSocketFrame(frameMessage));
+        }else{
+            String message = "Subscription to any channel is not possible while web socket is not connected";
+            throw new BitsoWebSocketExeption(message);
         }
     }
     
-    public void connect() throws InterruptedException{
-        open();
-        connectBitsoChannels();
-    }
-
-    public void close() throws InterruptedException{
-        System.out.println("WebSocket Client sending close");
+    public void closeConnection() throws InterruptedException{
         mChannel.writeAndFlush(new CloseWebSocketFrame());
         mChannel.closeFuture().sync();
         mGroup.shutdownGracefully();
     }
 
-    public void setMessageReceived(String messageReceived){
-        mMessageReceived = messageReceived;
-        setChanged();
-        notifyObservers(mMessageReceived);
-    }
-    
     public class WebSocketClientHandler extends ChannelInboundHandlerAdapter {
         private final WebSocketClientHandshaker mHandshaker;
         private ChannelPromise mHandshakeFuture;
@@ -139,9 +141,7 @@ public class BitsoWebSocket extends Observable{
         }
 
         @Override
-        public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-            System.out.println("WebSocket Client disconnected!");
-        }
+        public void channelInactive(ChannelHandlerContext ctx) throws Exception {}
 
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg)
@@ -164,6 +164,10 @@ public class BitsoWebSocket extends Observable{
             if (frame instanceof TextWebSocketFrame) {
                 TextWebSocketFrame textFrame = (TextWebSocketFrame) frame;
                 setMessageReceived(textFrame.text());
+            }
+            
+            if(frame instanceof CloseWebSocketFrame){
+                setConnected(Boolean.FALSE);
             }
         }
 
