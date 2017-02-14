@@ -56,4 +56,10 @@ public class BitsoWebSocketPublicOrder{
     public String getOrderId() {
         return mOrderId;
     }
+
+    @Override
+    public String toString() {
+        return "Rate:" + mRate + ", Side:" + mSide + ", Amount:" + mAmount
+                + ", Value:" + mValue;
+    }
 }

@@ -6,7 +6,7 @@ import java.util.Observer;
 
 public class BitsoWebSocketObserver implements Observer{
     private ArrayList<String> mMessagesReceived;
-    private Boolean mWSConnected;
+    protected Boolean mWSConnected;
 
     public BitsoWebSocketObserver() {        
         this.mMessagesReceived = new ArrayList<String>();

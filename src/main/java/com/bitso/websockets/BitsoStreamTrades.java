@@ -1,6 +1,7 @@
 package com.bitso.websockets;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,7 +46,12 @@ public class BitsoStreamTrades extends BitsoStreamUpdate{
         }
         return true;
     }
-    
+
+    @Override
+    public String toString() {
+        return "New Trade: \n" + Arrays.toString(payload);
+    }
+
     public class TradePayload{
         private int mTradeId;
         private BigDecimal mAmount;
@@ -73,6 +79,12 @@ public class BitsoStreamTrades extends BitsoStreamUpdate{
 
         public BigDecimal getValue() {
             return mValue;
+        }
+
+        @Override
+        public String toString() {
+            return "Amount:" + mAmount + ", Rate:" + mRate
+                    + ", Value=" + mValue;
         }
     }
 }

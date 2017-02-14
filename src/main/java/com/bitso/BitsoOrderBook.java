@@ -2,6 +2,8 @@ package com.bitso;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.Comparator;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -47,20 +49,34 @@ public class BitsoOrderBook {
         return Helpers.fieldPrinter(this);
     }
     
-    public class PulicOrder{
-        public BitsoBook book;
-        public BigDecimal price;
-        public BigDecimal amount;
+    public static class PulicOrder implements Comparable<PulicOrder>{
+        public BitsoBook mBook;
+        public BigDecimal mPrice;
+        public BigDecimal mAmount;
         
         public PulicOrder(JSONObject o){
-            book = Helpers.getBook(Helpers.getString(o, "book"));
-            price = Helpers.getBD(o, "price");
-            amount = Helpers.getBD(o, "amount");
+            mBook = Helpers.getBook(Helpers.getString(o, "book"));
+            mPrice = Helpers.getBD(o, "price");
+            mAmount = Helpers.getBD(o, "amount");
         }
 
         @Override
         public String toString() {
             return Helpers.fieldPrinter(this);
+        }
+
+        @Override
+        public int compareTo(PulicOrder o) {
+            return mPrice.compareTo(o.mPrice);
+        }
+
+        public static class Comparators{
+            public static Comparator<PulicOrder> PRICE = new Comparator<PulicOrder>(){
+                @Override
+                public int compare(PulicOrder o1, PulicOrder o2) {
+                    return o1.mPrice.compareTo(o2.mPrice);
+                }
+            };
         }
     }
 }

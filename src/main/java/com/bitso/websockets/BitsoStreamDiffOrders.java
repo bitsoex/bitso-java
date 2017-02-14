@@ -1,5 +1,7 @@
 package com.bitso.websockets;
 
+import java.util.Arrays;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -42,5 +44,10 @@ protected BitsoWebSocketPublicOrder[] mPayload;
             }
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "New Order: \n" + Arrays.toString(mPayload);
     }
 }
