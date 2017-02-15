@@ -11,13 +11,13 @@ import com.bitso.helpers.Helpers;
 
 public class BitsoOrderBook {
     public ZonedDateTime orderDate;
-    public String sequence;
+    public int sequence;
     public PulicOrder[] asks;
     public PulicOrder[] bids;
 
     public BitsoOrderBook(JSONObject o){
         orderDate = Helpers.getZonedDatetime(o, "updated_at");
-        sequence = Helpers.getString(o, "sequence");
+        sequence = Helpers.getInt(o, "sequence");
         processOrders(o);
     }
     

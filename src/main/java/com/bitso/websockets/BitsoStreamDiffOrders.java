@@ -5,11 +5,15 @@ import java.util.Arrays;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.bitso.helpers.Helpers;
+
 public class BitsoStreamDiffOrders extends BitsoStreamUpdate{
-protected BitsoWebSocketPublicOrder[] mPayload;
+    private BitsoWebSocketPublicOrder[] mPayload;
+    private int mSequenceNumber;
     
     public BitsoStreamDiffOrders(JSONObject jsonObject) {
         super(jsonObject);
+        mSequenceNumber = Helpers.getInt(jsonObject, "sequence");
         processPayload(jsonObject.getJSONArray("payload"));
     }
 
@@ -17,6 +21,10 @@ protected BitsoWebSocketPublicOrder[] mPayload;
         return mPayload;
     }
     
+    public int getSequenceNumber(){
+        return mSequenceNumber;
+    }
+
     private void processPayload(JSONArray jsonArray){
         int totalElements = jsonArray.length();
         mPayload = new BitsoWebSocketPublicOrder[totalElements];
