@@ -53,11 +53,17 @@ public class BitsoOrderBook {
         public BitsoBook mBook;
         public BigDecimal mPrice;
         public BigDecimal mAmount;
+        public String mOrderId;
         
         public PulicOrder(JSONObject o){
             mBook = Helpers.getBook(Helpers.getString(o, "book"));
             mPrice = Helpers.getBD(o, "price");
             mAmount = Helpers.getBD(o, "amount");
+            if(o.has("oid")){
+                mOrderId = Helpers.getString(o, "oid");
+            }else{
+                mOrderId = "";
+            }
         }
 
         @Override

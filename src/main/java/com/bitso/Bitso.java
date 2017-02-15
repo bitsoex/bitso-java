@@ -98,8 +98,16 @@ public class Bitso {
         return new BitsoTicker(o.getJSONObject("payload"));
     }
 
-    public BitsoOrderBook getOrderBook(BitsoBook book) {
-        String json = sendGet("/api/v3/order_book?book=" + book.toString());
+    public BitsoOrderBook getOrderBook(BitsoBook book, boolean... aggregate) {
+        String request = "/api/v3/order_book?book=" + book.toString();
+        if(aggregate != null && aggregate.length == 1){
+            if(aggregate[0]){
+                request += "&aggregate=true";
+            }else{
+                request += "&aggregate=false";
+            }
+        }
+        String json = sendGet(request);
         JSONObject o = Helpers.parseJson(json);
         if (o == null) {
             logError("Unable to get Bitso Order Book");
