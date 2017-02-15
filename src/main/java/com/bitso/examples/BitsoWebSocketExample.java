@@ -28,8 +28,8 @@ import com.bitso.websockets.BitsoWebSocketPublicOrder;
 
 public class BitsoWebSocketExample extends BitsoWebSocketObserver {
 
-    private SocketUpdatesManager mBids;
-    private SocketUpdatesManager mAsks;
+    private SocketUpdates mBids;
+    private SocketUpdates mAsks;
     private BitsoOrderBook mLiveOrderBook;
     private Bitso mBitso;
     private int mCurrentSequenceNumber;
@@ -38,8 +38,8 @@ public class BitsoWebSocketExample extends BitsoWebSocketObserver {
     private boolean mOrderBookObtained;
 
     public BitsoWebSocketExample() {
-        mBids = new SocketUpdatesManager();
-        mAsks = new SocketUpdatesManager();
+        mBids = new SocketUpdates();
+        mAsks = new SocketUpdates();
         mCurrentSequenceNumber = 0;
         
         mExpectedNewSequenceNumber = 0;
@@ -103,32 +103,32 @@ public class BitsoWebSocketExample extends BitsoWebSocketObserver {
     public void mergeOrders(BitsoStreamDiffOrders diff) {
         int diffSequence = diff.getSequenceNumber();
 
-        SocketUpdatesManager socketUpdatesManager;
+        SocketUpdates socketUpdates;
 
         BitsoWebSocketPublicOrder[] orders = diff.getPayload();
 
         for (BitsoWebSocketPublicOrder bitsoWebSocketPublicOrder : orders) {
             if (bitsoWebSocketPublicOrder.getSide() == BitsoOrder.SIDE.BUY) {
-                socketUpdatesManager = mBids;
+                socketUpdates = mBids;
             } else {
-                socketUpdatesManager = mAsks;
+                socketUpdates = mAsks;
             }
 
             BigDecimal currentPrice = bitsoWebSocketPublicOrder.getRate();
             BigDecimal currentAmount = bitsoWebSocketPublicOrder.getAmount();
 
             if (currentAmount.compareTo(new BigDecimal("0")) == 0) {
-                socketUpdatesManager.removePrice(currentPrice);
+                socketUpdates.removePrice(currentPrice);
                 return;
             }
 
             SocketUpdatesOperation operation = new SocketUpdatesOperation(currentPrice, currentAmount,
                     diffSequence);
 
-            if (socketUpdatesManager.priceExists(currentPrice)) {
-                socketUpdatesManager.updatePrice(currentPrice, operation);
+            if (socketUpdates.priceExists(currentPrice)) {
+                socketUpdates.updatePrice(currentPrice, operation);
             } else {
-                socketUpdatesManager.insertPrice(currentPrice, operation);
+                socketUpdates.insertPrice(currentPrice, operation);
             }
         }
     }
@@ -160,12 +160,12 @@ public class BitsoWebSocketExample extends BitsoWebSocketObserver {
         System.out.println("Best bid: " + mBids.getMaxPrice());
     }
 
-    public class SocketUpdatesManager {
+    public class SocketUpdates {
         private HashMap<BigDecimal, SocketUpdatesOperation> mPriceMap;
         private BigDecimal mMinPrice;
         private BigDecimal mMaxPrice;
 
-        public SocketUpdatesManager() {
+        public SocketUpdates() {
             mPriceMap = new HashMap<BigDecimal, SocketUpdatesOperation>();
             mMinPrice = new BigDecimal(0);
             mMaxPrice = new BigDecimal(0);
