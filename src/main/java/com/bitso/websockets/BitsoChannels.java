@@ -1,11 +1,11 @@
 package com.bitso.websockets;
 
-public enum Channels {
+public enum BitsoChannels {
     TRADES("trades"), DIFF_ORDERS("diff-orders"), ORDERS("orders");
 
     private final String id;
 
-    private Channels(String id) {
+    private BitsoChannels(String id) {
         this.id = id;
     }
 

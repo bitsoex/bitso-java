@@ -1,13 +1,5 @@
 package com.bitso;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.bitso.helpers.Helpers;
-
 public class BitsoUserTransactions {
     static enum SORT_ORDER {
         ASCENDING, DESCENDING;

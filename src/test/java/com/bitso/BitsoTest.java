@@ -145,7 +145,7 @@ public abstract class BitsoTest {
                 mxnFundingDestination.containsKey("accountIdentifier")));
     }
     
-    protected boolean nullCheck(Object obj, Class<?> genericType) {
+    public static boolean nullCheck(Object obj, Class<?> genericType) {
         Field[] fields = genericType.getDeclaredFields();
         for (Field f : fields) {
             try {

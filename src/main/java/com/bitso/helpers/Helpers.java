@@ -11,14 +11,14 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.bitso.BitsoBook;
+import com.bitso.exceptions.BitsoExceptionNotExpectedValue;
 
 public class Helpers {
     private static final String PATH = "src/test/java/JSONFiles/";
@@ -91,6 +91,16 @@ public class Helpers {
             e.printStackTrace();
         }
         return null;
+    }
+    
+    public static int getInt(JSONObject o, String key) {
+        if (o.has(key)) {
+            return o.getInt(key);
+        } else {
+            System.err.println("No " + key + ": " + o);
+            Helpers.printStackTrace();
+        }
+        return -1;
     }
 
     public static String getString(JSONObject o, String key) {
@@ -178,5 +188,17 @@ public class Helpers {
             }
         }
         return line;
+    }
+
+    public static BitsoBook getBook(String book) {
+        switch (book) {
+            case "btc_mxn":
+                return BitsoBook.BTC_MXN;
+            case "eth_mxn":
+                return BitsoBook.ETH_MXN;
+            default:
+                String exceptionMessage = book + "is not a supported book";
+                throw new BitsoExceptionNotExpectedValue(exceptionMessage);
+        }
     }
 }
