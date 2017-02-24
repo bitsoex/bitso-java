@@ -9,13 +9,78 @@ Add the following dependency to your project's Maven pom.xml:
 
 ```xml
 <dependency>
-  <groupId>com.bitso</groupId>
-  <artifactId>bitso-java</artifactId>
-  <version>0.0.36</version>
+    <groupId>com.bitso</groupId>
+    <artifactId>bitso-java</artifactId>
+    <version>3.0.2</version>
 </dependency>
 ```
 
 The library will automatically be pulled from Maven Central.
+
+### Using gradle and Android Studio
+
+On Android Studio find build.gradle file Gradle Scripts -> build.gradle(Module: app)
+
+Add jackOptions to support Java 1.8 inside defaultConfig block
+
+```gradle
+defaultConfig {
+  applicationId "com.example.app"
+  minSdkVersion 18
+  targetSdkVersion 24
+  versionCode 1
+  versionName "1.0"
+  testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+  jackOptions {
+    enabled true
+  }
+}
+```
+
+Add packagingOptions block to avoid repeated files and folders among libraries
+
+```gradle
+packagingOptions {
+  exclude 'META-INF/INDEX.LIST'
+  exclude 'META-INF/LICENSE'
+}
+```
+
+Add compileOptions block to indicate that the app uses Java 1.8
+
+```gradle
+compileOptions {
+  sourceCompatibility JavaVersion.VERSION_1_8
+  targetCompatibility JavaVersion.VERSION_1_8
+}
+```
+Finally add gradle dependency for bitso-java api on the dependencies block
+
+```gradle
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:recyclerview-v7:24.2.1'
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.bitso:bitso-java:3.0.2'
+    testCompile 'junit:junit:4.12'
+}
+```
+Using Java 1.8 causes that compilation time takes between three and five minutes, avoid this by using dexOptions block, which enables an incremental compilation.
+Using a Heap size from 2g to 4g is recommended, taking .125 to .345 seconds to compile. First compilation time is bigger. 
+
+```gradle
+dexOptions {
+  incremental true
+  javaMaxHeapSize "4g"
+}
+```
 
 ### JDK Requirements
 This library is only supported by OpenJDK 8
