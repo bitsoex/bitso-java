@@ -14,7 +14,6 @@ Add the following dependency to your project's Maven pom.xml:
     <version>3.0.2</version>
 </dependency>
 ```
-
 The library will automatically be pulled from Maven Central.
 
 ### Using gradle and Android Studio
