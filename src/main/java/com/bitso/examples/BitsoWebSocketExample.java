@@ -300,7 +300,7 @@ public class BitsoWebSocketExample extends BitsoWebSocketObserver {
 
         bitsoWebSocketExample.getInitialOrderBook();
 
-        Thread.sleep(50_000);
+        Thread.sleep(50000);
 
         bitsoWebSocket.closeConnection();
     }

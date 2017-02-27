@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.time.DateTimeException;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -20,11 +20,22 @@ import org.json.JSONObject;
 import com.bitso.BitsoBook;
 import com.bitso.exceptions.BitsoExceptionNotExpectedValue;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+
 public class Helpers {
     private static final String PATH = "src/test/java/JSONFiles/";
-    public static final DateTimeFormatter dateTimeFormatterZOffset = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZZ");
-    public static final DateTimeFormatter dateTimeFormatterXOffset = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
+    public static final String dateTimeFormatterZOffset = ("yyyy-MM-dd'T'HH:mm:ssZZZ");
+    public static final String dateTimeFormatterXOffset = ("yyyy-MM-dd'T'HH:mm:ssXXX");
+    private static DatatypeFactory dtf;
 
+    static {
+        try {
+            dtf = DatatypeFactory.newInstance();
+        } catch (DatatypeConfigurationException ex) {
+            System.out.println("FATAL: Cannot instantiate DatatypeFactory");
+        }
+    }
     private static final List<Field> getAllFields(List<Field> fields, Class<?> type) {
         fields.addAll(Arrays.asList(type.getDeclaredFields()));
         if (type.getSuperclass() != null) {
@@ -133,12 +144,21 @@ public class Helpers {
         return null;
     }
 
-    public static ZonedDateTime getZonedDatetime(JSONObject o, String key){
+    public static Date getZonedDatetime(JSONObject o, String key){
         if(o.has(key)){
+            final String date = o.getString(key);
             try {
-                return ZonedDateTime.parse(o.getString(key), dateTimeFormatterZOffset);
-            } catch (DateTimeException e) {
-                return ZonedDateTime.parse(o.getString(key), dateTimeFormatterXOffset);
+                return new SimpleDateFormat(dateTimeFormatterZOffset).parse(date);
+            } catch (ParseException e) {
+                try {
+                    return new SimpleDateFormat(dateTimeFormatterXOffset).parse(date);
+                } catch (ParseException e2) {
+                    try {
+                        return dtf.newXMLGregorianCalendar(date).toGregorianCalendar().getTime();
+                    } catch (IllegalArgumentException e3) {
+                        Helpers.printStackTrace();
+                    }
+                }
             }
         }else{
             System.err.println("No " + key + ": " + o);

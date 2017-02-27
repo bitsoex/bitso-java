@@ -1,14 +1,15 @@
 package com.bitso;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
+import java.util.Date;
+
 import org.json.JSONObject;
 import com.bitso.helpers.Helpers;
 
 public class BitsoTrade {
     public String book;
     public BigDecimal major;
-    public ZonedDateTime tradeDate;
+    public Date tradeDate;
     public BigDecimal minor;
     public BigDecimal feesAmount;
     public String feesCurrency;
