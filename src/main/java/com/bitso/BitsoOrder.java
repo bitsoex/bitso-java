@@ -1,7 +1,7 @@
 package com.bitso;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
+import java.util.Date;
 
 import org.json.JSONObject;
 
@@ -37,8 +37,8 @@ public class BitsoOrder {
     public BigDecimal originalAmount;
     public BigDecimal unfilledAmount;
     public BigDecimal originalValue;
-    public ZonedDateTime orderDate;
-    public ZonedDateTime updateDate;
+    public Date orderDate;
+    public Date updateDate;
     public BigDecimal price;
     public String oid;
     public SIDE side;

@@ -1,7 +1,5 @@
 package com.bitso;
 
-import java.time.ZonedDateTime;
-
 import org.json.JSONObject;
 
 import com.bitso.exchange.Ticker;
@@ -19,7 +17,7 @@ public class BitsoTicker extends Ticker {
         volume = Helpers.getBD(o, "volume");
         bid = Helpers.getBD(o, "bid");
         ask = Helpers.getBD(o, "ask");
-        createdAt = ZonedDateTime.parse(Helpers.getString(o, "created_at"));
+        createdAt = Helpers.getZonedDatetime(o, "created_at");
         book = BitsoBook.valueOf(Helpers.getString(o, "book").toUpperCase());
     }
 }

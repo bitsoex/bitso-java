@@ -51,9 +51,9 @@ public class BitsoTransfer {
             Object fields = o.get("fields");
             if (fields.getClass() == JSONObject.class) {
                 JSONObject f = o.getJSONObject("fields");
-                this.fields = new HashMap<String, Object>();
-                for (String key : f.keySet()) {
-                    this.fields.put(key, f.get(key));
+                this.fields = new HashMap<>();
+                for (Object key : f.keySet()) {
+                    this.fields.put(key.toString(), f.get(key.toString()));
                 }
             } else if (fields.getClass() == JSONArray.class) {
                 JSONArray f = o.getJSONArray("fields");
