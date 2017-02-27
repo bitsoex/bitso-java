@@ -1,7 +1,8 @@
 package com.bitso;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
+import java.util.Date;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.bitso.helpers.Helpers;
@@ -9,7 +10,7 @@ import com.bitso.helpers.Helpers;
 public class BitsoOperation {
     public String entryId;
     public String operationDescription;
-    public ZonedDateTime operationDate;
+    public Date operationDate;
     public BalanceUpdate[] afterOperationBalances;
     public JSONObject details;
 

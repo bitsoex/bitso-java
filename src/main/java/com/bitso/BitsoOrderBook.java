@@ -1,8 +1,8 @@
 package com.bitso;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
 import java.util.Comparator;
+import java.util.Date;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -10,7 +10,7 @@ import org.json.JSONObject;
 import com.bitso.helpers.Helpers;
 
 public class BitsoOrderBook {
-    public ZonedDateTime orderDate;
+    public Date orderDate;
     public int sequence;
     public PulicOrder[] asks;
     public PulicOrder[] bids;

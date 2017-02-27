@@ -1,14 +1,15 @@
 package com.bitso;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
+import java.util.Date;
+
 import org.json.JSONObject;
 import com.bitso.helpers.Helpers;
 
 public class BitsoWithdrawal {
     public String withdrawalId;
     public String status;
-    public ZonedDateTime withdrawalDate;
+    public Date withdrawalDate;
     public String currency;
     public String method;
     public BigDecimal amount;
