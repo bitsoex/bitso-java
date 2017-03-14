@@ -8,11 +8,11 @@ import org.json.JSONObject;
 import com.bitso.helpers.Helpers;
 
 public class BitsoOperation {
-    public String entryId;
-    public String operationDescription;
-    public Date operationDate;
-    public BalanceUpdate[] afterOperationBalances;
-    public JSONObject details;
+    protected String entryId;
+    protected String operationDescription;
+    protected Date operationDate;
+    protected BalanceUpdate[] afterOperationBalances;
+    protected JSONObject details;
 
     public BitsoOperation(JSONObject o) {
         entryId = Helpers.getString(o, "eid");
@@ -36,7 +36,47 @@ public class BitsoOperation {
         return Helpers.fieldPrinter(this);
     }
 
-    private class BalanceUpdate{
+    public String getEntryId() {
+		return entryId;
+	}
+
+	public void setEntryId(String entryId) {
+		this.entryId = entryId;
+	}
+
+	public String getOperationDescription() {
+		return operationDescription;
+	}
+
+	public void setOperationDescription(String operationDescription) {
+		this.operationDescription = operationDescription;
+	}
+
+	public Date getOperationDate() {
+		return operationDate;
+	}
+
+	public void setOperationDate(Date operationDate) {
+		this.operationDate = operationDate;
+	}
+
+	public BalanceUpdate[] getAfterOperationBalances() {
+		return afterOperationBalances;
+	}
+
+	public void setAfterOperationBalances(BalanceUpdate[] afterOperationBalances) {
+		this.afterOperationBalances = afterOperationBalances;
+	}
+
+	public JSONObject getDetails() {
+		return details;
+	}
+
+	public void setDetails(JSONObject details) {
+		this.details = details;
+	}
+
+	protected class BalanceUpdate{
         String currency;
         BigDecimal amount;
 
@@ -44,5 +84,21 @@ public class BitsoOperation {
             this.currency = Helpers.getString(o, "currency");
             this.amount = Helpers.getBD(o, "amount");
         }
+
+		public String getCurrency() {
+			return currency;
+		}
+
+		public void setCurrency(String currency) {
+			this.currency = currency;
+		}
+
+		public BigDecimal getAmount() {
+			return amount;
+		}
+
+		public void setAmount(BigDecimal amount) {
+			this.amount = amount;
+		}
     }
 }

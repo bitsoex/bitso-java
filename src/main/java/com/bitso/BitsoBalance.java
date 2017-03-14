@@ -9,15 +9,15 @@ import com.bitso.exceptions.BitsoExceptionJSONPayload;
 import com.bitso.helpers.Helpers;
 
 public class BitsoBalance {
-    public BigDecimal mxnTotal;
-    public BigDecimal ethTotal;
-    public BigDecimal btcTotal;
-    public BigDecimal mxnLocked;
-    public BigDecimal ethLocked;
-    public BigDecimal btcLocked;
-    public BigDecimal mxnAvailable;
-    public BigDecimal ethAvailable;
-    public BigDecimal btcAvailable;
+    protected BigDecimal mxnTotal;
+    protected BigDecimal ethTotal;
+    protected BigDecimal btcTotal;
+    protected BigDecimal mxnLocked;
+    protected BigDecimal ethLocked;
+    protected BigDecimal btcLocked;
+    protected BigDecimal mxnAvailable;
+    protected BigDecimal ethAvailable;
+    protected BigDecimal btcAvailable;
 
     public BitsoBalance(JSONObject o) {
         String currency = "";
@@ -59,4 +59,76 @@ public class BitsoBalance {
     public String toString() {
         return Helpers.fieldPrinter(this);
     }
+
+	public BigDecimal getMxnTotal() {
+		return mxnTotal;
+	}
+
+	public void setMxnTotal(BigDecimal mxnTotal) {
+		this.mxnTotal = mxnTotal;
+	}
+
+	public BigDecimal getEthTotal() {
+		return ethTotal;
+	}
+
+	public void setEthTotal(BigDecimal ethTotal) {
+		this.ethTotal = ethTotal;
+	}
+
+	public BigDecimal getBtcTotal() {
+		return btcTotal;
+	}
+
+	public void setBtcTotal(BigDecimal btcTotal) {
+		this.btcTotal = btcTotal;
+	}
+
+	public BigDecimal getMxnLocked() {
+		return mxnLocked;
+	}
+
+	public void setMxnLocked(BigDecimal mxnLocked) {
+		this.mxnLocked = mxnLocked;
+	}
+
+	public BigDecimal getEthLocked() {
+		return ethLocked;
+	}
+
+	public void setEthLocked(BigDecimal ethLocked) {
+		this.ethLocked = ethLocked;
+	}
+
+	public BigDecimal getBtcLocked() {
+		return btcLocked;
+	}
+
+	public void setBtcLocked(BigDecimal btcLocked) {
+		this.btcLocked = btcLocked;
+	}
+
+	public BigDecimal getMxnAvailable() {
+		return mxnAvailable;
+	}
+
+	public void setMxnAvailable(BigDecimal mxnAvailable) {
+		this.mxnAvailable = mxnAvailable;
+	}
+
+	public BigDecimal getEthAvailable() {
+		return ethAvailable;
+	}
+
+	public void setEthAvailable(BigDecimal ethAvailable) {
+		this.ethAvailable = ethAvailable;
+	}
+
+	public BigDecimal getBtcAvailable() {
+		return btcAvailable;
+	}
+
+	public void setBtcAvailable(BigDecimal btcAvailable) {
+		this.btcAvailable = btcAvailable;
+	}
 }
