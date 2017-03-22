@@ -76,7 +76,7 @@ public class BitsoOperation {
 		this.details = details;
 	}
 
-	protected class BalanceUpdate{
+	public class BalanceUpdate{
         String currency;
         BigDecimal amount;
 
