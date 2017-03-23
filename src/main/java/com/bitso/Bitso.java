@@ -20,6 +20,7 @@ import com.bitso.http.BlockingHttpClient;
 public class Bitso {
     private static final String BITSO_BASE_URL_PRODUCTION = "https://bitso.com";
     private static final String BITSO_BASE_URL_DEV = "https://dev.bitso.com";
+
     public static long THROTTLE_MS = 1000;
 
     private String key;
@@ -100,10 +101,10 @@ public class Bitso {
 
     public BitsoOrderBook getOrderBook(BitsoBook book, boolean... aggregate) {
         String request = "/api/v3/order_book?book=" + book.toString();
-        if(aggregate != null && aggregate.length == 1){
-            if(aggregate[0]){
+        if (aggregate != null && aggregate.length == 1) {
+            if (aggregate[0]) {
                 request += "&aggregate=true";
-            }else{
+            } else {
                 request += "&aggregate=false";
             }
         }
@@ -113,7 +114,7 @@ public class Bitso {
             logError("Unable to get Bitso Order Book");
             return null;
         }
-        if(o.has("payload")){
+        if (o.has("payload")) {
             return new BitsoOrderBook(o.getJSONObject("payload"));
         }
         return null;
@@ -137,50 +138,50 @@ public class Bitso {
             logError("Error getting Bitso Account Status: " + json);
             return null;
         }
-        if(o.has("payload")){
+        if (o.has("payload")) {
             JSONObject payload = o.getJSONObject("payload");
             return new BitsoAccountStatus(payload);
         }
         return null;
     }
 
-    public BitsoBalance getUserAccountBalance(){
-        String json =  sendBitsoGet("/api/v3/balance");
+    public BitsoBalance getUserAccountBalance() {
+        String json = sendBitsoGet("/api/v3/balance");
         JSONObject o = Helpers.parseJson(json);
-        if(o == null || o.has("error")){
+        if (o == null || o.has("error")) {
             logError("Error getting account balance: " + json);
             return null;
         }
         return new BitsoBalance(o);
     }
 
-    public BitsoFee getUserFees(){
-        String json =  sendBitsoGet("/api/v3/fees");
+    public BitsoFee getUserFees() {
+        String json = sendBitsoGet("/api/v3/fees");
         JSONObject o = Helpers.parseJson(json);
-        if(o == null || o.has("error")){
+        if (o == null || o.has("error")) {
             logError("Error getting user fees: " + json);
             return null;
         }
         return new BitsoFee(o);
     }
 
-    public BitsoOperation[] getUserLedger(String specificOperation){
+    public BitsoOperation[] getUserLedger(String specificOperation) {
         String request = "/api/v3/ledger";
-        if(specificOperation != null){
+        if (specificOperation != null) {
             request += "/" + specificOperation;
         }
         log(request);
-        String json =  sendBitsoGet(request);
+        String json = sendBitsoGet(request);
         JSONObject o = Helpers.parseJson(json);
-        if(o == null || o.has("error")){
+        if (o == null || o.has("error")) {
             logError("Error getting user ledgers: " + json);
             return null;
         }
-        if(o.has("payload")){
+        if (o.has("payload")) {
             JSONArray payload = o.getJSONArray("payload");
             int totalElements = payload.length();
             BitsoOperation[] operations = new BitsoOperation[totalElements];
-            for(int i=0; i<totalElements; i++){
+            for (int i = 0; i < totalElements; i++) {
                 operations[i] = new BitsoOperation(payload.getJSONObject(i));
             }
             return operations;
@@ -198,11 +199,11 @@ public class Bitso {
             logError("Error getting user withdrawals: " + json);
             return null;
         }
-        if(o.has("payload")){
+        if (o.has("payload")) {
             JSONArray payload = o.getJSONArray("payload");
             int totalElements = payload.length();
             BitsoWithdrawal[] withdrawals = new BitsoWithdrawal[totalElements];
-            for(int i=0; i<totalElements; i++){
+            for (int i = 0; i < totalElements; i++) {
                 withdrawals[i] = new BitsoWithdrawal(payload.getJSONObject(i));
             }
             return withdrawals;
@@ -210,21 +211,21 @@ public class Bitso {
         return null;
     }
 
-    public BitsoFunding[] getUserFundings(String... fundingsIds){
+    public BitsoFunding[] getUserFundings(String... fundingsIds) {
         String request = "/api/v3/fundings/";
         request += buildDynamicURLParameters(fundingsIds);
         log(request);
         String json = sendBitsoGet(request);
         JSONObject o = Helpers.parseJson(json);
-        if(o == null || o.has("error")){
+        if (o == null || o.has("error")) {
             logError("Error getting user fundings: " + json);
             return null;
         }
-        if(o.has("payload")){
+        if (o.has("payload")) {
             JSONArray payload = o.getJSONArray("payload");
             int totalElements = payload.length();
             BitsoFunding[] fundings = new BitsoFunding[totalElements];
-            for(int i=0; i<totalElements; i++){
+            for (int i = 0; i < totalElements; i++) {
                 fundings[i] = new BitsoFunding(payload.getJSONObject(i));
             }
             return fundings;
@@ -232,21 +233,21 @@ public class Bitso {
         return null;
     }
 
-    public BitsoTrade[] getUserTrades(String... tradesIds){
+    public BitsoTrade[] getUserTrades(String... tradesIds) {
         String request = "/api/v3/user_trades/";
         request += buildDynamicURLParameters(tradesIds);
         log(request);
         String json = sendBitsoGet(request);
         JSONObject o = Helpers.parseJson(json);
-        if(o == null || o.has("error")){
+        if (o == null || o.has("error")) {
             logError("Error getting user trades: " + json);
             return null;
         }
-        if(o.has("payload")){
+        if (o.has("payload")) {
             JSONArray payload = o.getJSONArray("payload");
             int totalElements = payload.length();
             BitsoTrade[] trades = new BitsoTrade[totalElements];
-            for(int i=0; i<totalElements; i++){
+            for (int i = 0; i < totalElements; i++) {
                 trades[i] = new BitsoTrade(payload.getJSONObject(i));
             }
             return trades;
@@ -254,19 +255,19 @@ public class Bitso {
         return null;
     }
 
-    public BitsoOrder[] getOpenOrders(){
+    public BitsoOrder[] getOpenOrders() {
         String request = "/api/v3/open_orders?book=btc_mxn";
         String json = sendBitsoGet(request);
         JSONObject o = Helpers.parseJson(json);
-        if(o == null || o.has("error")){
+        if (o == null || o.has("error")) {
             logError("Error in Open Orders: " + json);
             return null;
         }
-        if(o.has("payload")){
+        if (o.has("payload")) {
             JSONArray payload = o.getJSONArray("payload");
             int totalElements = payload.length();
             BitsoOrder[] orders = new BitsoOrder[totalElements];
-            for(int i=0; i<totalElements; i++){
+            for (int i = 0; i < totalElements; i++) {
                 orders[i] = new BitsoOrder(payload.getJSONObject(i));
             }
             return orders;
@@ -274,21 +275,21 @@ public class Bitso {
         return null;
     }
 
-    public BitsoOrder[] lookupOrders(String... ordersId){
+    public BitsoOrder[] lookupOrders(String... ordersId) {
         String request = "/api/v3/orders/";
         request += buildDynamicURLParameters(ordersId);
         log(request);
         String json = sendBitsoGet(request);
         JSONObject o = Helpers.parseJson(json);
-        if(o == null || o.has("error")){
+        if (o == null || o.has("error")) {
             logError("Error in lookupOrders: " + json);
             return null;
         }
-        if(o.has("payload")){
+        if (o.has("payload")) {
             JSONArray payload = o.getJSONArray("payload");
             int totalElements = payload.length();
             BitsoOrder[] orders = new BitsoOrder[totalElements];
-            for(int i=0; i<totalElements; i++){
+            for (int i = 0; i < totalElements; i++) {
                 orders[i] = new BitsoOrder(payload.getJSONObject(i));
             }
             return orders;
@@ -341,46 +342,43 @@ public class Bitso {
         log(request);
         String json = sendBitsoDelete(request);
         JSONObject o = Helpers.parseJson(json);
-        if(o == null || o.has("error")){
+        if (o == null || o.has("error")) {
             logError("Error cancelling orders: " + json);
             return null;
         }
         return Helpers.parseJSONArray(o.getJSONArray("payload"));
     }
 
-    public Map<String, String> fundingDestination(String fundCurrency){
-        String request = "/api/v3/funding_destination?" +
-                "fund_currency=" + fundCurrency;
+    public Map<String, String> fundingDestination(String fundCurrency) {
+        String request = "/api/v3/funding_destination?" + "fund_currency=" + fundCurrency;
         log(request);
         String json = sendBitsoGet(request);
         JSONObject o = Helpers.parseJson(json);
-        if(o == null || o.has("error")){
+        if (o == null || o.has("error")) {
             logError("Error getting funding destination: " + json);
             return null;
         }
         if (o.has("payload")) {
             JSONObject payload = o.getJSONObject("payload");
-            Map<String, String> fundingDestination =  new HashMap<String, String>();
+            Map<String, String> fundingDestination = new HashMap<String, String>();
             fundingDestination.put("accountIdentifierName",
                     Helpers.getString(payload, "account_identifier_name"));
-            fundingDestination.put("accountIdentifier",
-                    Helpers.getString(payload, "account_identifier"));
+            fundingDestination.put("accountIdentifier", Helpers.getString(payload, "account_identifier"));
             return fundingDestination;
         }
         return null;
     }
 
-    public BitsoWithdrawal bitcoinWithdrawal(BigDecimal amount, String address){
+    public BitsoWithdrawal bitcoinWithdrawal(BigDecimal amount, String address) {
         return currencyWithdrawal(CURRENCY_WITHDRAWALS.BITCOIN_WITHDRAWAL, amount, address);
     }
 
-    public BitsoWithdrawal etherWithdrawal(BigDecimal amount, String address){
+    public BitsoWithdrawal etherWithdrawal(BigDecimal amount, String address) {
         return currencyWithdrawal(CURRENCY_WITHDRAWALS.ETHER_WITHDRAWAL, amount, address);
     }
 
     public BitsoWithdrawal speiWithdrawal(BigDecimal amount, String recipientGivenNames,
-            String recipientFamilyNames, String clabe, String notesReference,
-            String numericReference){
+            String recipientFamilyNames, String clabe, String notesReference, String numericReference) {
         String request = "/api/v3/spei_withdrawal";
         JSONObject parameters = new JSONObject();
         parameters.put("amount", amount.toString());
@@ -402,23 +400,24 @@ public class Bitso {
         return null;
     }
 
-    public Map<String, String> getBanks(){
+    public Map<String, String> getBanks() {
         String request = "/api/v3/mx_bank_codes";
         log(request);
         String json = sendBitsoGet(request);
         JSONObject o = Helpers.parseJson(json);
-        if(o == null || o.has("error")){
+        if (o == null || o.has("error")) {
             logError("Error in lookupOrders: " + json);
             return null;
         }
-        if (o.has("payload")){
+        if (o.has("payload")) {
             Map<String, String> banks = new HashMap<String, String>();
             JSONArray payload = o.getJSONArray("payload");
             String currentBankCode = "";
             String currentBankName = "";
-            JSONObject currentJSON = null;;
+            JSONObject currentJSON = null;
+            ;
             int totalElements = payload.length();
-            for(int i=0; i<totalElements; i++){
+            for (int i = 0; i < totalElements; i++) {
                 currentJSON = payload.getJSONObject(i);
                 currentBankCode = Helpers.getString(currentJSON, "code");
                 currentBankName = Helpers.getString(currentJSON, "name");
@@ -430,7 +429,7 @@ public class Bitso {
     }
 
     public BitsoWithdrawal debitCardWithdrawal(BigDecimal amount, String recipientGivenNames,
-            String recipientFamilyNames, String cardNumber, String bankCode){
+            String recipientFamilyNames, String cardNumber, String bankCode) {
         String request = "/api/v3/debit_card_withdrawal";
         JSONObject parameters = new JSONObject();
         parameters.put("amount", amount.toString());
@@ -452,7 +451,7 @@ public class Bitso {
     }
 
     public BitsoWithdrawal phoneWithdrawal(BigDecimal amount, String recipientGivenNames,
-            String recipientFamilyNames, String phoneNumber, String bankCode){
+            String recipientFamilyNames, String phoneNumber, String bankCode) {
         String request = "/api/v3/phone_withdrawal";
         JSONObject parameters = new JSONObject();
         parameters.put("amount", amount.toString());
@@ -473,7 +472,8 @@ public class Bitso {
         return null;
     }
 
-    private BitsoWithdrawal currencyWithdrawal(CURRENCY_WITHDRAWALS withdrawal, BigDecimal amount, String address){
+    private BitsoWithdrawal currencyWithdrawal(CURRENCY_WITHDRAWALS withdrawal, BigDecimal amount,
+            String address) {
         String request = "/api/v3/" + withdrawal.toString();
         JSONObject parameters = new JSONObject();
         parameters.put("amount", amount.toString());
@@ -577,7 +577,8 @@ public class Bitso {
 
     private String sendBitsoDelete(String requestPath) {
         long nonce = System.currentTimeMillis();
-        Entry<String, String> authHeader = buildBitsoAuthHeader(secret, key, nonce, "DELETE", requestPath, null);
+        Entry<String, String> authHeader = buildBitsoAuthHeader(secret, key, nonce, "DELETE", requestPath,
+                null);
         HashMap<String, String> headers = new HashMap<String, String>();
         headers.put("Content-Type", "application/json");
         headers.put(authHeader.getKey(), authHeader.getValue());
@@ -592,7 +593,7 @@ public class Bitso {
     private String sendBitsoPost(String requestPath, JSONObject jsonPayload) {
         long nonce = System.currentTimeMillis();
         String jsonString = "";
-        if(jsonPayload != null){
+        if (jsonPayload != null) {
             jsonString = jsonPayload.toString();
         }
         Entry<String, String> header = buildBitsoAuthHeader(secret, key, nonce, "POST", requestPath,
@@ -608,14 +609,15 @@ public class Bitso {
         return null;
     }
 
-    private String buildDynamicURLParameters(String[] elements){
+    private String buildDynamicURLParameters(String[] elements) {
         int totalIds = elements.length;
         String parameters = "";
         if (totalIds > 0) {
             for (int i = 0; i < totalIds - 1; i++) {
                 parameters += elements[i] + "-";
             }
-            parameters += elements[totalIds - 1];;
+            parameters += elements[totalIds - 1];
+            ;
         }
         return parameters;
     }

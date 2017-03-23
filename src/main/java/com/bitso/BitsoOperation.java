@@ -22,11 +22,11 @@ public class BitsoOperation {
         details = o.getJSONObject("details");
     }
 
-    private BalanceUpdate[] getOperationBalances(JSONArray array){
-        int totalBalances =  array.length();
-        BalanceUpdate[] balances =  new BalanceUpdate[totalBalances];
-        for(int i=0; i<totalBalances; i++){
-            balances[i] =  new BalanceUpdate(array.getJSONObject(i));
+    private BalanceUpdate[] getOperationBalances(JSONArray array) {
+        int totalBalances = array.length();
+        BalanceUpdate[] balances = new BalanceUpdate[totalBalances];
+        for (int i = 0; i < totalBalances; i++) {
+            balances[i] = new BalanceUpdate(array.getJSONObject(i));
         }
         return balances;
     }
@@ -37,46 +37,46 @@ public class BitsoOperation {
     }
 
     public String getEntryId() {
-		return entryId;
-	}
+        return entryId;
+    }
 
-	public void setEntryId(String entryId) {
-		this.entryId = entryId;
-	}
+    public void setEntryId(String entryId) {
+        this.entryId = entryId;
+    }
 
-	public String getOperationDescription() {
-		return operationDescription;
-	}
+    public String getOperationDescription() {
+        return operationDescription;
+    }
 
-	public void setOperationDescription(String operationDescription) {
-		this.operationDescription = operationDescription;
-	}
+    public void setOperationDescription(String operationDescription) {
+        this.operationDescription = operationDescription;
+    }
 
-	public Date getOperationDate() {
-		return operationDate;
-	}
+    public Date getOperationDate() {
+        return operationDate;
+    }
 
-	public void setOperationDate(Date operationDate) {
-		this.operationDate = operationDate;
-	}
+    public void setOperationDate(Date operationDate) {
+        this.operationDate = operationDate;
+    }
 
-	public BalanceUpdate[] getAfterOperationBalances() {
-		return afterOperationBalances;
-	}
+    public BalanceUpdate[] getAfterOperationBalances() {
+        return afterOperationBalances;
+    }
 
-	public void setAfterOperationBalances(BalanceUpdate[] afterOperationBalances) {
-		this.afterOperationBalances = afterOperationBalances;
-	}
+    public void setAfterOperationBalances(BalanceUpdate[] afterOperationBalances) {
+        this.afterOperationBalances = afterOperationBalances;
+    }
 
-	public JSONObject getDetails() {
-		return details;
-	}
+    public JSONObject getDetails() {
+        return details;
+    }
 
-	public void setDetails(JSONObject details) {
-		this.details = details;
-	}
+    public void setDetails(JSONObject details) {
+        this.details = details;
+    }
 
-	public class BalanceUpdate{
+    public class BalanceUpdate {
         String currency;
         BigDecimal amount;
 
@@ -85,20 +85,20 @@ public class BitsoOperation {
             this.amount = Helpers.getBD(o, "amount");
         }
 
-		public String getCurrency() {
-			return currency;
-		}
+        public String getCurrency() {
+            return currency;
+        }
 
-		public void setCurrency(String currency) {
-			this.currency = currency;
-		}
+        public void setCurrency(String currency) {
+            this.currency = currency;
+        }
 
-		public BigDecimal getAmount() {
-			return amount;
-		}
+        public BigDecimal getAmount() {
+            return amount;
+        }
 
-		public void setAmount(BigDecimal amount) {
-			this.amount = amount;
-		}
+        public void setAmount(BigDecimal amount) {
+            this.amount = amount;
+        }
     }
 }
