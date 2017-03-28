@@ -2,8 +2,11 @@ package com.bitso;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import com.bitso.helpers.Helpers;
 
@@ -12,14 +15,14 @@ public class BitsoOperation {
     protected String operationDescription;
     protected Date operationDate;
     protected BalanceUpdate[] afterOperationBalances;
-    protected JSONObject details;
+    protected HashMap<String, String> details;
 
     public BitsoOperation(JSONObject o) {
         entryId = Helpers.getString(o, "eid");
         operationDescription = Helpers.getString(o, "operation");
         operationDate = Helpers.getZonedDatetime(o, "created_at");
         afterOperationBalances = getOperationBalances(o.getJSONArray("balance_updates"));
-        details = o.getJSONObject("details");
+        details = getOperationDetails(o.getJSONObject("details"));
     }
 
     private BalanceUpdate[] getOperationBalances(JSONArray array) {
@@ -29,6 +32,26 @@ public class BitsoOperation {
             balances[i] = new BalanceUpdate(array.getJSONObject(i));
         }
         return balances;
+    }
+
+    private HashMap<String, String> getOperationDetails(JSONObject o) {
+        if (o == null) {
+            return null;
+        }
+
+        HashMap<String, String> details = new HashMap<>();
+
+        for (Object key : o.keySet()) {
+            String value;
+            try {
+                value = Helpers.getString(o, (String) key);
+            } catch (JSONException exception) {
+                value = String.valueOf(Helpers.getInt(o, (String) key));
+            }
+            details.put((String) key, value);
+        }
+
+        return details;
     }
 
     @Override
@@ -68,11 +91,11 @@ public class BitsoOperation {
         this.afterOperationBalances = afterOperationBalances;
     }
 
-    public JSONObject getDetails() {
+    public HashMap<String, String> getDetails() {
         return details;
     }
 
-    public void setDetails(JSONObject details) {
+    public void setDetails(HashMap<String, String> details) {
         this.details = details;
     }
 
