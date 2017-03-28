@@ -2,7 +2,9 @@ package com.bitso;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import com.bitso.helpers.Helpers;
 
@@ -13,7 +15,7 @@ public class BitsoWithdrawal {
     protected String currency;
     protected String method;
     protected BigDecimal amount;
-    protected JSONObject details;
+    protected HashMap<String, String> details;
 
     public BitsoWithdrawal(JSONObject o) {
         withdrawalId = Helpers.getString(o, "wid");
@@ -22,7 +24,7 @@ public class BitsoWithdrawal {
         currency = Helpers.getString(o, "currency");
         method = Helpers.getString(o, "method");
         amount = Helpers.getBD(o, "amount");
-        details = o.getJSONObject("details");
+        details = getOperationDetails(o.getJSONObject("details"));
     }
 
     public String getWithdrawalId() {
@@ -73,12 +75,41 @@ public class BitsoWithdrawal {
         this.amount = amount;
     }
 
-    public JSONObject getDetails() {
+    public HashMap<String, String> getDetails() {
         return details;
     }
 
-    public void setDetails(JSONObject details) {
+    public void setDetails(HashMap<String, String> details) {
         this.details = details;
+    }
+
+    private HashMap<String, String> getOperationDetails(JSONObject o) {
+        if (o == null) {
+            return null;
+        }
+
+        HashMap<String, String> details = new HashMap<>();
+
+        for (Object key : o.keySet()) {
+            String value = null;
+            Object object = o.get((String) key);
+
+            if (object == null) {
+                value = "";
+            } else {
+                if (object instanceof String) {
+                    value = (String) object;
+                }
+
+                if (object instanceof JSONObject) {
+                    value = ((JSONObject) object).toString();
+                }
+            }
+
+            details.put((String) key, value);
+        }
+
+        return details;
     }
 
     @Override
