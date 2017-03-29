@@ -1,7 +1,16 @@
 package com.bitso;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.AbstractMap;
@@ -11,8 +20,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.net.ssl.HttpsURLConnection;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.junit.experimental.theories.Theories;
+
 import com.bitso.exchange.BookInfo;
 import com.bitso.helpers.Helpers;
 import com.bitso.http.BlockingHttpClient;
@@ -518,6 +531,30 @@ public class Bitso {
         return input.substring(1, length - 1);
     }
 
+    private String buildBitsoAuthHeader(String requestPath, String httpMethod, String apiKey,
+            String secret) {
+        long nonce = System.currentTimeMillis();
+        byte[] secretBytes = secret.getBytes();
+        byte[] arrayOfByte = null;
+        String signature = null;
+        BigInteger bigInteger = null;
+        Mac mac = null;
+
+        String message = nonce + httpMethod + requestPath;
+        SecretKeySpec secretKeySpec = new SecretKeySpec(secretBytes, "HmacSHA256");
+        try {
+            mac = Mac.getInstance("HmacSHA256");
+            mac.init(secretKeySpec);
+            arrayOfByte = mac.doFinal(message.getBytes());
+            bigInteger = new BigInteger(1, arrayOfByte);
+            signature = String.format("%0" + (arrayOfByte.length << 1) + "x", new Object[] { bigInteger });
+            return String.format("Bitso %s:%s:%s", apiKey, nonce, signature);
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private static Entry<String, String> buildBitsoAuthHeader(String secretKey, String publicKey, long nonce,
             String httpMethod, String requestPath, String jsonPayload) {
         if (jsonPayload == null) jsonPayload = "";
@@ -546,33 +583,55 @@ public class Bitso {
         return entry;
     }
 
-    private String sendBitsoPost(String url) {
-        return sendBitsoPost(url, null);
-    }
-
-    private String sendGet(String requestPath) {
-        HashMap<String, String> headers = new HashMap<String, String>();
-        // headers.put("Content-Type", "application/json");
+    public String sendGet(String requestedURL) {
         try {
-            return client.sendGet(baseUrl + requestPath, headers);
-        } catch (Exception e) {
+            URL url = new URL(baseUrl + requestedURL);
+            HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            con.setRequestProperty("User-Agent", "Android");
+
+            if (con.getResponseCode() == 200) {
+                int responseCode = con.getResponseCode();
+                return convertInputStreamToString(con.getInputStream());
+            }
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;
+    }
+
+    private String sendBitsoHttpRequest(String requestPath, String method) {
+        String response = null;
+        String requestURL = baseUrl + requestPath;
+
+        try {
+            URL url = new URL(requestURL);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.addRequestProperty("Authorization",
+                    buildBitsoAuthHeader(requestPath, "GET", key, secret));
+            connection.setRequestProperty("User-Agent", "Bitso-java-api");
+            connection.setRequestMethod(method);
+            if (connection.getResponseCode() == 200) {
+                InputStream inputStream = new BufferedInputStream(connection.getInputStream());
+                response = convertInputStreamToString(inputStream);
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return response;
     }
 
     private String sendBitsoGet(String requestPath) {
-        long nonce = System.currentTimeMillis();
-        Entry<String, String> authHeader = buildBitsoAuthHeader(secret, key, nonce, "GET", requestPath, null);
-        HashMap<String, String> headers = new HashMap<String, String>();
-        headers.put("Content-Type", "application/json");
-        headers.put(authHeader.getKey(), authHeader.getValue());
-        try {
-            return client.sendGet(baseUrl + requestPath, headers);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return sendBitsoHttpRequest(requestPath, "GET");
     }
 
     private String sendBitsoDelete(String requestPath) {
@@ -588,6 +647,10 @@ public class Bitso {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private String sendBitsoPost(String url) {
+        return sendBitsoPost(url, null);
     }
 
     private String sendBitsoPost(String requestPath, JSONObject jsonPayload) {
@@ -620,5 +683,25 @@ public class Bitso {
             ;
         }
         return parameters;
+    }
+
+    private static String convertInputStreamToString(InputStream inputStream) {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        StringBuilder stringBuilder = new StringBuilder();
+        String line = null;
+        try {
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return stringBuilder.toString();
     }
 }
