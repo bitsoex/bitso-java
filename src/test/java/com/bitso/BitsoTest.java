@@ -14,7 +14,7 @@ import com.bitso.exchange.Ticker;
 
 public abstract class BitsoTest {
     protected Bitso mBitso;
-    
+
     // Test public endpoints
     @Test
     public void testAvailableBooks() {
@@ -34,7 +34,7 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testOpenOrders(){
+    public void testOpenOrders() {
         BitsoOrder[] orders = mBitso.getOpenOrders();
         for (BitsoOrder bitsoOrder : orders) {
             assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
@@ -43,7 +43,7 @@ public abstract class BitsoTest {
 
     // Test private endpoints
     @Test
-    public void testUserAccountBalance(){
+    public void testUserAccountBalance() {
         BitsoBalance balance = mBitso.getUserAccountBalance();
         assertEquals(true, nullCheck(balance, BitsoBalance.class));
     }
@@ -56,15 +56,30 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testUserLedgers(){
-        BitsoOperation[] fullLedger = mBitso.getUserLedger(null);
+    public void testUserLedgers() {
+        BitsoOperation[] fullLedger = mBitso.getUserLedger("", "");
         for (BitsoOperation bitsoOperation : fullLedger) {
+            assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
+        }
+
+        BitsoOperation[] fullLedgerBothNull = mBitso.getUserLedger(null, null);
+        for (BitsoOperation bitsoOperation : fullLedgerBothNull) {
+            assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
+        }
+
+        BitsoOperation[] fullLedgerLastNull = mBitso.getUserLedger("", null);
+        for (BitsoOperation bitsoOperation : fullLedgerLastNull) {
+            assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
+        }
+
+        BitsoOperation[] fullLedgerFirstNull = mBitso.getUserLedger(null, "");
+        for (BitsoOperation bitsoOperation : fullLedgerFirstNull) {
             assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
         }
     }
 
     @Test
-    public void testUserWithdrawals(){
+    public void testUserWithdrawals() {
         BitsoWithdrawal[] fullWithdraws = mBitso.getUserWithdrawals();
         for (BitsoWithdrawal bitsoWithdrawal : fullWithdraws) {
             assertEquals(true, nullCheck(bitsoWithdrawal, BitsoWithdrawal.class));
@@ -72,25 +87,25 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testCurrencyWithdrawals(){
-        BitsoWithdrawal btcWithdrawal =  mBitso.bitcoinWithdrawal(new BigDecimal("0.001"),
+    public void testCurrencyWithdrawals() {
+        BitsoWithdrawal btcWithdrawal = mBitso.bitcoinWithdrawal(new BigDecimal("0.001"),
                 "31yTCKDHTqNXF5eZcsddJDe76BzBh8pVLb");
         assertEquals(true, nullCheck(btcWithdrawal, BitsoWithdrawal.class));
 
-        BitsoWithdrawal ethWithdrawal =  mBitso.etherWithdrawal(new BigDecimal("0.001"),
+        BitsoWithdrawal ethWithdrawal = mBitso.etherWithdrawal(new BigDecimal("0.001"),
                 "0xc83adea9e8fea3797139942a5939b961f67abfb8");
-         assertEquals(true, nullCheck(ethWithdrawal, BitsoWithdrawal.class));
+        assertEquals(true, nullCheck(ethWithdrawal, BitsoWithdrawal.class));
     }
 
     @Test
-    public void testGetBanks(){
+    public void testGetBanks() {
         Map<String, String> bitsoBanks = mBitso.getBanks();
         assertEquals(true, (bitsoBanks != null));
         assertEquals(false, bitsoBanks.isEmpty());
     }
 
     @Test
-    public void testUserFundings(){
+    public void testUserFundings() {
         BitsoFunding[] fullFundings = mBitso.getUserFundings();
         for (BitsoFunding bitsoFunding : fullFundings) {
             assertEquals(true, nullCheck(bitsoFunding, BitsoFunding.class));
@@ -98,7 +113,7 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testUserTrades(){
+    public void testUserTrades() {
         BitsoTrade[] fullTrades = mBitso.getUserTrades();
         for (BitsoTrade bitsoTrade : fullTrades) {
             assertEquals(true, nullCheck(bitsoTrade, BitsoTrade.class));
@@ -106,7 +121,7 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testLookUpOrders(){
+    public void testLookUpOrders() {
         BitsoOrder[] specificOrder = mBitso.lookupOrders("kRrcjsp5n9og98qa");
         for (BitsoOrder bitsoOrder : specificOrder) {
             assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
@@ -120,36 +135,35 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testPlaceUserOrder(){
-        String orderId = mBitso.placeOrder(BitsoBook.BTC_MXN, BitsoOrder.SIDE.BUY,
-                BitsoOrder.TYPE.LIMIT, new BigDecimal("15.4"), null,
-                new BigDecimal("20854.4"));
+    public void testPlaceUserOrder() {
+        String orderId = mBitso.placeOrder(BitsoBook.BTC_MXN, BitsoOrder.SIDE.BUY, BitsoOrder.TYPE.LIMIT,
+                new BigDecimal("15.4"), null, new BigDecimal("20854.4"));
         assertEquals(true, ((orderId != null) && (orderId.length() > 0)));
     }
 
     @Test
-    public void testFundingDestination(){
+    public void testFundingDestination() {
         Map<String, String> btcFundingDestination = mBitso.fundingDestination("btc");
         assertEquals(true, (btcFundingDestination != null));
-        assertEquals(true, (btcFundingDestination.containsKey("accountIdentifierName") &&
-                btcFundingDestination.containsKey("accountIdentifier")));
+        assertEquals(true, (btcFundingDestination.containsKey("accountIdentifierName")
+                && btcFundingDestination.containsKey("accountIdentifier")));
 
         Map<String, String> ethFundingDestination = mBitso.fundingDestination("eth");
         assertEquals(true, (ethFundingDestination != null));
-        assertEquals(true, (ethFundingDestination.containsKey("accountIdentifierName") &&
-                ethFundingDestination.containsKey("accountIdentifier")));
+        assertEquals(true, (ethFundingDestination.containsKey("accountIdentifierName")
+                && ethFundingDestination.containsKey("accountIdentifier")));
 
         Map<String, String> mxnFundingDestination = mBitso.fundingDestination("mxn");
         assertEquals(true, (mxnFundingDestination != null));
-        assertEquals(true, (mxnFundingDestination.containsKey("accountIdentifierName") &&
-                mxnFundingDestination.containsKey("accountIdentifier")));
+        assertEquals(true, (mxnFundingDestination.containsKey("accountIdentifierName")
+                && mxnFundingDestination.containsKey("accountIdentifier")));
     }
-    
+
     public static boolean nullCheck(Object obj, Class<?> genericType) {
         Field[] fields = genericType.getDeclaredFields();
         for (Field f : fields) {
             try {
-                if (f.get(obj) == null){
+                if (f.get(obj) == null) {
                     System.out.println(f.getName() + " attribute is null");
                     return false;
                 }

@@ -70,6 +70,14 @@ public class Bitso {
         this.baseUrl = production ? BITSO_BASE_URL_PRODUCTION : BITSO_BASE_URL_DEV;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
     public void setLog(boolean log) {
         this.log = log;
     }
@@ -178,11 +186,17 @@ public class Bitso {
         return new BitsoFee(o);
     }
 
-    public BitsoOperation[] getUserLedger(String specificOperation) {
+    public BitsoOperation[] getUserLedger(String specificOperation, String queryParameters) {
         String request = "/api/v3/ledger";
-        if (specificOperation != null) {
+
+        if (specificOperation != null && specificOperation.length() > 0) {
             request += "/" + specificOperation;
         }
+
+        if (queryParameters != null && queryParameters.length() > 0) {
+            request += "?" + queryParameters;
+        }
+
         log(request);
         String json = sendBitsoGet(request);
         JSONObject o = Helpers.parseJson(json);
@@ -531,8 +545,7 @@ public class Bitso {
         return input.substring(1, length - 1);
     }
 
-    private String buildBitsoAuthHeader(String requestPath, String httpMethod, String apiKey,
-            String secret) {
+    private String buildBitsoAuthHeader(String requestPath, String httpMethod, String apiKey, String secret) {
         long nonce = System.currentTimeMillis();
         byte[] secretBytes = secret.getBytes();
         byte[] arrayOfByte = null;
