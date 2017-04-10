@@ -110,14 +110,27 @@ public class Bitso {
         return books;
     }
 
-    public BitsoTicker getTicker(BitsoBook book) {
-        String json = sendGet("/api/v3/ticker?book=" + book.toString());
+    public BitsoTicker[] getTicker() {
+        String json = sendGet("/api/v3/ticker");
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
             logError("Unable to get Bitso Ticker: " + json);
             return null;
         }
-        return new BitsoTicker(o.getJSONObject("payload"));
+
+        if (o.has("error")) {
+            return null;
+        }
+
+        JSONArray arrayTickers = o.getJSONArray("payload");
+        int totalTickers = arrayTickers.length();
+
+        BitsoTicker[] tickers = new BitsoTicker[totalTickers];
+        for (int i = 0; i < totalTickers; i++) {
+            tickers[i] = new BitsoTicker(arrayTickers.getJSONObject(i));
+        }
+
+        return tickers;
     }
 
     public BitsoOrderBook getOrderBook(BitsoBook book, boolean... aggregate) {

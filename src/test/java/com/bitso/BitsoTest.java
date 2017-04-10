@@ -28,9 +28,14 @@ public abstract class BitsoTest {
 
     @Test
     public void testTicker() {
-        BitsoTicker bb = mBitso.getTicker(BitsoBook.BTC_MXN);
-        assertEquals(nullCheck(bb, Ticker.class), true);
-        assertEquals(nullCheck(bb, BitsoTicker.class), true);
+        BitsoTicker[] tickers = mBitso.getTicker();
+        int totalElements = tickers.length;
+        assertEquals(tickers != null, true);
+        assertEquals(2, totalElements);
+
+        for (int i = 0; i < totalElements; i++) {
+            assertEquals(nullCheck(tickers[i], BitsoTicker.class), true);
+        }
     }
 
     @Test

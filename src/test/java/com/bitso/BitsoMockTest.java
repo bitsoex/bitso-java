@@ -18,7 +18,7 @@ import com.bitso.helpers.Helpers;
 
 public class BitsoMockTest extends BitsoTest {
     private ArrayList<BookInfo> mockAvailableBooks;
-    private BitsoTicker mockTicker;
+    private BitsoTicker[] mockTicker;
     private BitsoOrderBook mockOrderBook;
     private BitsoAccountStatus mockAccountStatus;
     private BitsoBalance mockBalance;
@@ -70,7 +70,7 @@ public class BitsoMockTest extends BitsoTest {
 
     private void setUpMockitoActions() {
         Mockito.when(mBitso.availableBooks()).thenReturn(mockAvailableBooks);
-        Mockito.when(mBitso.getTicker(BitsoBook.BTC_MXN)).thenReturn(mockTicker);
+        Mockito.when(mBitso.getTicker()).thenReturn(mockTicker);
         Mockito.when(mBitso.getOrderBook(BitsoBook.BTC_MXN)).thenReturn(mockOrderBook);
         Mockito.when(mBitso.getUserAccountStatus()).thenReturn(mockAccountStatus);
         Mockito.when(mBitso.getUserAccountBalance()).thenReturn(mockBalance);
@@ -111,7 +111,13 @@ public class BitsoMockTest extends BitsoTest {
     }
 
     private void setUpTicker(JSONObject o) {
-        mockTicker = new BitsoTicker(o.getJSONObject("payload"));
+        JSONArray array = o.getJSONArray("payload");
+        int totalElements = array.length();
+        mockTicker = new BitsoTicker[totalElements];
+
+        for (int i = 0; i < totalElements; i++) {
+            mockTicker[i] = new BitsoTicker(array.getJSONObject(i));
+        }
     }
 
     private void setUpOrderBook(JSONObject o) {
