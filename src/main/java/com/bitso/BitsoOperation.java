@@ -41,14 +41,18 @@ public class BitsoOperation {
 
         HashMap<String, String> details = new HashMap<>();
 
-        for (Object key : o.keySet()) {
-            String value;
+        String currentKey;
+        String currentValue;
+        Iterator<String> detailsKeys = o.keys();
+
+        while (detailsKeys.hasNext()) {
+            currentKey = detailsKeys.next();
             try {
-                value = Helpers.getString(o, (String) key);
+                currentValue = Helpers.getString(o, currentKey);
             } catch (JSONException exception) {
-                value = String.valueOf(Helpers.getInt(o, (String) key));
+                currentValue = String.valueOf(Helpers.getInt(o, currentKey));
             }
-            details.put((String) key, value);
+            details.put(currentKey, currentValue);
         }
 
         return details;

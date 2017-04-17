@@ -3,6 +3,7 @@ package com.bitso;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -90,25 +91,29 @@ public class BitsoWithdrawal {
 
         HashMap<String, String> details = new HashMap<>();
 
-        for (Object key : o.keySet()) {
-            String value = null;
-            Object object = o.get((String) key);
+        String currentKey;
+        String currentValue = null;
+        Object object;
+        Iterator<String> detailsKeys = o.keys();
 
-            if (object == null) {
-                value = "";
-            } else {
-                if (object instanceof String) {
-                    value = (String) object;
-                }
+        while (detailsKeys.hasNext()) {
+            currentKey = detailsKeys.next();
+            object = o.get(currentKey);
 
-                if (object instanceof JSONObject) {
-                    value = ((JSONObject) object).toString();
-                }
+            if(object == null){
+                currentValue = "";
             }
 
-            details.put((String) key, value);
-        }
+            if(object instanceof String){
+                currentValue = (String) object;
+            }
 
+            if(object instanceof JSONObject){
+                currentValue = ((JSONObject) object).toString();
+            }
+
+            details.put(currentKey, currentValue);
+        }
         return details;
     }
 
