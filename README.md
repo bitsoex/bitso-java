@@ -11,7 +11,7 @@ Add the following dependency to your project's Maven pom.xml:
 <dependency>
     <groupId>com.bitso</groupId>
     <artifactId>bitso-java</artifactId>
-    <version>3.0.2</version>
+    <version>3.0.3</version>
 </dependency>
 ```
 The library will automatically be pulled from Maven Central.
@@ -67,7 +67,7 @@ dependencies {
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.android.support:recyclerview-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'
-    compile 'com.bitso:bitso-java:3.0.2'
+    compile 'com.bitso:bitso-java:3.0.3'
     testCompile 'junit:junit:4.12'
 }
 ```
