@@ -1,12 +1,18 @@
 package com.bitso.http;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map.Entry;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
@@ -124,7 +130,46 @@ public class BlockingHttpClient {
     }
 
     public String sendPost(String url, String body, HashMap<String, String> headers) throws Exception {
-        return sendPost(url, new StringEntity(body), headers);
+        try {
+            URL requestURL = new URL(url);
+            HttpsURLConnection con = (HttpsURLConnection) requestURL.openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("User-Agent", "Bitso-API");
+
+            // add request headers
+            if (headers != null) {
+                for (Entry<String, String> e : headers.entrySet()) {
+                    con.setRequestProperty(e.getKey(), e.getValue());
+                }
+                log("\nHeaders are \n" + headers.toString());
+            }
+
+            con.setDoOutput(true);
+            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+            wr.writeBytes(body);
+            wr.flush();
+            wr.close();
+
+            if (con.getResponseCode() == 200) {
+                BufferedReader bufferedReader = new BufferedReader(
+                        new InputStreamReader(con.getInputStream()));
+                String input;
+                StringBuffer stringBuffer = new StringBuffer();
+
+                while ((input = bufferedReader.readLine()) != null) {
+                    stringBuffer.append(input);
+                }
+                bufferedReader.close();
+                return stringBuffer.toString();
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public String sendPost(String url, String body, HashMap<String, String> headers, Charset charset)
@@ -139,6 +184,7 @@ public class BlockingHttpClient {
     private String sendPost(String url, AbstractHttpEntity body, HashMap<String, String> headers)
             throws Exception {
         throttle();
+
         HttpPost postRequest = new HttpPost(url);
         // add request headers
         if (headers != null) {
