@@ -25,7 +25,7 @@ public class BitsoWithdrawal {
         currency = Helpers.getString(o, "currency");
         method = Helpers.getString(o, "method");
         amount = Helpers.getBD(o, "amount");
-        details = getOperationDetails(o.getJSONObject("details"));
+        details = o.has("details") ? getOperationDetails(o.getJSONObject("details")) : null;
     }
 
     public String getWithdrawalId() {
@@ -85,10 +85,6 @@ public class BitsoWithdrawal {
     }
 
     private HashMap<String, String> getOperationDetails(JSONObject o) {
-        if (o == null) {
-            return null;
-        }
-
         HashMap<String, String> details = new HashMap<>();
 
         String currentKey;
