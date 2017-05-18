@@ -130,6 +130,8 @@ public class BlockingHttpClient {
     }
 
     public String sendPost(String url, String body, HashMap<String, String> headers) throws Exception {
+        throttle();
+
         try {
             URL requestURL = new URL(url);
             HttpsURLConnection con = (HttpsURLConnection) requestURL.openConnection();

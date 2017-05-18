@@ -97,7 +97,7 @@ public class BitsoWithdrawal {
             object = o.get(currentKey);
 
             if(object == null){
-                currentValue = "";
+                continue;
             }
 
             if(object instanceof String){

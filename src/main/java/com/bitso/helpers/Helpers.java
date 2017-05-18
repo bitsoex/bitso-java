@@ -127,7 +127,8 @@ public class Helpers {
 
     public static BigDecimal getBD(JSONObject o, String key) {
         if (o.has(key)) {
-            return new BigDecimal(o.getString(key));
+            String value = o.getString(key);
+            return value.equals("null") ? null : new BigDecimal(value);
         } else {
             System.err.println("No " + key + ": " + o);
             Helpers.printStackTrace();
