@@ -128,7 +128,7 @@ public class Helpers {
     public static BigDecimal getBD(JSONObject o, String key) {
         if (o.has(key)) {
             String value = o.getString(key);
-            return value.equals("null") ? null : new BigDecimal(value);
+            return value.equals("null") ? new BigDecimal("0") : new BigDecimal(value);
         } else {
             System.err.println("No " + key + ": " + o);
             Helpers.printStackTrace();
@@ -213,14 +213,10 @@ public class Helpers {
     }
 
     public static BitsoBook getBook(String book) {
-        switch (book) {
-            case "btc_mxn":
-                return BitsoBook.BTC_MXN;
-            case "eth_mxn":
-                return BitsoBook.ETH_MXN;
-            default:
-                String exceptionMessage = book + "is not a supported book";
-                throw new BitsoExceptionNotExpectedValue(exceptionMessage);
+        try{
+            return BitsoBook.valueOf(book.toUpperCase());
+        }catch (Exception e) {
+            return null;
         }
     }
 }
