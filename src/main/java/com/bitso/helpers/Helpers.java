@@ -36,6 +36,7 @@ public class Helpers {
             System.out.println("FATAL: Cannot instantiate DatatypeFactory");
         }
     }
+
     private static final List<Field> getAllFields(List<Field> fields, Class<?> type) {
         fields.addAll(Arrays.asList(type.getDeclaredFields()));
         if (type.getSuperclass() != null) {
@@ -103,7 +104,7 @@ public class Helpers {
         }
         return null;
     }
-    
+
     public static int getInt(JSONObject o, String key) {
         if (o.has(key)) {
             return o.getInt(key);
@@ -126,7 +127,8 @@ public class Helpers {
 
     public static BigDecimal getBD(JSONObject o, String key) {
         if (o.has(key)) {
-            return new BigDecimal(o.getString(key));
+            String value = o.getString(key);
+            return value.equals("null") ? new BigDecimal("0") : new BigDecimal(value);
         } else {
             System.err.println("No " + key + ": " + o);
             Helpers.printStackTrace();
@@ -134,18 +136,18 @@ public class Helpers {
         return null;
     }
 
-    public static Integer getInteger(JSONObject o, String key){
-        if(o.has(key)){
+    public static Integer getInteger(JSONObject o, String key) {
+        if (o.has(key)) {
             return o.getInt(key);
-        }else{
+        } else {
             System.err.println("No " + key + ": " + o);
             Helpers.printStackTrace();
         }
         return null;
     }
 
-    public static Date getZonedDatetime(JSONObject o, String key){
-        if(o.has(key)){
+    public static Date getZonedDatetime(JSONObject o, String key) {
+        if (o.has(key)) {
             final String date = o.getString(key);
             try {
                 return new SimpleDateFormat(dateTimeFormatterZOffset).parse(date);
@@ -160,17 +162,17 @@ public class Helpers {
                     }
                 }
             }
-        }else{
+        } else {
             System.err.println("No " + key + ": " + o);
             Helpers.printStackTrace();
         }
         return null;
     }
 
-    public static String[] parseJSONArray(JSONArray arrray){
+    public static String[] parseJSONArray(JSONArray arrray) {
         int totalElements = arrray.length();
-        String[] elements =  new String[totalElements];
-        for(int i=0; i<totalElements; i++){
+        String[] elements = new String[totalElements];
+        for (int i = 0; i < totalElements; i++) {
             elements[i] = arrray.getString(i);
         }
         return elements;
@@ -178,7 +180,7 @@ public class Helpers {
 
     public static JSONObject getJSONFromFile(String fileName) {
         String jsonString = getJSONString(fileName);
-        if(jsonString == null){
+        if (jsonString == null) {
             return null;
         }
         return Helpers.parseJson(jsonString);
@@ -211,14 +213,10 @@ public class Helpers {
     }
 
     public static BitsoBook getBook(String book) {
-        switch (book) {
-            case "btc_mxn":
-                return BitsoBook.BTC_MXN;
-            case "eth_mxn":
-                return BitsoBook.ETH_MXN;
-            default:
-                String exceptionMessage = book + "is not a supported book";
-                throw new BitsoExceptionNotExpectedValue(exceptionMessage);
+        try{
+            return BitsoBook.valueOf(book.toUpperCase());
+        }catch (Exception e) {
+            return null;
         }
     }
 }

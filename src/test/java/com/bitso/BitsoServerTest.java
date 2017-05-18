@@ -25,14 +25,14 @@ public class BitsoServerTest extends BitsoTest {
     public void testUserLedgers() {
         String[] operations = { "trades", "fees", "fundings", "withdrawals" };
         // Global ledger request
-        BitsoOperation[] fullLedger = mBitso.getUserLedger(null);
+        BitsoOperation[] fullLedger = mBitso.getUserLedger("", "");
         for (BitsoOperation bitsoOperation : fullLedger) {
             assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
         }
 
         // Specific operation type request
         for (String operationType : operations) {
-            BitsoOperation[] specificLedger = mBitso.getUserLedger(operationType);
+            BitsoOperation[] specificLedger = mBitso.getUserLedger(operationType, "");
             for (BitsoOperation bitsoOperation : specificLedger) {
                 assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
             }

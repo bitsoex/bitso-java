@@ -2,6 +2,7 @@ package com.bitso;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -9,22 +10,22 @@ import org.json.JSONObject;
 import com.bitso.helpers.Helpers;
 
 public class BitsoTransfer {
-    public String walletAddress;
-    public BigDecimal currencyAmount;
-    public BigDecimal btcPending;
-    public String confirmationCode;
-    public String paymentOutletId;
-    public String qrImgUri;
-    public long createdAt;
-    public BigDecimal currencyFees;
-    public BigDecimal btcReceived;
-    public BigDecimal btcAmount;
-    public String currency;
-    public String id;
-    public String userUri;
-    public HashMap<String, Object> fields;
-    public BigDecimal currencySettled;
-    public long expiresEpoch;
+    protected String walletAddress;
+    protected BigDecimal currencyAmount;
+    protected BigDecimal btcPending;
+    protected String confirmationCode;
+    protected String paymentOutletId;
+    protected String qrImgUri;
+    protected long createdAt;
+    protected BigDecimal currencyFees;
+    protected BigDecimal btcReceived;
+    protected BigDecimal btcAmount;
+    protected String currency;
+    protected String id;
+    protected String userUri;
+    protected HashMap<String, Object> fields;
+    protected BigDecimal currencySettled;
+    protected long expiresEpoch;
 
     public enum STATUS {
         pending, confirming, completed, expired
@@ -52,8 +53,11 @@ public class BitsoTransfer {
             if (fields.getClass() == JSONObject.class) {
                 JSONObject f = o.getJSONObject("fields");
                 this.fields = new HashMap<>();
-                for (Object key : f.keySet()) {
-                    this.fields.put(key.toString(), f.get(key.toString()));
+                Iterator<String> keys = f.keys();
+                String currentKey;
+                while(keys.hasNext()){
+                    currentKey = keys.next();
+                    this.fields.put(currentKey, f.get(currentKey));
                 }
             } else if (fields.getClass() == JSONArray.class) {
                 JSONArray f = o.getJSONArray("fields");
