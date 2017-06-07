@@ -17,7 +17,7 @@ import com.bitso.exchange.BookInfo;
 import com.bitso.helpers.Helpers;
 
 public class BitsoMockTest extends BitsoTest {
-    private ArrayList<BookInfo> mockAvailableBooks;
+    private BookInfo[] mockAvailableBooks;
     private BitsoTicker[] mockTicker;
     private BitsoOrderBook mockOrderBook;
     private BitsoAccountStatus mockAccountStatus;
@@ -69,13 +69,13 @@ public class BitsoMockTest extends BitsoTest {
     }
 
     private void setUpMockitoActions() {
-        Mockito.when(mBitso.availableBooks()).thenReturn(mockAvailableBooks);
+        Mockito.when(mBitso.getAvailableBooks()).thenReturn(mockAvailableBooks);
         Mockito.when(mBitso.getTicker()).thenReturn(mockTicker);
         Mockito.when(mBitso.getOrderBook(BitsoBook.BTC_MXN)).thenReturn(mockOrderBook);
-        Mockito.when(mBitso.getUserAccountStatus()).thenReturn(mockAccountStatus);
-        Mockito.when(mBitso.getUserAccountBalance()).thenReturn(mockBalance);
-        Mockito.when(mBitso.getUserFees()).thenReturn(mockFee);
-        Mockito.when(mBitso.getOpenOrders()).thenReturn(mockOpenOrders);
+        Mockito.when(mBitso.getAccountStatus()).thenReturn(mockAccountStatus);
+        Mockito.when(mBitso.getAccountBalance()).thenReturn(mockBalance);
+        Mockito.when(mBitso.getFees()).thenReturn(mockFee);
+        Mockito.when(mBitso.getOpenOrders(null)).thenReturn(mockOpenOrders);
         Mockito.when(mBitso.placeOrder(BitsoBook.BTC_MXN, BitsoOrder.SIDE.BUY, BitsoOrder.TYPE.LIMIT,
                 new BigDecimal("15.4"), null, new BigDecimal("20854.4"))).thenReturn(mockOpenOrderId);
         Mockito.when(mBitso.bitcoinWithdrawal(new BigDecimal("0.001"), "31yTCKDHTqNXF5eZcsddJDe76BzBh8pVLb"))
@@ -88,13 +88,13 @@ public class BitsoMockTest extends BitsoTest {
         Mockito.when(mBitso.getBanks()).thenReturn(mockBitsoBanks);
         Mockito.when(mBitso.debitCardWithdrawal(new BigDecimal("50"), "name test", "surname test",
                 "5579209071039769", "40044")).thenReturn(mockDebitCardWithdrawal);
-        Mockito.when(mBitso.getUserLedger("", "")).thenReturn(mockLedgers);
-        Mockito.when(mBitso.getUserLedger(null, null)).thenReturn(mockLedgers);
-        Mockito.when(mBitso.getUserLedger(null, "")).thenReturn(mockLedgers);
-        Mockito.when(mBitso.getUserLedger("", null)).thenReturn(mockLedgers);
-        Mockito.when(mBitso.getUserWithdrawals()).thenReturn(mockWithdrawals);
-        Mockito.when(mBitso.getUserFundings()).thenReturn(mockFundings);
-        Mockito.when(mBitso.getUserTrades()).thenReturn(mockTrades);
+        Mockito.when(mBitso.getLedger("", "")).thenReturn(mockLedgers);
+        Mockito.when(mBitso.getLedger(null, null)).thenReturn(mockLedgers);
+        Mockito.when(mBitso.getLedger(null, "")).thenReturn(mockLedgers);
+        Mockito.when(mBitso.getLedger("", null)).thenReturn(mockLedgers);
+        Mockito.when(mBitso.getWithdrawals(null)).thenReturn(mockWithdrawals);
+        Mockito.when(mBitso.getFundings(null)).thenReturn(mockFundings);
+        Mockito.when(mBitso.getUserTrades(null)).thenReturn(mockTrades);
         Mockito.when(mBitso.lookupOrders("kRrcjsp5n9og98qa")).thenReturn(mockLookUpOrders);
         Mockito.when(mBitso.cancelOrder("pj251R8m6im5lO82")).thenReturn(mockCanceledOrders);
         Mockito.when((mBitso.fundingDestination("btc"))).thenReturn(mockFundingDestination);
@@ -103,10 +103,10 @@ public class BitsoMockTest extends BitsoTest {
     }
 
     private void setUpAvailableBooks(JSONObject o) {
-        mockAvailableBooks = new ArrayList<BookInfo>();
+        mockAvailableBooks = new BookInfo[5];
         JSONArray arr = o.getJSONArray("payload");
         for (int i = 0; i < arr.length(); i++) {
-            mockAvailableBooks.add(new BookInfo(arr.getJSONObject(i)));
+            mockAvailableBooks[i] = new BookInfo(arr.getJSONObject(i));
         }
     }
 

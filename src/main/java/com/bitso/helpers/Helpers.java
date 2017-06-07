@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,7 +20,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.bitso.BitsoBook;
-import com.bitso.exceptions.BitsoExceptionNotExpectedValue;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -58,6 +59,32 @@ public class Helpers {
                 sb.append(o);
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+        }
+        sb.append("\n==============\n");
+        return sb.toString();
+    }
+
+    public static final String fieldPrinter(Object object, Class<?> genericType) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("==============");
+        Method[] methods = genericType.getDeclaredMethods();
+        for (Method method : methods) {
+            String methodName = method.getName();
+            if (methodName.startsWith("get")) {
+                try {
+                    Object methodExecutionResult = method.invoke(object);
+                    sb.append('\n');
+                    sb.append(methodName);
+                    sb.append(": ");
+                    sb.append(methodExecutionResult);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
             }
         }
         sb.append("\n==============\n");
@@ -127,8 +154,9 @@ public class Helpers {
 
     public static BigDecimal getBD(JSONObject o, String key) {
         if (o.has(key)) {
-            String value = o.getString(key);
-            return value.equals("null") ? new BigDecimal("0") : new BigDecimal(value);
+            String value = o.isNull(key) ? "null" : o.getString(key);
+            value = (value.equals("null") || value.length() == 0) ? "0" : value.trim();
+            return new BigDecimal(value);
         } else {
             System.err.println("No " + key + ": " + o);
             Helpers.printStackTrace();
@@ -213,9 +241,9 @@ public class Helpers {
     }
 
     public static BitsoBook getBook(String book) {
-        try{
+        try {
             return BitsoBook.valueOf(book.toUpperCase());
-        }catch (Exception e) {
+        } catch (Exception e) {
             return null;
         }
     }

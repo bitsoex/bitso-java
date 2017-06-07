@@ -8,24 +8,26 @@ import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.bitso.exchange.Ticker;
 import com.bitso.helpers.Helpers;
 
 public class BitsoOperation {
-    protected String entryId;
-    protected String operationDescription;
-    protected Date operationDate;
-    protected BalanceUpdate[] afterOperationBalances;
-    protected HashMap<String, String> details;
+    private String entryId;
+    private String operationDescription;
+    private Date operationDate;
+    private BalanceUpdate[] afterOperationBalances;
+    private HashMap<String, String> details;
 
     public BitsoOperation(JSONObject o) {
         entryId = Helpers.getString(o, "eid");
         operationDescription = Helpers.getString(o, "operation");
         operationDate = Helpers.getZonedDatetime(o, "created_at");
-        afterOperationBalances = getOperationBalances(o.getJSONArray("balance_updates"));
-        details = getOperationDetails(o.getJSONObject("details"));
+        afterOperationBalances = retrieveOperationBalances(o.getJSONArray("balance_updates"));
+        details = retrieveOperationDetails(o.getJSONObject("details"));
     }
 
-    private BalanceUpdate[] getOperationBalances(JSONArray array) {
+    private BalanceUpdate[] retrieveOperationBalances(JSONArray array) {
         int totalBalances = array.length();
         BalanceUpdate[] balances = new BalanceUpdate[totalBalances];
         for (int i = 0; i < totalBalances; i++) {
@@ -34,7 +36,7 @@ public class BitsoOperation {
         return balances;
     }
 
-    private HashMap<String, String> getOperationDetails(JSONObject o) {
+    private HashMap<String, String> retrieveOperationDetails(JSONObject o) {
         if (o == null) {
             return null;
         }
@@ -58,9 +60,8 @@ public class BitsoOperation {
         return details;
     }
 
-    @Override
     public String toString() {
-        return Helpers.fieldPrinter(this);
+        return Helpers.fieldPrinter(this, BitsoOperation.class);
     }
 
     public String getEntryId() {
@@ -104,8 +105,8 @@ public class BitsoOperation {
     }
 
     public class BalanceUpdate {
-        String currency;
-        BigDecimal amount;
+        private String currency;
+        private BigDecimal amount;
 
         public BalanceUpdate(JSONObject o) {
             this.currency = Helpers.getString(o, "currency");
@@ -126,6 +127,10 @@ public class BitsoOperation {
 
         public void setAmount(BigDecimal amount) {
             this.amount = amount;
+        }
+
+        public String toString() {
+            return Helpers.fieldPrinter(this, BitsoOperation.BalanceUpdate.class);
         }
     }
 }

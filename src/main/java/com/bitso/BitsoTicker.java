@@ -10,14 +10,14 @@ public class BitsoTicker extends Ticker {
     public BitsoBook book;
 
     public BitsoTicker(JSONObject o) {
-        last = Helpers.getBD(o, "last");
-        high = Helpers.getBD(o, "high");
-        low = Helpers.getBD(o, "low");
-        vwap = Helpers.getBD(o, "vwap");
-        volume = Helpers.getBD(o, "volume");
-        bid = Helpers.getBD(o, "bid");
-        ask = Helpers.getBD(o, "ask");
-        createdAt = Helpers.getZonedDatetime(o, "created_at");
+        mLast = Helpers.getBD(o, "last");
+        mHigh = Helpers.getBD(o, "high");
+        mLow = Helpers.getBD(o, "low");
+        mVwap = Helpers.getBD(o, "vwap");
+        mVolume = Helpers.getBD(o, "volume");
+        mBid = Helpers.getBD(o, "bid");
+        mAsk = Helpers.getBD(o, "ask");
+        mCreatedAt = Helpers.getZonedDatetime(o, "created_at");
         book = BitsoBook.valueOf(Helpers.getString(o, "book").toUpperCase());
     }
 }

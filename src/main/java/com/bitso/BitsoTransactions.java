@@ -1,55 +1,116 @@
 package com.bitso;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.Date;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.bitso.BitsoTransactions.Transaction.SIDE;
 import com.bitso.helpers.Helpers;
 
 public class BitsoTransactions {
-    public ArrayList<Transaction> list;
+    private Transaction[] mTransactionsList;
 
-    public BitsoTransactions(JSONArray a) {
-        list = new ArrayList<Transaction>(a.length());
-        for (int i = 0; i < a.length(); i++) {
-            JSONObject o = a.getJSONObject(i);
-            Transaction t = new Transaction();
-            t.date = Long.parseLong(o.getString("date"));
-            t.tid = o.getLong("tid");
-            t.price = new BigDecimal(o.getString("price"));
-            t.amount = new BigDecimal(o.getString("amount"));
-            t.side = SIDE.valueOf(o.getString("side").toUpperCase());
-            list.add(t);
+    public BitsoTransactions(JSONArray jsonArray) {
+        int totalElements = jsonArray.length();
+        mTransactionsList = new Transaction[totalElements];
+        for (int i = 0; i < totalElements; i++) {
+            JSONObject o = jsonArray.getJSONObject(i);
+            Transaction transaction = new Transaction(Helpers.getZonedDatetime(o, "created_at"),
+                    String.valueOf(o.getInt("tid")), Helpers.getBD(o, "price"), Helpers.getBD(o, "amount"),
+                    BitsoSide.valueOf(Helpers.getString(o, "maker_side").toUpperCase()),
+                    BitsoBook.valueOf(Helpers.getString(o, "book").toUpperCase()));
+            mTransactionsList[i] = transaction;
         }
+    }
+
+    public Transaction[] getTransactionsList() {
+        return mTransactionsList;
+    }
+
+    public void setmTransactionsList(Transaction[] mTransactionsList) {
+        this.mTransactionsList = mTransactionsList;
     }
 
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Bitso Recent Transactions\n");
-        for (Transaction t : list) {
-            sb.append(t);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Bitso Recent Transactions\n");
+        for (Transaction transaction : mTransactionsList) {
+            stringBuilder.append(transaction);
         }
 
-        return sb.toString();
+        return stringBuilder.toString();
     }
 
-    public static class Transaction {
+    public class Transaction {
+        private Date date;
+        private String tid;
+        private BigDecimal price;
+        private BigDecimal amount;
+        private BitsoSide side;
+        private BitsoBook book;
 
-        public enum SIDE {
-            SELL, BUY
-        };
+        public Transaction(Date date, String tid, BigDecimal price, BigDecimal amount, BitsoSide side,
+                BitsoBook book) {
+            super();
+            this.date = date;
+            this.tid = tid;
+            this.price = price;
+            this.amount = amount;
+            this.side = side;
+            this.book = book;
+        }
 
-        public long date;
-        public long tid;
-        public BigDecimal price;
-        public BigDecimal amount;
-        public SIDE side;
+        public Date getDate() {
+            return date;
+        }
+
+        public void setDate(Date date) {
+            this.date = date;
+        }
+
+        public String getTid() {
+            return tid;
+        }
+
+        public void setTid(String tid) {
+            this.tid = tid;
+        }
+
+        public BigDecimal getPrice() {
+            return price;
+        }
+
+        public void setPrice(BigDecimal price) {
+            this.price = price;
+        }
+
+        public BigDecimal getAmount() {
+            return amount;
+        }
+
+        public void setAmount(BigDecimal amount) {
+            this.amount = amount;
+        }
+
+        public BitsoSide getSide() {
+            return side;
+        }
+
+        public void setSide(BitsoSide side) {
+            this.side = side;
+        }
+
+        public BitsoBook getBook() {
+            return book;
+        }
+
+        public void setBook(BitsoBook book) {
+            this.book = book;
+        }
 
         public String toString() {
-            return Helpers.fieldPrinter(this);
+            return Helpers.fieldPrinter(this, BitsoTransactions.Transaction.class);
         }
     }
 }

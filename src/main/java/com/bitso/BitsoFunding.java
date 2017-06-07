@@ -10,13 +10,13 @@ import org.json.JSONObject;
 import com.bitso.helpers.Helpers;
 
 public class BitsoFunding {
-    protected String fundingId;
-    protected String status;
-    protected Date fundingDate;
-    protected String currency;
-    protected String method;
-    protected BigDecimal amount;
-    protected HashMap<String, String> details;
+    private String fundingId;
+    private String status;
+    private Date fundingDate;
+    private String currency;
+    private String method;
+    private BigDecimal amount;
+    private HashMap<String, String> details;
 
     public BitsoFunding(JSONObject o) {
         fundingId = Helpers.getString(o, "fid");
@@ -25,12 +25,12 @@ public class BitsoFunding {
         currency = Helpers.getString(o, "currency");
         method = Helpers.getString(o, "method");
         amount = Helpers.getBD(o, "amount");
-        details = getOperationDetails(o.getJSONObject("details"));
+        details = retrieveOperationDetails(o.getJSONObject("details"));
     }
 
     @Override
     public String toString() {
-        return Helpers.fieldPrinter(this);
+        return Helpers.fieldPrinter(this, BitsoFunding.class);
     }
 
     public String getFundingId() {
@@ -85,7 +85,7 @@ public class BitsoFunding {
         return details;
     }
 
-    private HashMap<String, String> getOperationDetails(JSONObject o) {
+    private HashMap<String, String> retrieveOperationDetails(JSONObject o) {
         if (o == null) {
             return null;
         }
