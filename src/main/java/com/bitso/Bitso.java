@@ -226,9 +226,9 @@ public class Bitso {
         return placeBuyMarketOrder(mxnAmountToSpend, BitsoBook.BTC_MXN);
     }
 
-    public BigDecimal placeBuyMarketOrder(BigDecimal mxnAmountToSpend, BitsoBook book) {
+    public BigDecimal placeBuyMarketOrder(BigDecimal minorToSpend, BitsoBook book) {
         HashMap<String, Object> body = new HashMap<String, Object>();
-        body.put("amount", mxnAmountToSpend.toPlainString());
+        body.put("amount", minorToSpend.toPlainString());
         body.put("book", book.toString());
         log("Placing the following buy maket order: " + body);
         String json = sendBitsoPost(baseUrl + "buy", body);
@@ -263,9 +263,9 @@ public class Bitso {
         return placeSellMarketOrder(btcAmountToSpend, BitsoBook.BTC_MXN);
     }
 
-    public BigDecimal placeSellMarketOrder(BigDecimal btcAmountToSpend, BitsoBook book) {
+    public BigDecimal placeSellMarketOrder(BigDecimal majorToSpend, BitsoBook book) {
         HashMap<String, Object> body = new HashMap<String, Object>();
-        body.put("amount", btcAmountToSpend.toPlainString());
+        body.put("amount", majorToSpend.toPlainString());
         body.put("book", book.toString());
         log("Placing the following sell market order: " + body);
         String json = sendBitsoPost(baseUrl + "sell", body);
@@ -539,11 +539,15 @@ public class Bitso {
     }
 
     public BookOrder findMatchingOrders(String id) {
+        return findMatchingOrders(id, BitsoBook.BTC_MXN);
+    }
+
+    public BookOrder findMatchingOrders(String id, BitsoBook book) {
         BookOrder toRet = null;
         int offset = 0;
         int limit = 10;
         outer: while (true) {
-            BitsoUserTransactions but = getUserTransactions(offset, limit, null);
+            BitsoUserTransactions but = getUserTransactions(offset, limit, null, book);
             if (but == null) {
                 return null;
             }
@@ -571,6 +575,10 @@ public class Bitso {
     }
 
     public BookOrder findMatchingOrders(JSONObject o) {
+        return findMatchingOrders(o, BitsoBook.BTC_MXN);
+    }
+
+    public BookOrder findMatchingOrders(JSONObject o, BitsoBook book) {
         BookOrder toRet = null;
         if (o.has("id")) {
             toRet = findMatchingOrders(o.getString("id"));
