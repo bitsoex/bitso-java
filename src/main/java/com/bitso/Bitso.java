@@ -95,42 +95,46 @@ public class Bitso {
     }
 
     // Public Functions
-    public ArrayList<BookInfo> availableBooks() {
-        String json = sendGet("/api/v3/available_books");
+    public BookInfo[] getAvailableBooks() {
+        String request = "/api/v3/available_books";
+
+        String json = sendGet(request);
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
-            logError("Unable to get Bitso Ticker: " + json);
+            logError("Unable to get availableBooks");
             return null;
         }
-        ArrayList<BookInfo> books = new ArrayList<BookInfo>();
-        JSONArray arr = o.getJSONArray("payload");
-        for (int i = 0; i < arr.length(); i++) {
-            books.add(new BookInfo(arr.getJSONObject(i)));
+        if (o.has("payload")) {
+            JSONArray array = o.getJSONArray("payload");
+            int totalElements = array.length();
+            BookInfo[] books = new BookInfo[totalElements];
+            for (int i = 0; i < totalElements; i++) {
+                books[i] = new BookInfo(array.getJSONObject(i));
+            }
+            return books;
         }
-        return books;
+        return null;
     }
 
     public BitsoTicker[] getTicker() {
-        String json = sendGet("/api/v3/ticker");
+        String request = "/api/v3/ticker";
+
+        String json = sendGet(request);
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
-            logError("Unable to get Bitso Ticker: " + json);
+            logError("Unable to get Bitso Ticker");
             return null;
         }
-
-        if (o.has("error")) {
-            return null;
+        if (o.has("payload")) {
+            JSONArray array = o.getJSONArray("payload");
+            int totalElements = array.length();
+            BitsoTicker[] tickers = new BitsoTicker[totalElements];
+            for (int i = 0; i < totalElements; i++) {
+                tickers[i] = new BitsoTicker(array.getJSONObject(i));
+            }
+            return tickers;
         }
-
-        JSONArray arrayTickers = o.getJSONArray("payload");
-        int totalTickers = arrayTickers.length();
-
-        BitsoTicker[] tickers = new BitsoTicker[totalTickers];
-        for (int i = 0; i < totalTickers; i++) {
-            tickers[i] = new BitsoTicker(arrayTickers.getJSONObject(i));
-        }
-
-        return tickers;
+        return null;
     }
 
     public BitsoOrderBook getOrderBook(BitsoBook book, boolean... aggregate) {
@@ -142,9 +146,10 @@ public class Bitso {
                 request += "&aggregate=false";
             }
         }
+
         String json = sendGet(request);
         JSONObject o = Helpers.parseJson(json);
-        if (o == null) {
+        if (o == null || o.has("error")) {
             logError("Unable to get Bitso Order Book");
             return null;
         }
@@ -154,67 +159,82 @@ public class Bitso {
         return null;
     }
 
-    public BitsoTransactions getTransactions(BitsoBook book) {
-        String json = sendGet(baseUrl + "trades?book=" + book.toString());
-        JSONArray a = Helpers.parseJsonArray(json);
-        if (a == null) {
-            logError("Unable to get Bitso Transactions");
-            return null;
-        }
-        return new BitsoTransactions(a);
-    }
+    public BitsoTransactions getTrades(BitsoBook book, String... queryParameters) {
+        String parsedQueryParametes = processQueryParameters("&", queryParameters);
+        String request = "/api/v3/trades?book=" + book.toString()
+                + ((parsedQueryParametes != null) ? "&" + parsedQueryParametes : "");
 
-    // Private Functions
-    public BitsoAccountStatus getUserAccountStatus() {
-        String json = sendBitsoGet("/api/v3/account_status");
+        String json = sendGet(request);
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
-            logError("Error getting Bitso Account Status: " + json);
+            logError("Unable to get Trades");
             return null;
         }
         if (o.has("payload")) {
-            JSONObject payload = o.getJSONObject("payload");
-            return new BitsoAccountStatus(payload);
+            return new BitsoTransactions(o.getJSONArray("payload"));
         }
         return null;
     }
 
-    public BitsoBalance getUserAccountBalance() {
-        String json = sendBitsoGet("/api/v3/balance");
+    // Private Functions
+    public BitsoAccountStatus getAccountStatus() {
+        String request = "/api/v3/account_status";
+        String json = sendBitsoGet(request);
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
-            logError("Error getting account balance: " + json);
+            logError("Error getting Bitso Account Status");
             return null;
         }
-        return new BitsoBalance(o);
+        if (o.has("payload")) {
+            return new BitsoAccountStatus(o.getJSONObject("payload"));
+        }
+        return null;
     }
 
-    public BitsoFee getUserFees() {
-        String json = sendBitsoGet("/api/v3/fees");
+    public BitsoBalance getAccountBalance() {
+        String request = "/api/v3/balance";
+        String json = sendBitsoGet(request);
+        JSONObject o = Helpers.parseJson(json);
+        if (o == null || o.has("error")) {
+            logError("Error getting account balance");
+            return null;
+        }
+        if (o.has("payload")) {
+            return new BitsoBalance(o.getJSONObject("payload"));
+        }
+        return null;
+    }
+
+    public BitsoFee getFees() {
+        String request = "/api/v3/fees";
+        String json = sendBitsoGet(request);
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
             logError("Error getting user fees: " + json);
             return null;
         }
-        return new BitsoFee(o);
+        if (o.has("payload")) {
+            return new BitsoFee(o.getJSONObject("payload"));
+        }
+        return null;
     }
 
-    public BitsoOperation[] getUserLedger(String specificOperation, String queryParameters) {
+    public BitsoOperation[] getLedger(String specificOperation, String... queryParameters) {
         String request = "/api/v3/ledger";
 
         if (specificOperation != null && specificOperation.length() > 0) {
             request += "/" + specificOperation;
         }
 
-        if (queryParameters != null && queryParameters.length() > 0) {
-            request += "?" + queryParameters;
-        }
+        String parsedQueryParametes = processQueryParameters("&", queryParameters);
+        request += ((parsedQueryParametes != null) ? "?" + parsedQueryParametes : "");
 
         log(request);
+
         String json = sendBitsoGet(request);
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
-            logError("Error getting user ledgers: " + json);
+            logError("Error getting user ledgers");
             return null;
         }
         if (o.has("payload")) {
@@ -229,14 +249,37 @@ public class Bitso {
         return null;
     }
 
-    public BitsoWithdrawal[] getUserWithdrawals(String... withdrawalsIds) {
-        String request = "/api/v3/withdrawals/";
-        request += buildDynamicURLParameters(withdrawalsIds);
+    /**
+     * The request needs withdrawalsIds or queryParameters, not both. In case both parameters are provided
+     * null will be returned
+     * 
+     * @param withdrawalsIds
+     * @param queryParameters
+     * @return BitsoWithdrawal[]
+     */
+    public BitsoWithdrawal[] getWithdrawals(String[] withdrawalsIds, String... queryParameters) {
+        String request = "/api/v3/withdrawals";
+
+        if ((withdrawalsIds != null && (queryParameters != null && queryParameters.length > 0))) {
+            return null;
+        }
+
+        if (withdrawalsIds != null) {
+            String withdrawalsIdsParameters = processQueryParameters("-", withdrawalsIds);
+            request += ((withdrawalsIdsParameters != null) ? "/" + withdrawalsIdsParameters : "");
+        }
+
+        if (queryParameters != null && queryParameters.length > 0) {
+            String parsedQueryParametes = processQueryParameters("&", queryParameters);
+            request += ((parsedQueryParametes != null) ? "?" + parsedQueryParametes : "");
+        }
+
         log(request);
+
         String json = sendBitsoGet(request);
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
-            logError("Error getting user withdrawals: " + json);
+            logError("Error getting user withdrawal");
             return null;
         }
         if (o.has("payload")) {
@@ -251,14 +294,37 @@ public class Bitso {
         return null;
     }
 
-    public BitsoFunding[] getUserFundings(String... fundingsIds) {
-        String request = "/api/v3/fundings/";
-        request += buildDynamicURLParameters(fundingsIds);
+    /**
+     * The request needs fundingssIds or queryParameters, not both. In case both parameters are provided null
+     * will be returned
+     * 
+     * @param fundingssIds
+     * @param queryParameters
+     * @return
+     */
+    public BitsoFunding[] getFundings(String[] fundingssIds, String... queryParameters) {
+        String request = "/api/v3/fundings";
+
+        if ((fundingssIds != null && (queryParameters != null && queryParameters.length > 0))) {
+            return null;
+        }
+
+        if (fundingssIds != null) {
+            String fundingssIdsParameters = processQueryParameters("-", fundingssIds);
+            request += ((fundingssIdsParameters != null) ? "/" + fundingssIdsParameters : "");
+        }
+
+        if (queryParameters != null && queryParameters.length > 0) {
+            String parsedQueryParametes = processQueryParameters("&", queryParameters);
+            request += ((parsedQueryParametes != null) ? "?" + parsedQueryParametes : "");
+        }
+
         log(request);
+
         String json = sendBitsoGet(request);
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
-            logError("Error getting user fundings: " + json);
+            logError("Error getting user withdrawal");
             return null;
         }
         if (o.has("payload")) {
@@ -273,14 +339,37 @@ public class Bitso {
         return null;
     }
 
-    public BitsoTrade[] getUserTrades(String... tradesIds) {
-        String request = "/api/v3/user_trades/";
-        request += buildDynamicURLParameters(tradesIds);
+    /**
+     * The request needs tradesIds or queryParameters, not both. In case both parameters are provided null
+     * will be returned
+     * 
+     * @param tradesIds
+     * @param queryParameters
+     * @return
+     */
+    public BitsoTrade[] getUserTrades(String[] tradesIds, String... queryParameters) {
+        String request = "/api/v3/user_trades";
+
+        if ((tradesIds != null && (queryParameters != null && queryParameters.length > 0))) {
+            return null;
+        }
+
+        if (tradesIds != null) {
+            String fundingssIdsParameters = processQueryParameters("-", tradesIds);
+            request += ((fundingssIdsParameters != null) ? "/" + fundingssIdsParameters : "");
+        }
+
+        if (queryParameters != null && queryParameters.length > 0) {
+            String parsedQueryParametes = processQueryParameters("&", queryParameters);
+            request += ((parsedQueryParametes != null) ? "?" + parsedQueryParametes : "");
+        }
+
         log(request);
+
         String json = sendBitsoGet(request);
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
-            logError("Error getting user trades: " + json);
+            logError("Error getting user trades");
             return null;
         }
         if (o.has("payload")) {
@@ -295,12 +384,47 @@ public class Bitso {
         return null;
     }
 
-    public BitsoOrder[] getOpenOrders() {
-        String request = "/api/v3/open_orders?book=btc_mxn";
+    public BitsoTrade[] getOrderTrades(String orderId) {
+        String request = "/api/v3/order_trades";
+
+        if (orderId == null || orderId.trim().length() == 0) {
+            return null;
+        }
+
+        request += "/" + orderId;
+
+        log(request);
+
         String json = sendBitsoGet(request);
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
-            logError("Error in Open Orders: " + json);
+            logError("Error getting order trades");
+            return null;
+        }
+        if (o.has("payload")) {
+            JSONArray payload = o.getJSONArray("payload");
+            int totalElements = payload.length();
+            BitsoTrade[] trades = new BitsoTrade[totalElements];
+            for (int i = 0; i < totalElements; i++) {
+                trades[i] = new BitsoTrade(payload.getJSONObject(i));
+            }
+            return trades;
+        }
+        return null;
+    }
+
+    public BitsoOrder[] getOpenOrders(BitsoBook book, String... queryParameters) {
+        String request = "/api/v3/open_orders";
+
+        request += "?" + "book=" + book.toString();
+
+        String parsedQueryParametes = processQueryParameters("&", queryParameters);
+        request += ((parsedQueryParametes != null) ? "&" + parsedQueryParametes : "");
+
+        String json = sendBitsoGet(request);
+        JSONObject o = Helpers.parseJson(json);
+        if (o == null || o.has("error")) {
+            logError("Error in Open Orders");
             return null;
         }
         if (o.has("payload")) {
@@ -316,13 +440,21 @@ public class Bitso {
     }
 
     public BitsoOrder[] lookupOrders(String... ordersId) {
-        String request = "/api/v3/orders/";
-        request += buildDynamicURLParameters(ordersId);
+        String request = "/api/v3/orders";
+
+        if (ordersId == null || ordersId.length == 0) {
+            return null;
+        }
+
+        String ordersIdsParameters = processQueryParameters("-", ordersId);
+        request += "/" + ordersIdsParameters;
+
         log(request);
+
         String json = sendBitsoGet(request);
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
-            logError("Error in lookupOrders: " + json);
+            logError("Error in lookupOrders");
             return null;
         }
         if (o.has("payload")) {
@@ -340,30 +472,36 @@ public class Bitso {
     public String placeOrder(BitsoBook book, BitsoOrder.SIDE side, BitsoOrder.TYPE type, BigDecimal major,
             BigDecimal minor, BigDecimal price) {
         String request = "/api/v3/orders";
+
         JSONObject parameters = new JSONObject();
 
         if ((major != null && minor != null) || (major == null && minor == null)) {
-            log("An order should be specified in terms of major or minor, never both.");
+            log("An order should be specified in terms of major or minor, never both or any");
             return null;
         }
 
-        if ((type.compareTo(BitsoOrder.TYPE.LIMIT) == 0) && (price != null)) {
+        if (type.equals(BitsoOrder.TYPE.MARKET) && (price != null)) {
+            log("On market order a price does not need to be specified");
+            return null;
+        }
+
+        // Filling data for request
+        parameters.put("book", book.toString().toLowerCase());
+        parameters.put("side", side.toString().toLowerCase());
+        parameters.put("type", type.toString().toLowerCase());
+
+        if (type.equals(BitsoOrder.TYPE.LIMIT) && (price != null)) {
             parameters.put("price", price.toString());
-        } else {
-            log("Price must be specified on limit orders.");
-            return null;
         }
-
-        parameters.put("book", book.toString());
-        parameters.put("side", side.toString());
-        parameters.put("type", type.toString());
 
         if (major != null) {
             parameters.put("major", major.toString());
         } else {
             parameters.put("minor", minor.toString());
         }
+
         String json = sendBitsoPost(request, parameters);
+
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
             logError("Error placing an order: " + json);
@@ -376,9 +514,16 @@ public class Bitso {
         return null;
     }
 
-    public String[] cancelOrder(String... orders) {
-        String request = "/api/v3/orders/";
-        request += buildDynamicURLParameters(orders);
+    public String[] cancelOrder(String... ordersIds) {
+        String request = "/api/v3/orders";
+
+        if (ordersIds == null || ordersIds.length == 0) {
+            return null;
+        }
+
+        String ordersIdsParameters = processQueryParameters("-", ordersIds);
+        request += "/" + ordersIdsParameters;
+
         log(request);
         String json = sendBitsoDelete(request);
         JSONObject o = Helpers.parseJson(json);
@@ -389,9 +534,17 @@ public class Bitso {
         return Helpers.parseJSONArray(o.getJSONArray("payload"));
     }
 
-    public Map<String, String> fundingDestination(String fundCurrency) {
-        String request = "/api/v3/funding_destination?" + "fund_currency=" + fundCurrency;
+    public Map<String, String> fundingDestination(String currencyParameter) {
+        String request = "/api/v3/funding_destination";
+
+        if (currencyParameter == null || currencyParameter.trim().length() == 0) {
+            return null;
+        }
+
+        request += "?" + currencyParameter;
+
         log(request);
+
         String json = sendBitsoGet(request);
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
@@ -401,9 +554,9 @@ public class Bitso {
         if (o.has("payload")) {
             JSONObject payload = o.getJSONObject("payload");
             Map<String, String> fundingDestination = new HashMap<String, String>();
-            fundingDestination.put("accountIdentifierName",
+            fundingDestination.put("account_identifier_name",
                     Helpers.getString(payload, "account_identifier_name"));
-            fundingDestination.put("accountIdentifier", Helpers.getString(payload, "account_identifier"));
+            fundingDestination.put("account_identifier", Helpers.getString(payload, "account_identifier"));
             return fundingDestination;
         }
         return null;
@@ -442,11 +595,13 @@ public class Bitso {
 
     public Map<String, String> getBanks() {
         String request = "/api/v3/mx_bank_codes";
+
         log(request);
+
         String json = sendBitsoGet(request);
         JSONObject o = Helpers.parseJson(json);
         if (o == null || o.has("error")) {
-            logError("Error in lookupOrders: " + json);
+            logError("Error in getBanks");
             return null;
         }
         if (o.has("payload")) {
@@ -455,7 +610,6 @@ public class Bitso {
             String currentBankCode = "";
             String currentBankName = "";
             JSONObject currentJSON = null;
-            ;
             int totalElements = payload.length();
             for (int i = 0; i < totalElements; i++) {
                 currentJSON = payload.getJSONObject(i);
@@ -559,7 +713,7 @@ public class Bitso {
     }
 
     private String buildBitsoAuthHeader(String requestPath, String httpMethod, String apiKey, String secret) {
-        long nonce = System.currentTimeMillis();
+        long nonce = System.currentTimeMillis() + System.currentTimeMillis();
         byte[] secretBytes = secret.getBytes();
         byte[] arrayOfByte = null;
         String signature = null;
@@ -729,5 +883,39 @@ public class Bitso {
             }
         }
         return stringBuilder.toString();
+    }
+
+    private String processQueryParameters(String separator, String... parameters) {
+        if (parameters == null) {
+            return null;
+        }
+
+        int totalParameters = parameters.length;
+
+        if (totalParameters == 0) {
+            return null;
+        }
+
+        String queryString = "";
+        for (int i = 0; i < (totalParameters - 1); i++) {
+            String currentParameter = parameters[i].trim();
+
+            if (currentParameter.length() == 0) {
+                continue;
+            }
+
+            queryString += currentParameter + separator;
+        }
+
+        String lastParameter = parameters[totalParameters - 1].trim();
+        // Meaning that the last parameter is not empty
+        if (lastParameter.length() != 0) {
+            queryString += parameters[totalParameters - 1];
+            // Remove the separator symbol at the end if query string has it
+        } else if (queryString.endsWith(separator)) {
+            queryString = queryString.substring(0, (queryString.length() - 1));
+        }
+
+        return queryString;
     }
 }
