@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -665,19 +666,48 @@ public abstract class BitsoTest {
         }
     }
 
-    /*
-     * @Test public void testTrading() throws InterruptedException { String orderId =
-     * mBitso.placeOrder(BitsoBook.BTC_MXN, BitsoOrder.SIDE.BUY, BitsoOrder.TYPE.LIMIT, new BigDecimal("0.1"),
-     * null, new BigDecimal("40000"));
-     * 
-     * if (orderId != null) { Thread.sleep(1_000); String canceledOrders[] = mBitso.cancelOrder(orderId); for
-     * (String canceledOrder : canceledOrders) { System.out.println(canceledOrder); } } else {
-     * System.out.println("Error"); } }
-     * 
-     * @Test public void testPlaceOrder() { String orderId = mBitso.placeOrder(BitsoBook.BTC_MXN,
-     * BitsoOrder.SIDE.BUY, BitsoOrder.TYPE.LIMIT, new BigDecimal("15.4"), null, new BigDecimal("20854.4"));
-     * assertEquals(true, ((orderId != null) && (orderId.length() > 0))); }
-     */
+    // @Test
+    public void testTrading() throws InterruptedException {
+        List<String> orders = new ArrayList<>();
+        String canceledOrders[] = null;
+
+        for (int i = 0; i < 5; i++) {
+            String orderId = mBitso.placeOrder(BitsoBook.BTC_MXN, BitsoOrder.SIDE.BUY, BitsoOrder.TYPE.LIMIT,
+                    new BigDecimal("0.001"), null, new BigDecimal("10000"));
+            assertEquals(orderId != null, true);
+            orders.add(orderId);
+        }
+
+        Thread.sleep(1_000);
+
+        for (int i = 0; i < 5; i++) {
+            String orderId = mBitso.placeOrder(BitsoBook.BTC_MXN, BitsoOrder.SIDE.SELL, BitsoOrder.TYPE.LIMIT,
+                    new BigDecimal("0.001"), null, new BigDecimal("80000"));
+            assertEquals(orderId != null, true);
+            orders.add(orderId);
+        }
+
+        Thread.sleep(1_000);
+
+        int totalOpenOrders = orders.size();
+
+        for (int i = 0; i < totalOpenOrders; i++) {
+            String orderId = orders.get(i);
+
+            BitsoOrder[] specificOrder = mBitso.lookupOrders(orderId);
+            assertEquals(specificOrder != null, true);
+            assertEquals(specificOrder.length, 1);
+
+            BitsoOrder bitsoOrder = specificOrder[0];
+            if (bitsoOrder.getUnfilledAmount().doubleValue() > 0) {
+                canceledOrders = mBitso.cancelOrder(orderId);
+
+                assertEquals(canceledOrders != null, true);
+                assertEquals(canceledOrders.length, 1);
+            }
+        }
+    }
+
     @Test
     public void testFundingDestination() throws InterruptedException {
         Map<String, String> btcFundingDestination = mBitso.fundingDestination("fund_currency=btc");

@@ -815,7 +815,7 @@ public class Bitso {
     }
 
     private String sendBitsoDelete(String requestPath) {
-        long nonce = System.currentTimeMillis();
+        long nonce = System.currentTimeMillis() + System.currentTimeMillis();
         Entry<String, String> authHeader = buildBitsoAuthHeader(secret, key, nonce, "DELETE", requestPath,
                 null);
         HashMap<String, String> headers = new HashMap<String, String>();
@@ -834,7 +834,7 @@ public class Bitso {
     }
 
     private String sendBitsoPost(String requestPath, JSONObject jsonPayload) {
-        long nonce = System.currentTimeMillis();
+        long nonce = System.currentTimeMillis() + System.currentTimeMillis();
         String jsonString = "";
         if (jsonPayload != null) {
             jsonString = jsonPayload.toString();
@@ -850,19 +850,6 @@ public class Bitso {
             e.printStackTrace();
         }
         return null;
-    }
-
-    private String buildDynamicURLParameters(String[] elements) {
-        int totalIds = elements.length;
-        String parameters = "";
-        if (totalIds > 0) {
-            for (int i = 0; i < totalIds - 1; i++) {
-                parameters += elements[i] + "-";
-            }
-            parameters += elements[totalIds - 1];
-            ;
-        }
-        return parameters;
     }
 
     private static String convertInputStreamToString(InputStream inputStream) {
