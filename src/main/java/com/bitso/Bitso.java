@@ -222,13 +222,13 @@ public class Bitso {
         return processBookOrderJSON(json);
     }
 
-    public BigDecimal placeBuyMarketOrder(BigDecimal mxnAmountToSpend) {
-        return placeBuyMarketOrder(mxnAmountToSpend, BitsoBook.BTC_MXN);
+    public BigDecimal placeBuyMarketOrder(BigDecimal btcToBuy) {
+        return placeBuyMarketOrder(btcToBuy, BitsoBook.BTC_MXN);
     }
 
-    public BigDecimal placeBuyMarketOrder(BigDecimal minorToSpend, BitsoBook book) {
+    public BigDecimal placeBuyMarketOrder(BigDecimal majorToBuy, BitsoBook book) {
         HashMap<String, Object> body = new HashMap<String, Object>();
-        body.put("amount", minorToSpend.toPlainString());
+        body.put("amount", majorToBuy.toPlainString());
         body.put("book", book.toString());
         log("Placing the following buy maket order: " + body);
         String json = sendBitsoPost(baseUrl + "buy", body);
@@ -238,9 +238,9 @@ public class Bitso {
             return null;
         }
 
-        BookOrder order = findMatchingOrders(o);
+        BookOrder order = findMatchingOrders(o, book);
         if (order != null) {
-            return order.major;
+            return order.minor;
         }
         return null;
     }
@@ -274,7 +274,7 @@ public class Bitso {
             logError("Unable to place Sell Market Order: " + json);
             return null;
         }
-        BookOrder order = findMatchingOrders(o);
+        BookOrder order = findMatchingOrders(o, book);
         if (order != null) {
             return order.minor;
         }
@@ -579,16 +579,25 @@ public class Bitso {
     }
 
     public BookOrder findMatchingOrders(JSONObject o, BitsoBook book) {
-        BookOrder toRet = null;
-        if (o.has("id")) {
-            toRet = findMatchingOrders(o.getString("id"));
-        }
-        if (toRet == null) {
-            logError("Unable to find order in recent transactions");
-            Helpers.printStackTrace();
+        if (!o.has("id")) {
+            logError("Unable to find a matching order without an id: " + o.toString());
+            return null;
         }
 
-        return toRet;
+        int counter = 0;
+        if (++counter < 5) {
+            BookOrder bo = findMatchingOrders(o.getString("id"), book);
+            if (bo != null) return bo;
+            try {
+                Thread.sleep(100 * counter);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        logError("Unable to find order in recent transactions");
+        Helpers.printStackTrace();
+        return null;
     }
 
     public static BookOrder processBookOrderJSON(String json) {

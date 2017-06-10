@@ -58,15 +58,12 @@ public class BitsoUserTransactions {
                 m.method = o.getString("method");
                 movements.add(m);
             } else if (transactionType == 2) {
+                BitsoCurrency majorCurrency = book.getMajor();
+                BitsoCurrency minorCurrency = book.getMinor();
                 BigDecimal price = new BigDecimal(o.getString("rate"));
-                BigDecimal major = null;
-                if (o.has("btc")) {
-                    major = new BigDecimal(o.getString("btc"));
-                } else if (o.has("eth")) {
-                    major = new BigDecimal(o.getString("eth"));
-                }
+                BigDecimal major = new BigDecimal(o.getString(majorCurrency.toString()));
 
-                BigDecimal minor = new BigDecimal(o.getString("mxn"));
+                BigDecimal minor = new BigDecimal(o.getString(minorCurrency.toString()));
                 BookOrder.TYPE type = BookOrder.TYPE.SELL;
                 if (major.compareTo(BigDecimal.ZERO) > 0) {
                     type = BookOrder.TYPE.BUY;
