@@ -584,9 +584,10 @@ public class Bitso {
             return null;
         }
 
+        String id = o.getString("id");
         int counter = 0;
         if (++counter < 5) {
-            BookOrder bo = findMatchingOrders(o.getString("id"), book);
+            BookOrder bo = findMatchingOrders(id, book);
             if (bo != null) return bo;
             try {
                 Thread.sleep(100 * counter);
@@ -595,7 +596,7 @@ public class Bitso {
             }
         }
 
-        logError("Unable to find order in recent transactions");
+        logError("Unable to find order in recent transactions: " + id);
         Helpers.printStackTrace();
         return null;
     }
