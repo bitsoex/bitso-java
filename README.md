@@ -1,5 +1,5 @@
 # bitso-java
-[Bitso's](htt ps://bitso.com) official Java wrapper to interact with the [Bitso REST API v3](https://bitso.com/api_info).
+[Bitso's](https://bitso.com) official Java wrapper to interact with the [Bitso REST API v3](https://bitso.com/api_info).
 
 ## Installation
 
