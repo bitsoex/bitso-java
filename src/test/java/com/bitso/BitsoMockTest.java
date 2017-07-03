@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.bitso.exceptions.BitsoAPIException;
 import com.bitso.exchange.BookInfo;
 import com.bitso.helpers.Helpers;
 
@@ -68,7 +69,7 @@ public class BitsoMockTest extends BitsoTest {
         setUpDebitCardWithdrawal(Helpers.getJSONFromFile("privateDebitCardWithdrawal.json"));
     }
 
-    private void setUpMockitoActions() {
+    private void setUpMockitoActions() throws BitsoAPIException {
         // Mockito.when(mBitso.getAvailableBooks()).thenReturn(mockAvailableBooks);
         Mockito.when(mBitso.getTicker()).thenReturn(mockTicker);
         Mockito.when(mBitso.getOrderBook(BitsoBook.BTC_MXN)).thenReturn(mockOrderBook);
@@ -275,14 +276,14 @@ public class BitsoMockTest extends BitsoTest {
     }
 
     @Test
-    public void testSPEIWithdrawal() {
+    public void testSPEIWithdrawal() throws BitsoAPIException {
         BitsoWithdrawal speiWithdrawal = mBitso.speiWithdrawal(new BigDecimal("50"), "name", "surname",
                 "044180001059660729", "testing reference", "5706");
         assertEquals(true, nullCheck(speiWithdrawal, BitsoWithdrawal.class));
     }
 
     @Test
-    public void testDebitCardWithdrawal() {
+    public void testDebitCardWithdrawal() throws BitsoAPIException {
         BitsoWithdrawal debitCardWithdrawal = mBitso.debitCardWithdrawal(new BigDecimal("50"), "name test",
                 "surname test", "5579209071039769", "40044");
         assertEquals(true, nullCheck(debitCardWithdrawal, BitsoWithdrawal.class));

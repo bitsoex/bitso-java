@@ -26,8 +26,15 @@ import javax.xml.datatype.DatatypeFactory;
 
 public class Helpers {
     private static final String PATH = "src/test/java/JSONFiles/";
+    
+    public static final int ERROR_NUMBER_PARSE_JSON = 400;
+    public static final int ERROR_NUMBER_NO_PAYLOAD = 500;
+    public static final String ERROR_PARSE_JSON = "Error parsing json";
+    public static final String ERROR_NO_PAYLOAD = "Error server response does not have payload";
+    
     public static final String dateTimeFormatterZOffset = ("yyyy-MM-dd'T'HH:mm:ssZZZ");
     public static final String dateTimeFormatterXOffset = ("yyyy-MM-dd'T'HH:mm:ssXXX");
+    
     private static DatatypeFactory dtf;
 
     static {

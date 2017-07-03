@@ -14,6 +14,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.bitso.exceptions.BitsoAPIException;
 import com.bitso.exchange.BookInfo;
 import com.bitso.exchange.Ticker;
 
@@ -22,7 +23,7 @@ public abstract class BitsoTest {
 
     // Test public Rest API
     @Test
-    public void testAvailableBooks() {
+    public void testAvailableBooks() throws BitsoAPIException {
         BookInfo[] books = mBitso.getAvailableBooks();
         assertEquals(true, (books != null));
         int totalElements = books.length;
@@ -33,7 +34,7 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testTicker() {
+    public void testTicker() throws BitsoAPIException {
         BitsoTicker[] tickers = mBitso.getTicker();
         assertEquals(tickers != null, true);
         int totalElements = tickers.length;
@@ -44,7 +45,7 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testOrderBook() {
+    public void testOrderBook() throws BitsoAPIException {
         BookInfo[] availableBooks = mBitso.getAvailableBooks();
         assertEquals(availableBooks != null, true);
         for (BookInfo bookInfo : availableBooks) {
@@ -58,7 +59,7 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testTrades() throws InterruptedException {
+    public void testTrades() throws InterruptedException, BitsoAPIException {
         BookInfo[] availableBooks = mBitso.getAvailableBooks();
         assertEquals(availableBooks != null, true);
         for (BookInfo bookInfo : availableBooks) {
@@ -72,10 +73,12 @@ public abstract class BitsoTest {
 
             // TODO:
             // This should return null due it's a negative value on limit
-            BitsoTransactions bitsoTransactionNegativeLimit = mBitso.getTrades(bookInfo.getBook(),
-                    "limit=-10");
-            assertEquals((bitsoTransactionNegativeLimit != null || bitsoTransactionNegativeLimit == null),
-                    true);
+            try{
+                BitsoTransactions bitsoTransactionNegativeLimit = mBitso.getTrades(bookInfo.getBook(),
+                        "limit=-10");
+            }catch (BitsoAPIException bitsoAPIException) {
+                assertEquals(bitsoAPIException != null, true);
+            }
 
             Thread.sleep(5_000);
 
@@ -156,13 +159,13 @@ public abstract class BitsoTest {
 
     // Test private Rest API
     @Test
-    public void testAccountStatus() {
+    public void testAccountStatus() throws BitsoAPIException {
         BitsoAccountStatus bitsoAccountStatus = mBitso.getAccountStatus();
         assertEquals(nullCheck(bitsoAccountStatus, BitsoAccountStatus.class), true);
     }
 
     @Test
-    public void testAccountBalance() {
+    public void testAccountBalance() throws BitsoAPIException {
         BitsoBalance bitsoBalance = mBitso.getAccountBalance();
         assertEquals(nullCheck(bitsoBalance, BitsoBalance.class), true);
         HashMap<String, BitsoBalance.Balance> balances = bitsoBalance.getBalances();
@@ -175,7 +178,7 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testFees() {
+    public void testFees() throws BitsoAPIException {
         BitsoFee bitsoFee = mBitso.getFees();
         assertEquals(nullCheck(bitsoFee, BitsoFee.class), true);
         HashMap<BitsoBook, BitsoFee.Fee> fees = bitsoFee.getFees();
@@ -188,7 +191,7 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testLedger() throws InterruptedException {
+    public void testLedger() throws InterruptedException, BitsoAPIException {
         int totalElements = 0;
 
         BitsoOperation[] defaultLedger = mBitso.getLedger("");
@@ -307,7 +310,7 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testWithdrawals() throws InterruptedException {
+    public void testWithdrawals() throws InterruptedException, BitsoAPIException {
         int totalElementsFirstCall = 0;
         int totalElements = 0;
 
@@ -403,7 +406,7 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void tesFundings() throws InterruptedException {
+    public void tesFundings() throws InterruptedException, BitsoAPIException {
         int totalElementsFirstCall = 0;
         int totalElements = 0;
 
@@ -496,7 +499,7 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testUserTrades() throws InterruptedException {
+    public void testUserTrades() throws InterruptedException, BitsoAPIException {
         int totalElementsFirstCall = 0;
         int totalElements = 0;
 
@@ -589,7 +592,7 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testOrderTrades() throws InterruptedException {
+    public void testOrderTrades() throws InterruptedException, BitsoAPIException {
         int totalElements = 0;
 
         // TODO:
@@ -616,7 +619,7 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testOpenOrders() {
+    public void testOpenOrders() throws BitsoAPIException {
         BitsoBook[] bitsoBooks = BitsoBook.values();
         for (BitsoBook bitsoBook : bitsoBooks) {
             BitsoOrder[] orders = mBitso.getOpenOrders(bitsoBook);
@@ -627,7 +630,7 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testLookUpOrders() throws InterruptedException {
+    public void testLookUpOrders() throws InterruptedException, BitsoAPIException {
         List<BitsoOrder> openOrders = new ArrayList<>();
         BitsoBook[] bitsoBooks = BitsoBook.values();
         for (BitsoBook bitsoBook : bitsoBooks) {
@@ -667,7 +670,7 @@ public abstract class BitsoTest {
     }
 
     // @Test
-    public void testTrading() throws InterruptedException {
+    public void testTrading() throws InterruptedException, BitsoAPIException {
         List<String> orders = new ArrayList<>();
         String canceledOrders[] = null;
 
@@ -709,7 +712,7 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testFundingDestination() throws InterruptedException {
+    public void testFundingDestination() throws InterruptedException, BitsoAPIException {
         Map<String, String> btcFundingDestination = mBitso.fundingDestination("fund_currency=btc");
         assertEquals(true, (btcFundingDestination != null));
         assertEquals(true, (btcFundingDestination.containsKey("account_identifier_name")
@@ -733,7 +736,7 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testGetBanks() {
+    public void testGetBanks() throws BitsoAPIException {
         Map<String, String> bitsoBanks = mBitso.getBanks();
         assertEquals(true, (bitsoBanks != null));
         assertEquals(false, bitsoBanks.isEmpty());

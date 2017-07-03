@@ -16,6 +16,7 @@ import com.bitso.BitsoBook;
 import com.bitso.BitsoOrder;
 import com.bitso.BitsoOrderBook;
 import com.bitso.BitsoOrderBook.PulicOrder;
+import com.bitso.exceptions.BitsoAPIException;
 import com.bitso.helpers.Helpers;
 import com.bitso.websockets.BitsoChannels;
 import com.bitso.websockets.BitsoStreamDiffOrders;
@@ -127,26 +128,31 @@ public class BitsoWebSocketExample extends BitsoWebSocketObserver {
             mBitso = new Bitso("", "", 0, Boolean.TRUE, Boolean.TRUE);
         }
 
-        mLiveOrderBook = mBitso.getOrderBook(BitsoBook.BTC_MXN, Boolean.FALSE);
+        try {
+            mLiveOrderBook = mBitso.getOrderBook(BitsoBook.BTC_MXN, Boolean.FALSE);
 
-        mCurrentSequenceNumber = mLiveOrderBook.getSequence();
-        mOrderBookObtained = Boolean.TRUE;
+            mCurrentSequenceNumber = mLiveOrderBook.getSequence();
+            mOrderBookObtained = Boolean.TRUE;
 
-        for (PulicOrder publicOrder : mLiveOrderBook.getAsks()) {
-            mAsks.manageOrder(publicOrder.getOrderId(), new OrderUpdate(publicOrder.getOrderId(),
-                    publicOrder.getPrice(), publicOrder.getAmount(), mCurrentSequenceNumber));
+            for (PulicOrder publicOrder : mLiveOrderBook.getAsks()) {
+                mAsks.manageOrder(publicOrder.getOrderId(), new OrderUpdate(publicOrder.getOrderId(),
+                        publicOrder.getPrice(), publicOrder.getAmount(), mCurrentSequenceNumber));
+            }
+
+            for (PulicOrder publicOrder : mLiveOrderBook.getBids()) {
+                mBids.manageOrder(publicOrder.getOrderId(), new OrderUpdate(publicOrder.getOrderId(),
+                        publicOrder.getPrice(), publicOrder.getAmount(), mCurrentSequenceNumber));
+            }
+
+            mAsks.updateMaxMin(mCurrentSequenceNumber);
+            mBids.updateMaxMin(mCurrentSequenceNumber);
+
+            System.out.println("Best ask: " + mAsks.getMinPrice());
+            System.out.println("Best bid: " + mBids.getMaxPrice());
+        } catch (BitsoAPIException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-
-        for (PulicOrder publicOrder : mLiveOrderBook.getBids()) {
-            mBids.manageOrder(publicOrder.getOrderId(), new OrderUpdate(publicOrder.getOrderId(),
-                    publicOrder.getPrice(), publicOrder.getAmount(), mCurrentSequenceNumber));
-        }
-
-        mAsks.updateMaxMin(mCurrentSequenceNumber);
-        mBids.updateMaxMin(mCurrentSequenceNumber);
-
-        System.out.println("Best ask: " + mAsks.getMinPrice());
-        System.out.println("Best bid: " + mBids.getMaxPrice());
     }
 
     public class Operation {
