@@ -22,6 +22,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.net.ssl.HttpsURLConnection;
 
+import org.apache.commons.logging.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.experimental.theories.Theories;
@@ -31,7 +32,7 @@ import com.bitso.helpers.Helpers;
 import com.bitso.http.BlockingHttpClient;
 
 public class Bitso {
-    private static final String BITSO_BASE_URL_PRODUCTION = "https://bitso.com";
+    private static final String BITSO_BASE_URL_PRODUCTION = "https://api.bitso.com";
     private static final String BITSO_BASE_URL_DEV = "https://dev.bitso.com";
 
     public static long THROTTLE_MS = 1000;
@@ -810,7 +811,7 @@ public class Bitso {
         return response;
     }
 
-    private String sendBitsoGet(String requestPath) {
+    public String sendBitsoGet(String requestPath) {
         return sendBitsoHttpRequest(requestPath, "GET");
     }
 
@@ -872,7 +873,7 @@ public class Bitso {
         return stringBuilder.toString();
     }
 
-    private String processQueryParameters(String separator, String... parameters) {
+    public String processQueryParameters(String separator, String... parameters) {
         if (parameters == null) {
             return null;
         }
