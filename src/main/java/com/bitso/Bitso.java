@@ -14,7 +14,6 @@ import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.AbstractMap;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -22,10 +21,8 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.net.ssl.HttpsURLConnection;
 
-import org.apache.commons.logging.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.experimental.theories.Theories;
 
 import com.bitso.exceptions.BitsoAPIException;
 import com.bitso.exchange.BookInfo;
@@ -465,6 +462,9 @@ public class Bitso {
         parameters.put("notes_ref", notesReference);
         parameters.put("numeric_ref", numericReference);
         String postResponse = sendBitsoPost(request, parameters);
+
+        log(postResponse);
+
         JSONObject payloadJSON = getJSONPayload(postResponse);
         return new BitsoWithdrawal(payloadJSON);
     }
@@ -615,10 +615,7 @@ public class Bitso {
             con.setRequestMethod("GET");
             con.setRequestProperty("User-Agent", "Android");
 
-            if (con.getResponseCode() == 200) {
-                int responseCode = con.getResponseCode();
-                return convertInputStreamToString(con.getInputStream());
-            }
+            return convertInputStreamToString(con.getInputStream());
         } catch (MalformedURLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -640,10 +637,8 @@ public class Bitso {
                     buildBitsoAuthHeader(requestPath, "GET", key, secret));
             connection.setRequestProperty("User-Agent", "Bitso-java-api");
             connection.setRequestMethod(method);
-            if (connection.getResponseCode() == 200) {
-                InputStream inputStream = new BufferedInputStream(connection.getInputStream());
-                response = convertInputStreamToString(inputStream);
-            }
+            InputStream inputStream = new BufferedInputStream(connection.getInputStream());
+            response = convertInputStreamToString(inputStream);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (ProtocolException e) {
@@ -674,11 +669,11 @@ public class Bitso {
         return null;
     }
 
-    private String sendBitsoPost(String url) {
+    public String sendBitsoPost(String url) {
         return sendBitsoPost(url, null);
     }
 
-    private String sendBitsoPost(String requestPath, JSONObject jsonPayload) {
+    public String sendBitsoPost(String requestPath, JSONObject jsonPayload) {
         long nonce = System.currentTimeMillis() + System.currentTimeMillis();
         String jsonString = "";
         if (jsonPayload != null) {
@@ -689,15 +684,11 @@ public class Bitso {
         HashMap<String, String> headers = new HashMap<String, String>();
         headers.put("Content-Type", "application/json");
         headers.put(header.getKey(), header.getValue());
-        try {
-            return client.sendPost(baseUrl + requestPath, jsonString, headers);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+
+        return client.sendPost(baseUrl + requestPath, jsonString, headers);
     }
 
-    private static String convertInputStreamToString(InputStream inputStream) {
+    public static String convertInputStreamToString(InputStream inputStream) {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         StringBuilder stringBuilder = new StringBuilder();
         String line = null;
