@@ -7,7 +7,7 @@ import com.bitso.helpers.Helpers;
 
 public class BitsoTicker extends Ticker {
 
-    public String book;
+    private String book;
 
     public BitsoTicker(JSONObject o) {
         mLast = Helpers.getBD(o, "last");
@@ -19,5 +19,13 @@ public class BitsoTicker extends Ticker {
         mAsk = Helpers.getBD(o, "ask");
         mCreatedAt = Helpers.getZonedDatetime(o, "created_at");
         book = Helpers.getString(o, "book");
+    }
+
+    public String getBook() {
+        return book;
+    }
+
+    public void setBook(String book) {
+        this.book = book;
     }
 }
