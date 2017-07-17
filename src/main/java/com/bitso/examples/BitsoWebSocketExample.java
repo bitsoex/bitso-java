@@ -12,7 +12,6 @@ import java.util.Observable;
 import javax.net.ssl.SSLException;
 import org.json.JSONObject;
 import com.bitso.Bitso;
-import com.bitso.BitsoBook;
 import com.bitso.BitsoOrder;
 import com.bitso.BitsoOrderBook;
 import com.bitso.BitsoOrderBook.PulicOrder;
@@ -25,6 +24,7 @@ import com.bitso.websockets.BitsoWebSocketObserver;
 import com.bitso.websockets.BitsoWebSocketPublicOrder;
 
 public class BitsoWebSocketExample extends BitsoWebSocketObserver {
+    private final String BTC_MXN_BOOK = "btc_mxn";
 
     private Operation mBids;
     private Operation mAsks;
@@ -129,7 +129,7 @@ public class BitsoWebSocketExample extends BitsoWebSocketObserver {
         }
 
         try {
-            mLiveOrderBook = mBitso.getOrderBook(BitsoBook.BTC_MXN, Boolean.FALSE);
+            mLiveOrderBook = mBitso.getOrderBook(BTC_MXN_BOOK, Boolean.FALSE);
 
             mCurrentSequenceNumber = mLiveOrderBook.getSequence();
             mOrderBookObtained = Boolean.TRUE;

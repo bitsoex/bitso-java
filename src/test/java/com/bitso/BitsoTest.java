@@ -112,7 +112,7 @@ public abstract class BitsoTest {
             Thread.sleep(5_000);
 
             BitsoTransactions bitsoTransactionSortAsc = mBitso.getTrades(bookInfo.getBook(),
-                    "sort=" + BitsoSort.ASC.toString());
+                    "sort=asc");
             innerTransactions = bitsoTransaction.getTransactionsList();
             totalElements = innerTransactions.length;
             assertEquals(bitsoTransactionSortAsc != null, true);
@@ -133,7 +133,7 @@ public abstract class BitsoTest {
             // TODO:
             // This should return a correct DESC order and is not doing it
             BitsoTransactions bitsoTransactionSortDesc = mBitso.getTrades(bookInfo.getBook(),
-                    "sort=" + BitsoSort.DESC.toString());
+                    "sort=desc");
             innerTransactions = bitsoTransaction.getTransactionsList();
             totalElements = innerTransactions.length;
             assertEquals(bitsoTransactionSortDesc != null, true);
@@ -152,7 +152,7 @@ public abstract class BitsoTest {
             Thread.sleep(5_000);
 
             BitsoTransactions bitsoTransactionSortLimit = mBitso.getTrades(bookInfo.getBook(),
-                    "sort=" + BitsoSort.ASC.toString(), "limit=15");
+                    "sort=asc", "limit=15");
             totalElements = bitsoTransactionSortLimit.getTransactionsList().length;
             assertEquals(bitsoTransactionSortLimit != null, true);
             assertEquals((totalElements >= 0 && totalElements <= 15), true);
@@ -183,9 +183,9 @@ public abstract class BitsoTest {
     public void testFees() throws BitsoAPIException {
         BitsoFee bitsoFee = mBitso.getFees();
         assertEquals(nullCheck(bitsoFee, BitsoFee.class), true);
-        HashMap<BitsoBook, BitsoFee.Fee> fees = bitsoFee.getFees();
-        Set<BitsoBook> keys = fees.keySet();
-        Iterator<BitsoBook> iterator = keys.iterator();
+        HashMap<String, BitsoFee.Fee> fees = bitsoFee.getFees();
+        Set<String> keys = fees.keySet();
+        Iterator<String> iterator = keys.iterator();
         while (iterator.hasNext()) {
             BitsoFee.Fee currentFee = fees.get(iterator.next());
             assertEquals(nullCheck(currentFee, BitsoFee.Fee.class), true);
@@ -622,9 +622,10 @@ public abstract class BitsoTest {
 
     @Test
     public void testOpenOrders() throws BitsoAPIException {
-        BitsoBook[] bitsoBooks = BitsoBook.values();
-        for (BitsoBook bitsoBook : bitsoBooks) {
-            BitsoOrder[] orders = mBitso.getOpenOrders(bitsoBook);
+        BookInfo[] books = mBitso.getAvailableBooks();
+        assertEquals(books != null, true);
+        for (BookInfo book : books) {
+            BitsoOrder[] orders = mBitso.getOpenOrders(book.getBook());
             for (BitsoOrder bitsoOrder : orders) {
                 assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
             }
@@ -634,9 +635,9 @@ public abstract class BitsoTest {
     @Test
     public void testLookUpOrders() throws InterruptedException, BitsoAPIException {
         List<BitsoOrder> openOrders = new ArrayList<>();
-        BitsoBook[] bitsoBooks = BitsoBook.values();
-        for (BitsoBook bitsoBook : bitsoBooks) {
-            BitsoOrder[] orders = mBitso.getOpenOrders(bitsoBook);
+        BookInfo[] books = mBitso.getAvailableBooks();
+        for (BookInfo book : books) {
+            BitsoOrder[] orders = mBitso.getOpenOrders(book.getBook());
             for (BitsoOrder bitsoOrder : orders) {
                 openOrders.add(bitsoOrder);
             }
@@ -677,7 +678,7 @@ public abstract class BitsoTest {
         String canceledOrders[] = null;
 
         for (int i = 0; i < 5; i++) {
-            String orderId = mBitso.placeOrder(BitsoBook.BTC_MXN, BitsoOrder.SIDE.BUY, BitsoOrder.TYPE.LIMIT,
+            String orderId = mBitso.placeOrder("btc_mxn", BitsoOrder.SIDE.BUY, BitsoOrder.TYPE.LIMIT,
                     new BigDecimal("0.001"), null, new BigDecimal("10000"));
             assertEquals(orderId != null, true);
             orders.add(orderId);
@@ -686,7 +687,7 @@ public abstract class BitsoTest {
         Thread.sleep(1_000);
 
         for (int i = 0; i < 5; i++) {
-            String orderId = mBitso.placeOrder(BitsoBook.BTC_MXN, BitsoOrder.SIDE.SELL, BitsoOrder.TYPE.LIMIT,
+            String orderId = mBitso.placeOrder("btc_mxn", BitsoOrder.SIDE.SELL, BitsoOrder.TYPE.LIMIT,
                     new BigDecimal("0.001"), null, new BigDecimal("80000"));
             assertEquals(orderId != null, true);
             orders.add(orderId);

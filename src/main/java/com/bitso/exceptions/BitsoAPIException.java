@@ -11,28 +11,16 @@ public class BitsoAPIException extends Exception {
         this.mErrorMessage = errorMessage;
     }
 
-    public boolean ismStatus() {
+    public boolean isStatus() {
         return mStatus;
     }
 
-    public void setmStatus(boolean mStatus) {
-        this.mStatus = mStatus;
-    }
-
-    public int getmErrorCode() {
+    public int getErrorCode() {
         return mErrorCode;
     }
 
-    public void setmErrorCode(int mErrorCode) {
-        this.mErrorCode = mErrorCode;
-    }
-
-    public String getmErrorMessage() {
+    public String getErrorMessage() {
         return mErrorMessage;
-    }
-
-    public void setmErrorMessage(String mErrorMessage) {
-        this.mErrorMessage = mErrorMessage;
     }
 
     @Override

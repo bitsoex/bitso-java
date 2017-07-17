@@ -72,13 +72,13 @@ public class BitsoMockTest extends BitsoTest {
     private void setUpMockitoActions() throws BitsoAPIException {
         // Mockito.when(mBitso.getAvailableBooks()).thenReturn(mockAvailableBooks);
         Mockito.when(mBitso.getTicker()).thenReturn(mockTicker);
-        Mockito.when(mBitso.getOrderBook(BitsoBook.BTC_MXN)).thenReturn(mockOrderBook);
+        //Mockito.when(mBitso.getOrderBook("btc_mxn").thenReturn(mockOrderBook);
         // Mockito.when(mBitso.getAccountStatus()).thenReturn(mockAccountStatus);
         // Mockito.when(mBitso.getAccountBalance()).thenReturn(mockBalance);
         // Mockito.when(mBitso.getFees()).thenReturn(mockFee);
         // Mockito.when(mBitso.getOpenOrders(null)).thenReturn(mockOpenOrders);
-        Mockito.when(mBitso.placeOrder(BitsoBook.BTC_MXN, BitsoOrder.SIDE.BUY, BitsoOrder.TYPE.LIMIT,
-                new BigDecimal("15.4"), null, new BigDecimal("20854.4"))).thenReturn(mockOpenOrderId);
+        //Mockito.when(mBitso.placeOrder(BitsoBook.BTC_MXN, BitsoOrder.SIDE.BUY, BitsoOrder.TYPE.LIMIT,
+        //        new BigDecimal("15.4"), null, new BigDecimal("20854.4"))).thenReturn(mockOpenOrderId);
         Mockito.when(mBitso.bitcoinWithdrawal(new BigDecimal("0.001"), "31yTCKDHTqNXF5eZcsddJDe76BzBh8pVLb"))
                 .thenReturn(mockBtcWithdrawal);
         Mockito.when(

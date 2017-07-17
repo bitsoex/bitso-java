@@ -81,13 +81,13 @@ public class BitsoOrderBook {
     }
 
     public class PulicOrder implements Comparable<PulicOrder> {
-        private BitsoBook mBook;
+        private String mBook;
         private BigDecimal mPrice;
         private BigDecimal mAmount;
         private String mOrderId;
 
         public PulicOrder(JSONObject o) {
-            mBook = Helpers.getBook(Helpers.getString(o, "book"));
+            mBook = Helpers.getString(o, "book");
             mPrice = Helpers.getBD(o, "price");
             mAmount = Helpers.getBD(o, "amount");
             if (o.has("oid")) {
@@ -97,11 +97,11 @@ public class BitsoOrderBook {
             }
         }
 
-        public BitsoBook getBook() {
+        public String getBook() {
             return mBook;
         }
 
-        public void setBook(BitsoBook mBook) {
+        public void setBook(String mBook) {
             this.mBook = mBook;
         }
 

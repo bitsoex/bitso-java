@@ -33,7 +33,7 @@ public class BitsoOrder {
         }
     }
 
-    private BitsoBook book;
+    private String book;
     private BigDecimal originalAmount;
     private BigDecimal unfilledAmount;
     private BigDecimal originalValue;
@@ -46,7 +46,7 @@ public class BitsoOrder {
     private TYPE type;
 
     public BitsoOrder(JSONObject o) {
-        book = Helpers.getBook(Helpers.getString(o, "book"));
+        book = Helpers.getString(o, "book");
         originalAmount = Helpers.getBD(o, "original_amount");
         unfilledAmount = Helpers.getBD(o, "unfilled_amount");
         originalValue = Helpers.getBD(o, "original_value");
@@ -83,11 +83,11 @@ public class BitsoOrder {
         return BitsoOrder.TYPE.valueOf(type.toUpperCase());
     }
 
-    public BitsoBook getBook() {
+    public String getBook() {
         return book;
     }
 
-    public void setBook(BitsoBook book) {
+    public void setBook(String book) {
         this.book = book;
     }
 

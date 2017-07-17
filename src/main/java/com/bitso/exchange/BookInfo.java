@@ -4,13 +4,12 @@ import java.math.BigDecimal;
 
 import org.json.JSONObject;
 
-import com.bitso.BitsoBook;
 import com.bitso.BitsoOperation;
 import com.bitso.helpers.Helpers;
 
 public class BookInfo {
 
-    private BitsoBook mBook;
+    private String mBook;
     private BigDecimal mMinAmount;
     private BigDecimal mMaxAmount;
     private BigDecimal mMinPrice;
@@ -25,14 +24,14 @@ public class BookInfo {
         mMaxPrice = Helpers.getBD(o, "maximum_price");
         mMinValue = Helpers.getBD(o, "minimum_value");
         mMaxValue = Helpers.getBD(o, "maximum_value");
-        mBook = BitsoBook.valueOf(Helpers.getString(o, "book").toUpperCase());
+        mBook = Helpers.getString(o, "book");
     }
 
-    public BitsoBook getBook() {
+    public String getBook() {
         return mBook;
     }
 
-    public void setBook(BitsoBook mBook) {
+    public void setBook(String mBook) {
         this.mBook = mBook;
     }
 

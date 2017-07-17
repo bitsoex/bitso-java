@@ -19,8 +19,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.bitso.BitsoBook;
-
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
@@ -29,8 +27,10 @@ public class Helpers {
     
     public static final int ERROR_NUMBER_PARSE_JSON = 400;
     public static final int ERROR_NUMBER_NO_PAYLOAD = 500;
+    public static final int ERROR_NUMBER_INVALID_PAYLOAD = 500;
     public static final String ERROR_PARSE_JSON = "Error parsing json";
     public static final String ERROR_NO_PAYLOAD = "Error server response does not have payload";
+    public static final String ERROR_INVALID_PAYLOAD = "Payload does not match JSONObject or JSONArray";
     
     public static final String dateTimeFormatterZOffset = ("yyyy-MM-dd'T'HH:mm:ssZZZ");
     public static final String dateTimeFormatterXOffset = ("yyyy-MM-dd'T'HH:mm:ssXXX");
@@ -245,13 +245,5 @@ public class Helpers {
             }
         }
         return line;
-    }
-
-    public static BitsoBook getBook(String book) {
-        try {
-            return BitsoBook.valueOf(book.toUpperCase());
-        } catch (Exception e) {
-            return null;
-        }
     }
 }

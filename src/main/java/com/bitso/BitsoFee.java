@@ -10,7 +10,7 @@ import com.bitso.exchange.Ticker;
 import com.bitso.helpers.Helpers;
 
 public class BitsoFee {
-    private HashMap<BitsoBook, Fee> mFees;
+    private HashMap<String, Fee> mFees;
 
     public BitsoFee(JSONObject o) {
         mFees = new HashMap<>();
@@ -18,18 +18,18 @@ public class BitsoFee {
         int totalElements = jsonFees.length();
         for (int i = 0; i < totalElements; i++) {
             JSONObject fee = jsonFees.getJSONObject(i);
-            BitsoBook book = BitsoBook.valueOf(Helpers.getString(fee, "book").toUpperCase());
+            String book = Helpers.getString(fee, "book");
             Fee currentFee = new Fee(book, Helpers.getBD(fee, "fee_decimal"),
                     Helpers.getBD(fee, "fee_percent"));
             mFees.put(book, currentFee);
         }
     }
 
-    public HashMap<BitsoBook, Fee> getFees() {
+    public HashMap<String, Fee> getFees() {
         return mFees;
     }
 
-    public void setmFees(HashMap<BitsoBook, Fee> fees) {
+    public void setmFees(HashMap<String, Fee> fees) {
         this.mFees = fees;
     }
 
@@ -38,22 +38,22 @@ public class BitsoFee {
     }
 
     public class Fee {
-        private BitsoBook mBook;
+        private String mBook;
         private BigDecimal mFeeDecimal;
         private BigDecimal mFeePercent;
 
-        public Fee(BitsoBook mBook, BigDecimal mFeeDecimal, BigDecimal mFeePercent) {
+        public Fee(String mBook, BigDecimal mFeeDecimal, BigDecimal mFeePercent) {
             super();
             this.mBook = mBook;
             this.mFeeDecimal = mFeeDecimal;
             this.mFeePercent = mFeePercent;
         }
 
-        public BitsoBook getBook() {
+        public String getBook() {
             return mBook;
         }
 
-        public void setBook(BitsoBook mBook) {
+        public void setBook(String mBook) {
             this.mBook = mBook;
         }
 

@@ -18,8 +18,8 @@ public class BitsoTransactions {
             JSONObject o = jsonArray.getJSONObject(i);
             Transaction transaction = new Transaction(Helpers.getZonedDatetime(o, "created_at"),
                     String.valueOf(o.getInt("tid")), Helpers.getBD(o, "price"), Helpers.getBD(o, "amount"),
-                    BitsoSide.valueOf(Helpers.getString(o, "maker_side").toUpperCase()),
-                    BitsoBook.valueOf(Helpers.getString(o, "book").toUpperCase()));
+                    BitsoOrder.SIDE.valueOf(Helpers.getString(o, "maker_side").toUpperCase()),
+                    Helpers.getString(o, "book"));
             mTransactionsList[i] = transaction;
         }
     }
@@ -47,11 +47,11 @@ public class BitsoTransactions {
         private String tid;
         private BigDecimal price;
         private BigDecimal amount;
-        private BitsoSide side;
-        private BitsoBook book;
+        private BitsoOrder.SIDE side;
+        private String book;
 
-        public Transaction(Date date, String tid, BigDecimal price, BigDecimal amount, BitsoSide side,
-                BitsoBook book) {
+        public Transaction(Date date, String tid, BigDecimal price, BigDecimal amount, BitsoOrder.SIDE side,
+                String book) {
             super();
             this.date = date;
             this.tid = tid;
@@ -93,19 +93,19 @@ public class BitsoTransactions {
             this.amount = amount;
         }
 
-        public BitsoSide getSide() {
+        public BitsoOrder.SIDE getSide() {
             return side;
         }
 
-        public void setSide(BitsoSide side) {
+        public void setSide(BitsoOrder.SIDE side) {
             this.side = side;
         }
 
-        public BitsoBook getBook() {
+        public String getBook() {
             return book;
         }
 
-        public void setBook(BitsoBook book) {
+        public void setBook(String book) {
             this.book = book;
         }
 

@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
@@ -16,7 +15,6 @@ import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.AbstractHttpEntity;
 import org.apache.http.entity.ByteArrayEntity;
@@ -25,9 +23,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.json.JSONObject;
 
 public class BlockingHttpClient {
-
-    private static final String USER_AGENT = "Mozilla/5.0"; // TODO: maybe do something more
-                                                            // rational here
     private boolean log = false;
     private long throttleMs = -1;
     private long lastCallTime = 0;
@@ -106,10 +101,10 @@ public class BlockingHttpClient {
             errorDescription.put("message", "Not a Valid URL");
             errorDescription.put("code", 0322);
         } catch (ProtocolException e) {
-            errorDescription.put("message", e.toString());
+            errorDescription.put("message", "Protocol error");
             errorDescription.put("code", 0101);
         } catch (IOException e) {
-            errorDescription.put("message", e.toString());
+            errorDescription.put("message", "No fetched data");
             errorDescription.put("code", 0101);
         }
 
@@ -164,30 +159,21 @@ public class BlockingHttpClient {
     public String sendDelete(String url, HashMap<String, String> headers) throws Exception {
         throttle();
         HttpDelete deleteRequest = new HttpDelete(url);
-        // add request headers
+
+        // Add request headers
         if (headers != null) {
             for (Entry<String, String> e : headers.entrySet()) {
                 deleteRequest.addHeader(e.getKey(), e.getValue());
             }
-            log("\nHeaders are \n" + headers.toString());
         }
-
-        log("\nSending 'DELETE' request to URL : " + url);
         CloseableHttpResponse response = HttpClients.createDefault().execute(deleteRequest);
-        log("Response Code : " + response.getStatusLine().getStatusCode());
         BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-
         String inputLine;
         StringBuffer responseBody = new StringBuffer();
-
         while ((inputLine = in.readLine()) != null) {
             responseBody.append(inputLine);
         }
         in.close();
-        log(response);
-        log(responseBody);
-
         return responseBody.toString();
     }
-
 }
