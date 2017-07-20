@@ -21,6 +21,8 @@ public class BitsoAccountStatus {
     private String originOfFunds;
     private String firstName;
     private String lastName;
+    private boolean isCellphoneNumberVerified;
+    private String email;
 
     public BitsoAccountStatus(JSONObject o) {
         clientId = Helpers.getString(o, "client_id");
@@ -31,7 +33,8 @@ public class BitsoAccountStatus {
         monthlyLimit = Helpers.getBD(o, "monthly_limit");
         dailyRemaining = Helpers.getBD(o, "daily_remaining");
         monthlyRemaining = Helpers.getBD(o, "monthly_remaining");
-        cellphoneNumber = Helpers.getString(o, "cellphone_number");
+        isCellphoneNumberVerified = Helpers.getString(o, "cellphone_number").equals("verified") ? true
+                : false;
         officialId = Helpers.getString(o, "official_id");
         proofOfResidency = Helpers.getString(o, "proof_of_residency");
         signedContract = Helpers.getString(o, "signed_contract");
@@ -41,6 +44,9 @@ public class BitsoAccountStatus {
                 && (dailyLimit.compareTo(new BigDecimal("1000000")) == 0)) {
             monthlyLimit = dailyLimit.multiply(new BigDecimal("31"));
         }
+
+        cellphoneNumber = Helpers.getString(o, "cellphone_number_stored");
+        email = Helpers.getString(o, "email_stored");
     }
 
     public String getClientId() {
@@ -145,6 +151,18 @@ public class BitsoAccountStatus {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isCellphoneNumberVerified() {
+        return isCellphoneNumberVerified;
     }
 
     public String toString() {
