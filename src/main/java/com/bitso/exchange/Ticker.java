@@ -3,7 +3,6 @@ package com.bitso.exchange;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.bitso.BitsoTransactions;
 import com.bitso.helpers.Helpers;
 
 public class Ticker {

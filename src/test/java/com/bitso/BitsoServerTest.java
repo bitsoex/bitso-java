@@ -1,6 +1,7 @@
 package com.bitso;
 
 import org.junit.After;
+import org.junit.Assume;
 import org.junit.Before;
 
 public class BitsoServerTest extends BitsoTest {
@@ -12,7 +13,7 @@ public class BitsoServerTest extends BitsoTest {
         // If BITSO_DEV_PRIVATE and BITSO_DEV_PUBLIC_KEY
         // environment variables are set, tests will be executed
         // normally, otherwise, they will be ignored.
-        // Assume.assumeTrue((secret != null && key != null));
+        Assume.assumeTrue((secret != null && key != null));
 
         mBitso = new Bitso(key, secret, 0, true, true);
     }

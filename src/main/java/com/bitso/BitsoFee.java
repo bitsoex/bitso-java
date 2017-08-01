@@ -6,7 +6,6 @@ import java.util.HashMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.bitso.exchange.Ticker;
 import com.bitso.helpers.Helpers;
 
 public class BitsoFee {

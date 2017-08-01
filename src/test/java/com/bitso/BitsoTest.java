@@ -72,15 +72,10 @@ public abstract class BitsoTest {
             Thread.sleep(5_000);
 
             /*
-            // TODO:
-            // This should return null due it's a negative value on limit
-            try{
-                BitsoTransactions bitsoTransactionNegativeLimit = mBitso.getTrades(bookInfo.getBook(),
-                        "limit=-10");
-            }catch (BitsoAPIException bitsoAPIException) {
-                assertEquals(bitsoAPIException != null, true);
-            }
-            */
+             * // TODO: // This should return null due it's a negative value on limit try{ BitsoTransactions
+             * bitsoTransactionNegativeLimit = mBitso.getTrades(bookInfo.getBook(), "limit=-10"); }catch
+             * (BitsoAPIException bitsoAPIException) { assertEquals(bitsoAPIException != null, true); }
+             */
 
             Thread.sleep(5_000);
 
@@ -111,8 +106,7 @@ public abstract class BitsoTest {
 
             Thread.sleep(5_000);
 
-            BitsoTransactions bitsoTransactionSortAsc = mBitso.getTrades(bookInfo.getBook(),
-                    "sort=asc");
+            BitsoTransactions bitsoTransactionSortAsc = mBitso.getTrades(bookInfo.getBook(), "sort=asc");
             innerTransactions = bitsoTransaction.getTransactionsList();
             totalElements = innerTransactions.length;
             assertEquals(bitsoTransactionSortAsc != null, true);
@@ -132,8 +126,7 @@ public abstract class BitsoTest {
 
             // TODO:
             // This should return a correct DESC order and is not doing it
-            BitsoTransactions bitsoTransactionSortDesc = mBitso.getTrades(bookInfo.getBook(),
-                    "sort=desc");
+            BitsoTransactions bitsoTransactionSortDesc = mBitso.getTrades(bookInfo.getBook(), "sort=desc");
             innerTransactions = bitsoTransaction.getTransactionsList();
             totalElements = innerTransactions.length;
             assertEquals(bitsoTransactionSortDesc != null, true);
@@ -151,8 +144,8 @@ public abstract class BitsoTest {
 
             Thread.sleep(5_000);
 
-            BitsoTransactions bitsoTransactionSortLimit = mBitso.getTrades(bookInfo.getBook(),
-                    "sort=asc", "limit=15");
+            BitsoTransactions bitsoTransactionSortLimit = mBitso.getTrades(bookInfo.getBook(), "sort=asc",
+                    "limit=15");
             totalElements = bitsoTransactionSortLimit.getTransactionsList().length;
             assertEquals(bitsoTransactionSortLimit != null, true);
             assertEquals((totalElements >= 0 && totalElements <= 15), true);
@@ -593,7 +586,7 @@ public abstract class BitsoTest {
         assertEquals((excedingLimit != null || excedingLimit == null), true);
     }
 
-    @Test
+    // @Test
     public void testOrderTrades() throws InterruptedException, BitsoAPIException {
         int totalElements = 0;
 
@@ -620,7 +613,7 @@ public abstract class BitsoTest {
         }
     }
 
-    @Test
+    // @Test
     public void testOpenOrders() throws BitsoAPIException {
         BookInfo[] books = mBitso.getAvailableBooks();
         assertEquals(books != null, true);
@@ -632,7 +625,7 @@ public abstract class BitsoTest {
         }
     }
 
-    @Test
+    // @Test
     public void testLookUpOrders() throws InterruptedException, BitsoAPIException {
         List<BitsoOrder> openOrders = new ArrayList<>();
         BookInfo[] books = mBitso.getAvailableBooks();

@@ -1,6 +1,7 @@
 package com.bitso.exceptions;
 
 public class BitsoAPIException extends Exception {
+    private static final long serialVersionUID = 1L;
     private boolean mStatus;
     private int mErrorCode;
     private String mErrorMessage;

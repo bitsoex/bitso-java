@@ -2,19 +2,43 @@
 	"success": true,
 	"payload": [{
 		"book": "btc_mxn",
-		"minimum_price": "10.00",
-		"maximum_price": "50000.00",
-		"minimum_amount": "0.00500000",
-		"maximum_amount": "100000.00000000",
-		"minimum_value": "1.00",
+		"minimum_price": "500.00",
+		"maximum_price": "80000.00",
+		"minimum_amount": "0.00015",
+		"maximum_amount": "500.00000000",
+		"minimum_value": "5",
 		"maximum_value": "10000000.00"
 	}, {
 		"book": "eth_mxn",
 		"minimum_price": "10.00",
-		"maximum_price": "50000",
-		"minimum_amount": "0.10000000",
-		"maximum_amount": "100000.0000000",
-		"minimum_value": "1.00",
+		"maximum_price": "50000.00",
+		"minimum_amount": "0.001",
+		"maximum_amount": "100000.00000000",
+		"minimum_value": "5.00",
 		"maximum_value": "10000000.00"
+	}, {
+		"book": "xrp_btc",
+		"minimum_price": "0.00000100",
+		"maximum_price": "5000.00000000",
+		"minimum_amount": "0.00000100",
+		"maximum_amount": "100000.00000000",
+		"minimum_value": "0.00000100",
+		"maximum_value": "100000.00000000"
+	}, {
+		"book": "xrp_mxn",
+		"minimum_price": "0.0000100",
+		"maximum_price": "5000.00000000",
+		"minimum_amount": "0.5",
+		"maximum_amount": "500000.00000000",
+		"minimum_value": "5",
+		"maximum_value": "10000000.00000000"
+	}, {
+		"book": "eth_btc",
+		"minimum_price": "0.00000100",
+		"maximum_price": "5000.00000000",
+		"minimum_amount": "0.00000100",
+		"maximum_amount": "1000.00000000",
+		"minimum_value": "0.00000100",
+		"maximum_value": "1000.00000000"
 	}]
 }

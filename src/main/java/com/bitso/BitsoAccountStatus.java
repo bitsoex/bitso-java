@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 
 import org.json.JSONObject;
 
-import com.bitso.exchange.Ticker;
 import com.bitso.helpers.Helpers;
 
 public class BitsoAccountStatus {
