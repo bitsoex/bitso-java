@@ -1,0 +1,272 @@
+{
+	"success": true,
+	"payload": [{
+		"eid": "219099b2e170a15f31d87846d17b347e",
+		"operation": "fee",
+		"created_at": "2017-07-30T22:59:23+0000",
+		"balance_updates": [{
+			"currency": "xrp",
+			"amount": "-0.06313044"
+		}],
+		"details": {
+			"tid": "1082340",
+			"oid": "O688rrV8Mvm02dr1"
+		}
+	}, {
+		"eid": "44d8b20aae7abdccbb324f7689fb7bf1",
+		"operation": "fee",
+		"created_at": "2017-07-30T22:50:04+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "-0.001"
+		}],
+		"details": {
+			"wid": "5846de3223baf452e6be8fc7a24246c5"
+		}
+	}, {
+		"eid": "aafad85cf70a7461aa4ee23879b1cf14",
+		"operation": "fee",
+		"created_at": "2017-07-22T00:38:10+0000",
+		"balance_updates": [{
+			"currency": "eth",
+			"amount": "-0.02021779"
+		}],
+		"details": {
+			"tid": "1038400",
+			"oid": "ffaV7kh3m7vdrq85"
+		}
+	}, {
+		"eid": "33bd95af61764ca0260916f0e58de42b",
+		"operation": "fee",
+		"created_at": "2017-07-14T21:49:33+0000",
+		"balance_updates": [{
+			"currency": "xrp",
+			"amount": "-0.02542675"
+		}],
+		"details": {
+			"tid": "981760",
+			"oid": "nlqJmVk9Rvip8cOQ"
+		}
+	}, {
+		"eid": "73c2c49e4915cdcacdeaff3517dfa0e7",
+		"operation": "fee",
+		"created_at": "2017-07-07T02:10:23+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "-0.00100000"
+		}],
+		"details": {
+			"tid": "938792",
+			"oid": "klmamnrqkrM486X5"
+		}
+	}, {
+		"eid": "db44ab68f9acda822cbdc228365f3975",
+		"operation": "fee",
+		"created_at": "2017-07-07T01:53:03+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "-0.00019602"
+		}],
+		"details": {
+			"tid": "938732",
+			"oid": "85g7OkQXlJaR8l07"
+		}
+	}, {
+		"eid": "e6dbfc15af252a671c7fb78001d8feb7",
+		"operation": "fee",
+		"created_at": "2017-06-23T15:45:03+0000",
+		"balance_updates": [{
+			"currency": "eth",
+			"amount": "-0.0025"
+		}],
+		"details": {
+			"wid": "02679e5bc13712d673736fca25cb450f"
+		}
+	}, {
+		"eid": "6f2c0d54a1c343726f9591e6a5219445",
+		"operation": "fee",
+		"created_at": "2017-06-21T01:20:10+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "-0.00000125"
+		}],
+		"details": {
+			"tid": "846862",
+			"oid": "5qpn7ap5sfOnidVt"
+		}
+	}, {
+		"eid": "b72368d6e5c3abf467dc0eb7fbec51fa",
+		"operation": "fee",
+		"created_at": "2017-06-08T23:12:36+0000",
+		"balance_updates": [{
+			"currency": "xrp",
+			"amount": "-0.05123562"
+		}],
+		"details": {
+			"tid": "732272",
+			"oid": "RlrR6Q68072dfh6v"
+		}
+	}, {
+		"eid": "35531e9abbe92f5a641ff7b5a941f042",
+		"operation": "fee",
+		"created_at": "2017-05-29T23:27:20+0000",
+		"balance_updates": [{
+			"currency": "xrp",
+			"amount": "-0.05443200"
+		}],
+		"details": {
+			"tid": "650779",
+			"oid": "ddO7qronvc4m9nR1"
+		}
+	}, {
+		"eid": "7e019a2c307cd359b96700dd6828654c",
+		"operation": "fee",
+		"created_at": "2017-05-18T15:53:03+0000",
+		"balance_updates": [{
+			"currency": "eth",
+			"amount": "-0.005"
+		}],
+		"details": {
+			"wid": "ad2e5c02fb8714aeede339f6bb33f146"
+		}
+	}, {
+		"eid": "7d0a306ed8de9f7eb08a082cc3baddca",
+		"operation": "fee",
+		"created_at": "2017-05-18T15:40:03+0000",
+		"balance_updates": [{
+			"currency": "eth",
+			"amount": "-0.005"
+		}],
+		"details": {
+			"wid": "12b90eadc5cb68c8e36d2727b82b4f6c"
+		}
+	}, {
+		"eid": "90ef4b642c5f075eefa10df3bb3b617e",
+		"operation": "fee",
+		"created_at": "2017-05-18T15:34:11+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "-14.68941631"
+		}],
+		"details": {
+			"tid": "539395",
+			"oid": "87JsRRaJks8a1g08"
+		}
+	}, {
+		"eid": "e220eb4acd919be527899eb89e2b5cd1",
+		"operation": "fee",
+		"created_at": "2017-05-18T15:01:46+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "-60.80004000"
+		}],
+		"details": {
+			"tid": "539016",
+			"oid": "87JsRRaJks8a1g08"
+		}
+	}, {
+		"eid": "275606f3bbf4b1dea66ad06b8c9e009b",
+		"operation": "fee",
+		"created_at": "2017-05-18T15:01:41+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "-0.80000000"
+		}],
+		"details": {
+			"tid": "539015",
+			"oid": "87JsRRaJks8a1g08"
+		}
+	}, {
+		"eid": "a9300c2aa36e590e960aba3b15a74ed5",
+		"operation": "fee",
+		"created_at": "2017-05-18T14:59:53+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "-37.59744000"
+		}],
+		"details": {
+			"tid": "538992",
+			"oid": "87JsRRaJks8a1g08"
+		}
+	}, {
+		"eid": "2613c591864d287a01a3abe3a35714ef",
+		"operation": "fee",
+		"created_at": "2017-05-18T14:59:46+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "-7.32468844"
+		}],
+		"details": {
+			"tid": "538991",
+			"oid": "87JsRRaJks8a1g08"
+		}
+	}, {
+		"eid": "182c16ccb71849e8d705d1f27722846c",
+		"operation": "fee",
+		"created_at": "2017-05-18T14:57:22+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "-8.00000000"
+		}],
+		"details": {
+			"tid": "538960",
+			"oid": "3ckrkiX1torvVtn7"
+		}
+	}, {
+		"eid": "dd5af29e96c44a14d1f5784c8e5881cb",
+		"operation": "fee",
+		"created_at": "2017-05-18T14:57:22+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "-4.92547556"
+		}],
+		"details": {
+			"tid": "538959",
+			"oid": "3ckrkiX1torvVtn7"
+		}
+	}, {
+		"eid": "80017b584279978ab84f7a73a5abaf76",
+		"operation": "fee",
+		"created_at": "2017-05-18T14:54:02+0000",
+		"balance_updates": [{
+			"currency": "eth",
+			"amount": "-0.005"
+		}],
+		"details": {
+			"wid": "4e03097c5dcf8622e936e70d95a2cc3f"
+		}
+	}, {
+		"eid": "d4cf6f86311a0cad0da153a675c13a54",
+		"operation": "fee",
+		"created_at": "2017-05-13T02:33:03+0000",
+		"balance_updates": [{
+			"currency": "eth",
+			"amount": "-0.001"
+		}],
+		"details": {
+			"wid": "0fe4318fbdcb41dc31da6a30c5e40283"
+		}
+	}, {
+		"eid": "fe76360a5e89f6ad4b95d32d8915dcb3",
+		"operation": "fee",
+		"created_at": "2017-05-12T00:56:03+0000",
+		"balance_updates": [{
+			"currency": "eth",
+			"amount": "-0.001"
+		}],
+		"details": {
+			"wid": "9f78837fa77fb0def7ca880795043ee3"
+		}
+	}, {
+		"eid": "8797c38d2965043a78770b4ddcfe0461",
+		"operation": "fee",
+		"created_at": "2017-05-12T00:51:04+0000",
+		"balance_updates": [{
+			"currency": "eth",
+			"amount": "-0.001"
+		}],
+		"details": {
+			"wid": "3f02a28f675157f7ffa8c5df1e080169"
+		}
+	}]
+}

@@ -1,0 +1,329 @@
+{
+	"success": true,
+	"payload": [{
+		"eid": "b8480ed99d733c268408f4e367dc2eba",
+		"operation": "withdrawal",
+		"created_at": "2017-07-30T22:50:04+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "-3.20590715"
+		}],
+		"details": {
+			"method": "btc",
+			"method_name": "Bitcoin",
+			"wid": "5846de3223baf452e6be8fc7a24246c5"
+		}
+	}, {
+		"eid": "4f33f9d028d35caf7df1df6069b6e2b9",
+		"operation": "withdrawal",
+		"created_at": "2017-07-26T21:25:02+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "-1"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "c6c69a73e192c0b0515bafa6bab4cca2"
+		}
+	}, {
+		"eid": "d11b0c84e80acf576746db5b1923002d",
+		"operation": "withdrawal",
+		"created_at": "2017-07-26T21:14:26+0000",
+		"balance_updates": [{
+			"currency": "eth",
+			"amount": "-0.01"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "80799acd494470b919c3a9dadfc960f7"
+		}
+	}, {
+		"eid": "7877159e0e58853aed0b5c86325316f5",
+		"operation": "withdrawal",
+		"created_at": "2017-07-26T21:13:46+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "-0.0001"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "f74709fcb773d590cad4a56a5621bab1"
+		}
+	}, {
+		"eid": "aea0a5021e42d9e4b9cc4e690f6663e5",
+		"operation": "withdrawal",
+		"created_at": "2017-07-26T21:12:50+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "-12"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "02f4ea87d03d5317e4b4abb4b29077b7"
+		}
+	}, {
+		"eid": "2af3c5e36f3956d266301e7598d6bbc4",
+		"operation": "withdrawal",
+		"created_at": "2017-07-26T19:44:41+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "-17"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "a6302949bd9e6bf4f1f7a15e862fd0d2"
+		}
+	}, {
+		"eid": "02ef84ddd8738390a13bbaeb8a1b4681",
+		"operation": "withdrawal",
+		"created_at": "2017-07-26T19:44:11+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "-0.0001"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "7cebeeb5a00e7a514afcead169f78acd"
+		}
+	}, {
+		"eid": "52fb3f7338955570c4b79e234c240a42",
+		"operation": "withdrawal",
+		"created_at": "2017-07-26T19:43:14+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "-0.0001"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "9dbe4c53503a1037de98d4b6bd0dce20"
+		}
+	}, {
+		"eid": "99debcda722e7dd7ee7f6e3557f3fc19",
+		"operation": "withdrawal",
+		"created_at": "2017-07-26T19:42:44+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "-12"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "35852375cc6ae307cc854701d38649c8"
+		}
+	}, {
+		"eid": "7af38f6c4790a7a6bffc4f55189da91c",
+		"operation": "withdrawal",
+		"created_at": "2017-07-26T19:41:46+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "-12"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "11649fdc1c2c8e1b779a413361d9cd27"
+		}
+	}, {
+		"eid": "e41b34d9dbf9656e0f86a39fcb68d45b",
+		"operation": "withdrawal",
+		"created_at": "2017-07-26T19:41:39+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "-12"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "b14c9d15edbb49743a3b3fd46c42b4ec"
+		}
+	}, {
+		"eid": "860aaa3b22f4d2fde067b183fbb1b206",
+		"operation": "withdrawal",
+		"created_at": "2017-07-26T19:39:22+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "-0.0001"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "f125e997c2294393a2b877266361155a"
+		}
+	}, {
+		"eid": "8525f5a3ccb1416494f00f4bd58fac20",
+		"operation": "withdrawal",
+		"created_at": "2017-07-26T19:37:57+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "-0.0001"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "7469f074c59626e2f7bf1cdc0b235028"
+		}
+	}, {
+		"eid": "c27ace0b2d99f294fad3f71bcb1a9f80",
+		"operation": "withdrawal",
+		"created_at": "2017-07-26T19:37:04+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "-5"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "58fc86a71155ad17ccf9fce5baa2a761"
+		}
+	}, {
+		"eid": "58b7d2f24d42d5b15854811c8c34d1eb",
+		"operation": "withdrawal",
+		"created_at": "2017-07-21T21:55:16+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "-1"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "d14051ab201916b8ea0f8ad14a7e6c97"
+		}
+	}, {
+		"eid": "84082538facec8e2db41cf85be526bfe",
+		"operation": "withdrawal",
+		"created_at": "2017-07-21T21:25:17+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "-1"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "505c14b47be5fbe462c199b7ac45d03f"
+		}
+	}, {
+		"eid": "c585ff656b7f3c6416da92bf7459690b",
+		"operation": "withdrawal",
+		"created_at": "2017-07-21T18:53:01+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "-0.0001"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "c74a7cc79c3a59f3f110cf18d599311b"
+		}
+	}, {
+		"eid": "0df58dab36c494f6503672551a6f4f16",
+		"operation": "withdrawal",
+		"created_at": "2017-07-21T16:36:42+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "-0.0001"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "6ad79655dcd1ea4a8de8a2b484cd6664"
+		}
+	}, {
+		"eid": "d7072a3066734861897c1c6531d9f92d",
+		"operation": "withdrawal",
+		"created_at": "2017-07-18T16:29:10+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "-875.00000000"
+		}],
+		"details": {
+			"method": "sp",
+			"method_name": "SPEI Transfer",
+			"wid": "423bb226ca6e4c69785569b0307d6fa5"
+		}
+	}, {
+		"eid": "801cdcd89f431dbad88a0003aaf09d4f",
+		"operation": "withdrawal",
+		"created_at": "2017-07-14T19:56:09+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "-1.0E-5"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "74ce6f7e7921229bb6208cc43f42832d"
+		}
+	}, {
+		"eid": "9647d1a904b300446dc38d170eb5c056",
+		"operation": "withdrawal",
+		"created_at": "2017-07-14T18:14:05+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "-1.0E-5"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "8afc652c9d6eca7668ab505119cfa304"
+		}
+	}, {
+		"eid": "f836c0f7b40f9d94faf633c5f1121c20",
+		"operation": "withdrawal",
+		"created_at": "2017-07-14T18:11:49+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "-1.0E-5"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "90bbbefef5b9bfbee6dd86be334512da"
+		}
+	}, {
+		"eid": "734c1384e371d2e4e669fbe16db9d3d2",
+		"operation": "withdrawal",
+		"created_at": "2017-07-14T18:08:53+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "-0.0001"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "fdd9c3cff83d5f06a1a2e8c534c2c0a7"
+		}
+	}, {
+		"eid": "1b259fde6539d2ce4cd3ebdd2b54b83b",
+		"operation": "withdrawal",
+		"created_at": "2017-07-14T18:06:39+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "-0.0001"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "6ffd572f3b706c6f6b17d9af2c887a7a"
+		}
+	}, {
+		"eid": "000b367be9190bf2805676e2b3e7057f",
+		"operation": "withdrawal",
+		"created_at": "2017-07-14T18:02:32+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "-0.0001"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"wid": "112e21883bea8eea033048d7572aceb4"
+		}
+	}]
+}

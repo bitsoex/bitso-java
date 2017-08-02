@@ -7,19 +7,19 @@ import org.json.JSONObject;
 import com.bitso.helpers.Helpers;
 
 public class BitsoTrade {
-    protected String book;
-    protected BigDecimal major;
-    protected Date tradeDate;
-    protected BigDecimal minor;
-    protected BigDecimal feesAmount;
-    protected String feesCurrency;
-    protected BigDecimal price;
+    private String book;
+    private BigDecimal major;
+    private Date tradeDate;
+    private BigDecimal minor;
+    private BigDecimal feesAmount;
+    private String feesCurrency;
+    private BigDecimal price;
     // TODO:
     // Check how long the tradeId would be, in order
     // to save it in an int or long type
-    protected int tid;
-    protected String oid;
-    protected String side;
+    private int tid;
+    private String oid;
+    private String side;
 
     public BitsoTrade(JSONObject o) {
         book = Helpers.getString(o, "book");
@@ -116,6 +116,6 @@ public class BitsoTrade {
 
     @Override
     public String toString() {
-        return Helpers.fieldPrinter(this);
+        return Helpers.fieldPrinter(this, BitsoTrade.class);
     }
 }

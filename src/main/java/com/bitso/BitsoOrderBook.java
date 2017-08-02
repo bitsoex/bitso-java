@@ -10,25 +10,25 @@ import org.json.JSONObject;
 import com.bitso.helpers.Helpers;
 
 public class BitsoOrderBook {
-    public Date orderDate;
-    public int sequence;
-    public PulicOrder[] asks;
-    public PulicOrder[] bids;
+    private Date mOrderDate;
+    private int mSequence;
+    private PulicOrder[] mAsks;
+    private PulicOrder[] mBids;
 
-    public BitsoOrderBook(JSONObject o){
-        orderDate = Helpers.getZonedDatetime(o, "updated_at");
-        sequence = Helpers.getInt(o, "sequence");
+    public BitsoOrderBook(JSONObject o) {
+        this.mOrderDate = Helpers.getZonedDatetime(o, "updated_at");
+        this.mSequence = Helpers.getInt(o, "sequence");
         processOrders(o);
     }
-    
+
     private void processOrders(JSONObject o) {
         // Getting asks
         if (o.has("asks")) {
             JSONArray asksArray = o.getJSONArray("asks");
             int totalAsks = asksArray.length();
-            asks = new PulicOrder[totalAsks];
+            mAsks = new PulicOrder[totalAsks];
             for (int i = 0; i < totalAsks; i++) {
-                asks[i] = new PulicOrder(asksArray.getJSONObject(i));
+                mAsks[i] = new PulicOrder(asksArray.getJSONObject(i));
             }
         }
 
@@ -36,39 +36,101 @@ public class BitsoOrderBook {
         if (o.has("bids")) {
             JSONArray bidsArray = o.getJSONArray("bids");
             int totalBids = bidsArray.length();
-            bids = new PulicOrder[totalBids];
+            mBids = new PulicOrder[totalBids];
             for (int i = 0; i < totalBids; i++) {
-                bids[i] = new PulicOrder(bidsArray.getJSONObject(i));
+                mBids[i] = new PulicOrder(bidsArray.getJSONObject(i));
             }
         }
 
     }
 
-    @Override
-    public String toString() {
-        return Helpers.fieldPrinter(this);
+    public Date getOrderDate() {
+        return mOrderDate;
     }
-    
-    public static class PulicOrder implements Comparable<PulicOrder>{
-        public BitsoBook mBook;
-        public BigDecimal mPrice;
-        public BigDecimal mAmount;
-        public String mOrderId;
-        
-        public PulicOrder(JSONObject o){
-            mBook = Helpers.getBook(Helpers.getString(o, "book"));
+
+    public void setOrderDate(Date mOrderDate) {
+        this.mOrderDate = mOrderDate;
+    }
+
+    public int getSequence() {
+        return mSequence;
+    }
+
+    public void setSequence(int mSequence) {
+        this.mSequence = mSequence;
+    }
+
+    public PulicOrder[] getAsks() {
+        return mAsks;
+    }
+
+    public void setAsks(PulicOrder[] mAsks) {
+        this.mAsks = mAsks;
+    }
+
+    public PulicOrder[] getBids() {
+        return mBids;
+    }
+
+    public void setBids(PulicOrder[] mBids) {
+        this.mBids = mBids;
+    }
+
+    public String toString() {
+        return Helpers.fieldPrinter(this, BitsoOrderBook.class);
+    }
+
+    public class PulicOrder implements Comparable<PulicOrder> {
+        private String mBook;
+        private BigDecimal mPrice;
+        private BigDecimal mAmount;
+        private String mOrderId;
+
+        public PulicOrder(JSONObject o) {
+            mBook = Helpers.getString(o, "book");
             mPrice = Helpers.getBD(o, "price");
             mAmount = Helpers.getBD(o, "amount");
-            if(o.has("oid")){
+            if (o.has("oid")) {
                 mOrderId = Helpers.getString(o, "oid");
-            }else{
+            } else {
                 mOrderId = "";
             }
         }
 
-        @Override
+        public String getBook() {
+            return mBook;
+        }
+
+        public void setBook(String mBook) {
+            this.mBook = mBook;
+        }
+
+        public BigDecimal getPrice() {
+            return mPrice;
+        }
+
+        public void setPrice(BigDecimal mPrice) {
+            this.mPrice = mPrice;
+        }
+
+        public BigDecimal getAmount() {
+            return mAmount;
+        }
+
+        public void setAmount(BigDecimal mAmount) {
+            this.mAmount = mAmount;
+        }
+
+        public String getOrderId() {
+            return mOrderId;
+        }
+
+        public void setOrderId(String mOrderId) {
+            this.mOrderId = mOrderId;
+        }
+
         public String toString() {
-            return Helpers.fieldPrinter(this);
+            return Helpers.fieldPrinter(this, BitsoOrderBook.PulicOrder.class);
         }
 
         @Override
@@ -76,8 +138,8 @@ public class BitsoOrderBook {
             return mPrice.compareTo(o.mPrice);
         }
 
-        public static class Comparators{
-            public static Comparator<PulicOrder> PRICE = new Comparator<PulicOrder>(){
+        public class Comparators {
+            public Comparator<PulicOrder> PRICE = new Comparator<PulicOrder>() {
                 @Override
                 public int compare(PulicOrder o1, PulicOrder o2) {
                     return o1.mPrice.compareTo(o2.mPrice);

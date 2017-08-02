@@ -3,40 +3,38 @@ package com.bitso;
 import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
-import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.bitso.exceptions.BitsoAPIException;
 import com.bitso.exchange.BookInfo;
 import com.bitso.helpers.Helpers;
 
 public class BitsoMockTest extends BitsoTest {
-    private ArrayList<BookInfo> mockAvailableBooks;
+    private BookInfo[] mockAvailableBooks;
     private BitsoTicker[] mockTicker;
     private BitsoOrderBook mockOrderBook;
     private BitsoAccountStatus mockAccountStatus;
     private BitsoBalance mockBalance;
     private BitsoFee mockFee;
     private BitsoOrder[] mockOpenOrders;
-    private String mockOpenOrderId;
-    private BitsoWithdrawal mockBtcWithdrawal;
-    private BitsoWithdrawal mockEthWithdrawal;
-    private BitsoWithdrawal mockSpeiWithdrawal;
     private Map<String, String> mockBitsoBanks;
-    private BitsoWithdrawal mockDebitCardWithdrawal;
     private BitsoOperation[] mockLedgers;
-    private BitsoWithdrawal[] mockWithdrawals;
+    private BitsoOperation[] mockLedgersTrades;
+    private BitsoOperation[] mockLedgersFees;
+    private BitsoOperation[] mockLedgersFundings;
+    private BitsoOperation[] mockLedgersWithdrawals;
     private BitsoFunding[] mockFundings;
     private BitsoTrade[] mockTrades;
-    private BitsoOrder[] mockLookUpOrders;
-    private String[] mockCanceledOrders;
     private Map<String, String> mockFundingDestination;
+
+    private BitsoTransactions mockTransactions;
+    BitsoWithdrawal[] mockWithdrawals;
 
     @Before
     public void setUp() throws Exception {
@@ -49,64 +47,58 @@ public class BitsoMockTest extends BitsoTest {
         setUpAvailableBooks(Helpers.getJSONFromFile("publicAvailableBooks.json"));
         setUpTicker(Helpers.getJSONFromFile("publicTicker.json"));
         setUpOrderBook(Helpers.getJSONFromFile("publicOrderBook.json"));
+        setUpTransactions(Helpers.getJSONFromFile("publicTrades.json"));
         setUpAccountStatus(Helpers.getJSONFromFile("privateAccountStatus.json"));
         setUpAccountBalance(Helpers.getJSONFromFile("privateAccountBalance.json"));
         setUpFees(Helpers.getJSONFromFile("privateFees.json"));
-        setUpLedgers(Helpers.getJSONFromFile("privateLedger.json"));
+        setUpLedgers();
         setUpWithdrawals(Helpers.getJSONFromFile("privateWithdrawals.json"));
         setUpFundings(Helpers.getJSONFromFile("privateFundings.json"));
         setUpTrades(Helpers.getJSONFromFile("privateUserTrades.json"));
-        setUpOpenOrders(Helpers.getJSONFromFile("privateOpenOrders.json"));
-        setUpLookUpOrders(Helpers.getJSONFromFile("privateLookUpOrders.json"));
-        setUpCanceledOrders(Helpers.getJSONFromFile("privateCancelOrder.json"));
-        setUpPlaceOrder(Helpers.getJSONFromFile("privatePlaceOrder.json"));
         setUpFundingDestionation(Helpers.getJSONFromFile("privateFundingDestination.json"));
-        setUpBtcWithdrawal(Helpers.getJSONFromFile("privateBitcoinWithdrawal.json"));
-        setUpEthWithdrawal(Helpers.getJSONFromFile("privateEtherWithdrawal.json"));
-        setUpSpeiWithdrawal(Helpers.getJSONFromFile("privateSPEIWithdrawal.json"));
         setUpBitsoBanks(Helpers.getJSONFromFile("privateBankCodes.json"));
-        setUpDebitCardWithdrawal(Helpers.getJSONFromFile("privateDebitCardWithdrawal.json"));
     }
 
-    private void setUpMockitoActions() {
-        Mockito.when(mBitso.availableBooks()).thenReturn(mockAvailableBooks);
+    private void setUpMockitoActions() throws BitsoAPIException {
+        Mockito.when(mBitso.getAvailableBooks()).thenReturn(mockAvailableBooks);
         Mockito.when(mBitso.getTicker()).thenReturn(mockTicker);
-        Mockito.when(mBitso.getOrderBook(BitsoBook.BTC_MXN)).thenReturn(mockOrderBook);
-        Mockito.when(mBitso.getUserAccountStatus()).thenReturn(mockAccountStatus);
-        Mockito.when(mBitso.getUserAccountBalance()).thenReturn(mockBalance);
-        Mockito.when(mBitso.getUserFees()).thenReturn(mockFee);
-        Mockito.when(mBitso.getOpenOrders()).thenReturn(mockOpenOrders);
-        Mockito.when(mBitso.placeOrder(BitsoBook.BTC_MXN, BitsoOrder.SIDE.BUY, BitsoOrder.TYPE.LIMIT,
-                new BigDecimal("15.4"), null, new BigDecimal("20854.4"))).thenReturn(mockOpenOrderId);
-        Mockito.when(mBitso.bitcoinWithdrawal(new BigDecimal("0.001"), "31yTCKDHTqNXF5eZcsddJDe76BzBh8pVLb"))
-                .thenReturn(mockBtcWithdrawal);
-        Mockito.when(
-                mBitso.etherWithdrawal(new BigDecimal("0.001"), "0xc83adea9e8fea3797139942a5939b961f67abfb8"))
-                .thenReturn(mockEthWithdrawal);
-        Mockito.when(mBitso.speiWithdrawal(new BigDecimal("50"), "name", "surname", "044180001059660729",
-                "testing reference", "5706")).thenReturn(mockSpeiWithdrawal);
+        Mockito.when(mBitso.getOrderBook("btc_mxn")).thenReturn(mockOrderBook);
+        Mockito.when(mBitso.getOrderBook("eth_mxn")).thenReturn(mockOrderBook);
+        Mockito.when(mBitso.getOrderBook("xrp_btc")).thenReturn(mockOrderBook);
+        Mockito.when(mBitso.getOrderBook("xrp_mxn")).thenReturn(mockOrderBook);
+        Mockito.when(mBitso.getOrderBook("eth_btc")).thenReturn(mockOrderBook);
+        Mockito.when(mBitso.getTrades("btc_mxn")).thenReturn(mockTransactions);
+        Mockito.when(mBitso.getTrades("eth_mxn")).thenReturn(mockTransactions);
+        Mockito.when(mBitso.getTrades("xrp_btc")).thenReturn(mockTransactions);
+        Mockito.when(mBitso.getTrades("xrp_mxn")).thenReturn(mockTransactions);
+        Mockito.when(mBitso.getTrades("eth_btc")).thenReturn(mockTransactions);
+        Mockito.when(mBitso.getAccountStatus()).thenReturn(mockAccountStatus);
+        Mockito.when(mBitso.getAccountBalance()).thenReturn(mockBalance);
+        Mockito.when(mBitso.getFees()).thenReturn(mockFee);
+        Mockito.when(mBitso.getLedger("")).thenReturn(mockLedgers);
+        Mockito.when(mBitso.getLedger("trades")).thenReturn(mockLedgersTrades);
+        Mockito.when(mBitso.getLedger("fees")).thenReturn(mockLedgersFees);
+        Mockito.when(mBitso.getLedger("fundings")).thenReturn(mockLedgersFundings);
+        Mockito.when(mBitso.getLedger("withdrawals")).thenReturn(mockLedgersWithdrawals);
+        Mockito.when(mBitso.getWithdrawals(null)).thenReturn(mockWithdrawals);
+        Mockito.when(mBitso.getFundings(null)).thenReturn(mockFundings);
+        Mockito.when(mBitso.getUserTrades(null)).thenReturn(mockTrades);
+        Mockito.when(mBitso.getOpenOrders("btc_mxn")).thenReturn(mockOpenOrders);
+        Mockito.when(mBitso.getOpenOrders("eth_mxn")).thenReturn(mockOpenOrders);
+        Mockito.when(mBitso.getOpenOrders("xrp_btc")).thenReturn(mockOpenOrders);
+        Mockito.when(mBitso.getOpenOrders("xrp_mxn")).thenReturn(mockOpenOrders);
+        Mockito.when(mBitso.getOpenOrders("eth_btc")).thenReturn(mockOpenOrders);
+        Mockito.when((mBitso.fundingDestination("fund_currency=btc"))).thenReturn(mockFundingDestination);
+        Mockito.when((mBitso.fundingDestination("fund_currency=eth"))).thenReturn(mockFundingDestination);
+        Mockito.when((mBitso.fundingDestination("fund_currency=mxn"))).thenReturn(mockFundingDestination);
         Mockito.when(mBitso.getBanks()).thenReturn(mockBitsoBanks);
-        Mockito.when(mBitso.debitCardWithdrawal(new BigDecimal("50"), "name test", "surname test",
-                "5579209071039769", "40044")).thenReturn(mockDebitCardWithdrawal);
-        Mockito.when(mBitso.getUserLedger("", "")).thenReturn(mockLedgers);
-        Mockito.when(mBitso.getUserLedger(null, null)).thenReturn(mockLedgers);
-        Mockito.when(mBitso.getUserLedger(null, "")).thenReturn(mockLedgers);
-        Mockito.when(mBitso.getUserLedger("", null)).thenReturn(mockLedgers);
-        Mockito.when(mBitso.getUserWithdrawals()).thenReturn(mockWithdrawals);
-        Mockito.when(mBitso.getUserFundings()).thenReturn(mockFundings);
-        Mockito.when(mBitso.getUserTrades()).thenReturn(mockTrades);
-        Mockito.when(mBitso.lookupOrders("kRrcjsp5n9og98qa")).thenReturn(mockLookUpOrders);
-        Mockito.when(mBitso.cancelOrder("pj251R8m6im5lO82")).thenReturn(mockCanceledOrders);
-        Mockito.when((mBitso.fundingDestination("btc"))).thenReturn(mockFundingDestination);
-        Mockito.when((mBitso.fundingDestination("eth"))).thenReturn(mockFundingDestination);
-        Mockito.when((mBitso.fundingDestination("mxn"))).thenReturn(mockFundingDestination);
     }
 
     private void setUpAvailableBooks(JSONObject o) {
-        mockAvailableBooks = new ArrayList<BookInfo>();
         JSONArray arr = o.getJSONArray("payload");
+        mockAvailableBooks = new BookInfo[arr.length()];
         for (int i = 0; i < arr.length(); i++) {
-            mockAvailableBooks.add(new BookInfo(arr.getJSONObject(i)));
+            mockAvailableBooks[i] = new BookInfo(arr.getJSONObject(i));
         }
     }
 
@@ -134,78 +126,63 @@ public class BitsoMockTest extends BitsoTest {
     }
 
     private void setUpAccountBalance(JSONObject o) {
-        mockBalance = new BitsoBalance(o);
+        if (o.has("payload")) {
+            JSONObject payload = o.getJSONObject("payload");
+            mockBalance = new BitsoBalance(payload);
+        }
     }
 
     private void setUpFees(JSONObject o) {
-        mockFee = new BitsoFee(o);
-    }
-
-    private void setUpOpenOrders(JSONObject o) {
-        if (o.has("payload")) {
-            JSONArray payload = o.getJSONArray("payload");
-            int totalElements = payload.length();
-            mockOpenOrders = new BitsoOrder[totalElements];
-            for (int i = 0; i < totalElements; i++) {
-                mockOpenOrders[i] = new BitsoOrder(payload.getJSONObject(i));
-            }
-        }
-    }
-
-    private void setUpBtcWithdrawal(JSONObject o) {
         if (o.has("payload")) {
             JSONObject payload = o.getJSONObject("payload");
-            mockBtcWithdrawal = new BitsoWithdrawal(payload);
+            mockFee = new BitsoFee(payload);
         }
     }
 
-    private void setUpEthWithdrawal(JSONObject o) {
-        if (o.has("payload")) {
-            JSONObject payload = o.getJSONObject("payload");
-            mockEthWithdrawal = new BitsoWithdrawal(payload);
-        }
-    }
+    private void setUpLedgers() {
+        String[] files = { "privateLedger.json", "privateLedgerTrades.json", "privateLedgerFees.json",
+                "privateLedgerFundings.json", "privateLedgerWithdrawals.json" };
 
-    private void setUpSpeiWithdrawal(JSONObject o) {
-        if (o.has("payload")) {
-            JSONObject payload = o.getJSONObject("payload");
-            mockSpeiWithdrawal = new BitsoWithdrawal(payload);
-        }
-    }
+        JSONObject ledger = Helpers.getJSONFromFile(files[0]);
+        JSONObject ledgerTrades = Helpers.getJSONFromFile(files[1]);
+        JSONObject ledgerFees = Helpers.getJSONFromFile(files[2]);
+        JSONObject ledgerFunds = Helpers.getJSONFromFile(files[3]);
+        JSONObject ledgerWithdraws = Helpers.getJSONFromFile(files[4]);
 
-    private void setUpBitsoBanks(JSONObject o) {
-        if (o.has("payload")) {
-            mockBitsoBanks = new HashMap<String, String>();
-            JSONArray payload = o.getJSONArray("payload");
-            String currentBankCode = "";
-            String currentBankName = "";
-            JSONObject currentJSON = null;
-            ;
-            int totalElements = payload.length();
-            for (int i = 0; i < totalElements; i++) {
-                currentJSON = payload.getJSONObject(i);
-                currentBankCode = Helpers.getString(currentJSON, "code");
-                currentBankName = Helpers.getString(currentJSON, "name");
-                mockBitsoBanks.put(currentBankCode, currentBankName);
-            }
-        }
-    }
+        JSONArray payload = ledger.getJSONArray("payload");
+        int totalElements = payload.length();
 
-    private void setUpDebitCardWithdrawal(JSONObject o) {
-        if (o.has("payload")) {
-            JSONObject payload = o.getJSONObject("payload");
-            mockDebitCardWithdrawal = new BitsoWithdrawal(payload);
+        mockLedgers = new BitsoOperation[totalElements];
+        for (int i = 0; i < totalElements; i++) {
+            mockLedgers[i] = new BitsoOperation(payload.getJSONObject(i));
         }
-    }
 
-    private void setUpLedgers(JSONObject o) {
-        if (o.has("payload")) {
-            JSONArray payload = o.getJSONArray("payload");
-            int totalElements = payload.length();
-            mockLedgers = new BitsoOperation[totalElements];
-            for (int i = 0; i < totalElements; i++) {
-                mockLedgers[i] = new BitsoOperation(payload.getJSONObject(i));
-            }
+        payload = ledgerTrades.getJSONArray("payload");
+        totalElements = payload.length();
+        mockLedgersTrades = new BitsoOperation[totalElements];
+        for (int i = 0; i < totalElements; i++) {
+            mockLedgersTrades[i] = new BitsoOperation(payload.getJSONObject(i));
+        }
+
+        payload = ledgerFees.getJSONArray("payload");
+        totalElements = payload.length();
+        mockLedgersFees = new BitsoOperation[totalElements];
+        for (int i = 0; i < totalElements; i++) {
+            mockLedgersFees[i] = new BitsoOperation(payload.getJSONObject(i));
+        }
+
+        payload = ledgerFunds.getJSONArray("payload");
+        totalElements = payload.length();
+        mockLedgersFundings = new BitsoOperation[totalElements];
+        for (int i = 0; i < totalElements; i++) {
+            mockLedgersFundings[i] = new BitsoOperation(payload.getJSONObject(i));
+        }
+
+        payload = ledgerWithdraws.getJSONArray("payload");
+        totalElements = payload.length();
+        mockLedgersWithdrawals = new BitsoOperation[totalElements];
+        for (int i = 0; i < totalElements; i++) {
+            mockLedgersWithdrawals[i] = new BitsoOperation(payload.getJSONObject(i));
         }
     }
 
@@ -242,49 +219,145 @@ public class BitsoMockTest extends BitsoTest {
         }
     }
 
-    public void setUpLookUpOrders(JSONObject o) {
-        if (o.has("payload")) {
-            JSONArray payload = o.getJSONArray("payload");
-            int totalElements = payload.length();
-            mockLookUpOrders = new BitsoOrder[totalElements];
-            for (int i = 0; i < totalElements; i++) {
-                mockLookUpOrders[i] = new BitsoOrder(payload.getJSONObject(i));
-            }
-        }
-    }
-
-    public void setUpCanceledOrders(JSONObject o) {
-        mockCanceledOrders = Helpers.parseJSONArray(o.getJSONArray("payload"));
-    }
-
-    public void setUpPlaceOrder(JSONObject o) {
-        if (o.has("payload")) {
-            JSONObject payload = o.getJSONObject("payload");
-            mockOpenOrderId = Helpers.getString(payload, "oid");
-        }
-    }
-
     public void setUpFundingDestionation(JSONObject o) {
         if (o.has("payload")) {
             JSONObject payload = o.getJSONObject("payload");
             mockFundingDestination = new HashMap<String, String>();
-            mockFundingDestination.put("accountIdentifierName",
+            mockFundingDestination.put("account_identifier_name",
                     Helpers.getString(payload, "account_identifier_name"));
-            mockFundingDestination.put("accountIdentifier", Helpers.getString(payload, "account_identifier"));
+            mockFundingDestination.put("account_identifier",
+                    Helpers.getString(payload, "account_identifier"));
         }
     }
 
-    @Test
-    public void testSPEIWithdrawal() {
+    public void setUpTransactions(JSONObject o) {
+        if (o.has("payload")) {
+            JSONArray payload = o.getJSONArray("payload");
+            mockTransactions = new BitsoTransactions(payload);
+        }
+    }
+
+    private void setUpBitsoBanks(JSONObject o) {
+        if (o.has("payload")) {
+            mockBitsoBanks = new HashMap<String, String>();
+            JSONArray payload = o.getJSONArray("payload");
+            String currentBankCode = "";
+            String currentBankName = "";
+            JSONObject currentJSON = null;
+            int totalElements = payload.length();
+            for (int i = 0; i < totalElements; i++) {
+                currentJSON = payload.getJSONObject(i);
+                currentBankCode = Helpers.getString(currentJSON, "code");
+                currentBankName = Helpers.getString(currentJSON, "name");
+                mockBitsoBanks.put(currentBankCode, currentBankName);
+            }
+
+        }
+    }
+
+    // @Test
+    public void testSPEIWithdrawal() throws BitsoAPIException {
         BitsoWithdrawal speiWithdrawal = mBitso.speiWithdrawal(new BigDecimal("50"), "name", "surname",
                 "044180001059660729", "testing reference", "5706");
         assertEquals(true, nullCheck(speiWithdrawal, BitsoWithdrawal.class));
     }
 
-    @Test
-    public void testDebitCardWithdrawal() {
-        BitsoWithdrawal debitCardWithdrawal = mBitso.debitCardWithdrawal(new BigDecimal("50"), "name test",
-                "surname test", "5579209071039769", "40044");
-        assertEquals(true, nullCheck(debitCardWithdrawal, BitsoWithdrawal.class));
+    @Override
+    public void testOrderBook() throws BitsoAPIException {
+        BookInfo[] availableBooks = mBitso.getAvailableBooks();
+        assertEquals(availableBooks != null, true);
+        for (BookInfo bookInfo : availableBooks) {
+            BitsoOrderBook bitsoOrderBook = mBitso.getOrderBook(bookInfo.getBook());
+            assertEquals(nullCheck(bitsoOrderBook, BitsoOrderBook.class), true);
+        }
+    }
+
+    @Override
+    public void testTrades() throws InterruptedException, BitsoAPIException {
+        BookInfo[] availableBooks = mBitso.getAvailableBooks();
+        assertEquals(availableBooks != null, true);
+
+        for (BookInfo bookInfo : availableBooks) {
+            BitsoTransactions bitsoTransaction = mBitso.getTrades(bookInfo.getBook());
+            assertEquals(nullCheck(bitsoTransaction, BitsoTransactions.class), true);
+        }
+    }
+
+    @Override
+    public void testLedger() throws InterruptedException, BitsoAPIException {
+        int totalElements = 0;
+
+        BitsoOperation[] defaultLedger = mBitso.getLedger("");
+        assertEquals(defaultLedger != null, true);
+        totalElements = defaultLedger.length;
+        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        for (BitsoOperation bitsoOperation : defaultLedger) {
+            assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
+        }
+
+        BitsoOperation[] tradesLedger = mBitso.getLedger("trades");
+        assertEquals(tradesLedger != null, true);
+        totalElements = tradesLedger.length;
+        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        for (BitsoOperation bitsoOperation : tradesLedger) {
+            assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
+            assertEquals(bitsoOperation.getOperationDescription(), "trade");
+        }
+
+        BitsoOperation[] feesLedger = mBitso.getLedger("fees");
+        assertEquals(feesLedger != null, true);
+        totalElements = feesLedger.length;
+        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        for (BitsoOperation bitsoOperation : feesLedger) {
+            assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
+            assertEquals(bitsoOperation.getOperationDescription(), "fee");
+        }
+
+        BitsoOperation[] fundingsLedger = mBitso.getLedger("fundings");
+        assertEquals(fundingsLedger != null, true);
+        totalElements = fundingsLedger.length;
+        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        for (BitsoOperation bitsoOperation : fundingsLedger) {
+            assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
+            assertEquals(bitsoOperation.getOperationDescription(), "funding");
+        }
+
+        BitsoOperation[] withdrawalsLedger = mBitso.getLedger("withdrawals");
+        assertEquals(withdrawalsLedger != null, true);
+        totalElements = withdrawalsLedger.length;
+        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        for (BitsoOperation bitsoOperation : withdrawalsLedger) {
+            assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
+            assertEquals(bitsoOperation.getOperationDescription(), "withdrawal");
+        }
+    }
+
+    @Override
+    public void testWithdrawals() throws InterruptedException, BitsoAPIException {
+        BitsoWithdrawal[] withdrawals = mBitso.getWithdrawals(null);
+        assertEquals(withdrawals != null, true);
+        for (BitsoWithdrawal bitsoWithdrawal : withdrawals) {
+            assertEquals(true, nullCheck(bitsoWithdrawal, BitsoWithdrawal.class));
+        }
+    }
+
+    @Override
+    public void tesFundings() throws InterruptedException, BitsoAPIException {
+        BitsoFunding[] fundings = mBitso.getFundings(null);
+        assertEquals(fundings != null, true);
+        for (BitsoFunding bitsoFunding : fundings) {
+            assertEquals(true, nullCheck(bitsoFunding, BitsoFunding.class));
+        }
+    }
+
+    @Override
+    public void testUserTrades() throws InterruptedException, BitsoAPIException {
+        BitsoTrade[] trades = mBitso.getUserTrades(null);
+        assertEquals(trades != null, true);
+        int totalElements = trades.length;
+        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        for (BitsoTrade current : trades) {
+            assertEquals(true, nullCheck(current, BitsoTrade.class));
+        }
     }
 }

@@ -8,29 +8,30 @@ import org.json.JSONObject;
 import com.bitso.BitsoOrder;
 import com.bitso.helpers.Helpers;
 
-public class BitsoWebSocketPublicOrder{
+public class BitsoWebSocketPublicOrder {
     private Date mOrderDate;
     private BigDecimal mRate;
     private BitsoOrder.SIDE mSide;
     private BigDecimal mAmount;
     private BigDecimal mValue;
     private String mOrderId;
-    
-    public BitsoWebSocketPublicOrder(JSONObject jsonObject){
-        mOrderDate = new java.util.Date(jsonObject.getLong("d")*1000);
+    private String mStatus;
+
+    public BitsoWebSocketPublicOrder(JSONObject jsonObject) {
+        mOrderDate = new java.util.Date(jsonObject.getLong("d") * 1000);
         mRate = new BigDecimal(String.valueOf(jsonObject.getDouble("r")));
-        mSide = (Helpers.getInt(jsonObject, "t") == 1) ?
-                BitsoOrder.SIDE.SELL : BitsoOrder.SIDE.BUY;
-        if(jsonObject.has("a") && jsonObject.has("v")){
+        mSide = (Helpers.getInt(jsonObject, "t") == 1) ? BitsoOrder.SIDE.SELL : BitsoOrder.SIDE.BUY;
+        if (jsonObject.has("a") && jsonObject.has("v")) {
             mAmount = new BigDecimal(String.valueOf(jsonObject.getDouble("a")));
             mValue = new BigDecimal(String.valueOf(jsonObject.getDouble("v")));
-        }else{
+        } else {
             mAmount = new BigDecimal("0");
             mValue = new BigDecimal("0");
         }
-        if(jsonObject.has("o")){
+        if (jsonObject.has("o")) {
             mOrderId = Helpers.getString(jsonObject, "o");
         }
+        mStatus = jsonObject.getString("s");
     }
 
     public Date getOrderDate() {
@@ -57,9 +58,12 @@ public class BitsoWebSocketPublicOrder{
         return mOrderId;
     }
 
+    public String getStatus() {
+        return mStatus;
+    }
+
     @Override
     public String toString() {
-        return "Rate:" + mRate + ", Side:" + mSide + ", Amount:" + mAmount
-                + ", Value:" + mValue;
+        return "Rate:" + mRate + ", Side:" + mSide + ", Amount:" + mAmount + ", Value:" + mValue;
     }
 }

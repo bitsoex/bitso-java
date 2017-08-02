@@ -2,25 +2,24 @@ package com.bitso.websockets;
 
 import org.json.JSONObject;
 
-import com.bitso.BitsoBook;
 import com.bitso.exceptions.BitsoExceptionNotExpectedValue;
 import com.bitso.helpers.Helpers;
 
 public class BitsoStreamUpdate {
     protected BitsoChannels bitsoChannel;
-    protected BitsoBook bitsoBook;
+    protected String bitsoBook;
 
     public BitsoChannels getBitsoChannel() {
         return bitsoChannel;
     }
         
-    public BitsoBook getBitsoBook() {
+    public String getBitsoBook() {
         return bitsoBook;
     }
     
     public BitsoStreamUpdate(JSONObject jsonObject){
         bitsoChannel = getStream(Helpers.getString(jsonObject, "type"));
-        bitsoBook = Helpers.getBook(Helpers.getString(jsonObject, "book"));
+        bitsoBook = Helpers.getString(jsonObject, "book");
     }
     
     protected BitsoChannels getStream(String stream) {

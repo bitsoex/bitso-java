@@ -1,0 +1,329 @@
+{
+	"success": true,
+	"payload": [{
+		"eid": "dee62882d6adf04c24cfc99ffc7689ea",
+		"operation": "funding",
+		"created_at": "2017-07-26T21:25:02+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "1"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"fid": "29bc0e38b7fdf3debffa831a05502fc1"
+		}
+	}, {
+		"eid": "0496d10c8a2b4589d889fb70da34c09e",
+		"operation": "funding",
+		"created_at": "2017-07-26T21:14:26+0000",
+		"balance_updates": [{
+			"currency": "eth",
+			"amount": "0.01"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"fid": "a2a462b5658da9613dcf32b7e60728cc"
+		}
+	}, {
+		"eid": "20ae4915cc580f78e4c0d11547b586f5",
+		"operation": "funding",
+		"created_at": "2017-07-26T21:13:46+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "0.0001"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"fid": "8e49035ccc290dc6172b6f0ea97ab3bc"
+		}
+	}, {
+		"eid": "f94769e3b1eaadd8379caf5e483cfd4c",
+		"operation": "funding",
+		"created_at": "2017-07-26T21:12:50+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "12"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"fid": "b9cf1a10c5f9b43883036938207130df"
+		}
+	}, {
+		"eid": "6004a1047bc2c677f83884d5c379db01",
+		"operation": "funding",
+		"created_at": "2017-07-26T19:44:41+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "17"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"fid": "58def110f88250af7da49806aa68879b"
+		}
+	}, {
+		"eid": "943372779327c3b027f5ed406233a736",
+		"operation": "funding",
+		"created_at": "2017-07-26T19:44:11+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "0.0001"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"fid": "570c7462c4d58017c7ddd57c5871b2ff"
+		}
+	}, {
+		"eid": "c4ebffea0d25778a1e96aa1966e92cab",
+		"operation": "funding",
+		"created_at": "2017-07-26T19:43:14+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "0.0001"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"fid": "ae3fb5559571862c94461dd6835518ca"
+		}
+	}, {
+		"eid": "939856aef6aafb11f3e7668149628405",
+		"operation": "funding",
+		"created_at": "2017-07-26T19:42:44+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "12"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"fid": "8f1947f8bfbc22f0c5c288532655ba2b"
+		}
+	}, {
+		"eid": "ff58c938ecc2ecfc78afeb243024412c",
+		"operation": "funding",
+		"created_at": "2017-07-26T19:41:46+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "12"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"fid": "51154fcfd3796223ab7f39a2e5bc2920"
+		}
+	}, {
+		"eid": "cfbcf43258f439099f800b0e705c026b",
+		"operation": "funding",
+		"created_at": "2017-07-26T19:41:39+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "12"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"fid": "f5483f4837e4503990d239758ecf88a3"
+		}
+	}, {
+		"eid": "ca01bc9b77ab1a78e9e6df603a4a4b8f",
+		"operation": "funding",
+		"created_at": "2017-07-26T19:39:22+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "0.0001"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"fid": "f41e1dce1d7f199cf8eb03d219ad0d90"
+		}
+	}, {
+		"eid": "ecd3ce733549c780bd0d77b9a1d1d561",
+		"operation": "funding",
+		"created_at": "2017-07-26T19:37:57+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "0.0001"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"fid": "e654dd00a227f3cc63e6aea58c88bfc8"
+		}
+	}, {
+		"eid": "61ccb5d716385a83bef21758b00d20d4",
+		"operation": "funding",
+		"created_at": "2017-07-26T19:37:04+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "5"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"fid": "66b371b6094c9c456e478242400dea90"
+		}
+	}, {
+		"eid": "3877b03b5e9b3410a96fbc83b2d271d7",
+		"operation": "funding",
+		"created_at": "2017-07-21T21:51:29+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "1"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"fid": "063229cd2bd7257d381d3e95fc201ab5"
+		}
+	}, {
+		"eid": "30071d1919f8dc6b7dd8cf101a231fec",
+		"operation": "funding",
+		"created_at": "2017-07-21T21:25:17+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "1"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"fid": "6bfeeacbb4ccc8a88eb746f6e75e2c10"
+		}
+	}, {
+		"eid": "1f5d8a3c798093a041e5713d91ae1355",
+		"operation": "funding",
+		"created_at": "2017-07-21T21:00:56+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "0.00043"
+		}],
+		"details": {
+			"method": "bt",
+			"method_name": "Bitso Transfer",
+			"fid": "4b8926fa392a60d9bb00d3c2fd9c8b37"
+		}
+	}, {
+		"eid": "fb7ba1aeeae800d0c17bc78a637d0500",
+		"operation": "funding",
+		"created_at": "2017-07-21T14:51:05+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "30000"
+		}],
+		"details": {
+			"method": "sp",
+			"method_name": "SPEI Transfer",
+			"fid": "d184040a2653a48e274d6473c2344931"
+		}
+	}, {
+		"eid": "0eae914660050b74e9774386c940984c",
+		"operation": "funding",
+		"created_at": "2017-07-18T16:25:22+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "844"
+		}],
+		"details": {
+			"method": "sp",
+			"method_name": "SPEI Transfer",
+			"fid": "a7df82a7487073da68d553d0e2db936d"
+		}
+	}, {
+		"eid": "90951ad5317de5e4483c7322dfe7656a",
+		"operation": "funding",
+		"created_at": "2017-05-18T16:02:29+0000",
+		"balance_updates": [{
+			"currency": "eth",
+			"amount": "3.561364590000000000"
+		}],
+		"details": {
+			"method": "eth",
+			"method_name": "Ether",
+			"fid": "f727ea5860b7789ac4f10988c9436990"
+		}
+	}, {
+		"eid": "cf4b085e2bd38b0dbdca98be52154fd3",
+		"operation": "funding",
+		"created_at": "2017-05-18T15:50:04+0000",
+		"balance_updates": [{
+			"currency": "eth",
+			"amount": "3.581364590000000000"
+		}],
+		"details": {
+			"method": "eth",
+			"method_name": "Ether",
+			"fid": "cead74cf4051a5cb4f36a62c9166e878"
+		}
+	}, {
+		"eid": "71a4aa5618f299025bfa32937e3906ad",
+		"operation": "funding",
+		"created_at": "2017-05-18T14:56:13+0000",
+		"balance_updates": [{
+			"currency": "xrp",
+			"amount": "2083.65000500"
+		}],
+		"details": {
+			"method": "rp",
+			"method_name": "Ripple",
+			"fid": "864d4170166b7559d8f221fcea3a67f6"
+		}
+	}, {
+		"eid": "0a3d5cd4fb8e095cf655d4b8ad328681",
+		"operation": "funding",
+		"created_at": "2017-05-18T14:33:16+0000",
+		"balance_updates": [{
+			"currency": "mxn",
+			"amount": "15000"
+		}],
+		"details": {
+			"method": "sp",
+			"method_name": "SPEI Transfer",
+			"fid": "8afc34a0bccd26f9dea6eafe0a35b813"
+		}
+	}, {
+		"eid": "3bfaf2a067c63e940dff7c4fbfb30a7c",
+		"operation": "funding",
+		"created_at": "2017-05-13T03:20:08+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "0.00100000"
+		}],
+		"details": {
+			"method": "btc",
+			"method_name": "Bitcoin",
+			"fid": "db144d4cc5d27b9e7475bdf38b70695c"
+		}
+	}, {
+		"eid": "c27a4ad43942aa1c484acd61941f2fe6",
+		"operation": "funding",
+		"created_at": "2017-05-13T02:41:41+0000",
+		"balance_updates": [{
+			"currency": "eth",
+			"amount": "0.000100000000000000"
+		}],
+		"details": {
+			"method": "eth",
+			"method_name": "Ether",
+			"fid": "f09d7f9bebd727831adb850a55eb2d66"
+		}
+	}, {
+		"eid": "f0f650a59e23f2157da98040223268c0",
+		"operation": "funding",
+		"created_at": "2017-05-12T15:32:12+0000",
+		"balance_updates": [{
+			"currency": "btc",
+			"amount": "0.00010000"
+		}],
+		"details": {
+			"method": "btc",
+			"method_name": "Bitcoin",
+			"fid": "a3e759429e416c46d99b0648f3cd40e6"
+		}
+	}]
+}

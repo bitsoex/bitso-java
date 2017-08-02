@@ -1,14 +1,30 @@
 {
-    "success": true,
-    "payload": {
-        "fees": [{
-            "book": "btc_mxn",
-            "fee_decimal": "0.0001",
-            "fee_percent": "0.01"
-        }, {
-            "book": "eth_mxn",
-            "fee_decimal": "0.001",
-            "fee_percent": "0.1"
-        }]
-    }
+	"success": true,
+	"payload": {
+		"fees": [{
+			"book": "btc_mxn",
+			"fee_percent": "0.0000",
+			"fee_decimal": "0.0000"
+		}, {
+			"book": "eth_mxn",
+			"fee_percent": "0.0000",
+			"fee_decimal": "0.0000"
+		}, {
+			"book": "xrp_btc",
+			"fee_percent": "0.8000",
+			"fee_decimal": "0.0080"
+		}, {
+			"book": "xrp_mxn",
+			"fee_percent": "0.8000",
+			"fee_decimal": "0.0080"
+		}, {
+			"book": "eth_btc",
+			"fee_percent": "1.0000",
+			"fee_decimal": "0.0100"
+		}],
+		"withdrawal_fees": {
+			"btc": "0.001",
+			"eth": "0.0025"
+		}
+	}
 }

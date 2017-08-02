@@ -5,18 +5,17 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import com.bitso.helpers.Helpers;
 
 public class BitsoWithdrawal {
-    protected String withdrawalId;
-    protected String status;
-    protected Date withdrawalDate;
-    protected String currency;
-    protected String method;
-    protected BigDecimal amount;
-    protected HashMap<String, String> details;
+    private String withdrawalId;
+    private String status;
+    private Date withdrawalDate;
+    private String currency;
+    private String method;
+    private BigDecimal amount;
+    private HashMap<String, String> details;
 
     public BitsoWithdrawal(JSONObject o) {
         withdrawalId = Helpers.getString(o, "wid");
@@ -25,7 +24,7 @@ public class BitsoWithdrawal {
         currency = Helpers.getString(o, "currency");
         method = Helpers.getString(o, "method");
         amount = Helpers.getBD(o, "amount");
-        details = o.has("details") ? getOperationDetails(o.getJSONObject("details")) : null;
+        details = o.has("details") ? retrieveOperationDetails(o.getJSONObject("details")) : null;
     }
 
     public String getWithdrawalId() {
@@ -84,7 +83,8 @@ public class BitsoWithdrawal {
         this.details = details;
     }
 
-    private HashMap<String, String> getOperationDetails(JSONObject o) {
+    @SuppressWarnings("unchecked")
+    private HashMap<String, String> retrieveOperationDetails(JSONObject o) {
         HashMap<String, String> details = new HashMap<>();
 
         String currentKey;
@@ -96,15 +96,15 @@ public class BitsoWithdrawal {
             currentKey = detailsKeys.next();
             object = o.get(currentKey);
 
-            if(object == null){
+            if (object == null) {
                 continue;
             }
 
-            if(object instanceof String){
+            if (object instanceof String) {
                 currentValue = (String) object;
             }
 
-            if(object instanceof JSONObject){
+            if (object instanceof JSONObject) {
                 currentValue = ((JSONObject) object).toString();
             }
 
@@ -115,6 +115,6 @@ public class BitsoWithdrawal {
 
     @Override
     public String toString() {
-        return Helpers.fieldPrinter(this);
+        return Helpers.fieldPrinter(this, BitsoWithdrawal.class);
     }
 }

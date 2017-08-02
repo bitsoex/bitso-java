@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,16 +19,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.bitso.BitsoBook;
-import com.bitso.exceptions.BitsoExceptionNotExpectedValue;
-
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
 public class Helpers {
     private static final String PATH = "src/test/java/JSONFiles/";
+    
+    public static final int ERROR_NUMBER_PARSE_JSON = 400;
+    public static final int ERROR_NUMBER_NO_PAYLOAD = 500;
+    public static final int ERROR_NUMBER_INVALID_PAYLOAD = 500;
+    public static final String ERROR_PARSE_JSON = "Error parsing json";
+    public static final String ERROR_NO_PAYLOAD = "Error server response does not have payload";
+    public static final String ERROR_INVALID_PAYLOAD = "Payload does not match JSONObject or JSONArray";
+    
     public static final String dateTimeFormatterZOffset = ("yyyy-MM-dd'T'HH:mm:ssZZZ");
     public static final String dateTimeFormatterXOffset = ("yyyy-MM-dd'T'HH:mm:ssXXX");
+    
     private static DatatypeFactory dtf;
 
     static {
@@ -58,6 +66,32 @@ public class Helpers {
                 sb.append(o);
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+        }
+        sb.append("\n==============\n");
+        return sb.toString();
+    }
+
+    public static final String fieldPrinter(Object object, Class<?> genericType) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("==============");
+        Method[] methods = genericType.getDeclaredMethods();
+        for (Method method : methods) {
+            String methodName = method.getName();
+            if (methodName.startsWith("get")) {
+                try {
+                    Object methodExecutionResult = method.invoke(object);
+                    sb.append('\n');
+                    sb.append(methodName);
+                    sb.append(": ");
+                    sb.append(methodExecutionResult);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
             }
         }
         sb.append("\n==============\n");
@@ -127,8 +161,9 @@ public class Helpers {
 
     public static BigDecimal getBD(JSONObject o, String key) {
         if (o.has(key)) {
-            String value = o.getString(key);
-            return value.equals("null") ? new BigDecimal("0") : new BigDecimal(value);
+            String value = o.isNull(key) ? "null" : o.getString(key);
+            value = (value.equals("null") || value.length() == 0) ? "0" : value.trim();
+            return new BigDecimal(value);
         } else {
             System.err.println("No " + key + ": " + o);
             Helpers.printStackTrace();
@@ -210,13 +245,5 @@ public class Helpers {
             }
         }
         return line;
-    }
-
-    public static BitsoBook getBook(String book) {
-        try{
-            return BitsoBook.valueOf(book.toUpperCase());
-        }catch (Exception e) {
-            return null;
-        }
     }
 }

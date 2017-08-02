@@ -1,16 +1,20 @@
 {
     "success": true,
     "payload": {
-        "client_id": "1234",
+        "client_id": "234237",
+        "first_name": "Nelson Victor",
+        "last_name": "Cruz Hernandez",
         "status": "active",
-        "daily_limit": "5300.00",
-        "monthly_limit": "32000.00",
-        "daily_remaining": "3300.00",
-        "monthly_remaining": "31000.00",
+        "daily_limit": "150000",
+        "monthly_limit": "480000",
+        "daily_remaining": "150000.00",
+        "monthly_remaining": "449083.00",
         "cellphone_number": "verified",
+        "cellphone_number_stored": "+525539969983",
+        "email_stored": "victor.cruz.isc@gmail.com",
         "official_id": "submitted",
         "proof_of_residency": "submitted",
-        "signed_contract": "unsubmitted",
-        "origin_of_funds": "unsubmitted"
+        "signed_contract": "not submitted",
+        "origin_of_funds": "not submitted"
     }
 }

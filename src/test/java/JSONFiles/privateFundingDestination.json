@@ -1,7 +1,7 @@
 {
-    "success": true,
-    "payload": {
-        "account_identifier_name": "SPEI CLABE",
-        "account_identifier": "646180115400346012"             
-    }
+	"success": true,
+	"payload": {
+		"account_identifier_name": "Bitcoin address",
+		"account_identifier": "3NZMQB3tSNoudgai28ig3WeKrNNWjXGUG4"
+	}
 }

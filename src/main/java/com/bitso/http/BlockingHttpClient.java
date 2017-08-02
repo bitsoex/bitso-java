@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
@@ -16,17 +15,14 @@ import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.AbstractHttpEntity;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
+import org.json.JSONObject;
 
 public class BlockingHttpClient {
-
-    private static final String USER_AGENT = "Mozilla/5.0"; // TODO: maybe do something more
-                                                            // rational here
     private boolean log = false;
     private long throttleMs = -1;
     private long lastCallTime = 0;
@@ -48,89 +44,29 @@ public class BlockingHttpClient {
         if (log) System.out.println(msg);
     }
 
-    private void throttle() throws InterruptedException {
+    private void throttle() {
         if (throttleMs <= 0) {
             return;
         }
         long time = System.currentTimeMillis();
         long diff = time - lastCallTime;
 
-        if (diff < throttleMs) {
-            log("Throttling request for " + (throttleMs - diff));
-            Thread.sleep(throttleMs - diff);
-        }
-        lastCallTime = System.currentTimeMillis();
-    }
-
-    public String get(String url, HashMap<String, String> headers) throws Exception {
-        throttle();
-        URL obj = new URL(url);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-        con.setRequestMethod("GET");
-
-        // add request headers
-        if (headers != null) {
-            for (Entry<String, String> e : headers.entrySet()) {
-                con.setRequestProperty(e.getKey(), e.getValue());
+        try {
+            if (diff < throttleMs) {
+                log("Throttling request for " + (throttleMs - diff));
+                Thread.sleep(throttleMs - diff);
             }
-            log("\nHeaders are \n" + headers.toString());
+            lastCallTime = System.currentTimeMillis();
+        } catch (InterruptedException e) {
+            log("Error executing throttle");
         }
-        con.setRequestProperty("User-Agent", USER_AGENT);
-
-        int responseCode = con.getResponseCode();
-        log("\nSending 'GET' request to URL : " + url);
-        log("Response Code : " + responseCode);
-
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
-
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
-
-        return response.toString();
     }
 
-    public String sendGet(String url, HashMap<String, String> headers) throws Exception {
+    public String sendPost(String url, String body, HashMap<String, String> headers) {
         throttle();
-        HttpGet getRequest = new HttpGet(url);
-
-        // add request headers
-        if (headers != null) {
-            for (Entry<String, String> e : headers.entrySet()) {
-                getRequest.addHeader(e.getKey(), e.getValue());
-            }
-            log("\nHeaders are \n" + headers.toString());
-        }
-
-        log("\nSending 'GET' request to URL : " + url);
-        CloseableHttpResponse response = HttpClients.createDefault().execute(getRequest);
-
-        log("Response Code : " + response.getStatusLine().getStatusCode());
-        BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-
-        String inputLine;
-        StringBuffer responseBody = new StringBuffer();
-
-        while ((inputLine = in.readLine()) != null) {
-            responseBody.append(inputLine);
-        }
-        in.close();
-        log(response);
-        log(responseBody);
-
-        return responseBody.toString();
-    }
-
-    public String get(String url) throws Exception {
-        return get(url, null);
-    }
-
-    public String sendPost(String url, String body, HashMap<String, String> headers) throws Exception {
-        throttle();
+        JSONObject errorJson = new JSONObject();
+        errorJson.put("success", Boolean.FALSE.toString());
+        JSONObject errorDescription = new JSONObject();
 
         try {
             URL requestURL = new URL(url);
@@ -138,7 +74,7 @@ public class BlockingHttpClient {
             con.setRequestMethod("POST");
             con.setRequestProperty("User-Agent", "Bitso-API");
 
-            // add request headers
+            // Add request headers
             if (headers != null) {
                 for (Entry<String, String> e : headers.entrySet()) {
                     con.setRequestProperty(e.getKey(), e.getValue());
@@ -152,26 +88,28 @@ public class BlockingHttpClient {
             wr.flush();
             wr.close();
 
-            if (con.getResponseCode() == 200) {
-                BufferedReader bufferedReader = new BufferedReader(
-                        new InputStreamReader(con.getInputStream()));
-                String input;
-                StringBuffer stringBuffer = new StringBuffer();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String input;
+            StringBuffer stringBuffer = new StringBuffer();
 
-                while ((input = bufferedReader.readLine()) != null) {
-                    stringBuffer.append(input);
-                }
-                bufferedReader.close();
-                return stringBuffer.toString();
+            while ((input = bufferedReader.readLine()) != null) {
+                stringBuffer.append(input);
             }
+            bufferedReader.close();
+            return stringBuffer.toString();
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            errorDescription.put("message", "Not a Valid URL");
+            errorDescription.put("code", 0322);
         } catch (ProtocolException e) {
-            e.printStackTrace();
+            errorDescription.put("message", "Protocol error");
+            errorDescription.put("code", 0101);
         } catch (IOException e) {
-            e.printStackTrace();
+            errorDescription.put("message", "No fetched data");
+            errorDescription.put("code", 0101);
         }
-        return null;
+
+        errorJson.put("error", errorDescription);
+        return errorJson.toString();
     }
 
     public String sendPost(String url, String body, HashMap<String, String> headers, Charset charset)
@@ -221,30 +159,21 @@ public class BlockingHttpClient {
     public String sendDelete(String url, HashMap<String, String> headers) throws Exception {
         throttle();
         HttpDelete deleteRequest = new HttpDelete(url);
-        // add request headers
+
+        // Add request headers
         if (headers != null) {
             for (Entry<String, String> e : headers.entrySet()) {
                 deleteRequest.addHeader(e.getKey(), e.getValue());
             }
-            log("\nHeaders are \n" + headers.toString());
         }
-
-        log("\nSending 'DELETE' request to URL : " + url);
         CloseableHttpResponse response = HttpClients.createDefault().execute(deleteRequest);
-        log("Response Code : " + response.getStatusLine().getStatusCode());
         BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-
         String inputLine;
         StringBuffer responseBody = new StringBuffer();
-
         while ((inputLine = in.readLine()) != null) {
             responseBody.append(inputLine);
         }
         in.close();
-        log(response);
-        log(responseBody);
-
         return responseBody.toString();
     }
-
 }
