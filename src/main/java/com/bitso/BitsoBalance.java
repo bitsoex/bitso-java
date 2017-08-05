@@ -6,6 +6,10 @@ import org.json.JSONObject;
 
 public class BitsoBalance {
 
+    public BigDecimal bchBalance; // BCH balance
+    public BigDecimal bchAvailable; // BCH available for trading
+    public BigDecimal bchReserved; // BCH reserved in open orders
+
     public BigDecimal btcBalance; // BTC balance
     public BigDecimal btcAvailable; // BTC available for trading
     public BigDecimal btcReserved; // BTC reserved in open orders
@@ -18,6 +22,10 @@ public class BitsoBalance {
     public BigDecimal ethAvailable; // MXN available for trading
     public BigDecimal ethReserved; // MXN reserved in open order
 
+    public BigDecimal xrpBalance; // XRP balance
+    public BigDecimal xrpAvailable; // XRP available for trading
+    public BigDecimal xrpReserved; // XRP reserved in open order
+
     /**
      * Customer trading fee, in percentage
      *
@@ -29,6 +37,10 @@ public class BitsoBalance {
     public BigDecimal feeDecimal; // customer trading fee, in decimal
 
     public BitsoBalance(JSONObject obj) {
+        bchBalance = new BigDecimal(obj.getString("bch_balance"));
+        bchAvailable = new BigDecimal(obj.getString("bch_available"));
+        bchReserved = new BigDecimal(obj.getString("bch_reserved"));
+
         btcBalance = new BigDecimal(obj.getString("btc_balance"));
         btcAvailable = new BigDecimal(obj.getString("btc_available"));
         btcReserved = new BigDecimal(obj.getString("btc_reserved"));
@@ -40,6 +52,10 @@ public class BitsoBalance {
         ethBalance = new BigDecimal(obj.getString("eth_balance"));
         ethAvailable = new BigDecimal(obj.getString("eth_available"));
         ethReserved = new BigDecimal(obj.getString("eth_reserved"));
+
+        xrpBalance = new BigDecimal(obj.getString("xrp_balance"));
+        xrpAvailable = new BigDecimal(obj.getString("xrp_available"));
+        xrpReserved = new BigDecimal(obj.getString("xrp_reserved"));
 
         feePercent = new BigDecimal(obj.getString("fee"));
         feeDecimal = feePercent.divide(new BigDecimal("100"), 8, BigDecimal.ROUND_UP);
