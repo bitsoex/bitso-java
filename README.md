@@ -1,24 +1,15 @@
 # bitso-java
 [Bitso's](https://bitso.com) official Java wrapper to interact with the [Bitso REST API v2](https://bitso.com/api_info/v2).
+
 *We recommend you migrate to [Bitso's](https://bitso.com) new [Bitso REST API v3](https://bitso.com/api_info).*
 
-## Installation
+You can access our Java REST API v3 Wrapper in [GitHub](https://github.com/bitsoex/bitso-java/).
 
-### Using Maven
+## Maven/Gradle
 
-Add the following dependency to your project's Maven pom.xml:
+You can add this library as a dependency to your Maven or Gradle project through [JitPack](https://jitpack.io/#bitsoex/bitso-java).
 
-```xml
-<dependency>
-  <groupId>com.bitso</groupId>
-  <artifactId>bitso-java</artifactId>
-  <version>2.0.3</version>
-</dependency>
-```
-
-The library will automatically be pulled from Maven Central.
-
-### JDK Requirements
+## JDK Requirements
 This library is only supported by OpenJDK 8
 
 ## Usage
