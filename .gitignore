@@ -7,3 +7,5 @@ conf/*
 target/
 pom.xml.versionsBackup
 .DS_Store
+build/
+.gradle
