@@ -301,3 +301,6 @@ mvn -Dtest=**/BitsoServerTest.java test
 Keep in mind that a couple of environment variables are required to run the tests against the server:
 - BITSO_DEV_PUBLIC_KEY
 - BITSO_DEV_PRIVATE
+
+# APIv2
+Although we highly recommend you stick to our APIv3 Wrapper, you can access our APIv2 Wrapper [here](https://github.com/bitsoex/bitso-java/tree/apiv2).
