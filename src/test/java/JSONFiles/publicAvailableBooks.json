@@ -40,5 +40,13 @@
 		"maximum_amount": "1000.00000000",
 		"minimum_value": "0.00000100",
 		"maximum_value": "1000.00000000"
+	}, {
+		"book": "bch_btc",
+		"minimum_price": "0.001",
+		"maximum_price": "80000.00",
+		"minimum_amount": "0.00015",
+		"maximum_amount": "500.00000000",
+		"minimum_value": "0.001",
+		"maximum_value": "10.00"
 	}]
 }

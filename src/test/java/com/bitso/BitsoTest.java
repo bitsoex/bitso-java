@@ -27,7 +27,7 @@ public abstract class BitsoTest {
         BookInfo[] books = mBitso.getAvailableBooks();
         assertEquals(true, (books != null));
         int totalElements = books.length;
-        assertEquals(5, totalElements);
+        assertEquals(6, totalElements);
         for (BookInfo bookInfo : books) {
             assertEquals(nullCheck(bookInfo, BookInfo.class), true);
         }
@@ -38,7 +38,7 @@ public abstract class BitsoTest {
         BitsoTicker[] tickers = mBitso.getTicker();
         assertEquals(tickers != null, true);
         int totalElements = tickers.length;
-        assertEquals(5, totalElements);
+        assertEquals(6, totalElements);
         for (Ticker ticker : tickers) {
             assertEquals(nullCheck(ticker, BitsoTicker.class), true);
         }

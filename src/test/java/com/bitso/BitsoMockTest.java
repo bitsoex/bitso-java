@@ -2,7 +2,6 @@ package com.bitso;
 
 import static org.junit.Assert.assertEquals;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,11 +66,13 @@ public class BitsoMockTest extends BitsoTest {
         Mockito.when(mBitso.getOrderBook("xrp_btc")).thenReturn(mockOrderBook);
         Mockito.when(mBitso.getOrderBook("xrp_mxn")).thenReturn(mockOrderBook);
         Mockito.when(mBitso.getOrderBook("eth_btc")).thenReturn(mockOrderBook);
+        Mockito.when(mBitso.getOrderBook("bch_btc")).thenReturn(mockOrderBook);
         Mockito.when(mBitso.getTrades("btc_mxn")).thenReturn(mockTransactions);
         Mockito.when(mBitso.getTrades("eth_mxn")).thenReturn(mockTransactions);
         Mockito.when(mBitso.getTrades("xrp_btc")).thenReturn(mockTransactions);
         Mockito.when(mBitso.getTrades("xrp_mxn")).thenReturn(mockTransactions);
         Mockito.when(mBitso.getTrades("eth_btc")).thenReturn(mockTransactions);
+        Mockito.when(mBitso.getTrades("bch_btc")).thenReturn(mockTransactions);
         Mockito.when(mBitso.getAccountStatus()).thenReturn(mockAccountStatus);
         Mockito.when(mBitso.getAccountBalance()).thenReturn(mockBalance);
         Mockito.when(mBitso.getFees()).thenReturn(mockFee);
@@ -88,6 +89,7 @@ public class BitsoMockTest extends BitsoTest {
         Mockito.when(mBitso.getOpenOrders("xrp_btc")).thenReturn(mockOpenOrders);
         Mockito.when(mBitso.getOpenOrders("xrp_mxn")).thenReturn(mockOpenOrders);
         Mockito.when(mBitso.getOpenOrders("eth_btc")).thenReturn(mockOpenOrders);
+        Mockito.when(mBitso.getOpenOrders("bch_btc")).thenReturn(mockOpenOrders);
         Mockito.when((mBitso.fundingDestination("fund_currency=btc"))).thenReturn(mockFundingDestination);
         Mockito.when((mBitso.fundingDestination("fund_currency=eth"))).thenReturn(mockFundingDestination);
         Mockito.when((mBitso.fundingDestination("fund_currency=mxn"))).thenReturn(mockFundingDestination);
@@ -253,13 +255,6 @@ public class BitsoMockTest extends BitsoTest {
             }
 
         }
-    }
-
-    // @Test
-    public void testSPEIWithdrawal() throws BitsoAPIException {
-        BitsoWithdrawal speiWithdrawal = mBitso.speiWithdrawal(new BigDecimal("50"), "name", "surname",
-                "044180001059660729", "testing reference", "5706");
-        assertEquals(true, nullCheck(speiWithdrawal, BitsoWithdrawal.class));
     }
 
     @Override

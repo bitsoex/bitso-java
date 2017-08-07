@@ -51,7 +51,7 @@ public class BitsoOperation {
             try {
                 currentValue = Helpers.getString(o, currentKey);
             } catch (JSONException exception) {
-                currentValue = String.valueOf(Helpers.getInt(o, currentKey));
+                currentValue = "-";
             }
             details.put(currentKey, currentValue);
         }
