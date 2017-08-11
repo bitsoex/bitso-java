@@ -1,34 +1,37 @@
 package com.bitso.exceptions;
 
+import com.bitso.helpers.Helpers;
+
+@SuppressWarnings("serial")
 public class BitsoAPIException extends Exception {
-    private static final long serialVersionUID = 1L;
-    private boolean mStatus;
     private int mErrorCode;
-    private String mErrorMessage;
-    
-    public BitsoAPIException(boolean status, int errorCode, String errorMessage){
-        this.mStatus = status;
-        this.mErrorCode = errorCode;
-        this.mErrorMessage = errorMessage;
+    private String mSimpleErrorMessage;
+    private String mDetailedErrorMessage;
+
+    public BitsoAPIException(int errorCode, String simpleErrorMessage) {
+        this(errorCode, simpleErrorMessage, "BITSO-API no detailed message");
     }
 
-    public boolean isStatus() {
-        return mStatus;
+    public BitsoAPIException(int errorCode, String simpleErrorMessage, String detailedErrorMessage) {
+        this.mErrorCode = errorCode;
+        this.mSimpleErrorMessage = simpleErrorMessage;
+        this.mDetailedErrorMessage = detailedErrorMessage;
     }
 
     public int getErrorCode() {
         return mErrorCode;
     }
 
-    public String getErrorMessage() {
-        return mErrorMessage;
+    public String getSimpleErrorMessage() {
+        return mSimpleErrorMessage;
+    }
+
+    public String getDetailedErrorMessage() {
+        return mDetailedErrorMessage;
     }
 
     @Override
     public String toString() {
-        return "BitsoAPIException Status=" + mStatus + ", ErrorCode=" +
-                mErrorCode + ", ErrorMessage=" + mErrorMessage;
+        return Helpers.fieldPrinter(this, BitsoAPIException.class);
     }
-    
-    
 }

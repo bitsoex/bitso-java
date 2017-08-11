@@ -3,6 +3,7 @@ package com.bitso.http;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -13,6 +14,7 @@ import java.util.Map.Entry;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
@@ -20,7 +22,6 @@ import org.apache.http.entity.AbstractHttpEntity;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
-import org.json.JSONObject;
 
 public class BlockingHttpClient {
     private boolean log = false;
@@ -48,13 +49,15 @@ public class BlockingHttpClient {
         if (throttleMs <= 0) {
             return;
         }
+
         long time = System.currentTimeMillis();
         long diff = time - lastCallTime;
 
         try {
             if (diff < throttleMs) {
-                log("Throttling request for " + (throttleMs - diff));
-                Thread.sleep(throttleMs - diff);
+                long throttleDifference = throttleMs - diff;
+                log("Throttling request for " + throttleDifference);
+                Thread.sleep(throttleDifference);
             }
             lastCallTime = System.currentTimeMillis();
         } catch (InterruptedException e) {
@@ -62,118 +65,90 @@ public class BlockingHttpClient {
         }
     }
 
-    public String sendPost(String url, String body, HashMap<String, String> headers) {
+    public String sendPost(String url, String body, HashMap<String, String> headers)
+            throws MalformedURLException, ProtocolException, IOException {
         throttle();
-        JSONObject errorJson = new JSONObject();
-        errorJson.put("success", Boolean.FALSE.toString());
-        JSONObject errorDescription = new JSONObject();
 
-        try {
-            URL requestURL = new URL(url);
-            HttpsURLConnection con = (HttpsURLConnection) requestURL.openConnection();
-            con.setRequestMethod("POST");
-            con.setRequestProperty("User-Agent", "Bitso-API");
+        URL requestURL = new URL(url);
+        HttpsURLConnection connection = (HttpsURLConnection) requestURL.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("User-Agent", "Bitso-API");
 
-            // Add request headers
-            if (headers != null) {
-                for (Entry<String, String> e : headers.entrySet()) {
-                    con.setRequestProperty(e.getKey(), e.getValue());
-                }
-                log("\nHeaders are \n" + headers.toString());
+        if (headers != null) {
+            for (Entry<String, String> e : headers.entrySet()) {
+                connection.setRequestProperty(e.getKey(), e.getValue());
             }
-
-            con.setDoOutput(true);
-            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-            wr.writeBytes(body);
-            wr.flush();
-            wr.close();
-
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String input;
-            StringBuffer stringBuffer = new StringBuffer();
-
-            while ((input = bufferedReader.readLine()) != null) {
-                stringBuffer.append(input);
-            }
-            bufferedReader.close();
-            return stringBuffer.toString();
-        } catch (MalformedURLException e) {
-            errorDescription.put("message", "Not a Valid URL");
-            errorDescription.put("code", 0322);
-        } catch (ProtocolException e) {
-            errorDescription.put("message", "Protocol error");
-            errorDescription.put("code", 0101);
-        } catch (IOException e) {
-            errorDescription.put("message", "No fetched data");
-            errorDescription.put("code", 0101);
         }
 
-        errorJson.put("error", errorDescription);
-        return errorJson.toString();
+        connection.setDoOutput(true);
+        DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+        wr.writeBytes(body);
+        wr.flush();
+        wr.close();
+
+        String response = getStringFromStream(connection.getInputStream());
+        log(response);
+
+        return response;
     }
 
     public String sendPost(String url, String body, HashMap<String, String> headers, Charset charset)
-            throws Exception {
+            throws ClientProtocolException, IOException {
         return sendPost(url, new StringEntity(body, charset), headers);
     }
 
-    public String sendPost(String url, byte[] body, HashMap<String, String> headers) throws Exception {
+    public String sendPost(String url, byte[] body, HashMap<String, String> headers)
+            throws ClientProtocolException, IOException {
         return sendPost(url, new ByteArrayEntity(body), headers);
     }
 
     private String sendPost(String url, AbstractHttpEntity body, HashMap<String, String> headers)
-            throws Exception {
+            throws ClientProtocolException, IOException {
         throttle();
 
         HttpPost postRequest = new HttpPost(url);
-        // add request headers
         if (headers != null) {
             for (Entry<String, String> e : headers.entrySet()) {
                 postRequest.addHeader(e.getKey(), e.getValue());
             }
-            log("\nHeaders are \n" + headers.toString());
         }
 
         postRequest.setEntity(body);
 
-        log("\nSending 'POST' request to URL : " + url);
-        log("Post parameters : " + body.getContent());
+        CloseableHttpResponse closeableHttpResponse = HttpClients.createDefault().execute(postRequest);
+        String response = getStringFromStream(closeableHttpResponse.getEntity().getContent());
 
-        CloseableHttpResponse response = HttpClients.createDefault().execute(postRequest);
-        log("Response Code : " + response.getStatusLine().getStatusCode());
-        BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-
-        String inputLine;
-        StringBuffer responseBody = new StringBuffer();
-
-        while ((inputLine = in.readLine()) != null) {
-            responseBody.append(inputLine);
-        }
-        in.close();
-        log(response);
-        log(responseBody);
-
-        return responseBody.toString();
+        return response;
     }
 
-    public String sendDelete(String url, HashMap<String, String> headers) throws Exception {
+    public String sendDelete(String url, HashMap<String, String> headers)
+            throws ClientProtocolException, IOException {
         throttle();
         HttpDelete deleteRequest = new HttpDelete(url);
 
-        // Add request headers
         if (headers != null) {
             for (Entry<String, String> e : headers.entrySet()) {
                 deleteRequest.addHeader(e.getKey(), e.getValue());
             }
         }
-        CloseableHttpResponse response = HttpClients.createDefault().execute(deleteRequest);
-        BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-        String inputLine;
-        StringBuffer responseBody = new StringBuffer();
-        while ((inputLine = in.readLine()) != null) {
-            responseBody.append(inputLine);
+
+        CloseableHttpResponse closeableHttpResponse = HttpClients.createDefault().execute(deleteRequest);
+        String response = getStringFromStream(closeableHttpResponse.getEntity().getContent());
+
+        return response;
+    }
+
+    public String getStringFromStream(InputStream inputStream) throws IOException {
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        StringBuffer stringBuffer = new StringBuffer();
+        String input = null;
+
+        while ((input = bufferedReader.readLine()) != null) {
+            stringBuffer.append(input);
         }
-        in.close();
-        return responseBody.toString();
+
+        bufferedReader.close();
+        return stringBuffer.toString();
     }
 }

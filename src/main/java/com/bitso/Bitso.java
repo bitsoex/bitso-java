@@ -21,6 +21,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.net.ssl.HttpsURLConnection;
 
+import org.apache.http.client.ClientProtocolException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -89,27 +90,52 @@ public class Bitso {
     // Public Functions
     public BookInfo[] getAvailableBooks() throws BitsoAPIException {
         String request = "/api/v3/available_books";
-        String getResponse = sendGet(request);
-        JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
-        int totalElements = payloadJSON.length();
-        BookInfo[] books = new BookInfo[totalElements];
-        for (int i = 0; i < totalElements; i++) {
-            books[i] = new BookInfo(payloadJSON.getJSONObject(i));
+
+        String getResponse = null;
+        try {
+            getResponse = sendGet(request);
+            JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
+            int totalElements = payloadJSON.length();
+            BookInfo[] books = new BookInfo[totalElements];
+            for (int i = 0; i < totalElements; i++) {
+                books[i] = new BookInfo(payloadJSON.getJSONObject(i));
+            }
+            return books;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
         }
-        return books;
     }
 
     public BitsoTicker[] getTicker() throws BitsoAPIException {
         String request = "/api/v3/ticker";
 
-        String getResponse = sendGet(request);
-        JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
-        int totalElements = payloadJSON.length();
-        BitsoTicker[] tickers = new BitsoTicker[totalElements];
-        for (int i = 0; i < totalElements; i++) {
-            tickers[i] = new BitsoTicker(payloadJSON.getJSONObject(i));
+        String getResponse = null;
+        try {
+            getResponse = sendGet(request);
+            JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
+            int totalElements = payloadJSON.length();
+            BitsoTicker[] tickers = new BitsoTicker[totalElements];
+            for (int i = 0; i < totalElements; i++) {
+                tickers[i] = new BitsoTicker(payloadJSON.getJSONObject(i));
+            }
+            return tickers;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
         }
-        return tickers;
     }
 
     public BitsoOrderBook getOrderBook(String book, boolean... aggregate) throws BitsoAPIException {
@@ -123,40 +149,102 @@ public class Bitso {
             }
         }
 
-        String getResponse = sendGet(request);
-        JSONObject payloadJSON = (JSONObject) getJSONPayload(getResponse);
-        return new BitsoOrderBook(payloadJSON);
+        String getResponse = null;
+        try {
+            getResponse = sendGet(request);
+            JSONObject payloadJSON = (JSONObject) getJSONPayload(getResponse);
+            return new BitsoOrderBook(payloadJSON);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+        }
     }
 
     public BitsoTransactions getTrades(String book, String... queryParameters) throws BitsoAPIException {
         String parsedQueryParametes = processQueryParameters("&", queryParameters);
         String request = "/api/v3/trades?book=" + book
                 + ((parsedQueryParametes != null) ? "&" + parsedQueryParametes : "");
-        String getResponse = sendGet(request);
-        JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
-        return new BitsoTransactions(payloadJSON);
+
+        String getResponse = null;
+        try {
+            getResponse = sendGet(request);
+            JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
+            return new BitsoTransactions(payloadJSON);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+        }
     }
 
     // Private Functions
     public BitsoAccountStatus getAccountStatus() throws BitsoAPIException {
         String request = "/api/v3/account_status";
-        String getResponse = sendBitsoGet(request);
-        JSONObject payloadJSON = (JSONObject) getJSONPayload(getResponse);
-        return new BitsoAccountStatus(payloadJSON);
+
+        String getResponse = null;
+        try {
+            getResponse = sendBitsoGet(request);
+            JSONObject payloadJSON = (JSONObject) getJSONPayload(getResponse);
+            return new BitsoAccountStatus(payloadJSON);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+        }
     }
 
     public BitsoBalance getAccountBalance() throws BitsoAPIException {
         String request = "/api/v3/balance";
-        String getResponse = sendBitsoGet(request);
-        JSONObject payloadJSON = (JSONObject) getJSONPayload(getResponse);
-        return new BitsoBalance(payloadJSON);
+        String getResponse = null;
+        try {
+            getResponse = sendBitsoGet(request);
+            JSONObject payloadJSON = (JSONObject) getJSONPayload(getResponse);
+            return new BitsoBalance(payloadJSON);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+        }
     }
 
     public BitsoFee getFees() throws BitsoAPIException {
         String request = "/api/v3/fees";
-        String getResponse = sendBitsoGet(request);
-        JSONObject payloadJSON = (JSONObject) getJSONPayload(getResponse);
-        return new BitsoFee(payloadJSON);
+        String getResponse = null;
+        try {
+            getResponse = sendBitsoGet(request);
+            JSONObject payloadJSON = (JSONObject) getJSONPayload(getResponse);
+            return new BitsoFee(payloadJSON);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+        }
     }
 
     public BitsoOperation[] getLedger(String specificOperation, String... queryParameters)
@@ -170,16 +258,26 @@ public class Bitso {
         String parsedQueryParametes = processQueryParameters("&", queryParameters);
         request += ((parsedQueryParametes != null) ? "?" + parsedQueryParametes : "");
 
-        log(request);
-
-        String getResponse = sendBitsoGet(request);
-        JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
-        int totalElements = payloadJSON.length();
-        BitsoOperation[] operations = new BitsoOperation[totalElements];
-        for (int i = 0; i < totalElements; i++) {
-            operations[i] = new BitsoOperation(payloadJSON.getJSONObject(i));
+        String getResponse = null;
+        try {
+            getResponse = sendBitsoGet(request);
+            JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
+            int totalElements = payloadJSON.length();
+            BitsoOperation[] operations = new BitsoOperation[totalElements];
+            for (int i = 0; i < totalElements; i++) {
+                operations[i] = new BitsoOperation(payloadJSON.getJSONObject(i));
+            }
+            return operations;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
         }
-        return operations;
     }
 
     /**
@@ -209,16 +307,26 @@ public class Bitso {
             request += ((parsedQueryParametes != null) ? "?" + parsedQueryParametes : "");
         }
 
-        log(request);
-
-        String getResponse = sendBitsoGet(request);
-        JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
-        int totalElements = payloadJSON.length();
-        BitsoWithdrawal[] withdrawals = new BitsoWithdrawal[totalElements];
-        for (int i = 0; i < totalElements; i++) {
-            withdrawals[i] = new BitsoWithdrawal(payloadJSON.getJSONObject(i));
+        String getResponse = null;
+        try {
+            getResponse = sendBitsoGet(request);
+            JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
+            int totalElements = payloadJSON.length();
+            BitsoWithdrawal[] withdrawals = new BitsoWithdrawal[totalElements];
+            for (int i = 0; i < totalElements; i++) {
+                withdrawals[i] = new BitsoWithdrawal(payloadJSON.getJSONObject(i));
+            }
+            return withdrawals;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
         }
-        return withdrawals;
     }
 
     /**
@@ -248,16 +356,26 @@ public class Bitso {
             request += ((parsedQueryParametes != null) ? "?" + parsedQueryParametes : "");
         }
 
-        log(request);
-
-        String getResponse = sendBitsoGet(request);
-        JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
-        int totalElements = payloadJSON.length();
-        BitsoFunding[] fundings = new BitsoFunding[totalElements];
-        for (int i = 0; i < totalElements; i++) {
-            fundings[i] = new BitsoFunding(payloadJSON.getJSONObject(i));
+        String getResponse = null;
+        try {
+            getResponse = sendBitsoGet(request);
+            JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
+            int totalElements = payloadJSON.length();
+            BitsoFunding[] fundings = new BitsoFunding[totalElements];
+            for (int i = 0; i < totalElements; i++) {
+                fundings[i] = new BitsoFunding(payloadJSON.getJSONObject(i));
+            }
+            return fundings;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
         }
-        return fundings;
     }
 
     /**
@@ -287,16 +405,26 @@ public class Bitso {
             request += ((parsedQueryParametes != null) ? "?" + parsedQueryParametes : "");
         }
 
-        log(request);
-
-        String getResponse = sendBitsoGet(request);
-        JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
-        int totalElements = payloadJSON.length();
-        BitsoTrade[] trades = new BitsoTrade[totalElements];
-        for (int i = 0; i < totalElements; i++) {
-            trades[i] = new BitsoTrade(payloadJSON.getJSONObject(i));
+        String getResponse = null;
+        try {
+            getResponse = sendBitsoGet(request);
+            JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
+            int totalElements = payloadJSON.length();
+            BitsoTrade[] trades = new BitsoTrade[totalElements];
+            for (int i = 0; i < totalElements; i++) {
+                trades[i] = new BitsoTrade(payloadJSON.getJSONObject(i));
+            }
+            return trades;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
         }
-        return trades;
     }
 
     public BitsoTrade[] getOrderTrades(String orderId) throws BitsoAPIException {
@@ -308,16 +436,26 @@ public class Bitso {
 
         request += "/" + orderId;
 
-        log(request);
-
-        String getResponse = sendBitsoGet(request);
-        JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
-        int totalElements = payloadJSON.length();
-        BitsoTrade[] trades = new BitsoTrade[totalElements];
-        for (int i = 0; i < totalElements; i++) {
-            trades[i] = new BitsoTrade(payloadJSON.getJSONObject(i));
+        String getResponse = null;
+        try {
+            getResponse = sendBitsoGet(request);
+            JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
+            int totalElements = payloadJSON.length();
+            BitsoTrade[] trades = new BitsoTrade[totalElements];
+            for (int i = 0; i < totalElements; i++) {
+                trades[i] = new BitsoTrade(payloadJSON.getJSONObject(i));
+            }
+            return trades;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
         }
-        return trades;
     }
 
     public BitsoOrder[] getOpenOrders(String book, String... queryParameters) throws BitsoAPIException {
@@ -328,14 +466,26 @@ public class Bitso {
         String parsedQueryParametes = processQueryParameters("&", queryParameters);
         request += ((parsedQueryParametes != null) ? "&" + parsedQueryParametes : "");
 
-        String getResponse = sendBitsoGet(request);
-        JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
-        int totalElements = payloadJSON.length();
-        BitsoOrder[] orders = new BitsoOrder[totalElements];
-        for (int i = 0; i < totalElements; i++) {
-            orders[i] = new BitsoOrder(payloadJSON.getJSONObject(i));
+        String getResponse = null;
+        try {
+            getResponse = sendBitsoGet(request);
+            JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
+            int totalElements = payloadJSON.length();
+            BitsoOrder[] orders = new BitsoOrder[totalElements];
+            for (int i = 0; i < totalElements; i++) {
+                orders[i] = new BitsoOrder(payloadJSON.getJSONObject(i));
+            }
+            return orders;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
         }
-        return orders;
     }
 
     public BitsoOrder[] lookupOrders(String... ordersId) throws BitsoAPIException {
@@ -348,17 +498,26 @@ public class Bitso {
         String ordersIdsParameters = processQueryParameters("-", ordersId);
         request += "/" + ordersIdsParameters;
 
-        log(request);
-
-        String getResponse = sendBitsoGet(request);
-        JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
-        int totalElements = payloadJSON.length();
-        BitsoOrder[] orders = new BitsoOrder[totalElements];
-        for (int i = 0; i < totalElements; i++) {
-            orders[i] = new BitsoOrder(payloadJSON.getJSONObject(i));
+        String getResponse = null;
+        try {
+            getResponse = sendBitsoGet(request);
+            JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
+            int totalElements = payloadJSON.length();
+            BitsoOrder[] orders = new BitsoOrder[totalElements];
+            for (int i = 0; i < totalElements; i++) {
+                orders[i] = new BitsoOrder(payloadJSON.getJSONObject(i));
+            }
+            return orders;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
         }
-        return orders;
-
     }
 
     public String placeOrder(String book, BitsoOrder.SIDE side, BitsoOrder.TYPE type, BigDecimal major,
@@ -392,9 +551,23 @@ public class Bitso {
             parameters.put("minor", minor.toString());
         }
 
-        String postResponse = sendBitsoPost(request, parameters);
-        JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
-        return Helpers.getString(payloadJSON, "oid");
+        String postResponse = null;
+        try {
+            postResponse = sendBitsoPost(request, parameters);
+            log(postResponse);
+
+            JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
+            return Helpers.getString(payloadJSON, "oid");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+        }
     }
 
     public String[] cancelOrder(String... ordersIds) throws BitsoAPIException {
@@ -406,11 +579,25 @@ public class Bitso {
 
         String ordersIdsParameters = processQueryParameters("-", ordersIds);
         request += "/" + ordersIdsParameters;
-
         log(request);
-        String deleteResponse = sendBitsoDelete(request);
-        JSONArray payloadJSON = (JSONArray) getJSONPayload(deleteResponse);
-        return Helpers.parseJSONArray(payloadJSON);
+
+        String deleteResponse = null;
+        try {
+            deleteResponse = sendBitsoDelete(request);
+            log(deleteResponse);
+
+            JSONArray payloadJSON = (JSONArray) getJSONPayload(deleteResponse);
+            return Helpers.parseJSONArray(payloadJSON);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+        }
     }
 
     public Map<String, String> fundingDestination(String currencyParameter) throws BitsoAPIException {
@@ -422,16 +609,28 @@ public class Bitso {
 
         request += "?" + currencyParameter;
 
-        log(request);
+        String getResponse = null;
+        try {
+            getResponse = sendBitsoGet(request);
+            log(getResponse);
 
-        String getResponse = sendBitsoGet(request);
-        JSONObject payloadJSON = (JSONObject) getJSONPayload(getResponse);
-        Map<String, String> fundingDestination = new HashMap<String, String>();
-        fundingDestination.put("account_identifier_name",
-                Helpers.getString(payloadJSON, "account_identifier_name"));
-        fundingDestination.put("account_identifier", Helpers.getString(payloadJSON, "account_identifier"));
-        return fundingDestination;
-
+            JSONObject payloadJSON = (JSONObject) getJSONPayload(getResponse);
+            Map<String, String> fundingDestination = new HashMap<String, String>();
+            fundingDestination.put("account_identifier_name",
+                    Helpers.getString(payloadJSON, "account_identifier_name"));
+            fundingDestination.put("account_identifier",
+                    Helpers.getString(payloadJSON, "account_identifier"));
+            return fundingDestination;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+        }
     }
 
     public BitsoWithdrawal bitcoinWithdrawal(BigDecimal amount, String address) throws BitsoAPIException {
@@ -453,34 +652,56 @@ public class Bitso {
         parameters.put("clabe", clabe);
         parameters.put("notes_ref", notesReference);
         parameters.put("numeric_ref", numericReference);
-        String postResponse = sendBitsoPost(request, parameters);
+        String postResponse = null;
+        try {
+            postResponse = sendBitsoPost(request, parameters);
+            log(postResponse);
 
-        log(postResponse);
-
-        JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
-        return new BitsoWithdrawal(payloadJSON);
+            JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
+            return new BitsoWithdrawal(payloadJSON);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+        }
     }
 
     public Map<String, String> getBanks() throws BitsoAPIException {
         String request = "/api/v3/mx_bank_codes";
+        String getResponse = null;
+        try {
+            getResponse = sendBitsoGet(request);
+            log(getResponse);
 
-        log(request);
+            JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
+            Map<String, String> banks = new HashMap<String, String>();
 
-        String getResponse = sendBitsoGet(request);
-        JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
-        Map<String, String> banks = new HashMap<String, String>();
-
-        String currentBankCode = "";
-        String currentBankName = "";
-        JSONObject currentJSON = null;
-        int totalElements = payloadJSON.length();
-        for (int i = 0; i < totalElements; i++) {
-            currentJSON = payloadJSON.getJSONObject(i);
-            currentBankCode = Helpers.getString(currentJSON, "code");
-            currentBankName = Helpers.getString(currentJSON, "name");
-            banks.put(currentBankCode, currentBankName);
+            String currentBankCode = "";
+            String currentBankName = "";
+            JSONObject currentJSON = null;
+            int totalElements = payloadJSON.length();
+            for (int i = 0; i < totalElements; i++) {
+                currentJSON = payloadJSON.getJSONObject(i);
+                currentBankCode = Helpers.getString(currentJSON, "code");
+                currentBankName = Helpers.getString(currentJSON, "name");
+                banks.put(currentBankCode, currentBankName);
+            }
+            return banks;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
         }
-        return banks;
     }
 
     public BitsoWithdrawal debitCardWithdrawal(BigDecimal amount, String recipientGivenNames,
@@ -492,9 +713,24 @@ public class Bitso {
         parameters.put("recipient_family_names", recipientFamilyNames);
         parameters.put("card_number", cardNumber);
         parameters.put("bank_code", bankCode);
-        String postResponse = sendBitsoPost(request, parameters);
-        JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
-        return new BitsoWithdrawal(payloadJSON);
+
+        String postResponse = null;
+        try {
+            postResponse = sendBitsoPost(request, parameters);
+            log(postResponse);
+
+            JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
+            return new BitsoWithdrawal(payloadJSON);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+        }
     }
 
     public BitsoWithdrawal phoneWithdrawal(BigDecimal amount, String recipientGivenNames,
@@ -506,34 +742,69 @@ public class Bitso {
         parameters.put("recipient_family_names", recipientFamilyNames);
         parameters.put("phone_number", phoneNumber);
         parameters.put("bank_code", bankCode);
-        String postResponse = sendBitsoPost(request, parameters);
-        JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
-        return new BitsoWithdrawal(payloadJSON);
+
+        String postResponse = null;
+        try {
+            postResponse = sendBitsoPost(request, parameters);
+            log(postResponse);
+
+            JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
+            return new BitsoWithdrawal(payloadJSON);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+        }
     }
 
-    private BitsoWithdrawal currencyWithdrawal(String currency, BigDecimal amount,
-            String address) throws BitsoAPIException {
+    private BitsoWithdrawal currencyWithdrawal(String currency, BigDecimal amount, String address)
+            throws BitsoAPIException {
         String request = "/api/v3/" + currency + "_withdrawal";
         JSONObject parameters = new JSONObject();
         parameters.put("amount", amount.toString());
         parameters.put("address", address);
-        String postResponse = sendBitsoPost(request, parameters);
-        JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
-        return new BitsoWithdrawal(payloadJSON);
-    }
 
-    public String getDepositAddress() {
-        return quoteEliminator(sendBitsoPost(baseUrl + "bitcoin_deposit_address"));
-    }
+        String postResponse = null;
+        try {
+            postResponse = sendBitsoPost(request, parameters);
+            log(postResponse);
 
-    public BitsoTransfer getTransferStatus(String transferId) {
-        String getResponse = sendGet(baseUrl + "transfer/" + transferId);
-        JSONObject o = Helpers.parseJson(getResponse);
-        if (o == null || o.has("error")) {
-            logError("Unable to get transfer status: " + getResponse);
-            return null;
+            JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
+            return new BitsoWithdrawal(payloadJSON);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
         }
-        return new BitsoTransfer(o);
+    }
+
+    public String getDepositAddress() throws BitsoAPIException {
+        String postResponse = null;
+        try {
+            postResponse = sendBitsoPost(baseUrl + "bitcoin_deposit_address");
+            log(postResponse);
+
+            return quoteEliminator(postResponse);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+        }
     }
 
     private String quoteEliminator(String input) {
@@ -600,82 +871,49 @@ public class Bitso {
         return entry;
     }
 
-    public String sendGet(String requestedURL) {
-        JSONObject errorJson = new JSONObject();
-        errorJson.put("success", Boolean.FALSE.toString());
-        JSONObject errorDescription = new JSONObject();
-        try {
-            URL url = new URL(baseUrl + requestedURL);
-            HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-            con.setRequestProperty("User-Agent", "Android");
-            return convertInputStreamToString(con.getInputStream());
-        } catch (MalformedURLException e) {
-            errorDescription.put("message", "Not a Valid URL");
-            errorDescription.put("code", 0322);
-        } catch (IOException e) {
-            errorDescription.put("message", "No fetched data");
-            errorDescription.put("code", 0101);
-        }
-        errorJson.put("error", errorDescription);
-        return errorJson.toString();
+    public String sendGet(String requestedURL) throws MalformedURLException, ProtocolException, IOException {
+        URL url = new URL(baseUrl + requestedURL);
+        HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("User-Agent", "Android");
+        return convertInputStreamToString(con.getInputStream());
     }
 
-    public String sendBitsoGet(String requestPath) {
+    public String sendBitsoGet(String requestPath)
+            throws MalformedURLException, ProtocolException, IOException {
         return sendBitsoHttpRequest(requestPath, "GET");
     }
 
-    private String sendBitsoHttpRequest(String requestPath, String method) {
+    private String sendBitsoHttpRequest(String requestPath, String method)
+            throws MalformedURLException, ProtocolException, IOException {
         String response = null;
         String requestURL = baseUrl + requestPath;
-        JSONObject errorJson = new JSONObject();
-        errorJson.put("success", Boolean.FALSE.toString());
-        JSONObject errorDescription = new JSONObject();
-        try {
-            URL url = new URL(requestURL);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.addRequestProperty("Authorization",
-                    buildBitsoAuthHeader(requestPath, "GET", key, secret));
-            connection.setRequestProperty("User-Agent", "Bitso-java-api");
-            connection.setRequestMethod(method);
-            InputStream inputStream = new BufferedInputStream(connection.getInputStream());
-            response = convertInputStreamToString(inputStream);
-            return response;
-        } catch (MalformedURLException e) {
-            errorDescription.put("message", "Not a Valid URL");
-            errorDescription.put("code", 0322);
-        } catch (ProtocolException e) {
-            errorDescription.put("message", "Protocol error");
-            errorDescription.put("code", 0101);
-        } catch (IOException e) {
-            errorDescription.put("message", "No fetched data");
-            errorDescription.put("code", 0101);
-        }
-
-        errorJson.put("error", errorDescription);
-        return errorJson.toString();
+        URL url = new URL(requestURL);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.addRequestProperty("Authorization", buildBitsoAuthHeader(requestPath, "GET", key, secret));
+        connection.setRequestProperty("User-Agent", "Bitso-java-api");
+        connection.setRequestMethod(method);
+        InputStream inputStream = new BufferedInputStream(connection.getInputStream());
+        response = convertInputStreamToString(inputStream);
+        return response;
     }
 
-    private String sendBitsoDelete(String requestPath) {
+    private String sendBitsoDelete(String requestPath) throws ClientProtocolException, IOException {
         long nonce = System.currentTimeMillis() + System.currentTimeMillis();
         Entry<String, String> authHeader = buildBitsoAuthHeader(secret, key, nonce, "DELETE", requestPath,
                 null);
         HashMap<String, String> headers = new HashMap<String, String>();
         headers.put("Content-Type", "application/json");
         headers.put(authHeader.getKey(), authHeader.getValue());
-        try {
-            return client.sendDelete(baseUrl + requestPath, headers);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return client.sendDelete(baseUrl + requestPath, headers);
     }
 
-    public String sendBitsoPost(String url) {
+    public String sendBitsoPost(String url) throws MalformedURLException, ProtocolException, IOException {
         return sendBitsoPost(url, null);
     }
 
-    public String sendBitsoPost(String requestPath, JSONObject jsonPayload) {
+    public String sendBitsoPost(String requestPath, JSONObject jsonPayload)
+            throws MalformedURLException, ProtocolException, IOException {
         long nonce = System.currentTimeMillis() + System.currentTimeMillis();
         String jsonString = "";
         if (jsonPayload != null) {
@@ -749,7 +987,7 @@ public class Bitso {
 
         if (o == null) {
             logError("Unable to parse server message " + jsonResponse);
-            throw new BitsoAPIException(false, Helpers.ERROR_NUMBER_PARSE_JSON, Helpers.ERROR_PARSE_JSON);
+            throw new BitsoAPIException(101, "Unable to parse server message");
         }
 
         if (o.has("error")) {
@@ -757,14 +995,14 @@ public class Bitso {
             int errorCode = Helpers.getInt(errorJson, "code");
             String errorMessage = Helpers.getString(errorJson, "message");
             logError("Error response from server " + errorMessage);
-            throw new BitsoAPIException(false, errorCode, errorMessage);
+            throw new BitsoAPIException(errorCode, errorMessage, "Error response from server in json");
         }
 
         if (o.has("payload")) {
             return o.get("payload");
         } else {
             logError("Server response does not contain payload");
-            throw new BitsoAPIException(false, Helpers.ERROR_NUMBER_NO_PAYLOAD, Helpers.ERROR_NO_PAYLOAD);
+            throw new BitsoAPIException(101, "Server response does not contain payload");
         }
     }
 }

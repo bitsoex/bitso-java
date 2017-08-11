@@ -14,6 +14,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.bitso.BitsoBalance.Balance;
 import com.bitso.exceptions.BitsoAPIException;
 import com.bitso.exchange.BookInfo;
 import com.bitso.exchange.Ticker;
@@ -613,82 +614,76 @@ public abstract class BitsoTest {
         }
     }
 
-    // @Test
-    public void testOpenOrders() throws BitsoAPIException {
-        BookInfo[] books = mBitso.getAvailableBooks();
-        assertEquals(books != null, true);
-        for (BookInfo book : books) {
-            BitsoOrder[] orders = mBitso.getOpenOrders(book.getBook());
-            for (BitsoOrder bitsoOrder : orders) {
-                assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
-            }
-        }
-    }
-
-    // @Test
-    public void testLookUpOrders() throws InterruptedException, BitsoAPIException {
-        List<BitsoOrder> openOrders = new ArrayList<>();
-        BookInfo[] books = mBitso.getAvailableBooks();
-        for (BookInfo book : books) {
-            BitsoOrder[] orders = mBitso.getOpenOrders(book.getBook());
-            for (BitsoOrder bitsoOrder : orders) {
-                openOrders.add(bitsoOrder);
-            }
-        }
-
-        int totalOpenOrders = openOrders.size();
-
-        BitsoOrder[] empty = mBitso.lookupOrders();
-        assertEquals(empty == null, true);
-
-        Thread.sleep(5_000);
-
-        if (totalOpenOrders > 0) {
-            BitsoOrder[] specificOrder = mBitso.lookupOrders(openOrders.get(0).getOid());
-            assertEquals(specificOrder != null, true);
-            assertEquals(specificOrder.length, 1);
-            for (BitsoOrder bitsoOrder : specificOrder) {
-                assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
-            }
-        }
-
-        Thread.sleep(5_000);
-
-        if (totalOpenOrders >= 3) {
-            BitsoOrder[] multiple = mBitso.lookupOrders(openOrders.get(0).getOid(),
-                    openOrders.get(1).getOid(), openOrders.get(2).getOid());
-            assertEquals(multiple != null, true);
-            assertEquals(multiple.length, 3);
-            for (BitsoOrder bitsoOrder : multiple) {
-                assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
-            }
-        }
-    }
-
-    // @Test
+    //@Test
     public void testTrading() throws InterruptedException, BitsoAPIException {
         List<String> orders = new ArrayList<>();
         String canceledOrders[] = null;
+        String sellOrderId = null;
+        String buyOrderId = null;
 
-        for (int i = 0; i < 5; i++) {
-            String orderId = mBitso.placeOrder("btc_mxn", BitsoOrder.SIDE.BUY, BitsoOrder.TYPE.LIMIT,
+        BitsoBalance bitsoBalance = mBitso.getAccountBalance();
+        assertEquals((bitsoBalance != null), true);
+
+        HashMap<String, Balance> currencyBalances = bitsoBalance.getBalances();
+        assertEquals((currencyBalances != null), true);
+
+        Balance mxnBalance = currencyBalances.get("mxn");
+        assertEquals(nullCheck(mxnBalance, Balance.class), true);
+
+        Balance btcBalance = currencyBalances.get("btc");
+        assertEquals(nullCheck(btcBalance, Balance.class), true);
+
+        if (mxnBalance.getAvailable().doubleValue() >= 10) {
+            buyOrderId = mBitso.placeOrder("btc_mxn", BitsoOrder.SIDE.BUY, BitsoOrder.TYPE.LIMIT,
                     new BigDecimal("0.001"), null, new BigDecimal("10000"));
-            assertEquals(orderId != null, true);
-            orders.add(orderId);
+            assertEquals(buyOrderId != null, true);
+            orders.add(buyOrderId);
+        } else {
+            System.out.println(
+                    "Test: Set limit BUY order on mxn_btc order book was not executed due not enough funds in MXN");
         }
 
-        Thread.sleep(1_000);
-
-        for (int i = 0; i < 5; i++) {
-            String orderId = mBitso.placeOrder("btc_mxn", BitsoOrder.SIDE.SELL, BitsoOrder.TYPE.LIMIT,
+        if (btcBalance.getAvailable().doubleValue() >= 0.001) {
+            sellOrderId = mBitso.placeOrder("btc_mxn", BitsoOrder.SIDE.SELL, BitsoOrder.TYPE.LIMIT,
                     new BigDecimal("0.001"), null, new BigDecimal("80000"));
-            assertEquals(orderId != null, true);
-            orders.add(orderId);
+            assertEquals(sellOrderId != null, true);
+            orders.add(sellOrderId);
+        } else {
+            System.out.println(
+                    "Test: Set limit SELL order on mxn_btc order book was not executed due not enough funds in BTC");
         }
 
         Thread.sleep(1_000);
 
         int totalOpenOrders = orders.size();
+        assertEquals(totalOpenOrders, 2);
+
+        BookInfo[] books = mBitso.getAvailableBooks();
+        assertEquals(books != null, true);
+        int totalExpectedOpenOrders = 0;
+        for (BookInfo book : books) {
+            totalExpectedOpenOrders = (book.getBook().equals("btc_mxn") ||
+                    book.getBook().equals("eth_btc")) ? totalOpenOrders : 0;
+            BitsoOrder[] openOrders = mBitso.getOpenOrders(book.getBook());
+            assertEquals(openOrders.length, totalExpectedOpenOrders);
+
+            if (openOrders.length > 0) {
+                for (BitsoOrder bitsoOrder : openOrders) {
+                    assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
+                }
+            }
+        }
+
+        Thread.sleep(1_000);
+
+        BitsoOrder[] multiple = mBitso.lookupOrders(buyOrderId, sellOrderId);
+        assertEquals(multiple != null, true);
+        assertEquals(multiple.length, 2);
+        for (BitsoOrder bitsoOrder : multiple) {
+            assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
+        }
+
+        Thread.sleep(1_000);
 
         for (int i = 0; i < totalOpenOrders; i++) {
             String orderId = orders.get(i);
