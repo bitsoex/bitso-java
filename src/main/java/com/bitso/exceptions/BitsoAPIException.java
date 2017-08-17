@@ -18,6 +18,13 @@ public class BitsoAPIException extends Exception {
         this.mDetailedErrorMessage = detailedErrorMessage;
     }
 
+    public BitsoAPIException(int errorCode, String simpleErrorMessage, Throwable throwable) {
+        super(throwable);
+        this.mErrorCode = errorCode;
+        this.mSimpleErrorMessage = simpleErrorMessage;
+        this.mSimpleErrorMessage = "BITSO-API no detailed message";
+    }
+
     public int getErrorCode() {
         return mErrorCode;
     }

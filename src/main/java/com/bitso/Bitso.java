@@ -103,13 +103,13 @@ public class Bitso {
             return books;
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -128,13 +128,13 @@ public class Bitso {
             return tickers;
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -156,13 +156,13 @@ public class Bitso {
             return new BitsoOrderBook(payloadJSON);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -178,13 +178,13 @@ public class Bitso {
             return new BitsoTransactions(payloadJSON);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -199,13 +199,13 @@ public class Bitso {
             return new BitsoAccountStatus(payloadJSON);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -218,13 +218,13 @@ public class Bitso {
             return new BitsoBalance(payloadJSON);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -237,13 +237,13 @@ public class Bitso {
             return new BitsoFee(payloadJSON);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -270,13 +270,13 @@ public class Bitso {
             return operations;
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -319,13 +319,13 @@ public class Bitso {
             return withdrawals;
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -368,13 +368,13 @@ public class Bitso {
             return fundings;
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -417,13 +417,13 @@ public class Bitso {
             return trades;
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -448,13 +448,13 @@ public class Bitso {
             return trades;
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -478,13 +478,13 @@ public class Bitso {
             return orders;
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -510,13 +510,13 @@ public class Bitso {
             return orders;
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -560,13 +560,13 @@ public class Bitso {
             return Helpers.getString(payloadJSON, "oid");
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -590,13 +590,13 @@ public class Bitso {
             return Helpers.parseJSONArray(payloadJSON);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -623,13 +623,13 @@ public class Bitso {
             return fundingDestination;
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -661,13 +661,13 @@ public class Bitso {
             return new BitsoWithdrawal(payloadJSON);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -694,13 +694,13 @@ public class Bitso {
             return banks;
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -723,13 +723,13 @@ public class Bitso {
             return new BitsoWithdrawal(payloadJSON);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -752,13 +752,13 @@ public class Bitso {
             return new BitsoWithdrawal(payloadJSON);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -778,13 +778,13 @@ public class Bitso {
             return new BitsoWithdrawal(payloadJSON);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
@@ -797,13 +797,13 @@ public class Bitso {
             return quoteEliminator(postResponse);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e.getMessage());
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e.getMessage());
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BitsoAPIException(101, "IO Error", e.getMessage());
+            throw new BitsoAPIException(101, "IO Error", e);
         }
     }
 
