@@ -2,6 +2,8 @@ package com.bitso;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -9,10 +11,16 @@ import org.json.JSONObject;
 import com.bitso.helpers.Helpers;
 
 public class BitsoFee {
-    private HashMap<String, Fee> mFees;
+    private HashMap<String, Fee> mTradeFees;
+    private HashMap<String, String> mWithdrawalFees;
 
     public BitsoFee(JSONObject o) {
-        mFees = new HashMap<>();
+        processTradeFees(o);
+        processWithdrawalFees(o);
+    }
+
+    private void processTradeFees(JSONObject o) {
+        mTradeFees = new HashMap<>();
         JSONArray jsonFees = o.getJSONArray("fees");
         int totalElements = jsonFees.length();
         for (int i = 0; i < totalElements; i++) {
@@ -20,16 +28,35 @@ public class BitsoFee {
             String book = Helpers.getString(fee, "book");
             Fee currentFee = new Fee(book, Helpers.getBD(fee, "fee_decimal"),
                     Helpers.getBD(fee, "fee_percent"));
-            mFees.put(book, currentFee);
+            mTradeFees.put(book, currentFee);
         }
     }
 
-    public HashMap<String, Fee> getFees() {
-        return mFees;
+    private void processWithdrawalFees(JSONObject o) {
+        mWithdrawalFees = new HashMap<>();
+        JSONObject withdrawalFees = o.getJSONObject("withdrawal_fees");
+        Set<String> keys = withdrawalFees.keySet();
+        Iterator<String> it = keys.iterator();
+        while (it.hasNext()) {
+            String key = it.next();
+            mWithdrawalFees.put(key, withdrawalFees.getString(key));
+        }
     }
 
-    public void setmFees(HashMap<String, Fee> fees) {
-        this.mFees = fees;
+    public HashMap<String, Fee> getTradeFees() {
+        return mTradeFees;
+    }
+
+    public void setTradeFees(HashMap<String, Fee> mTradeFees) {
+        this.mTradeFees = mTradeFees;
+    }
+
+    public HashMap<String, String> getWithdrawalFees() {
+        return mWithdrawalFees;
+    }
+
+    public void setWithdrawalFees(HashMap<String, String> mWithdrawalFees) {
+        this.mWithdrawalFees = mWithdrawalFees;
     }
 
     public String toString() {

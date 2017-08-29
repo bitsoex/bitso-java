@@ -177,13 +177,16 @@ public abstract class BitsoTest {
     public void testFees() throws BitsoAPIException {
         BitsoFee bitsoFee = mBitso.getFees();
         assertEquals(nullCheck(bitsoFee, BitsoFee.class), true);
-        HashMap<String, BitsoFee.Fee> fees = bitsoFee.getFees();
+        HashMap<String, BitsoFee.Fee> fees = bitsoFee.getTradeFees();
         Set<String> keys = fees.keySet();
         Iterator<String> iterator = keys.iterator();
         while (iterator.hasNext()) {
             BitsoFee.Fee currentFee = fees.get(iterator.next());
             assertEquals(nullCheck(currentFee, BitsoFee.Fee.class), true);
         }
+
+        HashMap<String, String> withdrawalFees = bitsoFee.getWithdrawalFees();
+        assertEquals((withdrawalFees != null), true);
     }
 
     @Test
@@ -614,7 +617,7 @@ public abstract class BitsoTest {
         }
     }
 
-    //@Test
+    // @Test
     public void testTrading() throws InterruptedException, BitsoAPIException {
         List<String> orders = new ArrayList<>();
         String canceledOrders[] = null;
@@ -662,8 +665,8 @@ public abstract class BitsoTest {
         assertEquals(books != null, true);
         int totalExpectedOpenOrders = 0;
         for (BookInfo book : books) {
-            totalExpectedOpenOrders = (book.getBook().equals("btc_mxn") ||
-                    book.getBook().equals("eth_btc")) ? totalOpenOrders : 0;
+            totalExpectedOpenOrders = (book.getBook().equals("btc_mxn") || book.getBook().equals("eth_btc"))
+                    ? totalOpenOrders : 0;
             BitsoOrder[] openOrders = mBitso.getOpenOrders(book.getBook());
             assertEquals(openOrders.length, totalExpectedOpenOrders);
 
