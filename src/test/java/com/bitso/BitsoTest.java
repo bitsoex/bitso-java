@@ -617,7 +617,7 @@ public abstract class BitsoTest {
         }
     }
 
-    // @Test
+    @Test
     public void testTrading() throws InterruptedException, BitsoAPIException {
         List<String> orders = new ArrayList<>();
         String canceledOrders[] = null;
@@ -648,7 +648,7 @@ public abstract class BitsoTest {
 
         if (btcBalance.getAvailable().doubleValue() >= 0.001) {
             sellOrderId = mBitso.placeOrder("btc_mxn", BitsoOrder.SIDE.SELL, BitsoOrder.TYPE.LIMIT,
-                    new BigDecimal("0.001"), null, new BigDecimal("80000"));
+                    new BigDecimal("0.001"), null, new BigDecimal("100000"));
             assertEquals(sellOrderId != null, true);
             orders.add(sellOrderId);
         } else {

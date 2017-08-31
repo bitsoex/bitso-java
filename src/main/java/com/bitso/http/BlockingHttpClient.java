@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -21,7 +20,10 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.AbstractHttpEntity;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+
+import com.bitso.exceptions.BitsoAPIException;
 
 public class BlockingHttpClient {
     private boolean log = false;
@@ -66,30 +68,36 @@ public class BlockingHttpClient {
     }
 
     public String sendPost(String url, String body, HashMap<String, String> headers)
-            throws MalformedURLException, ProtocolException, IOException {
+            throws BitsoAPIException {
         throttle();
+        HttpsURLConnection connection = null;
+        try {
+            URL requestURL = new URL(url);
+            connection = (HttpsURLConnection) requestURL.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("User-Agent", "Bitso-API");
 
-        URL requestURL = new URL(url);
-        HttpsURLConnection connection = (HttpsURLConnection) requestURL.openConnection();
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("User-Agent", "Bitso-API");
-
-        if (headers != null) {
-            for (Entry<String, String> e : headers.entrySet()) {
-                connection.setRequestProperty(e.getKey(), e.getValue());
+            if (headers != null) {
+                for (Entry<String, String> e : headers.entrySet()) {
+                    connection.setRequestProperty(e.getKey(), e.getValue());
+                }
             }
+
+            connection.setDoOutput(true);
+
+            DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+            wr.writeBytes(body);
+            wr.flush();
+            wr.close();
+
+            return convertInputStreamToString(connection.getInputStream());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(322, "Not a Valid URL", e);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return convertInputStreamToString(connection.getErrorStream());
         }
-
-        connection.setDoOutput(true);
-        DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-        wr.writeBytes(body);
-        wr.flush();
-        wr.close();
-
-        String response = getStringFromStream(connection.getInputStream());
-        log(response);
-
-        return response;
     }
 
     public String sendPost(String url, String body, HashMap<String, String> headers, Charset charset)
@@ -116,39 +124,52 @@ public class BlockingHttpClient {
         postRequest.setEntity(body);
 
         CloseableHttpResponse closeableHttpResponse = HttpClients.createDefault().execute(postRequest);
-        String response = getStringFromStream(closeableHttpResponse.getEntity().getContent());
+        String response = convertInputStreamToString(closeableHttpResponse.getEntity().getContent());
 
         return response;
     }
 
-    public String sendDelete(String url, HashMap<String, String> headers)
-            throws ClientProtocolException, IOException {
+    public String sendDelete(String url, HashMap<String, String> headers) throws BitsoAPIException {
         throttle();
-        HttpDelete deleteRequest = new HttpDelete(url);
+        HttpDelete deleteURL = new HttpDelete(url);
 
         if (headers != null) {
             for (Entry<String, String> e : headers.entrySet()) {
-                deleteRequest.addHeader(e.getKey(), e.getValue());
+                deleteURL.addHeader(e.getKey(), e.getValue());
             }
         }
 
-        CloseableHttpResponse closeableHttpResponse = HttpClients.createDefault().execute(deleteRequest);
-        String response = getStringFromStream(closeableHttpResponse.getEntity().getContent());
-
-        return response;
+        CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
+        CloseableHttpResponse response = null;
+        try {
+            response = closeableHttpClient.execute(deleteURL);
+            return convertInputStreamToString(response.getEntity().getContent());
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Usupported HTTP method", e);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(101, "Connection Aborted", e);
+        }
     }
 
-    public String getStringFromStream(InputStream inputStream) throws IOException {
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-        StringBuffer stringBuffer = new StringBuffer();
-        String input = null;
-
-        while ((input = bufferedReader.readLine()) != null) {
-            stringBuffer.append(input);
+    public String convertInputStreamToString(InputStream inputStream) {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        StringBuilder stringBuilder = new StringBuilder();
+        String line = null;
+        try {
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-
-        bufferedReader.close();
-        return stringBuffer.toString();
+        return stringBuilder.toString();
     }
 }

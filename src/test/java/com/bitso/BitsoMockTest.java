@@ -355,4 +355,9 @@ public class BitsoMockTest extends BitsoTest {
             assertEquals(true, nullCheck(current, BitsoTrade.class));
         }
     }
+
+    @Override
+    public void testTrading() {
+        System.out.println("This test is overriden");
+    }
 }
