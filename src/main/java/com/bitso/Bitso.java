@@ -667,7 +667,11 @@ public class Bitso {
         return client.sendPost(baseUrl + requestPath, jsonString, headers);
     }
 
-    public String convertInputStreamToString(InputStream inputStream) {
+    public String convertInputStreamToString(InputStream inputStream) throws BitsoAPIException {
+        if (inputStream == null) {
+            throw new BitsoAPIException(101, "Input stream is null");
+        }
+
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         StringBuilder stringBuilder = new StringBuilder();
         String line = null;

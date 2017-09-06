@@ -101,17 +101,17 @@ public class BlockingHttpClient {
     }
 
     public String sendPost(String url, String body, HashMap<String, String> headers, Charset charset)
-            throws ClientProtocolException, IOException {
+            throws ClientProtocolException, IOException, IllegalStateException, BitsoAPIException {
         return sendPost(url, new StringEntity(body, charset), headers);
     }
 
     public String sendPost(String url, byte[] body, HashMap<String, String> headers)
-            throws ClientProtocolException, IOException {
+            throws ClientProtocolException, IOException, IllegalStateException, BitsoAPIException {
         return sendPost(url, new ByteArrayEntity(body), headers);
     }
 
     private String sendPost(String url, AbstractHttpEntity body, HashMap<String, String> headers)
-            throws ClientProtocolException, IOException {
+            throws ClientProtocolException, IOException, IllegalStateException, BitsoAPIException {
         throttle();
 
         HttpPost postRequest = new HttpPost(url);
@@ -153,7 +153,10 @@ public class BlockingHttpClient {
         }
     }
 
-    public String convertInputStreamToString(InputStream inputStream) {
+    public String convertInputStreamToString(InputStream inputStream) throws BitsoAPIException {
+        if (inputStream == null) {
+            throw new BitsoAPIException(101, "Input stream is null");
+        }
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         StringBuilder stringBuilder = new StringBuilder();
         String line = null;
