@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.mockito.Mockito;
 
 import com.bitso.exceptions.BitsoAPIException;
+import com.bitso.exceptions.BitsoExceptionJSONPayload;
 import com.bitso.exchange.BookInfo;
 import com.bitso.helpers.Helpers;
 
@@ -43,19 +44,23 @@ public class BitsoMockTest extends BitsoTest {
     }
 
     private void setUpTestMocks() {
-        setUpAvailableBooks(Helpers.getJSONFromFile("publicAvailableBooks.json"));
-        setUpTicker(Helpers.getJSONFromFile("publicTicker.json"));
-        setUpOrderBook(Helpers.getJSONFromFile("publicOrderBook.json"));
-        setUpTransactions(Helpers.getJSONFromFile("publicTrades.json"));
-        setUpAccountStatus(Helpers.getJSONFromFile("privateAccountStatus.json"));
-        setUpAccountBalance(Helpers.getJSONFromFile("privateAccountBalance.json"));
-        setUpFees(Helpers.getJSONFromFile("privateFees.json"));
-        setUpLedgers();
-        setUpWithdrawals(Helpers.getJSONFromFile("privateWithdrawals.json"));
-        setUpFundings(Helpers.getJSONFromFile("privateFundings.json"));
-        setUpTrades(Helpers.getJSONFromFile("privateUserTrades.json"));
-        setUpFundingDestionation(Helpers.getJSONFromFile("privateFundingDestination.json"));
-        setUpBitsoBanks(Helpers.getJSONFromFile("privateBankCodes.json"));
+        try {
+            setUpAvailableBooks(Helpers.getJSONFromFile("publicAvailableBooks.json"));
+            setUpTicker(Helpers.getJSONFromFile("publicTicker.json"));
+            setUpOrderBook(Helpers.getJSONFromFile("publicOrderBook.json"));
+            setUpTransactions(Helpers.getJSONFromFile("publicTrades.json"));
+            setUpAccountStatus(Helpers.getJSONFromFile("privateAccountStatus.json"));
+            setUpAccountBalance(Helpers.getJSONFromFile("privateAccountBalance.json"));
+            setUpFees(Helpers.getJSONFromFile("privateFees.json"));
+            setUpLedgers();
+            setUpWithdrawals(Helpers.getJSONFromFile("privateWithdrawals.json"));
+            setUpFundings(Helpers.getJSONFromFile("privateFundings.json"));
+            setUpTrades(Helpers.getJSONFromFile("privateUserTrades.json"));
+            setUpFundingDestionation(Helpers.getJSONFromFile("privateFundingDestination.json"));
+            setUpBitsoBanks(Helpers.getJSONFromFile("privateBankCodes.json"));
+        } catch (BitsoAPIException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setUpMockitoActions() throws BitsoAPIException {
@@ -145,11 +150,21 @@ public class BitsoMockTest extends BitsoTest {
         String[] files = { "privateLedger.json", "privateLedgerTrades.json", "privateLedgerFees.json",
                 "privateLedgerFundings.json", "privateLedgerWithdrawals.json" };
 
-        JSONObject ledger = Helpers.getJSONFromFile(files[0]);
-        JSONObject ledgerTrades = Helpers.getJSONFromFile(files[1]);
-        JSONObject ledgerFees = Helpers.getJSONFromFile(files[2]);
-        JSONObject ledgerFunds = Helpers.getJSONFromFile(files[3]);
-        JSONObject ledgerWithdraws = Helpers.getJSONFromFile(files[4]);
+        JSONObject ledger = null;
+        JSONObject ledgerTrades = null;
+        JSONObject ledgerFees = null;
+        JSONObject ledgerFunds = null;
+        JSONObject ledgerWithdraws = null;
+
+        try {
+            ledger = Helpers.getJSONFromFile(files[0]);
+            ledgerTrades = Helpers.getJSONFromFile(files[1]);
+            ledgerFees = Helpers.getJSONFromFile(files[2]);
+            ledgerFunds = Helpers.getJSONFromFile(files[3]);
+            ledgerWithdraws = Helpers.getJSONFromFile(files[4]);
+        } catch (BitsoAPIException e) {
+            e.printStackTrace();
+        }
 
         JSONArray payload = ledger.getJSONArray("payload");
         int totalElements = payload.length();

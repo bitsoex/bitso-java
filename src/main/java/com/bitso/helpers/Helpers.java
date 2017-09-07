@@ -19,6 +19,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.bitso.exceptions.BitsoAPIException;
+
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
@@ -113,30 +115,26 @@ public class Helpers {
         printStackTrace(System.err);
     }
 
-    public static JSONObject parseJson(String json) {
+    public static JSONObject parseJson(String json) throws BitsoAPIException{
         if (json == null) {
-            return null;
+            throw new BitsoAPIException(101, "json value is null");
         }
-        try {
+        try{
             return new JSONObject(json);
-        } catch (JSONException e) {
-            System.err.println("Unable to parse json: " + json);
-            e.printStackTrace();
+        }catch(JSONException e){
+           throw new BitsoAPIException(101, "Unable to parse server message", e);
         }
-        return null;
     }
 
-    public static JSONArray parseJsonArray(String json) {
+    public static JSONArray parseJsonArray(String json) throws BitsoAPIException{
         if (json == null) {
-            return null;
+            throw new BitsoAPIException(101, "json value is null");
         }
-        try {
+        try{
             return new JSONArray(json);
-        } catch (JSONException e) {
-            System.err.println("Unable to parse json array: " + json);
-            e.printStackTrace();
+        }catch(JSONException e){
+           throw new BitsoAPIException(101, "Unable to parse server message", e);
         }
-        return null;
     }
 
     public static int getInt(JSONObject o, String key) {
@@ -213,7 +211,7 @@ public class Helpers {
         return elements;
     }
 
-    public static JSONObject getJSONFromFile(String fileName) {
+    public static JSONObject getJSONFromFile(String fileName) throws BitsoAPIException {
         String jsonString = getJSONString(fileName);
         if (jsonString == null) {
             return null;
