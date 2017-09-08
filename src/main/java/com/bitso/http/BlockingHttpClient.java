@@ -1,11 +1,7 @@
 package com.bitso.http;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -23,7 +19,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
-import com.bitso.exceptions.BitsoAPIException;
+import com.bitso.exceptions.BitsoNullException;
+import com.bitso.helpers.Helpers;
 
 public class BlockingHttpClient {
     private boolean log = false;
@@ -68,50 +65,42 @@ public class BlockingHttpClient {
     }
 
     public String sendPost(String url, String body, HashMap<String, String> headers)
-            throws BitsoAPIException {
+            throws BitsoNullException, IOException {
         throttle();
         HttpsURLConnection connection = null;
-        try {
-            URL requestURL = new URL(url);
-            connection = (HttpsURLConnection) requestURL.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("User-Agent", "Bitso-API");
+        URL requestURL = new URL(url);
+        connection = (HttpsURLConnection) requestURL.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("User-Agent", "Bitso-API");
 
-            if (headers != null) {
-                for (Entry<String, String> e : headers.entrySet()) {
-                    connection.setRequestProperty(e.getKey(), e.getValue());
-                }
+        if (headers != null) {
+            for (Entry<String, String> e : headers.entrySet()) {
+                connection.setRequestProperty(e.getKey(), e.getValue());
             }
-
-            connection.setDoOutput(true);
-
-            DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-            wr.writeBytes(body);
-            wr.flush();
-            wr.close();
-
-            return convertInputStreamToString(connection.getInputStream());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            throw new BitsoAPIException(322, "Not a Valid URL", e);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return convertInputStreamToString(connection.getErrorStream());
         }
+
+        connection.setDoOutput(true);
+
+        DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+        wr.writeBytes(body);
+        wr.flush();
+        wr.close();
+
+        return Helpers.convertInputStreamToString(connection.getInputStream());
     }
 
     public String sendPost(String url, String body, HashMap<String, String> headers, Charset charset)
-            throws ClientProtocolException, IOException, IllegalStateException, BitsoAPIException {
+            throws ClientProtocolException, IllegalStateException, IOException, BitsoNullException {
         return sendPost(url, new StringEntity(body, charset), headers);
     }
 
     public String sendPost(String url, byte[] body, HashMap<String, String> headers)
-            throws ClientProtocolException, IOException, IllegalStateException, BitsoAPIException {
+            throws ClientProtocolException, IllegalStateException, IOException, BitsoNullException {
         return sendPost(url, new ByteArrayEntity(body), headers);
     }
 
     private String sendPost(String url, AbstractHttpEntity body, HashMap<String, String> headers)
-            throws ClientProtocolException, IOException, IllegalStateException, BitsoAPIException {
+            throws ClientProtocolException, IOException, IllegalStateException, BitsoNullException {
         throttle();
 
         HttpPost postRequest = new HttpPost(url);
@@ -124,12 +113,13 @@ public class BlockingHttpClient {
         postRequest.setEntity(body);
 
         CloseableHttpResponse closeableHttpResponse = HttpClients.createDefault().execute(postRequest);
-        String response = convertInputStreamToString(closeableHttpResponse.getEntity().getContent());
+        String response = Helpers.convertInputStreamToString(closeableHttpResponse.getEntity().getContent());
 
         return response;
     }
 
-    public String sendDelete(String url, HashMap<String, String> headers) throws BitsoAPIException {
+    public String sendDelete(String url, HashMap<String, String> headers)
+            throws ClientProtocolException, IOException, IllegalStateException, BitsoNullException {
         throttle();
         HttpDelete deleteURL = new HttpDelete(url);
 
@@ -141,38 +131,8 @@ public class BlockingHttpClient {
 
         CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
         CloseableHttpResponse response = null;
-        try {
-            response = closeableHttpClient.execute(deleteURL);
-            return convertInputStreamToString(response.getEntity().getContent());
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-            throw new BitsoAPIException(901, "Usupported HTTP method", e);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new BitsoAPIException(101, "Connection Aborted", e);
-        }
-    }
 
-    public String convertInputStreamToString(InputStream inputStream) throws BitsoAPIException {
-        if (inputStream == null) {
-            throw new BitsoAPIException(101, "Input stream is null");
-        }
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        StringBuilder stringBuilder = new StringBuilder();
-        String line = null;
-        try {
-            while ((line = bufferedReader.readLine()) != null) {
-                stringBuilder.append(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                inputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return stringBuilder.toString();
+        response = closeableHttpClient.execute(deleteURL);
+        return Helpers.convertInputStreamToString(response.getEntity().getContent());
     }
 }

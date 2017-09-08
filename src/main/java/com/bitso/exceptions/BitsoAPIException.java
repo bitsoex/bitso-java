@@ -5,36 +5,14 @@ import com.bitso.helpers.Helpers;
 @SuppressWarnings("serial")
 public class BitsoAPIException extends Exception {
     private int mErrorCode;
-    private String mSimpleErrorMessage;
-    private String mDetailedErrorMessage;
 
-    public BitsoAPIException(int errorCode, String simpleErrorMessage) {
-        this(errorCode, simpleErrorMessage, "BITSO-API no detailed message");
-    }
-
-    public BitsoAPIException(int errorCode, String simpleErrorMessage, String detailedErrorMessage) {
+    public BitsoAPIException(int errorCode, String apiErrorMessage) {
+        super(apiErrorMessage);
         this.mErrorCode = errorCode;
-        this.mSimpleErrorMessage = simpleErrorMessage;
-        this.mDetailedErrorMessage = detailedErrorMessage;
-    }
-
-    public BitsoAPIException(int errorCode, String simpleErrorMessage, Throwable throwable) {
-        super(throwable);
-        this.mErrorCode = errorCode;
-        this.mSimpleErrorMessage = simpleErrorMessage;
-        this.mSimpleErrorMessage = "BITSO-API no detailed message";
     }
 
     public int getErrorCode() {
         return mErrorCode;
-    }
-
-    public String getSimpleErrorMessage() {
-        return mSimpleErrorMessage;
-    }
-
-    public String getDetailedErrorMessage() {
-        return mDetailedErrorMessage;
     }
 
     @Override

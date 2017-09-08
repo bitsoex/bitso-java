@@ -3,6 +3,8 @@ package com.bitso.helpers;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -19,24 +21,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.bitso.exceptions.BitsoAPIException;
+import com.bitso.Bitso;
+import com.bitso.exceptions.BitsoNullException;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
 public class Helpers {
     private static final String PATH = "src/test/java/JSONFiles/";
-    
-    public static final int ERROR_NUMBER_PARSE_JSON = 400;
-    public static final int ERROR_NUMBER_NO_PAYLOAD = 500;
-    public static final int ERROR_NUMBER_INVALID_PAYLOAD = 500;
-    public static final String ERROR_PARSE_JSON = "Error parsing json";
-    public static final String ERROR_NO_PAYLOAD = "Error server response does not have payload";
-    public static final String ERROR_INVALID_PAYLOAD = "Payload does not match JSONObject or JSONArray";
-    
+
     public static final String dateTimeFormatterZOffset = ("yyyy-MM-dd'T'HH:mm:ssZZZ");
     public static final String dateTimeFormatterXOffset = ("yyyy-MM-dd'T'HH:mm:ssXXX");
-    
+
     private static DatatypeFactory dtf;
 
     static {
@@ -115,26 +111,21 @@ public class Helpers {
         printStackTrace(System.err);
     }
 
-    public static JSONObject parseJson(String json) throws BitsoAPIException{
+    public static JSONObject parseJson(String json)
+            throws BitsoNullException, JSONException {
         if (json == null) {
-            throw new BitsoAPIException(101, "json value is null");
+            throw new BitsoNullException(Helpers.class.getSimpleName(), "parseJson()");
         }
-        try{
-            return new JSONObject(json);
-        }catch(JSONException e){
-           throw new BitsoAPIException(101, "Unable to parse server message", e);
-        }
+
+        return new JSONObject(json);
     }
 
-    public static JSONArray parseJsonArray(String json) throws BitsoAPIException{
+    public static JSONArray parseJsonArray(String json)
+            throws BitsoNullException, JSONException {
         if (json == null) {
-            throw new BitsoAPIException(101, "json value is null");
+            throw new BitsoNullException(Helpers.class.getSimpleName(), "parseJsonArray()");
         }
-        try{
-            return new JSONArray(json);
-        }catch(JSONException e){
-           throw new BitsoAPIException(101, "Unable to parse server message", e);
-        }
+        return new JSONArray(json);
     }
 
     public static int getInt(JSONObject o, String key) {
@@ -211,7 +202,7 @@ public class Helpers {
         return elements;
     }
 
-    public static JSONObject getJSONFromFile(String fileName) throws BitsoAPIException {
+    public static JSONObject getJSONFromFile(String fileName) throws JSONException, BitsoNullException {
         String jsonString = getJSONString(fileName);
         if (jsonString == null) {
             return null;
@@ -243,5 +234,21 @@ public class Helpers {
             }
         }
         return line;
+    }
+
+    public static String convertInputStreamToString(InputStream inputStream)
+            throws BitsoNullException, IOException {
+        if (inputStream == null) {
+            throw new BitsoNullException(Bitso.class.getSimpleName(), "convertInputStreamToString()");
+        }
+
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        StringBuilder stringBuilder = new StringBuilder();
+        String line = null;
+        while ((line = bufferedReader.readLine()) != null) {
+            stringBuilder.append(line);
+        }
+        inputStream.close();
+        return stringBuilder.toString();
     }
 }
