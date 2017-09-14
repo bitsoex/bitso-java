@@ -22,6 +22,7 @@ import org.json.JSONObject;
 import com.bitso.exceptions.BitsoAPIException;
 import com.bitso.exceptions.BitsoNullException;
 import com.bitso.exceptions.BitsoPayloadException;
+import com.bitso.exceptions.BitsoValidationException;
 import com.bitso.exchange.BookInfo;
 import com.bitso.helpers.Helpers;
 import com.bitso.http.BlockingHttpClient;
@@ -85,7 +86,7 @@ public class Bitso {
 
     // Public Functions
     public BookInfo[] getAvailableBooks()
-            throws BitsoNullException, IOException, JSONException, BitsoAPIException, BitsoPayloadException {
+            throws IOException, JSONException, BitsoAPIException, BitsoPayloadException, BitsoNullException {
         String request = "/api/v3/available_books";
 
         String getResponse = sendGet(request);
@@ -503,6 +504,46 @@ public class Bitso {
 
         JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
         return new BitsoWithdrawal(payloadJSON);
+    }
+
+    public String numberRegistration(String phoneNumber) throws BitsoNullException, IOException,
+            JSONException, BitsoAPIException, BitsoPayloadException, BitsoValidationException {
+        if (phoneNumber == null) {
+            throw new BitsoNullException(Bitso.class.getSimpleName(), "phoneRegister");
+        }
+
+        phoneNumber = phoneNumber.trim();
+        if (phoneNumber.length() == 0) {
+            throw new BitsoValidationException(Bitso.class.getSimpleName(), "phoneNumber parameter is empty");
+        }
+
+        String request = "/api/v3/phone_number";
+        JSONObject parameters = new JSONObject();
+        parameters.put("phone_number", phoneNumber);
+
+        String postResponse = sendBitsoPost(request, parameters);
+        JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
+        return payloadJSON.getString("phone");
+    }
+
+    public String phoneVerification(String verificationCode) throws BitsoNullException, IOException,
+            JSONException, BitsoAPIException, BitsoPayloadException, BitsoValidationException {
+        if (verificationCode == null) {
+            throw new BitsoNullException(Bitso.class.getSimpleName(), "phoneRegister");
+        }
+
+        verificationCode = verificationCode.trim();
+        if (verificationCode.length() == 0) {
+            throw new BitsoValidationException(Bitso.class.getSimpleName(), "phoneNumber parameter is empty");
+        }
+
+        String request = "/api/v3/phone_verification";
+        JSONObject parameters = new JSONObject();
+        parameters.put("verification_code", verificationCode);
+
+        String postResponse = sendBitsoPost(request, parameters);
+        JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
+        return payloadJSON.getString("phone");
     }
 
     public BitsoWithdrawal phoneWithdrawal(BigDecimal amount, String recipientGivenNames,
