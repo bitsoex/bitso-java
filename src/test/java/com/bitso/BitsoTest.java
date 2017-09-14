@@ -748,13 +748,10 @@ public abstract class BitsoTest {
                         return false;
                     }
                 } catch (IllegalAccessException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 } catch (IllegalArgumentException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 } catch (InvocationTargetException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }

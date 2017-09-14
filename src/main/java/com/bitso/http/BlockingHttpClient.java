@@ -1,10 +1,7 @@
 package com.bitso.http;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -24,6 +21,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
 import com.bitso.exceptions.BitsoAPIException;
+import com.bitso.helpers.Helpers;
 
 public class BlockingHttpClient {
     private boolean log = false;
@@ -90,28 +88,28 @@ public class BlockingHttpClient {
             wr.flush();
             wr.close();
 
-            return convertInputStreamToString(connection.getInputStream());
+            return Helpers.convertInputStreamToString(connection.getInputStream());
         } catch (MalformedURLException e) {
             e.printStackTrace();
             throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (IOException e) {
             e.printStackTrace();
-            return convertInputStreamToString(connection.getErrorStream());
+            return Helpers.convertInputStreamToString(connection.getErrorStream());
         }
     }
 
     public String sendPost(String url, String body, HashMap<String, String> headers, Charset charset)
-            throws ClientProtocolException, IOException, IllegalStateException, BitsoAPIException {
+            throws ClientProtocolException, IOException {
         return sendPost(url, new StringEntity(body, charset), headers);
     }
 
     public String sendPost(String url, byte[] body, HashMap<String, String> headers)
-            throws ClientProtocolException, IOException, IllegalStateException, BitsoAPIException {
+            throws ClientProtocolException, IOException {
         return sendPost(url, new ByteArrayEntity(body), headers);
     }
 
     private String sendPost(String url, AbstractHttpEntity body, HashMap<String, String> headers)
-            throws ClientProtocolException, IOException, IllegalStateException, BitsoAPIException {
+            throws ClientProtocolException, IOException {
         throttle();
 
         HttpPost postRequest = new HttpPost(url);
@@ -124,7 +122,7 @@ public class BlockingHttpClient {
         postRequest.setEntity(body);
 
         CloseableHttpResponse closeableHttpResponse = HttpClients.createDefault().execute(postRequest);
-        String response = convertInputStreamToString(closeableHttpResponse.getEntity().getContent());
+        String response = Helpers.convertInputStreamToString(closeableHttpResponse.getEntity().getContent());
 
         return response;
     }
@@ -143,7 +141,7 @@ public class BlockingHttpClient {
         CloseableHttpResponse response = null;
         try {
             response = closeableHttpClient.execute(deleteURL);
-            return convertInputStreamToString(response.getEntity().getContent());
+            return Helpers.convertInputStreamToString(response.getEntity().getContent());
         } catch (ClientProtocolException e) {
             e.printStackTrace();
             throw new BitsoAPIException(901, "Usupported HTTP method", e);
@@ -151,28 +149,5 @@ public class BlockingHttpClient {
             e.printStackTrace();
             throw new BitsoAPIException(101, "Connection Aborted", e);
         }
-    }
-
-    public String convertInputStreamToString(InputStream inputStream) throws BitsoAPIException {
-        if (inputStream == null) {
-            throw new BitsoAPIException(101, "Input stream is null");
-        }
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        StringBuilder stringBuilder = new StringBuilder();
-        String line = null;
-        try {
-            while ((line = bufferedReader.readLine()) != null) {
-                stringBuilder.append(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                inputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return stringBuilder.toString();
     }
 }

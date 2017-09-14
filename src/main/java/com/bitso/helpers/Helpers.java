@@ -3,6 +3,8 @@ package com.bitso.helpers;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -16,7 +18,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -24,17 +25,10 @@ import javax.xml.datatype.DatatypeFactory;
 
 public class Helpers {
     private static final String PATH = "src/test/java/JSONFiles/";
-    
-    public static final int ERROR_NUMBER_PARSE_JSON = 400;
-    public static final int ERROR_NUMBER_NO_PAYLOAD = 500;
-    public static final int ERROR_NUMBER_INVALID_PAYLOAD = 500;
-    public static final String ERROR_PARSE_JSON = "Error parsing json";
-    public static final String ERROR_NO_PAYLOAD = "Error server response does not have payload";
-    public static final String ERROR_INVALID_PAYLOAD = "Payload does not match JSONObject or JSONArray";
-    
+
     public static final String dateTimeFormatterZOffset = ("yyyy-MM-dd'T'HH:mm:ssZZZ");
     public static final String dateTimeFormatterXOffset = ("yyyy-MM-dd'T'HH:mm:ssXXX");
-    
+
     private static DatatypeFactory dtf;
 
     static {
@@ -113,30 +107,12 @@ public class Helpers {
         printStackTrace(System.err);
     }
 
-    public static JSONObject parseJson(String json) {
-        if (json == null) {
-            return null;
-        }
-        try {
-            return new JSONObject(json);
-        } catch (JSONException e) {
-            System.err.println("Unable to parse json: " + json);
-            e.printStackTrace();
-        }
-        return null;
+    public static JSONObject parseJson(String json){
+        return new JSONObject(json);
     }
 
-    public static JSONArray parseJsonArray(String json) {
-        if (json == null) {
-            return null;
-        }
-        try {
-            return new JSONArray(json);
-        } catch (JSONException e) {
-            System.err.println("Unable to parse json array: " + json);
-            e.printStackTrace();
-        }
-        return null;
+    public static JSONArray parseJsonArray(String json){
+        return new JSONArray(json);
     }
 
     public static int getInt(JSONObject o, String key) {
@@ -204,7 +180,7 @@ public class Helpers {
         return null;
     }
 
-    public static String[] parseJSONArray(JSONArray arrray) {
+    public static String[] parseJSONArray(JSONArray arrray){
         int totalElements = arrray.length();
         String[] elements = new String[totalElements];
         for (int i = 0; i < totalElements; i++) {
@@ -213,11 +189,8 @@ public class Helpers {
         return elements;
     }
 
-    public static JSONObject getJSONFromFile(String fileName) {
+    public static JSONObject getJSONFromFile(String fileName){
         String jsonString = getJSONString(fileName);
-        if (jsonString == null) {
-            return null;
-        }
         return Helpers.parseJson(jsonString);
     }
 
@@ -245,5 +218,26 @@ public class Helpers {
             }
         }
         return line;
+    }
+
+    public static String convertInputStreamToString(InputStream inputStream) {
+        if (inputStream == null) {
+            return null;
+        }
+
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder stringBuilder = new StringBuilder();
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+            inputStream.close();
+            return stringBuilder.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

@@ -1,44 +1,45 @@
 package com.bitso.exceptions;
 
-import com.bitso.helpers.Helpers;
-
 @SuppressWarnings("serial")
 public class BitsoAPIException extends Exception {
     private int mErrorCode;
-    private String mSimpleErrorMessage;
-    private String mDetailedErrorMessage;
 
-    public BitsoAPIException(int errorCode, String simpleErrorMessage) {
-        this(errorCode, simpleErrorMessage, "BITSO-API no detailed message");
+    public BitsoAPIException() {
+        super();
+        this.mErrorCode = 101;
     }
 
-    public BitsoAPIException(int errorCode, String simpleErrorMessage, String detailedErrorMessage) {
-        this.mErrorCode = errorCode;
-        this.mSimpleErrorMessage = simpleErrorMessage;
-        this.mDetailedErrorMessage = detailedErrorMessage;
+    public BitsoAPIException(String message, Throwable cause, boolean enableSuppression,
+            boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+        this.mErrorCode = 101;
     }
 
-    public BitsoAPIException(int errorCode, String simpleErrorMessage, Throwable throwable) {
-        super(throwable);
+    public BitsoAPIException(String message, Throwable cause) {
+        super(message, cause);
+        this.mErrorCode = 101;
+    }
+
+    public BitsoAPIException(String message) {
+        super(message);
+    }
+
+    public BitsoAPIException(int errorCode, String message, Throwable initialException) {
+        super(message, initialException);
         this.mErrorCode = errorCode;
-        this.mSimpleErrorMessage = simpleErrorMessage;
-        this.mSimpleErrorMessage = "BITSO-API no detailed message";
+    }
+
+    public BitsoAPIException(int errorCode, String message) {
+        super(message);
+        this.mErrorCode = errorCode;
+    }
+
+    public BitsoAPIException(Throwable cause) {
+        super(cause);
+        this.mErrorCode = 101;
     }
 
     public int getErrorCode() {
         return mErrorCode;
-    }
-
-    public String getSimpleErrorMessage() {
-        return mSimpleErrorMessage;
-    }
-
-    public String getDetailedErrorMessage() {
-        return mDetailedErrorMessage;
-    }
-
-    @Override
-    public String toString() {
-        return Helpers.fieldPrinter(this, BitsoAPIException.class);
     }
 }
