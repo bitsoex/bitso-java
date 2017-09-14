@@ -21,6 +21,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
 import com.bitso.exceptions.BitsoAPIException;
+
 import com.bitso.helpers.Helpers;
 
 public class BlockingHttpClient {
@@ -69,6 +70,7 @@ public class BlockingHttpClient {
             throws BitsoAPIException {
         throttle();
         HttpsURLConnection connection = null;
+
         try {
             URL requestURL = new URL(url);
             connection = (HttpsURLConnection) requestURL.openConnection();

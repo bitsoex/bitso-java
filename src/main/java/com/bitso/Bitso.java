@@ -474,8 +474,46 @@ public class Bitso {
         return new BitsoWithdrawal(payloadJSON);
     }
 
+    public String numberRegistration(String phoneNumber) throws BitsoAPIException {
+        if (phoneNumber == null) {
+
+        }
+
+        phoneNumber = phoneNumber.trim();
+        if (phoneNumber.length() == 0) {
+
+        }
+
+        String request = "/api/v3/phone_number";
+        JSONObject parameters = new JSONObject();
+        parameters.put("phone_number", phoneNumber);
+
+        String postResponse = sendBitsoPost(request, parameters);
+        JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
+        return payloadJSON.getString("phone");
+    }
+
+    public String phoneVerification(String verificationCode) throws BitsoAPIException {
+        if (verificationCode == null) {
+
+        }
+
+        verificationCode = verificationCode.trim();
+        if (verificationCode.length() == 0) {
+
+        }
+
+        String request = "/api/v3/phone_verification";
+        JSONObject parameters = new JSONObject();
+        parameters.put("verification_code", verificationCode);
+
+        String postResponse = sendBitsoPost(request, parameters);
+        JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
+        return payloadJSON.getString("phone");
+    }
+
     public BitsoWithdrawal phoneWithdrawal(BigDecimal amount, String recipientGivenNames,
-            String recipientFamilyNames, String phoneNumber, String bankCode) throws BitsoAPIException {
+            String recipientFamilyNames, String phoneNumber, String bankCode) throws BitsoAPIException{
         String request = "/api/v3/phone_withdrawal";
         JSONObject parameters = new JSONObject();
         parameters.put("amount", amount.toString());
@@ -687,7 +725,6 @@ public class Bitso {
             JSONObject errorJson = o.getJSONObject("error");
             int errorCode = Helpers.getInt(errorJson, "code");
             String errorMessage = Helpers.getString(errorJson, "message");
-            logError("Error response from server " + errorMessage);
             throw new BitsoAPIException(errorCode, errorMessage);
         }
 

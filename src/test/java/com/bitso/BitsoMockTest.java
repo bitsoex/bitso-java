@@ -2,15 +2,19 @@ package com.bitso;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.mockito.Mockito;
 
 import com.bitso.exceptions.BitsoAPIException;
+import com.bitso.exceptions.BitsoNullException;
+import com.bitso.exceptions.BitsoPayloadException;
 import com.bitso.exchange.BookInfo;
 import com.bitso.helpers.Helpers;
 
@@ -43,22 +47,27 @@ public class BitsoMockTest extends BitsoTest {
     }
 
     private void setUpTestMocks() {
-        setUpAvailableBooks(Helpers.getJSONFromFile("publicAvailableBooks.json"));
-        setUpTicker(Helpers.getJSONFromFile("publicTicker.json"));
-        setUpOrderBook(Helpers.getJSONFromFile("publicOrderBook.json"));
-        setUpTransactions(Helpers.getJSONFromFile("publicTrades.json"));
-        setUpAccountStatus(Helpers.getJSONFromFile("privateAccountStatus.json"));
-        setUpAccountBalance(Helpers.getJSONFromFile("privateAccountBalance.json"));
-        setUpFees(Helpers.getJSONFromFile("privateFees.json"));
-        setUpLedgers();
-        setUpWithdrawals(Helpers.getJSONFromFile("privateWithdrawals.json"));
-        setUpFundings(Helpers.getJSONFromFile("privateFundings.json"));
-        setUpTrades(Helpers.getJSONFromFile("privateUserTrades.json"));
-        setUpFundingDestionation(Helpers.getJSONFromFile("privateFundingDestination.json"));
-        setUpBitsoBanks(Helpers.getJSONFromFile("privateBankCodes.json"));
+        try {
+            setUpAvailableBooks(Helpers.getJSONFromFile("publicAvailableBooks.json"));
+            setUpTicker(Helpers.getJSONFromFile("publicTicker.json"));
+            setUpOrderBook(Helpers.getJSONFromFile("publicOrderBook.json"));
+            setUpTransactions(Helpers.getJSONFromFile("publicTrades.json"));
+            setUpAccountStatus(Helpers.getJSONFromFile("privateAccountStatus.json"));
+            setUpAccountBalance(Helpers.getJSONFromFile("privateAccountBalance.json"));
+            setUpFees(Helpers.getJSONFromFile("privateFees.json"));
+            setUpLedgers();
+            setUpWithdrawals(Helpers.getJSONFromFile("privateWithdrawals.json"));
+            setUpFundings(Helpers.getJSONFromFile("privateFundings.json"));
+            setUpTrades(Helpers.getJSONFromFile("privateUserTrades.json"));
+            setUpFundingDestionation(Helpers.getJSONFromFile("privateFundingDestination.json"));
+            setUpBitsoBanks(Helpers.getJSONFromFile("privateBankCodes.json"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void setUpMockitoActions() throws BitsoAPIException {
+    private void setUpMockitoActions()
+            throws JSONException, BitsoNullException, IOException, BitsoAPIException, BitsoPayloadException {
         Mockito.when(mBitso.getAvailableBooks()).thenReturn(mockAvailableBooks);
         Mockito.when(mBitso.getTicker()).thenReturn(mockTicker);
         Mockito.when(mBitso.getOrderBook("btc_mxn")).thenReturn(mockOrderBook);
@@ -145,11 +154,21 @@ public class BitsoMockTest extends BitsoTest {
         String[] files = { "privateLedger.json", "privateLedgerTrades.json", "privateLedgerFees.json",
                 "privateLedgerFundings.json", "privateLedgerWithdrawals.json" };
 
-        JSONObject ledger = Helpers.getJSONFromFile(files[0]);
-        JSONObject ledgerTrades = Helpers.getJSONFromFile(files[1]);
-        JSONObject ledgerFees = Helpers.getJSONFromFile(files[2]);
-        JSONObject ledgerFunds = Helpers.getJSONFromFile(files[3]);
-        JSONObject ledgerWithdraws = Helpers.getJSONFromFile(files[4]);
+        JSONObject ledger = null;
+        JSONObject ledgerTrades = null;
+        JSONObject ledgerFees = null;
+        JSONObject ledgerFunds = null;
+        JSONObject ledgerWithdraws = null;
+
+        try {
+            ledger = Helpers.getJSONFromFile(files[0]);
+            ledgerTrades = Helpers.getJSONFromFile(files[1]);
+            ledgerFees = Helpers.getJSONFromFile(files[2]);
+            ledgerFunds = Helpers.getJSONFromFile(files[3]);
+            ledgerWithdraws = Helpers.getJSONFromFile(files[4]);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         JSONArray payload = ledger.getJSONArray("payload");
         int totalElements = payload.length();
@@ -258,17 +277,22 @@ public class BitsoMockTest extends BitsoTest {
     }
 
     @Override
-    public void testOrderBook() throws BitsoAPIException {
-        BookInfo[] availableBooks = mBitso.getAvailableBooks();
-        assertEquals(availableBooks != null, true);
-        for (BookInfo bookInfo : availableBooks) {
-            BitsoOrderBook bitsoOrderBook = mBitso.getOrderBook(bookInfo.getBook());
-            assertEquals(nullCheck(bitsoOrderBook, BitsoOrderBook.class), true);
+    public void testOrderBook() {
+        try {
+            BookInfo[] availableBooks = mBitso.getAvailableBooks();
+            assertEquals(availableBooks != null, true);
+            for (BookInfo bookInfo : availableBooks) {
+                BitsoOrderBook bitsoOrderBook = mBitso.getOrderBook(bookInfo.getBook());
+                assertEquals(nullCheck(bitsoOrderBook, BitsoOrderBook.class), true);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
-    public void testTrades() throws InterruptedException, BitsoAPIException {
+    public void testTrades()
+            throws JSONException, BitsoNullException, IOException, BitsoAPIException, BitsoPayloadException {
         BookInfo[] availableBooks = mBitso.getAvailableBooks();
         assertEquals(availableBooks != null, true);
 
@@ -279,7 +303,8 @@ public class BitsoMockTest extends BitsoTest {
     }
 
     @Override
-    public void testLedger() throws InterruptedException, BitsoAPIException {
+    public void testLedger()
+            throws JSONException, BitsoNullException, IOException, BitsoAPIException, BitsoPayloadException {
         int totalElements = 0;
 
         BitsoOperation[] defaultLedger = mBitso.getLedger("");
@@ -328,7 +353,8 @@ public class BitsoMockTest extends BitsoTest {
     }
 
     @Override
-    public void testWithdrawals() throws InterruptedException, BitsoAPIException {
+    public void testWithdrawals()
+            throws JSONException, BitsoNullException, IOException, BitsoAPIException, BitsoPayloadException {
         BitsoWithdrawal[] withdrawals = mBitso.getWithdrawals(null);
         assertEquals(withdrawals != null, true);
         for (BitsoWithdrawal bitsoWithdrawal : withdrawals) {
@@ -337,7 +363,8 @@ public class BitsoMockTest extends BitsoTest {
     }
 
     @Override
-    public void tesFundings() throws InterruptedException, BitsoAPIException {
+    public void tesFundings()
+            throws JSONException, BitsoNullException, IOException, BitsoAPIException, BitsoPayloadException {
         BitsoFunding[] fundings = mBitso.getFundings(null);
         assertEquals(fundings != null, true);
         for (BitsoFunding bitsoFunding : fundings) {
@@ -346,7 +373,8 @@ public class BitsoMockTest extends BitsoTest {
     }
 
     @Override
-    public void testUserTrades() throws InterruptedException, BitsoAPIException {
+    public void testUserTrades()
+            throws JSONException, BitsoNullException, IOException, BitsoAPIException, BitsoPayloadException {
         BitsoTrade[] trades = mBitso.getUserTrades(null);
         assertEquals(trades != null, true);
         int totalElements = trades.length;

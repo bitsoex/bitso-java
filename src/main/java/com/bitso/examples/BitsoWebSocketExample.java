@@ -1,5 +1,6 @@
 package com.bitso.examples;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -10,12 +11,15 @@ import java.util.Map;
 import java.util.Observable;
 
 import javax.net.ssl.SSLException;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 import com.bitso.Bitso;
 import com.bitso.BitsoOrder;
 import com.bitso.BitsoOrderBook;
 import com.bitso.BitsoOrderBook.PulicOrder;
 import com.bitso.exceptions.BitsoAPIException;
+import com.bitso.exceptions.BitsoPayloadException;
 import com.bitso.helpers.Helpers;
 import com.bitso.websockets.BitsoChannels;
 import com.bitso.websockets.BitsoStreamDiffOrders;
@@ -150,7 +154,6 @@ public class BitsoWebSocketExample extends BitsoWebSocketObserver {
             System.out.println("Best ask: " + mAsks.getMinPrice());
             System.out.println("Best bid: " + mBids.getMaxPrice());
         } catch (BitsoAPIException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
