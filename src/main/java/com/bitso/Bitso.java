@@ -416,17 +416,19 @@ public class Bitso {
         return fundingDestination;
     }
 
-    public BitsoWithdrawal bitcoinWithdrawal(BigDecimal amount, String address) throws BitsoAPIException {
-        return currencyWithdrawal(BITCOIN, amount, address);
+    public BitsoWithdrawal bitcoinWithdrawal(BigDecimal amount, String address, boolean saveAccount,
+            String... savedName) throws BitsoAPIException {
+        return currencyWithdrawal(BITCOIN, amount, address, saveAccount, savedName);
     }
 
-    public BitsoWithdrawal etherWithdrawal(BigDecimal amount, String address) throws BitsoAPIException {
-        return currencyWithdrawal(ETHER, amount, address);
+    public BitsoWithdrawal etherWithdrawal(BigDecimal amount, String address, boolean saveAccount,
+            String... savedName) throws BitsoAPIException {
+        return currencyWithdrawal(ETHER, amount, address, saveAccount, savedName);
     }
 
     public BitsoWithdrawal speiWithdrawal(BigDecimal amount, String recipientGivenNames,
-            String recipientFamilyNames, String clabe, String notesReference, String numericReference)
-            throws BitsoAPIException {
+            String recipientFamilyNames, String clabe, String notesReference, String numericReference,
+            boolean saveAccount, String... savedName) throws BitsoAPIException {
         String request = "/api/v3/spei_withdrawal";
         JSONObject parameters = new JSONObject();
         parameters.put("amount", amount.toString());
@@ -435,6 +437,12 @@ public class Bitso {
         parameters.put("clabe", clabe);
         parameters.put("notes_ref", notesReference);
         parameters.put("numeric_ref", numericReference);
+
+        if (saveAccount && savedName.length == 1) {
+            parameters.put("save", saveAccount);
+            parameters.put("saved_name", savedName[0]);
+        }
+
         String postResponse = sendBitsoPost(request, parameters);
         JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
         return new BitsoWithdrawal(payloadJSON);
@@ -460,7 +468,8 @@ public class Bitso {
     }
 
     public BitsoWithdrawal debitCardWithdrawal(BigDecimal amount, String recipientGivenNames,
-            String recipientFamilyNames, String cardNumber, String bankCode) throws BitsoAPIException {
+            String recipientFamilyNames, String cardNumber, String bankCode, boolean saveAccount,
+            String... savedName) throws BitsoAPIException {
         String request = "/api/v3/debit_card_withdrawal";
         JSONObject parameters = new JSONObject();
         parameters.put("amount", amount.toString());
@@ -468,6 +477,11 @@ public class Bitso {
         parameters.put("recipient_family_names", recipientFamilyNames);
         parameters.put("card_number", cardNumber);
         parameters.put("bank_code", bankCode);
+
+        if (saveAccount && savedName.length == 1) {
+            parameters.put("save", saveAccount);
+            parameters.put("saved_name", savedName[0]);
+        }
 
         String postResponse = sendBitsoPost(request, parameters);
         JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
@@ -513,7 +527,7 @@ public class Bitso {
     }
 
     public BitsoWithdrawal phoneWithdrawal(BigDecimal amount, String recipientGivenNames,
-            String recipientFamilyNames, String phoneNumber, String bankCode) throws BitsoAPIException{
+            String recipientFamilyNames, String phoneNumber, String bankCode) throws BitsoAPIException {
         String request = "/api/v3/phone_withdrawal";
         JSONObject parameters = new JSONObject();
         parameters.put("amount", amount.toString());
@@ -527,12 +541,17 @@ public class Bitso {
         return new BitsoWithdrawal(payloadJSON);
     }
 
-    private BitsoWithdrawal currencyWithdrawal(String currency, BigDecimal amount, String address)
-            throws BitsoAPIException {
+    private BitsoWithdrawal currencyWithdrawal(String currency, BigDecimal amount, String address,
+            boolean saveAccount, String... savedName) throws BitsoAPIException {
         String request = "/api/v3/" + currency + "_withdrawal";
         JSONObject parameters = new JSONObject();
         parameters.put("amount", amount.toString());
         parameters.put("address", address);
+
+        if (saveAccount && savedName.length == 1) {
+            parameters.put("save", saveAccount);
+            parameters.put("saved_name", savedName[0]);
+        }
 
         String postResponse = sendBitsoPost(request, parameters);
         JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
