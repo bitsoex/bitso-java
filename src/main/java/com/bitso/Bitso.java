@@ -738,6 +738,10 @@ public class Bitso {
     }
 
     public Object getJSONPayload(String jsonResponse) throws BitsoAPIException {
+        if (jsonResponse == null) {
+            throw new BitsoAPIException(101, "Server response is null");
+        }
+
         JSONObject o = Helpers.parseJson(jsonResponse);
 
         if (o.has("error")) {
