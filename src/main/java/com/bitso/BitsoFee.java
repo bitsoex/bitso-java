@@ -35,8 +35,7 @@ public class BitsoFee {
     private void processWithdrawalFees(JSONObject o) {
         mWithdrawalFees = new HashMap<>();
         JSONObject withdrawalFees = o.getJSONObject("withdrawal_fees");
-        Set<String> keys = withdrawalFees.keySet();
-        Iterator<String> it = keys.iterator();
+        Iterator<String> it = withdrawalFees.keys();
         while (it.hasNext()) {
             String key = it.next();
             mWithdrawalFees.put(key, withdrawalFees.getString(key));
