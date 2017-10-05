@@ -1,20 +1,22 @@
 {
-    "success": true,
-    "payload": {
-        "client_id": "234237",
-        "first_name": "Nelson Victor",
-        "last_name": "Cruz Hernandez",
-        "status": "active",
-        "daily_limit": "150000",
-        "monthly_limit": "480000",
-        "daily_remaining": "150000.00",
-        "monthly_remaining": "449083.00",
-        "cellphone_number": "verified",
-        "cellphone_number_stored": "+525539969983",
-        "email_stored": "victor.cruz.isc@gmail.com",
-        "official_id": "submitted",
-        "proof_of_residency": "submitted",
-        "signed_contract": "not submitted",
-        "origin_of_funds": "not submitted"
-    }
+	"success": true,
+	"payload": {
+		"client_id": "111111",
+		"first_name": "mocked_first_name",
+		"last_name": "mocked_last_name",
+		"status": "active",
+		"daily_limit": "1",
+		"monthly_limit": "1",
+		"daily_remaining": "1.00",
+		"monthly_remaining": "1.00",
+		"cellphone_number": "verified",
+		"cellphone_number_stored": "+525521342190",
+		"email_stored": "mocked_mail@mocked_server.com",
+		"official_id": "not submitted",
+		"proof_of_residency": "not submitted",
+		"signed_contract": "not submitted",
+		"origin_of_funds": "not submitted",
+		"verification_level": 1,
+		"referral_code": "mocked_referral_ode"
+	}
 }

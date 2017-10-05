@@ -22,22 +22,24 @@ public class BitsoAccountStatus {
     private String lastName;
     private boolean isCellphoneNumberVerified;
     private String email;
+    private String referralCode;
 
     public BitsoAccountStatus(JSONObject o) {
-        clientId = Helpers.getString(o, "client_id");
-        firstName = Helpers.getString(o, "first_name");
-        lastName = Helpers.getString(o, "last_name");
-        status = Helpers.getString(o, "status");
-        dailyLimit = Helpers.getBD(o, "daily_limit");
-        monthlyLimit = Helpers.getBD(o, "monthly_limit");
-        dailyRemaining = Helpers.getBD(o, "daily_remaining");
-        monthlyRemaining = Helpers.getBD(o, "monthly_remaining");
-        isCellphoneNumberVerified = Helpers.getString(o, "cellphone_number").equals("verified") ? true
+        this.clientId = Helpers.getString(o, "client_id");
+        this.firstName = Helpers.getString(o, "first_name");
+        this.lastName = Helpers.getString(o, "last_name");
+        this.status = Helpers.getString(o, "status");
+        this.dailyLimit = Helpers.getBD(o, "daily_limit");
+        this.monthlyLimit = Helpers.getBD(o, "monthly_limit");
+        this.dailyRemaining = Helpers.getBD(o, "daily_remaining");
+        this.monthlyRemaining = Helpers.getBD(o, "monthly_remaining");
+        this.isCellphoneNumberVerified = Helpers.getString(o, "cellphone_number").equals("verified") ? true
                 : false;
-        officialId = Helpers.getString(o, "official_id");
-        proofOfResidency = Helpers.getString(o, "proof_of_residency");
-        signedContract = Helpers.getString(o, "signed_contract");
-        originOfFunds = Helpers.getString(o, "origin_of_funds");
+        this.officialId = Helpers.getString(o, "official_id");
+        this.proofOfResidency = Helpers.getString(o, "proof_of_residency");
+        this.signedContract = Helpers.getString(o, "signed_contract");
+        this.originOfFunds = Helpers.getString(o, "origin_of_funds");
+        this.referralCode = Helpers.getString(o, "referral_code");
 
         if ((monthlyLimit.compareTo(new BigDecimal("0")) == 0)
                 && (dailyLimit.compareTo(new BigDecimal("1000000")) == 0)) {
@@ -162,6 +164,18 @@ public class BitsoAccountStatus {
 
     public boolean isCellphoneNumberVerified() {
         return isCellphoneNumberVerified;
+    }
+
+    public String getReferralCode() {
+        return referralCode;
+    }
+
+    public void setReferralCode(String referralCode) {
+        this.referralCode = referralCode;
+    }
+
+    public void setCellphoneNumberVerified(boolean isCellphoneNumberVerified) {
+        this.isCellphoneNumberVerified = isCellphoneNumberVerified;
     }
 
     public String toString() {
