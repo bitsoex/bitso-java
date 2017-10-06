@@ -605,7 +605,7 @@ public abstract class BitsoTest {
         assertEquals((excedingLimit != null || excedingLimit == null), true);
     }
 
-    // @Test
+    @Test
     public void testOrderTrades() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, InterruptedException {
         int totalElements = 0;

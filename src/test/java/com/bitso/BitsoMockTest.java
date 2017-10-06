@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.bitso.exceptions.BitsoAPIException;
@@ -378,6 +379,22 @@ public class BitsoMockTest extends BitsoTest {
         BitsoTrade[] trades = mBitso.getUserTrades(null);
         assertEquals(trades != null, true);
         int totalElements = trades.length;
+        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        for (BitsoTrade current : trades) {
+            assertEquals(true, nullCheck(current, BitsoTrade.class));
+        }
+    }
+
+    @Test
+    public void testOrderTrades() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
+            BitsoPayloadException, InterruptedException {
+        int totalElements = 0;
+
+        // TODO:
+        // This should return a collection of 25 elements, not working limit default value
+        BitsoTrade[] trades = mBitso.getUserTrades(null);
+        assertEquals(trades != null, true);
+        totalElements = trades.length;
         assertEquals((totalElements >= 0 && totalElements <= 25), true);
         for (BitsoTrade current : trades) {
             assertEquals(true, nullCheck(current, BitsoTrade.class));

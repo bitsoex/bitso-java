@@ -576,27 +576,36 @@ public class Bitso {
         return input.substring(1, length - 1);
     }
 
-    private String buildBitsoAuthHeader(String requestPath, String httpMethod, String apiKey, String secret) {
-        long nonce = System.currentTimeMillis() + System.currentTimeMillis();
-        byte[] secretBytes = secret.getBytes();
-        byte[] arrayOfByte = null;
-        String signature = null;
-        BigInteger bigInteger = null;
-        Mac mac = null;
+    private String buildBitsoAuthHeader(String requestPath, String httpMethod, String apiKey, String secret)
+            throws BitsoAPIException {
+        if (apiKey == null || secret == null) {
+            throw new BitsoAPIException("Bitso API key or secret is null");
+        }
 
+        byte[] secretBytes = secret.getBytes();
+        if (secretBytes.length == 0) {
+            throw new BitsoAPIException("Bitso API key is empty");
+        }
+
+        long nonce = System.currentTimeMillis() + System.currentTimeMillis();
         String message = nonce + httpMethod + requestPath;
-        SecretKeySpec secretKeySpec = new SecretKeySpec(secretBytes, "HmacSHA256");
+
         try {
-            mac = Mac.getInstance("HmacSHA256");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(secretBytes, "HmacSHA256");
+            Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(secretKeySpec);
-            arrayOfByte = mac.doFinal(message.getBytes());
-            bigInteger = new BigInteger(1, arrayOfByte);
-            signature = String.format("%0" + (arrayOfByte.length << 1) + "x", new Object[] { bigInteger });
+            byte[] arrayOfByte = mac.doFinal(message.getBytes());
+            BigInteger bigInteger = new BigInteger(1, arrayOfByte);
+            String signature = String.format("%0" + (arrayOfByte.length << 1) + "x",
+                    new Object[] { bigInteger });
             return String.format("Bitso %s:%s:%s", apiKey, nonce, signature);
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             e.printStackTrace();
+            throw new BitsoAPIException(e);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(e);
         }
-        return null;
     }
 
     private static Entry<String, String> buildBitsoAuthHeader(String secretKey, String publicKey, long nonce,
@@ -609,6 +618,7 @@ public class Bitso {
         try {
             Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(localMac);
+
             // Compute the hmac on input data bytes
             byte[] arrayOfByte = mac.doFinal(message.getBytes());
             BigInteger localBigInteger = new BigInteger(1, arrayOfByte);

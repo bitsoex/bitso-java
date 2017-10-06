@@ -22,6 +22,7 @@ public class BitsoAPIException extends Exception {
 
     public BitsoAPIException(String message) {
         super(message);
+        this.mErrorCode = 101;
     }
 
     public BitsoAPIException(int errorCode, String message, Throwable initialException) {

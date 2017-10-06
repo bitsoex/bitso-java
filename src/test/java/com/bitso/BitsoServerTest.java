@@ -26,4 +26,14 @@ public class BitsoServerTest extends BitsoTest {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void testTrading() {
+        System.out.println("This test is overriden in BitsoServerTest");
+    }
+
+    @Override
+    public void testOrderTrades() {
+        System.out.println("This test is overriden in BitsoServerTest");
+    }
 }
