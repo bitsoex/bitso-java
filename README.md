@@ -109,23 +109,25 @@ System.out.println(bitso.getBalance());
 ### Print Available books
 
 ```java
-ArrayList<BookInfo> books = bitso.availableBooks();
+BookInfo[] books = bitso.availableBooks();
 for (BookInfo bookInfo : books) {
     System.out.println(bookInfo);
 }
 ```
 
-### Print trading information from a specified book
+### Print trading information
 
 ```java
-BitsoTicker ticker = bitso.getTicker(BitsoBook.BTC_MXN);
-System.out.println(ticker);
+BitsoTicker[] tickers = bitso.getTicker();
+for (BitsoTicker ticket : tickers) {
+    System.out.println(ticket);
+}
 ```
 
 ### Get order books
 
 ```java
-BitsoOrderBook orderBook = bitso.getOrderBook(BitsoBook.BTC_MXN);
+BitsoOrderBook orderBook = bitso.getOrderBook("btc_mxn");
 PublicOrder[] asks = orderBook.asks;
 PublicOrder[] bids = orderBook.bids;
 ```
