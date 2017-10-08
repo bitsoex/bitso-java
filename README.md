@@ -109,7 +109,7 @@ System.out.println(bitso.getBalance());
 ### Print Available books
 
 ```java
-BookInfo[] books = bitso.availableBooks();
+BookInfo[] books = bitso.getAvailableBooks();
 for (BookInfo bookInfo : books) {
     System.out.println(bookInfo);
 }
