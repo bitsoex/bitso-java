@@ -40,7 +40,7 @@ public class BitsoOperation {
             return null;
         }
 
-        HashMap<String, String> details = new HashMap<>();
+        HashMap<String, String> details = new HashMap<String, String>();
 
         String currentKey;
         String currentValue;

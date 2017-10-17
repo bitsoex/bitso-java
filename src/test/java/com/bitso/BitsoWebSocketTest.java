@@ -21,12 +21,13 @@ import com.bitso.websockets.BitsoWebSocketObserver;
 import com.bitso.websockets.BitsoChannels;
 
 public class BitsoWebSocketTest {
-    private final BitsoChannels[] bitsoChannels = { BitsoChannels.TRADES, BitsoChannels.DIFF_ORDERS, BitsoChannels.ORDERS };
+    private final BitsoChannels[] bitsoChannels = { BitsoChannels.TRADES, BitsoChannels.DIFF_ORDERS,
+            BitsoChannels.ORDERS };
     private BitsoWebSocket bitsoWebSocket;
     private BitsoWebSocketObserver bitsoWebSocketObserver;
-    
+
     @Before
-    public void setUp() throws Exception{
+    public void setUp() throws Exception {
         bitsoWebSocket = new BitsoWebSocket();
         bitsoWebSocketObserver = new BitsoWebSocketObserver();
         bitsoWebSocket.addObserver(bitsoWebSocketObserver);
@@ -63,23 +64,27 @@ public class BitsoWebSocketTest {
         for (int i = 3; i < totalMessagesReceived; i++) {
             JSONObject jsonObject = new JSONObject(receivedMessages.get(i));
             String type = Helpers.getString(jsonObject, "type");
-            switch (type) {
-                case "trades":
+            BitsoChannels channel = BitsoChannels.getBitsoChannel(type);
+
+            assertEquals(true, (channel != null));
+
+            switch (channel) {
+                case TRADES:
                     BitsoStreamTrades trades = new BitsoStreamTrades(jsonObject);
                     assertEquals((trades != null), true);
                     assertEquals(trades.attributesNotNull(), true);
                     break;
-                case "diff-orders":
+                case DIFF_ORDERS:
                     BitsoStreamDiffOrders diff = new BitsoStreamDiffOrders(jsonObject);
                     assertEquals((diff != null), true);
                     assertEquals(diff.attributesNotNull(), true);
                     break;
-                case "orders":
+                case ORDERS:
                     BitsoStreamOrders orders = new BitsoStreamOrders(jsonObject);
                     assertEquals(orders != null, true);
                     assertEquals(orders.attributesNotNull(), true);
                     break;
-                case "ka":
+                case KA:
                     break;
                 default:
                     String exceptionMessage = type + "is not a supported stream type";

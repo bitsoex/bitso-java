@@ -599,10 +599,13 @@ public class Bitso {
             String signature = String.format("%0" + (arrayOfByte.length << 1) + "x",
                     new Object[] { bigInteger });
             return String.format("Bitso %s:%s:%s", apiKey, nonce, signature);
-        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+        } catch (NoSuchAlgorithmException e){
             e.printStackTrace();
             throw new BitsoAPIException(e);
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(e);
+        } catch (InvalidKeyException e) {
             e.printStackTrace();
             throw new BitsoAPIException(e);
         }

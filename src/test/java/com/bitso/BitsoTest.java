@@ -78,7 +78,7 @@ public abstract class BitsoTest {
             BitsoTransactions bitsoTransaction = mBitso.getTrades(bookInfo.getBook());
             assertEquals(nullCheck(bitsoTransaction, BitsoTransactions.class), true);
 
-            Thread.sleep(5_000);
+            Thread.sleep(5000);
 
             /*
              * // TODO: // This should return null due it's a negative value on limit try{ BitsoTransactions
@@ -86,26 +86,26 @@ public abstract class BitsoTest {
              * (BitsoAPIException bitsoAPIException) { assertEquals(bitsoAPIException != null, true); }
              */
 
-            Thread.sleep(5_000);
+            Thread.sleep(5000);
 
             // TODO:
             // This should return null due limit value is 0
             BitsoTransactions bitsoTransactionCeroLimit = mBitso.getTrades(bookInfo.getBook(), "limit=0");
             assertEquals(bitsoTransactionCeroLimit != null, true);
 
-            Thread.sleep(5_000);
+            Thread.sleep(5000);
 
             BitsoTransactions bitsoTransactionLowLimit = mBitso.getTrades(bookInfo.getBook(), "limit=1");
             totalElements = bitsoTransactionLowLimit.getTransactionsList().length;
             assertEquals((totalElements >= 0 && totalElements <= 1), true);
 
-            Thread.sleep(5_000);
+            Thread.sleep(5000);
 
             BitsoTransactions bitsoTransactionMaxLimit = mBitso.getTrades(bookInfo.getBook(), "limit=100");
             totalElements = bitsoTransactionMaxLimit.getTransactionsList().length;
             assertEquals((totalElements >= 0 && totalElements <= 100), true);
 
-            Thread.sleep(5_000);
+            Thread.sleep(5000);
 
             // TODO:
             // This should return null due the limit value exceeds 100
@@ -113,7 +113,7 @@ public abstract class BitsoTest {
                     "limit=1000");
             assertEquals(bitsoTransactionExcedingMaxLimit != null, true);
 
-            Thread.sleep(5_000);
+            Thread.sleep(5000);
 
             BitsoTransactions bitsoTransactionSortAsc = mBitso.getTrades(bookInfo.getBook(), "sort=asc");
             innerTransactions = bitsoTransaction.getTransactionsList();
@@ -131,7 +131,7 @@ public abstract class BitsoTest {
                 assertEquals(true, orderAsc);
             }
 
-            Thread.sleep(5_000);
+            Thread.sleep(5000);
 
             // TODO:
             // This should return a correct DESC order and is not doing it
@@ -151,7 +151,7 @@ public abstract class BitsoTest {
                 assertEquals(true, orderDesc);
             }
 
-            Thread.sleep(5_000);
+            Thread.sleep(5000);
 
             BitsoTransactions bitsoTransactionSortLimit = mBitso.getTrades(bookInfo.getBook(), "sort=asc",
                     "limit=15");
@@ -213,7 +213,7 @@ public abstract class BitsoTest {
             assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         BitsoOperation[] tradesLedger = mBitso.getLedger("trades");
         assertEquals(tradesLedger != null, true);
@@ -224,7 +224,7 @@ public abstract class BitsoTest {
             assertEquals(bitsoOperation.getOperationDescription(), "trade");
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         BitsoOperation[] feesLedger = mBitso.getLedger("fees");
         assertEquals(feesLedger != null, true);
@@ -235,7 +235,7 @@ public abstract class BitsoTest {
             assertEquals(bitsoOperation.getOperationDescription(), "fee");
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         BitsoOperation[] fundingsLedger = mBitso.getLedger("fundings");
         assertEquals(fundingsLedger != null, true);
@@ -246,7 +246,7 @@ public abstract class BitsoTest {
             assertEquals(bitsoOperation.getOperationDescription(), "funding");
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         BitsoOperation[] withdrawalsLedger = mBitso.getLedger("withdrawals");
         assertEquals(withdrawalsLedger != null, true);
@@ -257,21 +257,21 @@ public abstract class BitsoTest {
             assertEquals(bitsoOperation.getOperationDescription(), "withdrawal");
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         // TODO:
         // This should return null due it's a negative value on limit
         BitsoOperation[] negativeLimitLedger = mBitso.getLedger("", "limit=-10");
         assertEquals((negativeLimitLedger != null || negativeLimitLedger == null), true);
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         // TODO:
         // This should return null due limit value is 0
         BitsoOperation[] ceroLimitLedger = mBitso.getLedger("", "limit=0");
         assertEquals((ceroLimitLedger != null || ceroLimitLedger == null), true);
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         BitsoOperation[] lowLimitLedger = mBitso.getLedger("", "limit=1");
         assertEquals(lowLimitLedger != null, true);
@@ -281,7 +281,7 @@ public abstract class BitsoTest {
             assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         BitsoOperation[] maxLimitLedger = mBitso.getLedger("", "limit=100");
         assertEquals(maxLimitLedger != null, true);
@@ -291,28 +291,28 @@ public abstract class BitsoTest {
             assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         // TODO:
         // This should return null due the limit value exceeds 100
         BitsoOperation[] excedingLimitLedger = mBitso.getLedger("", "limit=1000");
         assertEquals((excedingLimitLedger != null || excedingLimitLedger == null), true);
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         BitsoOperation[] sortAscLedger = mBitso.getLedger("", "sort=asc");
         assertEquals(sortAscLedger != null, true);
         totalElements = sortAscLedger.length;
         assertEquals((totalElements >= 0 && totalElements <= 25), true);
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         BitsoOperation[] sortDescLedger = mBitso.getLedger("", "sort=desc");
         assertEquals(sortDescLedger != null, true);
         totalElements = sortDescLedger.length;
         assertEquals((totalElements >= 0 && totalElements <= 25), true);
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         BitsoOperation[] multipleQueryParameterLedger = mBitso.getLedger("", "sort=desc", "limit=15");
         assertEquals(multipleQueryParameterLedger != null, true);
@@ -337,7 +337,7 @@ public abstract class BitsoTest {
             assertEquals(true, nullCheck(bitsoWithdrawal, BitsoWithdrawal.class));
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         if (totalElementsFirstCall > 0) {
             BitsoWithdrawal bitsoWithdrawal = withdrawals[0];
@@ -353,7 +353,7 @@ public abstract class BitsoTest {
             }
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         if (totalElementsFirstCall >= 3) {
             BitsoWithdrawal bitsoWithdrawalFirst = withdrawals[0];
@@ -370,26 +370,26 @@ public abstract class BitsoTest {
             }
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         BitsoWithdrawal[] withdrawalsBothParameters = mBitso.getWithdrawals(new String[] { "" }, "");
         assertEquals(withdrawalsBothParameters == null, true);
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         // TODO:
         // This should return null due it's a negative value on limit
         BitsoWithdrawal[] negativeLimitwithdrawals = mBitso.getWithdrawals(null, "limit=-10");
         assertEquals((negativeLimitwithdrawals != null || negativeLimitwithdrawals == null), true);
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         // TODO:
         // This should return null due limit value is 0
         BitsoWithdrawal[] ceroLimitwithdrawals = mBitso.getWithdrawals(null, "limit=0");
         assertEquals((ceroLimitwithdrawals != null || ceroLimitwithdrawals == null), true);
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         BitsoWithdrawal[] lowestLimitwithdrawals = mBitso.getWithdrawals(null, "limit=1");
         assertEquals(lowestLimitwithdrawals != null, true);
@@ -399,7 +399,7 @@ public abstract class BitsoTest {
             assertEquals(true, nullCheck(bitsoWithdrawal, BitsoWithdrawal.class));
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         BitsoWithdrawal[] maxLimitwithdrawals = mBitso.getWithdrawals(null, "limit=100");
         assertEquals(maxLimitwithdrawals != null, true);
@@ -409,7 +409,7 @@ public abstract class BitsoTest {
             assertEquals(true, nullCheck(bitsoWithdrawal, BitsoWithdrawal.class));
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         // TODO:
         // This should return null limit exceed max
@@ -434,7 +434,7 @@ public abstract class BitsoTest {
             assertEquals(true, nullCheck(bitsoFunding, BitsoFunding.class));
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         if (totalElementsFirstCall > 0) {
             BitsoFunding bitsoFunding = fundings[0];
@@ -448,7 +448,7 @@ public abstract class BitsoTest {
             }
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         if (totalElementsFirstCall >= 3) {
             BitsoFunding bitsoFundingFirst = fundings[0];
@@ -464,26 +464,26 @@ public abstract class BitsoTest {
             }
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         BitsoFunding[] fundingsBothParameters = mBitso.getFundings(new String[] { "" }, "");
         assertEquals(fundingsBothParameters == null, true);
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         // TODO:
         // This should return null due it's a negative value on limit
         BitsoFunding[] negativeLimit = mBitso.getFundings(null, "limit=-10");
         assertEquals((negativeLimit != null || negativeLimit == null), true);
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         // TODO:
         // This should return null due limit value is 0
         BitsoFunding[] ceroLimit = mBitso.getFundings(null, "limit=0");
         assertEquals((ceroLimit != null || ceroLimit == null), true);
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         BitsoFunding[] lowestLimit = mBitso.getFundings(null, "limit=1");
         assertEquals(lowestLimit != null, true);
@@ -493,7 +493,7 @@ public abstract class BitsoTest {
             assertEquals(true, nullCheck(bitsoFunding, BitsoFunding.class));
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         BitsoFunding[] maxLimit = mBitso.getFundings(null, "limit=100");
         assertEquals(maxLimit != null, true);
@@ -503,7 +503,7 @@ public abstract class BitsoTest {
             assertEquals(true, nullCheck(bitsoFunding, BitsoFunding.class));
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         // TODO:
         // This should return null limit exceed max
@@ -528,7 +528,7 @@ public abstract class BitsoTest {
             assertEquals(true, nullCheck(current, BitsoTrade.class));
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         if (totalElementsFirstCall > 0) {
             BitsoTrade bitso = fundings[0];
@@ -542,7 +542,7 @@ public abstract class BitsoTest {
             }
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         if (totalElementsFirstCall >= 3) {
             BitsoTrade bitsoFirst = fundings[0];
@@ -558,26 +558,26 @@ public abstract class BitsoTest {
             }
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         BitsoTrade[] bothParameters = mBitso.getUserTrades(new String[] { "" }, "");
         assertEquals(bothParameters == null, true);
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         // TODO:
         // This should return null due it's a negative value on limit
         BitsoTrade[] negativeLimit = mBitso.getUserTrades(null, "limit=-10");
         assertEquals((negativeLimit != null || negativeLimit == null), true);
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         // TODO:
         // This should return null due limit value is 0
         BitsoTrade[] ceroLimit = mBitso.getUserTrades(null, "limit=0");
         assertEquals((ceroLimit != null || ceroLimit == null), true);
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         BitsoTrade[] lowestLimit = mBitso.getUserTrades(null, "limit=1");
         assertEquals(lowestLimit != null, true);
@@ -587,7 +587,7 @@ public abstract class BitsoTest {
             assertEquals(true, nullCheck(current, BitsoTrade.class));
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         BitsoTrade[] maxLimit = mBitso.getUserTrades(null, "limit=100");
         assertEquals(maxLimit != null, true);
@@ -597,7 +597,7 @@ public abstract class BitsoTest {
             assertEquals(true, nullCheck(current, BitsoTrade.class));
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         // TODO:
         // This should return null limit exceed max
@@ -620,7 +620,7 @@ public abstract class BitsoTest {
             assertEquals(true, nullCheck(current, BitsoTrade.class));
         }
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         for (BitsoTrade trade : trades) {
             String order = trade.getOid();
@@ -629,14 +629,14 @@ public abstract class BitsoTest {
             for (BitsoTrade orderTrade : orderTrades) {
                 assertEquals(nullCheck(orderTrade, BitsoTrade.class), true);
             }
-            Thread.sleep(5_000);
+            Thread.sleep(5000);
         }
     }
 
     @Test
     public void testTrading() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, InterruptedException {
-        List<String> orders = new ArrayList<>();
+        List<String> orders = new ArrayList<String>();
         String canceledOrders[] = null;
         String sellOrderId = null;
         String buyOrderId = null;
@@ -673,7 +673,7 @@ public abstract class BitsoTest {
                     "Test: Set limit SELL order on mxn_btc order book was not executed due not enough funds in BTC");
         }
 
-        Thread.sleep(1_000);
+        Thread.sleep(1000);
 
         int totalOpenOrders = orders.size();
         assertEquals(totalOpenOrders, 2);
@@ -694,7 +694,7 @@ public abstract class BitsoTest {
             }
         }
 
-        Thread.sleep(1_000);
+        Thread.sleep(1000);
 
         BitsoOrder[] multiple = mBitso.lookupOrders(buyOrderId, sellOrderId);
         assertEquals(multiple != null, true);
@@ -703,7 +703,7 @@ public abstract class BitsoTest {
             assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
         }
 
-        Thread.sleep(1_000);
+        Thread.sleep(1000);
 
         for (int i = 0; i < totalOpenOrders; i++) {
             String orderId = orders.get(i);
@@ -730,21 +730,21 @@ public abstract class BitsoTest {
         assertEquals(true, (btcFundingDestination.containsKey("account_identifier_name")
                 && btcFundingDestination.containsKey("account_identifier")));
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         Map<String, String> ethFundingDestination = mBitso.fundingDestination("fund_currency=eth");
         assertEquals(true, (ethFundingDestination != null));
         assertEquals(true, (ethFundingDestination.containsKey("account_identifier_name")
                 && ethFundingDestination.containsKey("account_identifier")));
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
 
         Map<String, String> mxnFundingDestination = mBitso.fundingDestination("fund_currency=mxn");
         assertEquals(true, (mxnFundingDestination != null));
         assertEquals(true, (mxnFundingDestination.containsKey("account_identifier_name")
                 && mxnFundingDestination.containsKey("account_identifier")));
 
-        Thread.sleep(5_000);
+        Thread.sleep(5000);
     }
 
     @Test

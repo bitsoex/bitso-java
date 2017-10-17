@@ -12,7 +12,7 @@ public class BitsoBalance {
     private HashMap<String, Balance> mBalances;
 
     public BitsoBalance(JSONObject o) {
-        mBalances = new HashMap<>();
+        mBalances = new HashMap<String, Balance>();
         JSONArray jsonBalances = o.getJSONArray("balances");
         int totalElements = jsonBalances.length();
         for (int i = 0; i < totalElements; i++) {

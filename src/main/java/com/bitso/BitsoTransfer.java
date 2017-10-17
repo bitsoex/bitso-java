@@ -52,7 +52,7 @@ public class BitsoTransfer {
             Object fields = o.get("fields");
             if (fields.getClass() == JSONObject.class) {
                 JSONObject f = o.getJSONObject("fields");
-                this.fields = new HashMap<>();
+                this.fields = new HashMap<String, Object>();
                 Iterator<String> keys = f.keys();
                 String currentKey;
                 while(keys.hasNext()){

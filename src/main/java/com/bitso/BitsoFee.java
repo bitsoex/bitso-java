@@ -20,7 +20,7 @@ public class BitsoFee {
     }
 
     private void processTradeFees(JSONObject o) {
-        mTradeFees = new HashMap<>();
+        mTradeFees = new HashMap<String, Fee>();
         JSONArray jsonFees = o.getJSONArray("fees");
         int totalElements = jsonFees.length();
         for (int i = 0; i < totalElements; i++) {
@@ -33,7 +33,7 @@ public class BitsoFee {
     }
 
     private void processWithdrawalFees(JSONObject o) {
-        mWithdrawalFees = new HashMap<>();
+        mWithdrawalFees = new HashMap<String, String>();
         JSONObject withdrawalFees = o.getJSONObject("withdrawal_fees");
         Iterator<String> it = withdrawalFees.keys();
         while (it.hasNext()) {

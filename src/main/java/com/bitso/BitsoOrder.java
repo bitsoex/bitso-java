@@ -64,19 +64,13 @@ public class BitsoOrder {
     }
 
     private BitsoOrder.STATUS retrieveStatus(String status) {
-        switch (status) {
-            case "open":
-                return BitsoOrder.STATUS.OPEN;
-            case "partially filled":
-                return BitsoOrder.STATUS.PARTIALLY_FILLED;
-            case "completed":
-                return BitsoOrder.STATUS.COMPLETED;
-            case "cancelled":
-                return BitsoOrder.STATUS.CANCELLED;
-            default:
-                String exceptionMessage = status + "is not a supported order status";
-                throw new BitsoExceptionNotExpectedValue(exceptionMessage);
-        }
+        if (status.equals("open")) return BitsoOrder.STATUS.OPEN;
+        if (status.equals("partially filled")) return BitsoOrder.STATUS.PARTIALLY_FILLED;
+        if (status.equals("completed")) return BitsoOrder.STATUS.COMPLETED;
+        if (status.equals("cancelled")) return BitsoOrder.STATUS.CANCELLED;
+
+        String exceptionMessage = status + "is not a supported order status";
+        throw new BitsoExceptionNotExpectedValue(exceptionMessage);
     }
 
     private BitsoOrder.TYPE retrieveType(String type) {

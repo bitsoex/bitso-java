@@ -21,7 +21,7 @@ public class BitsoServerTest extends BitsoTest {
     @After
     public void tearDown() {
         try {
-            Thread.sleep(5_000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

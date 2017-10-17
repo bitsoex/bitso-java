@@ -85,7 +85,7 @@ public class BitsoWithdrawal {
 
     @SuppressWarnings("unchecked")
     private HashMap<String, String> retrieveOperationDetails(JSONObject o) {
-        HashMap<String, String> details = new HashMap<>();
+        HashMap<String, String> details = new HashMap<String, String>();
 
         String currentKey;
         String currentValue = null;
