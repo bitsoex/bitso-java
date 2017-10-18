@@ -28,4 +28,8 @@ public class BitsoTicker extends Ticker {
     public void setBook(String book) {
         this.book = book;
     }
+
+    public String toString() {
+        return Helpers.fieldPrinter(this, BitsoTicker.class) + super.toString();
+    }
 }

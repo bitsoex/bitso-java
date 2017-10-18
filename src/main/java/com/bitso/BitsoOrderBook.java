@@ -133,14 +133,12 @@ public class BitsoOrderBook {
             return Helpers.fieldPrinter(this, BitsoOrderBook.PulicOrder.class);
         }
 
-        @Override
         public int compareTo(PulicOrder o) {
             return mPrice.compareTo(o.mPrice);
         }
 
         public class Comparators {
             public Comparator<PulicOrder> PRICE = new Comparator<PulicOrder>() {
-                @Override
                 public int compare(PulicOrder o1, PulicOrder o2) {
                     return o1.mPrice.compareTo(o2.mPrice);
                 }
