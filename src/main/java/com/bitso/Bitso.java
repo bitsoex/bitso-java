@@ -17,9 +17,13 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.net.ssl.HttpsURLConnection;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.bitso.exceptions.BitsoAPIException;
+import com.bitso.exceptions.BitsoPayloadException;
+import com.bitso.exceptions.BitsoServerException;
+import com.bitso.exceptions.BitsoValidationException;
 import com.bitso.exchange.BookInfo;
 import com.bitso.helpers.Helpers;
 import com.bitso.http.BlockingHttpClient;
@@ -82,7 +86,8 @@ public class Bitso {
     }
 
     // Public Functions
-    public BookInfo[] getAvailableBooks() throws BitsoAPIException {
+    public BookInfo[] getAvailableBooks()
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/available_books";
 
         String getResponse = sendGet(request);
@@ -95,7 +100,7 @@ public class Bitso {
         return books;
     }
 
-    public BitsoTicker[] getTicker() throws BitsoAPIException {
+    public BitsoTicker[] getTicker() throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/ticker";
 
         String getResponse = sendGet(request);
@@ -108,7 +113,8 @@ public class Bitso {
         return tickers;
     }
 
-    public BitsoOrderBook getOrderBook(String book, boolean... aggregate) throws BitsoAPIException {
+    public BitsoOrderBook getOrderBook(String book, boolean... aggregate)
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/order_book?book=" + book;
 
         if (aggregate != null && aggregate.length == 1) {
@@ -124,7 +130,8 @@ public class Bitso {
         return new BitsoOrderBook(payloadJSON);
     }
 
-    public BitsoTransactions getTrades(String book, String... queryParameters) throws BitsoAPIException {
+    public BitsoTransactions getTrades(String book, String... queryParameters)
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String parsedQueryParametes = processQueryParameters("&", queryParameters);
         String request = "/api/v3/trades?book=" + book
                 + ((parsedQueryParametes != null) ? "&" + parsedQueryParametes : "");
@@ -135,7 +142,8 @@ public class Bitso {
     }
 
     // Private Functions
-    public BitsoAccountStatus getAccountStatus() throws BitsoAPIException {
+    public BitsoAccountStatus getAccountStatus()
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/account_status";
 
         String getResponse = sendBitsoGet(request);
@@ -143,14 +151,15 @@ public class Bitso {
         return new BitsoAccountStatus(payloadJSON);
     }
 
-    public BitsoBalance getAccountBalance() throws BitsoAPIException {
+    public BitsoBalance getAccountBalance()
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/balance";
         String getResponse = sendBitsoGet(request);
         JSONObject payloadJSON = (JSONObject) getJSONPayload(getResponse);
         return new BitsoBalance(payloadJSON);
     }
 
-    public BitsoFee getFees() throws BitsoAPIException {
+    public BitsoFee getFees() throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/fees";
         String getResponse = sendBitsoGet(request);
         JSONObject payloadJSON = (JSONObject) getJSONPayload(getResponse);
@@ -158,7 +167,7 @@ public class Bitso {
     }
 
     public BitsoOperation[] getLedger(String specificOperation, String... queryParameters)
-            throws BitsoAPIException {
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/ledger";
 
         if (specificOperation != null && specificOperation.length() > 0) {
@@ -188,7 +197,7 @@ public class Bitso {
      * @throws BitsoAPIException
      */
     public BitsoWithdrawal[] getWithdrawals(String[] withdrawalsIds, String... queryParameters)
-            throws BitsoAPIException {
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/withdrawals";
 
         if ((withdrawalsIds != null) && (queryParameters != null && queryParameters.length > 0)) {
@@ -225,7 +234,7 @@ public class Bitso {
      * @throws BitsoAPIException
      */
     public BitsoFunding[] getFundings(String[] fundingssIds, String... queryParameters)
-            throws BitsoAPIException {
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/fundings";
 
         if ((fundingssIds != null && (queryParameters != null && queryParameters.length > 0))) {
@@ -262,7 +271,7 @@ public class Bitso {
      * @throws BitsoAPIException
      */
     public BitsoTrade[] getUserTrades(String[] tradesIds, String... queryParameters)
-            throws BitsoAPIException {
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/user_trades";
 
         if ((tradesIds != null && (queryParameters != null && queryParameters.length > 0))) {
@@ -289,7 +298,8 @@ public class Bitso {
         return trades;
     }
 
-    public BitsoTrade[] getOrderTrades(String orderId) throws BitsoAPIException {
+    public BitsoTrade[] getOrderTrades(String orderId)
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/order_trades";
 
         if (orderId == null || orderId.trim().length() == 0) {
@@ -308,7 +318,8 @@ public class Bitso {
         return trades;
     }
 
-    public BitsoOrder[] getOpenOrders(String book, String... queryParameters) throws BitsoAPIException {
+    public BitsoOrder[] getOpenOrders(String book, String... queryParameters)
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/open_orders";
 
         request += "?" + "book=" + book;
@@ -326,7 +337,8 @@ public class Bitso {
         return orders;
     }
 
-    public BitsoOrder[] lookupOrders(String... ordersId) throws BitsoAPIException {
+    public BitsoOrder[] lookupOrders(String... ordersId)
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/orders";
 
         if (ordersId == null || ordersId.length == 0) {
@@ -347,7 +359,8 @@ public class Bitso {
     }
 
     public String placeOrder(String book, BitsoOrder.SIDE side, BitsoOrder.TYPE type, BigDecimal major,
-            BigDecimal minor, BigDecimal price) throws BitsoAPIException {
+            BigDecimal minor, BigDecimal price)
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/orders";
 
         JSONObject parameters = new JSONObject();
@@ -382,11 +395,12 @@ public class Bitso {
         return Helpers.getString(payloadJSON, "oid");
     }
 
-    public String[] cancelOrder(String... ordersIds) throws BitsoAPIException {
+    public String[] cancelOrder(String... ordersIds)
+            throws BitsoAPIException, BitsoValidationException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/orders";
 
-        if (ordersIds == null || ordersIds.length == 0) {
-            return null;
+        if (ordersIds.length == 0) {
+            throw new BitsoValidationException("No orders to cancel");
         }
 
         String ordersIdsParameters = processQueryParameters("-", ordersIds);
@@ -395,10 +409,11 @@ public class Bitso {
 
         String deleteResponse = sendBitsoDelete(request);
         JSONArray payloadJSON = (JSONArray) getJSONPayload(deleteResponse);
-        return Helpers.parseJSONArray(payloadJSON);
+        return Helpers.getJSONArrayElements(payloadJSON);
     }
 
-    public Map<String, String> fundingDestination(String currencyParameter) throws BitsoAPIException {
+    public Map<String, String> fundingDestination(String currencyParameter)
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/funding_destination";
 
         if (currencyParameter == null || currencyParameter.trim().length() == 0) {
@@ -417,18 +432,19 @@ public class Bitso {
     }
 
     public BitsoWithdrawal bitcoinWithdrawal(BigDecimal amount, String address, boolean saveAccount,
-            String... savedName) throws BitsoAPIException {
+            String... savedName) throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         return currencyWithdrawal(BITCOIN, amount, address, saveAccount, savedName);
     }
 
     public BitsoWithdrawal etherWithdrawal(BigDecimal amount, String address, boolean saveAccount,
-            String... savedName) throws BitsoAPIException {
+            String... savedName) throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         return currencyWithdrawal(ETHER, amount, address, saveAccount, savedName);
     }
 
     public BitsoWithdrawal speiWithdrawal(BigDecimal amount, String recipientGivenNames,
             String recipientFamilyNames, String clabe, String notesReference, String numericReference,
-            boolean saveAccount, String... savedName) throws BitsoAPIException {
+            boolean saveAccount, String... savedName)
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/spei_withdrawal";
         JSONObject parameters = new JSONObject();
         parameters.put("amount", amount.toString());
@@ -448,7 +464,8 @@ public class Bitso {
         return new BitsoWithdrawal(payloadJSON);
     }
 
-    public Map<String, String> getBanks() throws BitsoAPIException {
+    public Map<String, String> getBanks()
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/mx_bank_codes";
         String getResponse = sendBitsoGet(request);
         JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
@@ -469,7 +486,7 @@ public class Bitso {
 
     public BitsoWithdrawal debitCardWithdrawal(BigDecimal amount, String recipientGivenNames,
             String recipientFamilyNames, String cardNumber, String bankCode, boolean saveAccount,
-            String... savedName) throws BitsoAPIException {
+            String... savedName) throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/debit_card_withdrawal";
         JSONObject parameters = new JSONObject();
         parameters.put("amount", amount.toString());
@@ -488,7 +505,8 @@ public class Bitso {
         return new BitsoWithdrawal(payloadJSON);
     }
 
-    public String numberRegistration(String phoneNumber) throws BitsoAPIException {
+    public String numberRegistration(String phoneNumber)
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         if (phoneNumber == null) {
 
         }
@@ -507,7 +525,8 @@ public class Bitso {
         return payloadJSON.getString("phone");
     }
 
-    public String phoneVerification(String verificationCode) throws BitsoAPIException {
+    public String phoneVerification(String verificationCode)
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         if (verificationCode == null) {
 
         }
@@ -527,7 +546,8 @@ public class Bitso {
     }
 
     public BitsoWithdrawal phoneWithdrawal(BigDecimal amount, String recipientGivenNames,
-            String recipientFamilyNames, String phoneNumber, String bankCode) throws BitsoAPIException {
+            String recipientFamilyNames, String phoneNumber, String bankCode)
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/phone_withdrawal";
         JSONObject parameters = new JSONObject();
         parameters.put("amount", amount.toString());
@@ -542,7 +562,8 @@ public class Bitso {
     }
 
     private BitsoWithdrawal currencyWithdrawal(String currency, BigDecimal amount, String address,
-            boolean saveAccount, String... savedName) throws BitsoAPIException {
+            boolean saveAccount, String... savedName)
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/" + currency + "_withdrawal";
         JSONObject parameters = new JSONObject();
         parameters.put("amount", amount.toString());
@@ -599,7 +620,7 @@ public class Bitso {
             String signature = String.format("%0" + (arrayOfByte.length << 1) + "x",
                     new Object[] { bigInteger });
             return String.format("Bitso %s:%s:%s", apiKey, nonce, signature);
-        } catch (NoSuchAlgorithmException e){
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             throw new BitsoAPIException(e);
         } catch (IllegalArgumentException e) {
@@ -750,24 +771,30 @@ public class Bitso {
         return queryString;
     }
 
-    public Object getJSONPayload(String jsonResponse) throws BitsoAPIException {
+    public Object getJSONPayload(String jsonResponse)
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         if (jsonResponse == null) {
-            throw new BitsoAPIException(101, "Server response is null");
+            throw new BitsoServerException("Server response is null");
         }
 
-        JSONObject o = Helpers.parseJson(jsonResponse);
+        try {
+            JSONObject o = Helpers.parseJson(jsonResponse);
 
-        if (o.has("error")) {
-            JSONObject errorJson = o.getJSONObject("error");
-            int errorCode = Helpers.getInt(errorJson, "code");
-            String errorMessage = Helpers.getString(errorJson, "message");
-            throw new BitsoAPIException(errorCode, errorMessage);
-        }
+            if (o.has("error")) {
+                JSONObject errorJson = o.getJSONObject("error");
+                int errorCode = Helpers.getInt(errorJson, "code");
+                String errorMessage = Helpers.getString(errorJson, "message");
+                throw new BitsoAPIException(errorCode, errorMessage);
+            }
 
-        if (o.has("payload")) {
-            return o.get("payload");
-        } else {
-            throw new BitsoAPIException(101, "Server response does not contain payload");
+            if (o.has("payload")) {
+                return o.get("payload");
+            } else {
+                throw new BitsoPayloadException("Server response does not contain payload");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw new BitsoServerException("Server response is not a valid JSON", e);
         }
     }
 }

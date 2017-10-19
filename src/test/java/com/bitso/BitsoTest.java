@@ -20,6 +20,8 @@ import com.bitso.BitsoBalance.Balance;
 import com.bitso.exceptions.BitsoAPIException;
 import com.bitso.exceptions.BitsoNullException;
 import com.bitso.exceptions.BitsoPayloadException;
+import com.bitso.exceptions.BitsoServerException;
+import com.bitso.exceptions.BitsoValidationException;
 import com.bitso.exchange.BookInfo;
 import com.bitso.exchange.Ticker;
 
@@ -28,8 +30,8 @@ public abstract class BitsoTest {
 
     // Test public Rest API
     @Test
-    public void testAvailableBooks()
-            throws JSONException, BitsoNullException, IOException, BitsoAPIException, BitsoPayloadException {
+    public void testAvailableBooks() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
+            BitsoPayloadException, BitsoServerException {
         BookInfo[] books = mBitso.getAvailableBooks();
         assertEquals(true, (books != null));
         int totalElements = books.length;
@@ -40,8 +42,8 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testTicker()
-            throws JSONException, BitsoNullException, IOException, BitsoAPIException, BitsoPayloadException {
+    public void testTicker() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
+            BitsoPayloadException, BitsoServerException {
         BitsoTicker[] tickers = mBitso.getTicker();
         assertEquals(tickers != null, true);
         int totalElements = tickers.length;
@@ -52,8 +54,8 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testOrderBook()
-            throws JSONException, BitsoNullException, IOException, BitsoAPIException, BitsoPayloadException {
+    public void testOrderBook() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
+            BitsoPayloadException, BitsoServerException {
         BookInfo[] availableBooks = mBitso.getAvailableBooks();
         assertEquals(availableBooks != null, true);
         for (BookInfo bookInfo : availableBooks) {
@@ -68,7 +70,7 @@ public abstract class BitsoTest {
 
     @Test
     public void testTrades() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
-            BitsoPayloadException, InterruptedException {
+            BitsoPayloadException, InterruptedException, BitsoServerException {
         BookInfo[] availableBooks = mBitso.getAvailableBooks();
         assertEquals(availableBooks != null, true);
         for (BookInfo bookInfo : availableBooks) {
@@ -163,15 +165,15 @@ public abstract class BitsoTest {
 
     // Test private Rest API
     @Test
-    public void testAccountStatus()
-            throws JSONException, BitsoNullException, IOException, BitsoAPIException, BitsoPayloadException {
+    public void testAccountStatus() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
+            BitsoPayloadException, BitsoServerException {
         BitsoAccountStatus bitsoAccountStatus = mBitso.getAccountStatus();
         assertEquals(nullCheck(bitsoAccountStatus, BitsoAccountStatus.class), true);
     }
 
     @Test
-    public void testAccountBalance()
-            throws JSONException, BitsoNullException, IOException, BitsoAPIException, BitsoPayloadException {
+    public void testAccountBalance() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
+            BitsoPayloadException, BitsoServerException {
         BitsoBalance bitsoBalance = mBitso.getAccountBalance();
         assertEquals(nullCheck(bitsoBalance, BitsoBalance.class), true);
         HashMap<String, BitsoBalance.Balance> balances = bitsoBalance.getBalances();
@@ -184,8 +186,8 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testFees()
-            throws JSONException, BitsoNullException, IOException, BitsoAPIException, BitsoPayloadException {
+    public void testFees() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
+            BitsoPayloadException, BitsoServerException {
         BitsoFee bitsoFee = mBitso.getFees();
         assertEquals(nullCheck(bitsoFee, BitsoFee.class), true);
         HashMap<String, BitsoFee.Fee> fees = bitsoFee.getTradeFees();
@@ -202,7 +204,7 @@ public abstract class BitsoTest {
 
     @Test
     public void testLedger() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
-            BitsoPayloadException, InterruptedException {
+            BitsoPayloadException, BitsoServerException, InterruptedException {
         int totalElements = 0;
 
         BitsoOperation[] defaultLedger = mBitso.getLedger("");
@@ -322,7 +324,7 @@ public abstract class BitsoTest {
 
     @Test
     public void testWithdrawals() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
-            BitsoPayloadException, InterruptedException {
+            BitsoPayloadException, BitsoServerException, InterruptedException {
         int totalElementsFirstCall = 0;
         int totalElements = 0;
 
@@ -419,7 +421,7 @@ public abstract class BitsoTest {
 
     @Test
     public void tesFundings() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
-            BitsoPayloadException, InterruptedException {
+            BitsoPayloadException, BitsoServerException, InterruptedException {
         int totalElementsFirstCall = 0;
         int totalElements = 0;
 
@@ -513,7 +515,7 @@ public abstract class BitsoTest {
 
     @Test
     public void testUserTrades() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
-            BitsoPayloadException, InterruptedException {
+            BitsoPayloadException, BitsoServerException, InterruptedException {
         int totalElementsFirstCall = 0;
         int totalElements = 0;
 
@@ -607,7 +609,7 @@ public abstract class BitsoTest {
 
     @Test
     public void testOrderTrades() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
-            BitsoPayloadException, InterruptedException {
+            BitsoPayloadException, BitsoServerException, InterruptedException {
         int totalElements = 0;
 
         // TODO:
@@ -635,7 +637,7 @@ public abstract class BitsoTest {
 
     @Test
     public void testTrading() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
-            BitsoPayloadException, InterruptedException {
+            BitsoPayloadException, BitsoServerException, InterruptedException, BitsoValidationException {
         List<String> orders = new ArrayList<String>();
         String canceledOrders[] = null;
         String sellOrderId = null;
@@ -724,7 +726,7 @@ public abstract class BitsoTest {
 
     @Test
     public void testFundingDestination() throws JSONException, BitsoNullException, IOException,
-            BitsoAPIException, BitsoPayloadException, InterruptedException {
+            BitsoAPIException, BitsoPayloadException, BitsoServerException, InterruptedException {
         Map<String, String> btcFundingDestination = mBitso.fundingDestination("fund_currency=btc");
         assertEquals(true, (btcFundingDestination != null));
         assertEquals(true, (btcFundingDestination.containsKey("account_identifier_name")
@@ -748,8 +750,8 @@ public abstract class BitsoTest {
     }
 
     @Test
-    public void testGetBanks()
-            throws JSONException, BitsoNullException, IOException, BitsoAPIException, BitsoPayloadException {
+    public void testGetBanks() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
+            BitsoPayloadException, BitsoServerException {
         Map<String, String> bitsoBanks = mBitso.getBanks();
         assertEquals(true, (bitsoBanks != null));
         assertEquals(false, bitsoBanks.isEmpty());

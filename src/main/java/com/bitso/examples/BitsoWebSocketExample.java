@@ -20,6 +20,7 @@ import com.bitso.BitsoOrderBook;
 import com.bitso.BitsoOrderBook.PulicOrder;
 import com.bitso.exceptions.BitsoAPIException;
 import com.bitso.exceptions.BitsoPayloadException;
+import com.bitso.exceptions.BitsoServerException;
 import com.bitso.helpers.Helpers;
 import com.bitso.websockets.BitsoChannels;
 import com.bitso.websockets.BitsoStreamDiffOrders;
@@ -154,6 +155,10 @@ public class BitsoWebSocketExample extends BitsoWebSocketObserver {
             System.out.println("Best ask: " + mAsks.getMinPrice());
             System.out.println("Best bid: " + mBids.getMaxPrice());
         } catch (BitsoAPIException e) {
+            e.printStackTrace();
+        } catch (BitsoPayloadException e) {
+            e.printStackTrace();
+        } catch (BitsoServerException e) {
             e.printStackTrace();
         }
     }
