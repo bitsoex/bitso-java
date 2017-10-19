@@ -4,11 +4,28 @@
 ## Installation
 You can add this library as a dependency to your Maven or Gradle project through [JitPack](https://jitpack.io/#bitsoex/bitso-java)
 
-Released versions are also availables on the maven central repository :
+### Maven projects
 
-group id: com.bitso
+Add the JitPack repository to your build file
 
-artifact id: bitso-java
+```mvn
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+
+Add the dependency
+
+```mvn
+<dependency>
+    <groupId>com.github.bitsoex</groupId>
+    <artifactId>bitso-java</artifactId>
+    <version>v3.0.5</version>
+</dependency>
+```
 
 ### Using gradle and Android Studio
 On Android Studio find build.gradle file Gradle Scripts -> build.gradle(Project: <your_app_name>)
