@@ -7,111 +7,131 @@ import org.json.JSONObject;
 import com.bitso.helpers.Helpers;
 
 public class BitsoTrade {
-    private String book;
-    private BigDecimal major;
-    private Date tradeDate;
-    private BigDecimal minor;
-    private BigDecimal feesAmount;
-    private String feesCurrency;
-    private BigDecimal price;
     // TODO:
     // Check how long the tradeId would be, in order
     // to save it in an int or long type
-    private int tid;
-    private String oid;
-    private String side;
+    private int mTid;
+    private String mOid;
+    private String mSide;
+    private String mMinorCurrency;
+    private String mMajorCurrency;
+    private String mBook;
+    private String mFeesCurrency;
+    private BigDecimal mFeesAmount;
+    private BigDecimal mPrice;
+    private BigDecimal mMajor;
+    private BigDecimal mMinor;
+    private Date mTradeDate;
 
     public BitsoTrade(JSONObject o) {
-        book = Helpers.getString(o, "book");
-        major = Helpers.getBD(o, "major");
-        tradeDate = Helpers.getZonedDatetime(o, "created_at");
-        minor = Helpers.getBD(o, "minor");
-        feesAmount = Helpers.getBD(o, "fees_amount");
-        feesCurrency = Helpers.getString(o, "fees_currency");
-        price = Helpers.getBD(o, "price");
-        tid = Helpers.getInteger(o, "tid");
-        oid = Helpers.getString(o, "oid");
-        side = Helpers.getString(o, "side");
-    }
-
-    public String getBook() {
-        return book;
-    }
-
-    public void setBook(String book) {
-        this.book = book;
-    }
-
-    public BigDecimal getMajor() {
-        return major;
-    }
-
-    public void setMajor(BigDecimal major) {
-        this.major = major;
-    }
-
-    public Date getTradeDate() {
-        return tradeDate;
-    }
-
-    public void setTradeDate(Date tradeDate) {
-        this.tradeDate = tradeDate;
-    }
-
-    public BigDecimal getMinor() {
-        return minor;
-    }
-
-    public void setMinor(BigDecimal minor) {
-        this.minor = minor;
-    }
-
-    public BigDecimal getFeesAmount() {
-        return feesAmount;
-    }
-
-    public void setFeesAmount(BigDecimal feesAmount) {
-        this.feesAmount = feesAmount;
-    }
-
-    public String getFeesCurrency() {
-        return feesCurrency;
-    }
-
-    public void setFeesCurrency(String feesCurrency) {
-        this.feesCurrency = feesCurrency;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+        this.mBook = Helpers.getString(o, "book");
+        this.mMajor = Helpers.getBD(o, "major");
+        this.mTradeDate = Helpers.getZonedDatetime(o, "created_at");
+        this.mMinor = Helpers.getBD(o, "minor");
+        this.mFeesAmount = Helpers.getBD(o, "fees_amount");
+        this.mFeesCurrency = Helpers.getString(o, "fees_currency");
+        this.mPrice = Helpers.getBD(o, "price");
+        this.mTid = Helpers.getInteger(o, "tid");
+        this.mOid = Helpers.getString(o, "oid");
+        this.mSide = Helpers.getString(o, "side");
+        this.mMinorCurrency = Helpers.getString(o, "minor_currency");
+        this.mMajorCurrency = Helpers.getString(o, "major_currency");
     }
 
     public int getTid() {
-        return tid;
+        return mTid;
     }
 
-    public void setTid(int tid) {
-        this.tid = tid;
+    public void setTid(int mTid) {
+        this.mTid = mTid;
     }
 
     public String getOid() {
-        return oid;
+        return mOid;
     }
 
-    public void setOid(String oid) {
-        this.oid = oid;
+    public void setOid(String mOid) {
+        this.mOid = mOid;
     }
 
     public String getSide() {
-        return side;
+        return mSide;
     }
 
-    public void setSide(String side) {
-        this.side = side;
+    public void setSide(String mSide) {
+        this.mSide = mSide;
+    }
+
+    public String getMinorCurrency() {
+        return mMinorCurrency;
+    }
+
+    public void setMinorCurrency(String mMinorCurrency) {
+        this.mMinorCurrency = mMinorCurrency;
+    }
+
+    public String getMajorCurrency() {
+        return mMajorCurrency;
+    }
+
+    public void setMajorCurrency(String mMajorCurrency) {
+        this.mMajorCurrency = mMajorCurrency;
+    }
+
+    public String getBook() {
+        return mBook;
+    }
+
+    public void setBook(String mBook) {
+        this.mBook = mBook;
+    }
+
+    public String getFeesCurrency() {
+        return mFeesCurrency;
+    }
+
+    public void setFeesCurrency(String mFeesCurrency) {
+        this.mFeesCurrency = mFeesCurrency;
+    }
+
+    public BigDecimal getFeesAmount() {
+        return mFeesAmount;
+    }
+
+    public void setFeesAmount(BigDecimal mFeesAmount) {
+        this.mFeesAmount = mFeesAmount;
+    }
+
+    public BigDecimal getPrice() {
+        return mPrice;
+    }
+
+    public void setPrice(BigDecimal mPrice) {
+        this.mPrice = mPrice;
+    }
+
+    public BigDecimal getMajor() {
+        return mMajor;
+    }
+
+    public void setMajor(BigDecimal mMajor) {
+        this.mMajor = mMajor;
+    }
+
+    public BigDecimal getMinor() {
+        return mMinor;
+    }
+
+    public void setMinor(BigDecimal mMinor) {
+        this.mMinor = mMinor;
+    }
+
+    public Date getTradeDate() {
+        return mTradeDate;
+    }
+
+    public void setTradeDate(Date mTradeDate) {
+        this.mTradeDate = mTradeDate;
     }
 
     @Override
