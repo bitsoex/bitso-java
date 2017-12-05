@@ -7,10 +7,6 @@ public class BitsoPayloadException extends Exception {
         super();
     }
 
-    public BitsoPayloadException(String className, String method) {
-        super(className + ": " + method + " payload key was not found");
-    }
-
     public BitsoPayloadException(String message, Throwable cause, boolean enableSuppression,
             boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);

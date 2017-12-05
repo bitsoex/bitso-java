@@ -6,7 +6,7 @@ import java.util.Observable;
 
 import javax.net.ssl.SSLException;
 
-import com.bitso.exceptions.BitsoWebSocketExeption;
+import com.bitso.exceptions.BitsoWebSocketException;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -106,7 +106,7 @@ public class BitsoWebSocket extends Observable{
             mChannel.writeAndFlush(new TextWebSocketFrame(frameMessage));
         }else{
             String message = "Subscription to any channel is not possible while web socket is not connected";
-            throw new BitsoWebSocketExeption(message);
+            throw new BitsoWebSocketException(message);
         }
     }
     

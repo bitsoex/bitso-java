@@ -1,9 +1,9 @@
 package com.bitso.exceptions;
 
-public class BitsoWebSocketExeption extends RuntimeException{
+public class BitsoWebSocketException extends RuntimeException{
     private static final long serialVersionUID = 1L;
 
-    public BitsoWebSocketExeption(String message) {
+    public BitsoWebSocketException(String message) {
         super(message);
     }
 }

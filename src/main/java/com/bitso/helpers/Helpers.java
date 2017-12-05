@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -106,12 +107,8 @@ public class Helpers {
         printStackTrace(System.err);
     }
 
-    public static JSONObject parseJson(String json){
+    public static JSONObject parseJson(String json) throws JSONException {
         return new JSONObject(json);
-    }
-
-    public static JSONArray parseJsonArray(String json){
-        return new JSONArray(json);
     }
 
     public static int getInt(JSONObject o, String key) {
@@ -179,7 +176,7 @@ public class Helpers {
         return null;
     }
 
-    public static String[] parseJSONArray(JSONArray arrray){
+    public static String[] getJSONArrayElements(JSONArray arrray) {
         int totalElements = arrray.length();
         String[] elements = new String[totalElements];
         for (int i = 0; i < totalElements; i++) {
@@ -188,7 +185,7 @@ public class Helpers {
         return elements;
     }
 
-    public static JSONObject getJSONFromFile(String fileName){
+    public static JSONObject getJSONFromFile(String fileName) throws JSONException {
         String jsonString = getJSONString(fileName);
         return Helpers.parseJson(jsonString);
     }

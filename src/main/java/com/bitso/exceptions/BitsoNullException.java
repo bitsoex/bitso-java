@@ -1,18 +1,10 @@
 package com.bitso.exceptions;
 
 public class BitsoNullException extends Exception {
-
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     public BitsoNullException() {
         super();
-    }
-
-    public BitsoNullException(String className, String method) {
-        super(className + ": " + method + " parameter is null");
     }
 
     public BitsoNullException(String message, Throwable cause, boolean enableSuppression,
@@ -31,5 +23,4 @@ public class BitsoNullException extends Exception {
     public BitsoNullException(Throwable cause) {
         super(cause);
     }
-
 }

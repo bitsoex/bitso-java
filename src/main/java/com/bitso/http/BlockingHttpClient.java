@@ -3,6 +3,7 @@ package com.bitso.http;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -94,6 +95,9 @@ public class BlockingHttpClient {
         } catch (MalformedURLException e) {
             e.printStackTrace();
             throw new BitsoAPIException(322, "Not a Valid URL", e);
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
             e.printStackTrace();
             return Helpers.convertInputStreamToString(connection.getErrorStream());
