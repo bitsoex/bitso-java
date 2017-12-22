@@ -12,8 +12,8 @@ import com.bitso.helpers.Helpers;
 public class BitsoOrderBook {
     private Date mOrderDate;
     private int mSequence;
-    private PulicOrder[] mAsks;
-    private PulicOrder[] mBids;
+    private PublicOrder[] mAsks;
+    private PublicOrder[] mBids;
 
     public BitsoOrderBook(JSONObject o) {
         this.mOrderDate = Helpers.getZonedDatetime(o, "updated_at");
@@ -26,9 +26,9 @@ public class BitsoOrderBook {
         if (o.has("asks")) {
             JSONArray asksArray = o.getJSONArray("asks");
             int totalAsks = asksArray.length();
-            mAsks = new PulicOrder[totalAsks];
+            mAsks = new PublicOrder[totalAsks];
             for (int i = 0; i < totalAsks; i++) {
-                mAsks[i] = new PulicOrder(asksArray.getJSONObject(i));
+                mAsks[i] = new PublicOrder(asksArray.getJSONObject(i));
             }
         }
 
@@ -36,9 +36,9 @@ public class BitsoOrderBook {
         if (o.has("bids")) {
             JSONArray bidsArray = o.getJSONArray("bids");
             int totalBids = bidsArray.length();
-            mBids = new PulicOrder[totalBids];
+            mBids = new PublicOrder[totalBids];
             for (int i = 0; i < totalBids; i++) {
-                mBids[i] = new PulicOrder(bidsArray.getJSONObject(i));
+                mBids[i] = new PublicOrder(bidsArray.getJSONObject(i));
             }
         }
 
@@ -60,19 +60,19 @@ public class BitsoOrderBook {
         this.mSequence = mSequence;
     }
 
-    public PulicOrder[] getAsks() {
+    public PublicOrder[] getAsks() {
         return mAsks;
     }
 
-    public void setAsks(PulicOrder[] mAsks) {
+    public void setAsks(PublicOrder[] mAsks) {
         this.mAsks = mAsks;
     }
 
-    public PulicOrder[] getBids() {
+    public PublicOrder[] getBids() {
         return mBids;
     }
 
-    public void setBids(PulicOrder[] mBids) {
+    public void setBids(PublicOrder[] mBids) {
         this.mBids = mBids;
     }
 
@@ -80,13 +80,13 @@ public class BitsoOrderBook {
         return Helpers.fieldPrinter(this, BitsoOrderBook.class);
     }
 
-    public class PulicOrder implements Comparable<PulicOrder> {
+    public class PublicOrder implements Comparable<PublicOrder> {
         private String mBook;
         private BigDecimal mPrice;
         private BigDecimal mAmount;
         private String mOrderId;
 
-        public PulicOrder(JSONObject o) {
+        public PublicOrder(JSONObject o) {
             mBook = Helpers.getString(o, "book");
             mPrice = Helpers.getBD(o, "price");
             mAmount = Helpers.getBD(o, "amount");
@@ -130,16 +130,16 @@ public class BitsoOrderBook {
         }
 
         public String toString() {
-            return Helpers.fieldPrinter(this, BitsoOrderBook.PulicOrder.class);
+            return Helpers.fieldPrinter(this, PublicOrder.class);
         }
 
-        public int compareTo(PulicOrder o) {
+        public int compareTo(PublicOrder o) {
             return mPrice.compareTo(o.mPrice);
         }
 
         public class Comparators {
-            public Comparator<PulicOrder> PRICE = new Comparator<PulicOrder>() {
-                public int compare(PulicOrder o1, PulicOrder o2) {
+            public Comparator<PublicOrder> PRICE = new Comparator<PublicOrder>() {
+                public int compare(PublicOrder o1, PublicOrder o2) {
                     return o1.mPrice.compareTo(o2.mPrice);
                 }
             };

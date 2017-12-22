@@ -154,7 +154,7 @@ public class BitsoWebSocket extends Observable{
 
             if (msg instanceof FullHttpResponse) {
                 FullHttpResponse response = (FullHttpResponse) msg;
-                throw new Exception("Unexpected FullHttpResponse (getStatus=" + response.getStatus() + ", content="
+                throw new Exception("Unexpected FullHttpResponse (getStatus=" + response.status() + ", content="
                         + response.content().toString(CharsetUtil.UTF_8) + ')');
             }
 

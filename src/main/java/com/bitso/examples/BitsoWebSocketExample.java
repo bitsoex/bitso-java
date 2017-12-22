@@ -17,7 +17,7 @@ import org.json.JSONObject;
 import com.bitso.Bitso;
 import com.bitso.BitsoOrder;
 import com.bitso.BitsoOrderBook;
-import com.bitso.BitsoOrderBook.PulicOrder;
+import com.bitso.BitsoOrderBook.PublicOrder;
 import com.bitso.exceptions.BitsoAPIException;
 import com.bitso.exceptions.BitsoPayloadException;
 import com.bitso.exceptions.BitsoServerException;
@@ -139,12 +139,12 @@ public class BitsoWebSocketExample extends BitsoWebSocketObserver {
             mCurrentSequenceNumber = mLiveOrderBook.getSequence();
             mOrderBookObtained = Boolean.TRUE;
 
-            for (PulicOrder publicOrder : mLiveOrderBook.getAsks()) {
+            for (PublicOrder publicOrder : mLiveOrderBook.getAsks()) {
                 mAsks.manageOrder(publicOrder.getOrderId(), new OrderUpdate(publicOrder.getOrderId(),
                         publicOrder.getPrice(), publicOrder.getAmount(), mCurrentSequenceNumber));
             }
 
-            for (PulicOrder publicOrder : mLiveOrderBook.getBids()) {
+            for (PublicOrder publicOrder : mLiveOrderBook.getBids()) {
                 mBids.manageOrder(publicOrder.getOrderId(), new OrderUpdate(publicOrder.getOrderId(),
                         publicOrder.getPrice(), publicOrder.getAmount(), mCurrentSequenceNumber));
             }
