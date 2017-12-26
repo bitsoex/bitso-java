@@ -19,7 +19,8 @@ public class BitsoBalance {
             JSONObject balance = jsonBalances.getJSONObject(i);
             String currency = Helpers.getString(balance, "currency");
             Balance currentBalance = new Balance(currency, Helpers.getBD(balance, "total"),
-                    Helpers.getBD(balance, "locked"), Helpers.getBD(balance, "available"));
+                    Helpers.getBD(balance, "locked"), Helpers.getBD(balance, "available"),
+                    Helpers.getBD(balance, "pending_deposit"), Helpers.getBD(balance, "pending_withdrawal"));
             mBalances.put(currency, currentBalance);
         }
     }
@@ -41,12 +42,17 @@ public class BitsoBalance {
         private BigDecimal mTotal;
         private BigDecimal mLocked;
         private BigDecimal mAvailable;
+        private BigDecimal mPendingDeposit;
+        private BigDecimal mPendingWithdrawal;
 
-        public Balance(String currency, BigDecimal total, BigDecimal locked, BigDecimal available) {
+        public Balance(String currency, BigDecimal total, BigDecimal locked, BigDecimal available,
+                BigDecimal pendingDeposit, BigDecimal pendingWithdrawal) {
             mCurrency = currency;
             mTotal = total;
             mLocked = locked;
             mAvailable = available;
+            mPendingDeposit = pendingDeposit;
+            mPendingWithdrawal = pendingWithdrawal;
         }
 
         public String getCurrency() {
@@ -79,6 +85,22 @@ public class BitsoBalance {
 
         public void setAvailable(BigDecimal mAvailable) {
             this.mAvailable = mAvailable;
+        }
+
+        public BigDecimal getPendingDeposit() {
+            return mPendingDeposit;
+        }
+
+        public void setPendingDeposit(BigDecimal mPendingDeposit) {
+            this.mPendingDeposit = mPendingDeposit;
+        }
+
+        public BigDecimal getPendingWithdrawal() {
+            return mPendingWithdrawal;
+        }
+
+        public void setPendingWithdrawal(BigDecimal mPendingWithdrawal) {
+            this.mPendingWithdrawal = mPendingWithdrawal;
         }
 
         public String toString() {
