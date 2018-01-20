@@ -2,27 +2,23 @@ package com.bitso.exceptions;
 
 @SuppressWarnings("serial")
 public class BitsoAPIException extends Exception {
-    private int mErrorCode;
+    private int mErrorCode = 101;
 
     public BitsoAPIException() {
         super();
-        this.mErrorCode = 101;
     }
 
     public BitsoAPIException(String message, Throwable cause, boolean enableSuppression,
             boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
-        this.mErrorCode = 101;
     }
 
     public BitsoAPIException(String message, Throwable cause) {
         super(message, cause);
-        this.mErrorCode = 101;
     }
 
     public BitsoAPIException(String message) {
         super(message);
-        this.mErrorCode = 101;
     }
 
     public BitsoAPIException(int errorCode, String message, Throwable initialException) {
@@ -37,7 +33,6 @@ public class BitsoAPIException extends Exception {
 
     public BitsoAPIException(Throwable cause) {
         super(cause);
-        this.mErrorCode = 101;
     }
 
     public int getErrorCode() {

@@ -579,6 +579,77 @@ public class Bitso {
         return new BitsoWithdrawal(payloadJSON);
     }
 
+    /**
+     * @param currency
+     *            The currency you want to withdraw [bitcoin | ether | ripple | litecoin | bcash]
+     * @param address
+     *            The address you want to send the specified amount
+     * @param amount
+     *            The total amount you want to send
+     * @param save
+     *            Set if you want to save the withdrawal destination
+     * @param extraParameters
+     *            Allows to add extra parameters to the withdrawal operation, could be: tag: If you want to
+     *            withdraw ripple and need to set a destination tag set this key name: If save parameter is
+     *            set to positive, name tag should be added to get a name for the destination
+     * @return
+     * @throws BitsoValidationException
+     *             If any of the parameters is not valid
+     * @throws BitsoAPIException
+     *             If server detected something was wrong with the request
+     * @throws BitsoPayloadException
+     *             If server response is wrong in any way
+     * @throws BitsoServerException
+     *             If something is wrong in the server
+     */
+    public BitsoWithdrawal currencyWithdrawal(String currency, String address, String amount, boolean save,
+            HashMap<String, String> extraParameters)
+            throws BitsoValidationException, BitsoAPIException, BitsoPayloadException, BitsoServerException {
+        if (currency == null || currency.isEmpty()) {
+            throw new BitsoValidationException("Currency can't be empty");
+        }
+
+        if (address == null || address.isEmpty()) {
+            throw new BitsoValidationException("Address can't be empty");
+        }
+
+        if (amount == null || amount.isEmpty()) {
+            throw new BitsoValidationException("Amount can't be empty");
+        }
+        try {
+            BigDecimal amountValue = new BigDecimal(amount);
+            if (amountValue.doubleValue() <= 0) {
+                throw new BitsoValidationException("You cannot withdraw cero or negative amounts");
+            }
+        } catch (NumberFormatException e) {
+            throw new BitsoValidationException("Amount is not valid a number to process withdrawal");
+        }
+
+        if (save && (extraParameters == null || extraParameters.size() == 0)) {
+            throw new BitsoValidationException(
+                    "You are inidcating that th operation must be saved, but no save name has been provided");
+        }
+
+        String request = "/api/v3/" + currency + "_withdrawal";
+
+        JSONObject parameters = new JSONObject();
+        parameters.put("amount", amount.toString());
+        parameters.put("address", address);
+
+        if (currency.equals("ripple") && extraParameters.containsKey("tag")) {
+            parameters.put("destination_tag", parameters.get("tag"));
+        }
+
+        parameters.put("save", save);
+        if (save) {
+            parameters.put("saved_name", extraParameters.get("name"));
+        }
+
+        String postResponse = sendBitsoPost(request, parameters);
+        JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
+        return new BitsoWithdrawal(payloadJSON);
+    }
+
     public String getDepositAddress() throws BitsoAPIException {
         String postResponse = sendBitsoPost(baseUrl + "bitcoin_deposit_address");
         return quoteEliminator(postResponse);
