@@ -281,6 +281,19 @@ public class Bitso {
         return null;
     }
 
+    public void waitUntilProcessed(String id) {
+        while(true) {
+            BitsoLookupOrders blo = lookupOrder(id);
+            BookOrder bo = blo.list.get(0);
+            if (bo.status == BookOrder.STATUS.COMPLETE) return;
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public String getDepositAddress() {
         return quoteEliminator(sendBitsoPost(baseUrl + "bitcoin_deposit_address"));
     }
@@ -585,6 +598,7 @@ public class Bitso {
         }
 
         String id = o.getString("id");
+        waitUntilProcessed(id);
         int counter = 0;
         if (++counter < 5) {
             BookOrder bo = findMatchingOrders(id, book);
