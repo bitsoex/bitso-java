@@ -637,7 +637,7 @@ public class Bitso {
         parameters.put("address", address);
 
         if (currency.equals("ripple") && extraParameters.containsKey("tag")) {
-            parameters.put("destination_tag", parameters.get("tag"));
+            parameters.put("destination_tag", extraParameters.get("tag"));
         }
 
         parameters.put("save", save);
