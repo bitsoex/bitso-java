@@ -61,6 +61,10 @@ public class Bitso {
         this.baseUrl = production ? BITSO_BASE_URL_PRODUCTION : BITSO_BASE_URL_DEV;
     }
 
+    public void setBaseURL(String url) {
+        baseUrl = url;
+    }
+
     public String getKey() {
         return key;
     }
@@ -668,7 +672,7 @@ public class Bitso {
         return input.substring(1, length - 1);
     }
 
-    private String buildBitsoAuthHeader(String requestPath, String httpMethod, String apiKey, String secret)
+    public String buildBitsoAuthHeader(String requestPath, String httpMethod, String apiKey, String secret)
             throws BitsoAPIException {
         if (apiKey == null || secret == null) {
             throw new BitsoAPIException("Bitso API key or secret is null");
