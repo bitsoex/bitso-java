@@ -17,14 +17,6 @@ public class BitsoOrder {
         }
     }
 
-    public static enum STATUS {
-        OPEN, PARTIALLY_FILLED, COMPLETED, CANCELLED;
-
-        public String toString() {
-            return this.name().toLowerCase();
-        }
-    }
-
     public static enum TYPE {
         MARKET, LIMIT;
 
@@ -42,7 +34,8 @@ public class BitsoOrder {
     private BigDecimal price;
     private String oid;
     private SIDE side;
-    private STATUS status;
+    // open || partially filled || completed || cancelled || queuedis
+    private String status;
     private TYPE type;
 
     public BitsoOrder(JSONObject o) {
@@ -55,22 +48,12 @@ public class BitsoOrder {
         price = Helpers.getBD(o, "price");
         oid = Helpers.getString(o, "oid");
         side = retrieveSide(Helpers.getString(o, "side"));
-        status = retrieveStatus(Helpers.getString(o, "status"));
+        status = Helpers.getString(o, "status");
         type = retrieveType(Helpers.getString(o, "type"));
     }
 
     private BitsoOrder.SIDE retrieveSide(String side) {
         return BitsoOrder.SIDE.valueOf(side.toUpperCase());
-    }
-
-    private BitsoOrder.STATUS retrieveStatus(String status) {
-        if (status.equals("open")) return BitsoOrder.STATUS.OPEN;
-        if (status.equals("partially filled")) return BitsoOrder.STATUS.PARTIALLY_FILLED;
-        if (status.equals("completed")) return BitsoOrder.STATUS.COMPLETED;
-        if (status.equals("cancelled")) return BitsoOrder.STATUS.CANCELLED;
-
-        String exceptionMessage = status + "is not a supported order status";
-        throw new BitsoExceptionNotExpectedValue(exceptionMessage);
     }
 
     private BitsoOrder.TYPE retrieveType(String type) {
@@ -149,11 +132,11 @@ public class BitsoOrder {
         this.side = side;
     }
 
-    public STATUS getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(STATUS status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
