@@ -21,6 +21,7 @@ public class BitsoAccountStatus {
     private String firstName;
     private String lastName;
     private boolean isCellphoneNumberVerified;
+    private boolean isMailVerified;
     private String email;
     private String referralCode;
 
@@ -35,6 +36,7 @@ public class BitsoAccountStatus {
         this.monthlyRemaining = Helpers.getBD(o, "monthly_remaining");
         this.isCellphoneNumberVerified = Helpers.getString(o, "cellphone_number").equals("verified") ? true
                 : false;
+        this.isMailVerified = Helpers.getString(o, "email").equals("verified") ? true : false;
         this.officialId = Helpers.getString(o, "official_id");
         this.proofOfResidency = Helpers.getString(o, "proof_of_residency");
         this.signedContract = Helpers.getString(o, "signed_contract");
@@ -176,6 +178,14 @@ public class BitsoAccountStatus {
 
     public void setCellphoneNumberVerified(boolean isCellphoneNumberVerified) {
         this.isCellphoneNumberVerified = isCellphoneNumberVerified;
+    }
+
+    public boolean isMailVerified() {
+        return isMailVerified;
+    }
+
+    public void setMailVerified(boolean isMailVerified) {
+        this.isMailVerified = isMailVerified;
     }
 
     public String toString() {
