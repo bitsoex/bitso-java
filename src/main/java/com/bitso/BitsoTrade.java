@@ -23,6 +23,11 @@ public class BitsoTrade {
     private BigDecimal mMinor;
     private Date mTradeDate;
 
+    public BitsoTrade() {
+        mMajor = BigDecimal.ZERO;
+        mMinor = BigDecimal.ZERO;
+    }
+
     public BitsoTrade(JSONObject o) {
         this.mBook = Helpers.getString(o, "book");
         this.mMajor = Helpers.getBD(o, "major");
