@@ -5,7 +5,6 @@ import java.util.Date;
 
 import org.json.JSONObject;
 
-import com.bitso.exceptions.BitsoExceptionNotExpectedValue;
 import com.bitso.helpers.Helpers;
 
 public class BitsoOrder {
@@ -25,6 +24,10 @@ public class BitsoOrder {
         }
     }
 
+    public static enum STATUS {
+        OPEN, PARTIALLY_FILLED, QUEUED, COMPLETED, CANCELLED, UNKNOWN
+    }
+
     private String book;
     private BigDecimal originalAmount;
     private BigDecimal unfilledAmount;
@@ -35,25 +38,36 @@ public class BitsoOrder {
     private String oid;
     private SIDE side;
     // open || partially filled || completed || cancelled || queuedis
-    private String status;
+    private STATUS status;
     private TYPE type;
 
     public BitsoOrder(JSONObject o) {
         book = Helpers.getString(o, "book");
         originalAmount = Helpers.getBD(o, "original_amount");
-        unfilledAmount = Helpers.getBD(o, "unfilled_amount");
+        //unfilledAmount = Helpers.getBD(o, "unfilled_amount");
         originalValue = Helpers.getBD(o, "original_value");
         orderDate = Helpers.getZonedDatetime(o, "created_at");
         updateDate = Helpers.getZonedDatetime(o, "updated_at");
         price = Helpers.getBD(o, "price");
         oid = Helpers.getString(o, "oid");
         side = retrieveSide(Helpers.getString(o, "side"));
-        status = Helpers.getString(o, "status");
+        status = retrieveStatus(Helpers.getString(o, "status"));
         type = retrieveType(Helpers.getString(o, "type"));
     }
 
     private BitsoOrder.SIDE retrieveSide(String side) {
         return BitsoOrder.SIDE.valueOf(side.toUpperCase());
+    }
+
+    private BitsoOrder.STATUS retrieveStatus(String status) {
+        if (status.equals("open")) return BitsoOrder.STATUS.OPEN;
+        if (status.equals("partially filled")) return BitsoOrder.STATUS.PARTIALLY_FILLED;
+        if (status.equals("completed")) return BitsoOrder.STATUS.COMPLETED;
+        if (status.equals("cancelled")) return BitsoOrder.STATUS.CANCELLED;
+        if (status.equals("queued")) return BitsoOrder.STATUS.QUEUED;
+
+        System.err.println(status + " is not a supported order status");
+        return BitsoOrder.STATUS.UNKNOWN;
     }
 
     private BitsoOrder.TYPE retrieveType(String type) {
@@ -132,11 +146,11 @@ public class BitsoOrder {
         this.side = side;
     }
 
-    public String getStatus() {
+    public STATUS getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(STATUS status) {
         this.status = status;
     }
 
