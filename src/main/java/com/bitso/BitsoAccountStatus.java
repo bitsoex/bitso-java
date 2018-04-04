@@ -1,10 +1,10 @@
 package com.bitso;
 
-import java.math.BigDecimal;
+import com.bitso.helpers.Helpers;
 
 import org.json.JSONObject;
 
-import com.bitso.helpers.Helpers;
+import java.math.BigDecimal;
 
 public class BitsoAccountStatus {
     private String clientId;
@@ -24,6 +24,7 @@ public class BitsoAccountStatus {
     private boolean isMailVerified;
     private String email;
     private String referralCode;
+    private BigDecimal cashDepositLimit;
 
     public BitsoAccountStatus(JSONObject o) {
         this.clientId = Helpers.getString(o, "client_id");
@@ -42,7 +43,7 @@ public class BitsoAccountStatus {
         this.signedContract = Helpers.getString(o, "signed_contract");
         this.originOfFunds = Helpers.getString(o, "origin_of_funds");
         this.referralCode = Helpers.getString(o, "referral_code");
-
+        this.cashDepositLimit = Helpers.getBD(o, "cash_deposit_allowance");
         if ((monthlyLimit.compareTo(new BigDecimal("0")) == 0)
                 && (dailyLimit.compareTo(new BigDecimal("1000000")) == 0)) {
             monthlyLimit = dailyLimit.multiply(new BigDecimal("31"));
@@ -178,6 +179,10 @@ public class BitsoAccountStatus {
 
     public void setCellphoneNumberVerified(boolean isCellphoneNumberVerified) {
         this.isCellphoneNumberVerified = isCellphoneNumberVerified;
+    }
+
+    public BigDecimal cashDepositLimit() {
+        return cashDepositLimit;
     }
 
     public boolean isMailVerified() {
