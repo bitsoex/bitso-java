@@ -1,15 +1,15 @@
 package com.bitso;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
+import com.bitso.helpers.Helpers;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.bitso.helpers.Helpers;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class BitsoOperation {
     private String entryId;
@@ -101,6 +101,12 @@ public class BitsoOperation {
 
     public void setDetails(HashMap<String, String> details) {
         this.details = details;
+    }
+
+    public void addElementToDetails(String key, String value){
+        if(details != null){
+            details.put(key, value);
+        }
     }
 
     public class BalanceUpdate {

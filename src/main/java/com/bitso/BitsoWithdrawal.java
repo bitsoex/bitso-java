@@ -1,12 +1,13 @@
 package com.bitso;
 
+import com.bitso.helpers.Helpers;
+
+import org.json.JSONObject;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-
-import org.json.JSONObject;
-import com.bitso.helpers.Helpers;
 
 public class BitsoWithdrawal {
     private String withdrawalId;
@@ -81,6 +82,16 @@ public class BitsoWithdrawal {
 
     public void setDetails(HashMap<String, String> details) {
         this.details = details;
+    }
+
+    public void addDetails(String key, String value){
+        if(details != null){
+            details.put(key, value);
+        }
+    }
+
+    public void addDetails(HashMap<String, String> newDetails){
+        details.putAll(newDetails);
     }
 
     @SuppressWarnings("unchecked")
