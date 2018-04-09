@@ -1,7 +1,7 @@
 package com.bitso;
 
 public enum BitsoBook {
-    BTC_MXN, ETH_MXN, XRP_BTC, XRP_MXN, ETH_BTC, BCH_BTC, LTC_MXN, LTC_BTC;
+    BTC_MXN, ETH_MXN, XRP_BTC, XRP_MXN, ETH_BTC, BCH_BTC, LTC_MXN, LTC_BTC, BCH_MXN;
 
     public String toString() {
         return this.name().toLowerCase();
@@ -18,6 +18,7 @@ public enum BitsoBook {
             case ETH_MXN:
                 return BitsoCurrency.ETH;
             case BCH_BTC:
+            case BCH_MXN:
                 return BitsoCurrency.BCH;
             case LTC_BTC:
             case LTC_MXN:
@@ -33,6 +34,7 @@ public enum BitsoBook {
             case ETH_MXN:
             case LTC_MXN:
             case XRP_MXN:
+            case BCH_MXN:
                 return BitsoCurrency.MXN;
             case BCH_BTC:
             case ETH_BTC:
