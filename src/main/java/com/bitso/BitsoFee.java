@@ -67,8 +67,11 @@ public class BitsoFee {
     }
 
     public class Fee {
+
         private String mBook;
+        @Deprecated
         private BigDecimal mFeeDecimal;
+        @Deprecated
         private BigDecimal mFeePercent;
         private BigDecimal mTakerFeeDecimal;
         private BigDecimal mTakerFeePercent;
@@ -95,18 +98,22 @@ public class BitsoFee {
             this.mBook = mBook;
         }
 
+        @Deprecated
         public BigDecimal getFeeDecimal() {
             return mFeeDecimal;
         }
 
+        @Deprecated
         public void setFeeDecimal(BigDecimal mFeeDecimal) {
             this.mFeeDecimal = mFeeDecimal;
         }
 
+        @Deprecated
         public BigDecimal getFeePercent() {
             return mFeePercent;
         }
 
+        @Deprecated
         public void setFeePercent(BigDecimal mFeePercent) {
             this.mFeePercent = mFeePercent;
         }
