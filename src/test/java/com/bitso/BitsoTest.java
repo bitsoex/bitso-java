@@ -779,4 +779,28 @@ public abstract class BitsoTest {
         }
         return true;
     }
+
+    @Test
+    public void testSignedTicker() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
+            BitsoPayloadException, BitsoServerException {
+        BitsoTicker[] tickers = mBitso.getSignedTicker();
+        assertEquals(tickers != null, true);
+        int totalElements = tickers.length;
+        assertEquals(6, totalElements);
+        for (Ticker ticker : tickers) {
+            assertEquals(nullCheck(ticker, BitsoTicker.class), true);
+        }
+    }
+
+    @Test
+    public void testSignedAvailableBooks() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
+            BitsoPayloadException, BitsoServerException {
+        BookInfo[] books = mBitso.getSignedAvailableBooks();
+        assertEquals(true, (books != null));
+        int totalElements = books.length;
+        assertEquals(6, totalElements);
+        for (BookInfo bookInfo : books) {
+            assertEquals(nullCheck(bookInfo, BookInfo.class), true);
+        }
+    }
 }
