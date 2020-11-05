@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 group = 'com.bitso'
-version = '3.0.4-SNAPSHOT'
+version = '3.1.0-SNAPSHOT'
 
 description = """bitso-java"""
 
@@ -16,7 +16,7 @@ tasks.withType(JavaCompile) {
 
 repositories {
         
-     maven { url "http://repo.maven.apache.org/maven2" }
+     maven { url "https://repo.maven.apache.org/maven2/" }
 }
 dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version:'4.3.6'
