@@ -145,6 +145,34 @@ public class Bitso {
         return new BitsoTransactions(payloadJSON);
     }
 
+    //Public Functions Signed
+    public BitsoTicker[] getSignedTicker() throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
+        String request = "/api/v3/ticker";
+
+        String getResponse = sendBitsoGet(request);
+        JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
+        int totalElements = payloadJSON.length();
+        BitsoTicker[] tickers = new BitsoTicker[totalElements];
+        for (int i = 0; i < totalElements; i++) {
+            tickers[i] = new BitsoTicker(payloadJSON.getJSONObject(i));
+        }
+        return tickers;
+    }
+
+    public BookInfo[] getSignedAvailableBooks()
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
+        String request = "/api/v3/available_books";
+
+        String getResponse = sendBitsoGet(request);
+        JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
+        int totalElements = payloadJSON.length();
+        BookInfo[] books = new BookInfo[totalElements];
+        for (int i = 0; i < totalElements; i++) {
+            books[i] = new BookInfo(payloadJSON.getJSONObject(i));
+        }
+        return books;
+    }
+
     // Private Functions
     public BitsoAccountStatus getAccountStatus()
             throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
