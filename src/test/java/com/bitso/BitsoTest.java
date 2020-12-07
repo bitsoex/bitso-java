@@ -1,6 +1,7 @@
 package com.bitso;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -802,5 +803,83 @@ public abstract class BitsoTest {
         for (BookInfo bookInfo : books) {
             assertEquals(nullCheck(bookInfo, BookInfo.class), true);
         }
+    }
+
+
+    @Test
+    public void testCancelAll() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
+            BitsoPayloadException, BitsoServerException, InterruptedException, BitsoValidationException {
+        List<String> orders = new ArrayList<String>();
+        String canceledOrders[] = null;
+        String sellOrderId = null;
+        String buyOrderId = null;
+
+        BitsoBalance bitsoBalance = mBitso.getAccountBalance();
+        assertEquals((bitsoBalance != null), true);
+
+        HashMap<String, Balance> currencyBalances = bitsoBalance.getBalances();
+        assertEquals((currencyBalances != null), true);
+
+        Balance mxnBalance = currencyBalances.get("mxn");
+        assertEquals(nullCheck(mxnBalance, Balance.class), true);
+
+        Balance btcBalance = currencyBalances.get("btc");
+        assertEquals(nullCheck(btcBalance, Balance.class), true);
+
+        if (mxnBalance.getAvailable().doubleValue() >= 10) {
+            buyOrderId = mBitso.placeOrder("btc_mxn", BitsoOrder.SIDE.BUY, BitsoOrder.TYPE.LIMIT,
+                    new BigDecimal("0.001"), null, new BigDecimal("10000"));
+            assertEquals(buyOrderId != null, true);
+            orders.add(buyOrderId);
+        } else {
+            System.out.println(
+                    "Test: Set limit BUY order on mxn_btc order book was not executed due not enough funds in MXN");
+        }
+
+        if (btcBalance.getAvailable().doubleValue() >= 0.001) {
+            sellOrderId = mBitso.placeOrder("btc_mxn", BitsoOrder.SIDE.SELL, BitsoOrder.TYPE.LIMIT,
+                    new BigDecimal("0.001"), null, new BigDecimal("100000"));
+            assertEquals(sellOrderId != null, true);
+            orders.add(sellOrderId);
+        } else {
+            System.out.println(
+                    "Test: Set limit SELL order on mxn_btc order book was not executed due not enough funds in BTC");
+        }
+
+        Thread.sleep(1000);
+
+        int totalOpenOrders = orders.size();
+        assertEquals(totalOpenOrders, 2);
+
+        BookInfo[] books = mBitso.getAvailableBooks();
+        assertEquals(books != null, true);
+        int totalExpectedOpenOrders = 0;
+        for (BookInfo book : books) {
+            totalExpectedOpenOrders = (book.getBook().equals("btc_mxn") || book.getBook().equals("eth_btc"))
+                    ? totalOpenOrders : 0;
+            BitsoOrder[] openOrders = mBitso.getOpenOrders(book.getBook());
+            assertEquals(openOrders.length, totalExpectedOpenOrders);
+
+            if (openOrders.length > 0) {
+                for (BitsoOrder bitsoOrder : openOrders) {
+                    assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
+                }
+            }
+        }
+
+        Thread.sleep(1000);
+
+        BitsoOrder[] multiple = mBitso.lookupOrders(buyOrderId, sellOrderId);
+        assertEquals(multiple != null, true);
+        assertEquals(multiple.length, 2);
+        for (BitsoOrder bitsoOrder : multiple) {
+            assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
+        }
+
+        Thread.sleep(1000);
+
+        String[] response = mBitso.cancelAllOrders();
+        assertNotNull(response);
+
     }
 }
