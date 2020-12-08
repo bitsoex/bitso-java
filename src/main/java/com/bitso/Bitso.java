@@ -444,6 +444,15 @@ public class Bitso {
         return Helpers.getJSONArrayElements(payloadJSON);
     }
 
+    public String[] cancelAllOrders()
+            throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
+        String request = "/api/v3/orders/all";
+        log(request);
+        String deleteResponse = sendBitsoDelete(request);
+        JSONArray payloadJSON = (JSONArray) getJSONPayload(deleteResponse);
+        return Helpers.getJSONArrayElements(payloadJSON);
+    }
+
     public Map<String, String> fundingDestination(String currencyParameter)
             throws BitsoAPIException, BitsoPayloadException, BitsoServerException {
         String request = "/api/v3/funding_destination";
