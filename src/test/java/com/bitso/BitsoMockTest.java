@@ -1,7 +1,5 @@
 package com.bitso;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,8 +7,8 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.bitso.exceptions.BitsoAPIException;
@@ -19,6 +17,8 @@ import com.bitso.exceptions.BitsoPayloadException;
 import com.bitso.exceptions.BitsoServerException;
 import com.bitso.exchange.BookInfo;
 import com.bitso.helpers.Helpers;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BitsoMockTest extends BitsoTest {
     private BookInfo[] mockAvailableBooks;
@@ -41,7 +41,7 @@ public class BitsoMockTest extends BitsoTest {
     private BitsoTransactions mockTransactions;
     BitsoWithdrawal[] mockWithdrawals;
 
-    @Before
+    @BeforeEach
     public void setUp() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, BitsoServerException {
         mBitso = Mockito.mock(Bitso.class);

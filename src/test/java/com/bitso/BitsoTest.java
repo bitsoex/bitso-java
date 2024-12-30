@@ -1,8 +1,5 @@
 package com.bitso;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -15,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.json.JSONException;
-import org.junit.Test;
 
 import com.bitso.BitsoBalance.Balance;
 import com.bitso.exceptions.BitsoAPIException;
@@ -25,6 +21,10 @@ import com.bitso.exceptions.BitsoServerException;
 import com.bitso.exceptions.BitsoValidationException;
 import com.bitso.exchange.BookInfo;
 import com.bitso.exchange.Ticker;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public abstract class BitsoTest {
     protected Bitso mBitso;
