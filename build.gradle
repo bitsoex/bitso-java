@@ -27,10 +27,11 @@ dependencies {
     api 'org.json:json:20230227'
     api 'io.netty:netty-all:4.1.65.Final'
 
-    implementation 'org.mockito:mockito-all:1.10.19'
-
-    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.14.2'
 }
+
+test.useJUnitPlatform()
 
 // To specify a license in the pom:
 publishing {
