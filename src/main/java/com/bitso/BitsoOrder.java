@@ -7,8 +7,12 @@ import org.json.JSONObject;
 
 import com.bitso.helpers.Helpers;
 
+/**
+ * Represents an order in the Bitso system.
+ */
 public class BitsoOrder {
-    public static enum SIDE {
+
+    public enum SIDE {
         BUY, SELL;
 
         public String toString() {
@@ -16,7 +20,7 @@ public class BitsoOrder {
         }
     }
 
-    public static enum TYPE {
+    public enum TYPE {
         MARKET, LIMIT;
 
         public String toString() {
@@ -24,8 +28,20 @@ public class BitsoOrder {
         }
     }
 
-    public static enum STATUS {
+    public enum STATUS {
         OPEN, PARTIALLY_FILLED, QUEUED, COMPLETED, CANCELLED, UNKNOWN
+    }
+
+    /** The time-in-force attribute for limit orders. */
+    public enum TIME_IN_FORCE {
+        /** Leave the order in the book until it's completed, or cancelled by the user. */
+        GOODTILLCANCELLED,
+        /** The order must be completed when it's processed, or canceled without any matches. */
+        FILLORKILL,
+        /** If the order is not completed during processing, cancel whatever is left, but keep the matches. */
+        IMMEDIATEORCANCEL,
+        /** If the order matches during processing, cancel it instead. */
+        POSTONLY
     }
 
     private String book;
@@ -40,6 +56,7 @@ public class BitsoOrder {
     // open || partially filled || completed || cancelled || queuedis
     private STATUS status;
     private TYPE type;
+    private TIME_IN_FORCE timeInForce;
 
     public BitsoOrder(JSONObject o) {
         book = Helpers.getString(o, "book");
