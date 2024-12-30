@@ -1,13 +1,16 @@
-apply plugin: 'java'
-apply plugin: 'maven'
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
 
 group = 'com.bitso'
 version = '3.2.0-SNAPSHOT'
 
-description = """bitso-java"""
+description = "bitso-java"
 
-sourceCompatibility = 1.5
-targetCompatibility = 1.5
+sourceCompatibility = 8
+targetCompatibility = 8
+
 tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
@@ -19,40 +22,28 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
-    implementation 'org.json:json:20230227'
+    api 'org.apache.httpcomponents:httpclient:4.5.13'
+    api 'org.json:json:20230227'
+    api 'io.netty:netty-all:4.1.65.Final'
+
     implementation 'org.mockito:mockito-all:1.10.19'
-    implementation 'io.netty:netty-all:4.1.65.Final'
 
-    testImplementation 'junit:junit:4.12'
-}
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
+    testImplementation 'junit:junit:4.13.1'
 }
 
 // To specify a license in the pom:
-install {
-  repositories.mavenInstaller {
-    pom.project {
-      licenses {
-        license {
-          name 'The MIT License (MIT)'
-          url 'https://github.com/bitsoex/bitso-java/blob/master/LICENSE'
-          distribution 'repo'
+publishing {
+    publications {
+        maven(MavenPublication) {
+            pom {
+                licenses {
+                    license {
+                        name = 'The MIT License (MIT)'
+                        url = 'https://github.com/bitsoex/bitso-java/blob/master/LICENSE'
+                        distribution = 'repo'
+                    }
+                }
+            }
         }
-      }
     }
-  }
 }
