@@ -19,6 +19,8 @@ import com.bitso.exchange.BookInfo;
 import com.bitso.helpers.Helpers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BitsoMockTest extends BitsoTest {
     private BookInfo[] mockAvailableBooks;
@@ -380,11 +382,11 @@ public class BitsoMockTest extends BitsoTest {
     public void testUserTrades() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, BitsoServerException {
         BitsoTrade[] trades = mBitso.getUserTrades(null);
-        assertEquals(trades != null, true);
+        assertNotNull(trades);
         int totalElements = trades.length;
         assertEquals((totalElements >= 0 && totalElements <= 25), true);
         for (BitsoTrade current : trades) {
-            assertEquals(true, nullCheck(current, BitsoTrade.class));
+            assertTrue(nullCheck(current, BitsoTrade.class));
         }
     }
 
