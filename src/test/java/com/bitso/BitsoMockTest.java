@@ -1,16 +1,18 @@
 package com.bitso;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Stream;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.bitso.exceptions.BitsoAPIException;
@@ -20,6 +22,12 @@ import com.bitso.exceptions.BitsoServerException;
 import com.bitso.exchange.BookInfo;
 import com.bitso.helpers.Helpers;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+
 public class BitsoMockTest extends BitsoTest {
     private BookInfo[] mockAvailableBooks;
     private BitsoTicker[] mockTicker;
@@ -27,7 +35,6 @@ public class BitsoMockTest extends BitsoTest {
     private BitsoAccountStatus mockAccountStatus;
     private BitsoBalance mockBalance;
     private BitsoFee mockFee;
-    private BitsoOrder[] mockOpenOrders;
     private Map<String, String> mockBitsoBanks;
     private BitsoOperation[] mockLedgers;
     private BitsoOperation[] mockLedgersTrades;
@@ -41,7 +48,7 @@ public class BitsoMockTest extends BitsoTest {
     private BitsoTransactions mockTransactions;
     BitsoWithdrawal[] mockWithdrawals;
 
-    @Before
+    @BeforeEach
     public void setUp() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, BitsoServerException {
         mBitso = Mockito.mock(Bitso.class);
@@ -73,7 +80,9 @@ public class BitsoMockTest extends BitsoTest {
     private void setUpMockitoActions() throws JSONException, BitsoNullException, IOException,
             BitsoAPIException, BitsoPayloadException, BitsoServerException {
         Mockito.when(mBitso.getAvailableBooks()).thenReturn(mockAvailableBooks);
+        Mockito.when(mBitso.getSignedAvailableBooks()).thenReturn(mockAvailableBooks);
         Mockito.when(mBitso.getTicker()).thenReturn(mockTicker);
+        Mockito.when(mBitso.getSignedTicker()).thenReturn(mockTicker);
         Mockito.when(mBitso.getOrderBook("btc_mxn")).thenReturn(mockOrderBook);
         Mockito.when(mBitso.getOrderBook("eth_mxn")).thenReturn(mockOrderBook);
         Mockito.when(mBitso.getOrderBook("xrp_btc")).thenReturn(mockOrderBook);
@@ -97,16 +106,32 @@ public class BitsoMockTest extends BitsoTest {
         Mockito.when(mBitso.getWithdrawals(null)).thenReturn(mockWithdrawals);
         Mockito.when(mBitso.getFundings(null)).thenReturn(mockFundings);
         Mockito.when(mBitso.getUserTrades(null)).thenReturn(mockTrades);
-        Mockito.when(mBitso.getOpenOrders("btc_mxn")).thenReturn(mockOpenOrders);
-        Mockito.when(mBitso.getOpenOrders("eth_mxn")).thenReturn(mockOpenOrders);
-        Mockito.when(mBitso.getOpenOrders("xrp_btc")).thenReturn(mockOpenOrders);
-        Mockito.when(mBitso.getOpenOrders("xrp_mxn")).thenReturn(mockOpenOrders);
-        Mockito.when(mBitso.getOpenOrders("eth_btc")).thenReturn(mockOpenOrders);
-        Mockito.when(mBitso.getOpenOrders("bch_btc")).thenReturn(mockOpenOrders);
+        Mockito.when(mBitso.getOpenOrders(anyString())).thenReturn(new BitsoOrder[0]);
+        BitsoOrder[] one = new BitsoOrder[1];
+        JSONArray orders = Helpers.getJSONFromFile("privateOpenOrders.json").getJSONArray("payload");
+        one[0] = new BitsoOrder(orders.getJSONObject(0));
+        one[0].setUnfilledAmount(BigDecimal.ZERO);
+        Mockito.when(mBitso.getOpenOrders("btc_mxn")).thenReturn(one);
+        BitsoOrder[] lookup = new BitsoOrder[2];
+        lookup[0] = one[0];
+        lookup[1] = new BitsoOrder(orders.getJSONObject(1));
+        lookup[1].setUnfilledAmount(BigDecimal.ZERO);
+        Mockito.when(mBitso.lookupOrders(any(), any())).thenReturn(lookup);
+        Mockito.when(mBitso.cancelAllOrders()).thenReturn(new String[0]);
         Mockito.when((mBitso.fundingDestination("fund_currency=btc"))).thenReturn(mockFundingDestination);
         Mockito.when((mBitso.fundingDestination("fund_currency=eth"))).thenReturn(mockFundingDestination);
         Mockito.when((mBitso.fundingDestination("fund_currency=mxn"))).thenReturn(mockFundingDestination);
         Mockito.when(mBitso.getBanks()).thenReturn(mockBitsoBanks);
+        Mockito.when(mBitso.placeOrder(anyString(), any(), any(), any(), any(), any(), any()))
+                .thenReturn("genericOrder", generateOrderIds(10));
+        Mockito.when(mBitso.placeLimitOrder(anyString(), any(), any(), any(), any(), any()))
+                .thenReturn("limitOrder", generateOrderIds(15));
+    }
+
+    private final AtomicLong oidgen = new AtomicLong(12345);
+    private String[] generateOrderIds(int count) {
+        return Stream.generate(() -> "orderId" + oidgen.incrementAndGet())
+                .limit(count).toArray(String[]::new);
     }
 
     private void setUpAvailableBooks(JSONObject o) {
@@ -380,11 +405,11 @@ public class BitsoMockTest extends BitsoTest {
     public void testUserTrades() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, BitsoServerException {
         BitsoTrade[] trades = mBitso.getUserTrades(null);
-        assertEquals(trades != null, true);
+        assertNotNull(trades);
         int totalElements = trades.length;
         assertEquals((totalElements >= 0 && totalElements <= 25), true);
         for (BitsoTrade current : trades) {
-            assertEquals(true, nullCheck(current, BitsoTrade.class));
+            assertTrue(nullCheck(current, BitsoTrade.class));
         }
     }
 

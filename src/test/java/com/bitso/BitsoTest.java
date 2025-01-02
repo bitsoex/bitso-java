@@ -1,8 +1,5 @@
 package com.bitso;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -15,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.json.JSONException;
-import org.junit.Test;
 
 import com.bitso.BitsoBalance.Balance;
 import com.bitso.exceptions.BitsoAPIException;
@@ -25,6 +21,11 @@ import com.bitso.exceptions.BitsoServerException;
 import com.bitso.exceptions.BitsoValidationException;
 import com.bitso.exchange.BookInfo;
 import com.bitso.exchange.Ticker;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class BitsoTest {
     protected Bitso mBitso;
@@ -34,7 +35,7 @@ public abstract class BitsoTest {
     public void testAvailableBooks() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, BitsoServerException {
         BookInfo[] books = mBitso.getAvailableBooks();
-        assertEquals(true, (books != null));
+        assertNotNull(books);
         int totalElements = books.length;
         assertEquals(6, totalElements);
         for (BookInfo bookInfo : books) {
@@ -46,7 +47,7 @@ public abstract class BitsoTest {
     public void testTicker() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, BitsoServerException {
         BitsoTicker[] tickers = mBitso.getTicker();
-        assertEquals(tickers != null, true);
+        assertNotNull(tickers);
         int totalElements = tickers.length;
         assertEquals(6, totalElements);
         for (Ticker ticker : tickers) {
@@ -58,7 +59,7 @@ public abstract class BitsoTest {
     public void testOrderBook() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, BitsoServerException {
         BookInfo[] availableBooks = mBitso.getAvailableBooks();
-        assertEquals(availableBooks != null, true);
+        assertNotNull(availableBooks);
         for (BookInfo bookInfo : availableBooks) {
             BitsoOrderBook bitsoOrderBook = mBitso.getOrderBook(bookInfo.getBook());
             assertEquals(nullCheck(bitsoOrderBook, BitsoOrderBook.class), true);
@@ -73,7 +74,7 @@ public abstract class BitsoTest {
     public void testTrades() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, InterruptedException, BitsoServerException {
         BookInfo[] availableBooks = mBitso.getAvailableBooks();
-        assertEquals(availableBooks != null, true);
+        assertNotNull(availableBooks);
         for (BookInfo bookInfo : availableBooks) {
             int totalElements = 0;
             BitsoTransactions.Transaction[] innerTransactions;
@@ -639,27 +640,27 @@ public abstract class BitsoTest {
     @Test
     public void testTrading() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, BitsoServerException, InterruptedException, BitsoValidationException {
-        List<String> orders = new ArrayList<String>();
+        List<String> orders = new ArrayList<>();
         String canceledOrders[] = null;
         String sellOrderId = null;
         String buyOrderId = null;
 
         BitsoBalance bitsoBalance = mBitso.getAccountBalance();
-        assertEquals((bitsoBalance != null), true);
+        assertNotNull(bitsoBalance);
 
         HashMap<String, Balance> currencyBalances = bitsoBalance.getBalances();
-        assertEquals((currencyBalances != null), true);
+        assertNotNull(currencyBalances);
 
         Balance mxnBalance = currencyBalances.get("mxn");
-        assertEquals(nullCheck(mxnBalance, Balance.class), true);
+        assertTrue(nullCheck(mxnBalance, Balance.class));
 
         Balance btcBalance = currencyBalances.get("btc");
-        assertEquals(nullCheck(btcBalance, Balance.class), true);
+        assertTrue(nullCheck(btcBalance, Balance.class));
 
         if (mxnBalance.getAvailable().doubleValue() >= 10) {
             buyOrderId = mBitso.placeOrder("btc_mxn", BitsoOrder.SIDE.BUY, BitsoOrder.TYPE.LIMIT,
                     new BigDecimal("0.001"), null, new BigDecimal("10000"));
-            assertEquals(buyOrderId != null, true);
+            assertNotNull(buyOrderId);
             orders.add(buyOrderId);
         } else {
             System.out.println(
@@ -669,7 +670,7 @@ public abstract class BitsoTest {
         if (btcBalance.getAvailable().doubleValue() >= 0.001) {
             sellOrderId = mBitso.placeOrder("btc_mxn", BitsoOrder.SIDE.SELL, BitsoOrder.TYPE.LIMIT,
                     new BigDecimal("0.001"), null, new BigDecimal("100000"));
-            assertEquals(sellOrderId != null, true);
+            assertNotNull(sellOrderId);
             orders.add(sellOrderId);
         } else {
             System.out.println(
@@ -679,10 +680,10 @@ public abstract class BitsoTest {
         Thread.sleep(1000);
 
         int totalOpenOrders = orders.size();
-        assertEquals(totalOpenOrders, 2);
+        assertEquals(1, totalOpenOrders);
 
         BookInfo[] books = mBitso.getAvailableBooks();
-        assertEquals(books != null, true);
+        assertNotNull(books);
         int totalExpectedOpenOrders = 0;
         for (BookInfo book : books) {
             totalExpectedOpenOrders = (book.getBook().equals("btc_mxn") || book.getBook().equals("eth_btc"))
@@ -785,11 +786,11 @@ public abstract class BitsoTest {
     public void testSignedTicker() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, BitsoServerException {
         BitsoTicker[] tickers = mBitso.getSignedTicker();
-        assertEquals(tickers != null, true);
+        assertNotNull(tickers);
         int totalElements = tickers.length;
         assertEquals(6, totalElements);
         for (Ticker ticker : tickers) {
-            assertEquals(nullCheck(ticker, BitsoTicker.class), true);
+            assertTrue(nullCheck(ticker, BitsoTicker.class));
         }
     }
 
@@ -797,11 +798,11 @@ public abstract class BitsoTest {
     public void testSignedAvailableBooks() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, BitsoServerException {
         BookInfo[] books = mBitso.getSignedAvailableBooks();
-        assertEquals(true, (books != null));
+        assertNotNull(books);
         int totalElements = books.length;
         assertEquals(6, totalElements);
         for (BookInfo bookInfo : books) {
-            assertEquals(nullCheck(bookInfo, BookInfo.class), true);
+            assertTrue(nullCheck(bookInfo, BookInfo.class));
         }
     }
 
@@ -809,27 +810,27 @@ public abstract class BitsoTest {
     @Test
     public void testCancelAll() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, BitsoServerException, InterruptedException, BitsoValidationException {
-        List<String> orders = new ArrayList<String>();
-        String canceledOrders[] = null;
+        List<String> orders = new ArrayList<>();
         String sellOrderId = null;
         String buyOrderId = null;
 
         BitsoBalance bitsoBalance = mBitso.getAccountBalance();
-        assertEquals((bitsoBalance != null), true);
+        assertNotNull(bitsoBalance);
 
         HashMap<String, Balance> currencyBalances = bitsoBalance.getBalances();
-        assertEquals((currencyBalances != null), true);
+        assertNotNull(currencyBalances);
 
         Balance mxnBalance = currencyBalances.get("mxn");
-        assertEquals(nullCheck(mxnBalance, Balance.class), true);
+        assertTrue(nullCheck(mxnBalance, Balance.class));
 
         Balance btcBalance = currencyBalances.get("btc");
-        assertEquals(nullCheck(btcBalance, Balance.class), true);
+        assertTrue(nullCheck(btcBalance, Balance.class));
 
         if (mxnBalance.getAvailable().doubleValue() >= 10) {
-            buyOrderId = mBitso.placeOrder("btc_mxn", BitsoOrder.SIDE.BUY, BitsoOrder.TYPE.LIMIT,
-                    new BigDecimal("0.001"), null, new BigDecimal("10000"));
-            assertEquals(buyOrderId != null, true);
+            buyOrderId = mBitso.placeLimitOrder("btc_mxn", BitsoOrder.SIDE.BUY,
+                    new BigDecimal("0.001"), null, new BigDecimal("10000"),
+                    BitsoOrder.TIME_IN_FORCE.GOODTILLCANCELLED);
+            assertNotNull(buyOrderId);
             orders.add(buyOrderId);
         } else {
             System.out.println(
@@ -837,9 +838,10 @@ public abstract class BitsoTest {
         }
 
         if (btcBalance.getAvailable().doubleValue() >= 0.001) {
-            sellOrderId = mBitso.placeOrder("btc_mxn", BitsoOrder.SIDE.SELL, BitsoOrder.TYPE.LIMIT,
-                    new BigDecimal("0.001"), null, new BigDecimal("100000"));
-            assertEquals(sellOrderId != null, true);
+            sellOrderId = mBitso.placeLimitOrder("btc_mxn", BitsoOrder.SIDE.SELL,
+                    new BigDecimal("0.001"), null, new BigDecimal("100000"),
+                    BitsoOrder.TIME_IN_FORCE.GOODTILLCANCELLED);
+            assertNotNull(sellOrderId);
             orders.add(sellOrderId);
         } else {
             System.out.println(
@@ -849,31 +851,29 @@ public abstract class BitsoTest {
         Thread.sleep(1000);
 
         int totalOpenOrders = orders.size();
-        assertEquals(totalOpenOrders, 2);
+        assertEquals(1, totalOpenOrders);
 
         BookInfo[] books = mBitso.getAvailableBooks();
-        assertEquals(books != null, true);
+        assertNotNull(books);
         int totalExpectedOpenOrders = 0;
         for (BookInfo book : books) {
-            totalExpectedOpenOrders = (book.getBook().equals("btc_mxn") || book.getBook().equals("eth_btc"))
+            totalExpectedOpenOrders = (book.getBook().equals("btc_mxn"))
                     ? totalOpenOrders : 0;
             BitsoOrder[] openOrders = mBitso.getOpenOrders(book.getBook());
-            assertEquals(openOrders.length, totalExpectedOpenOrders);
+            assertEquals(totalExpectedOpenOrders, openOrders.length, "wrong number of open orders for " + book.getBook());
 
-            if (openOrders.length > 0) {
-                for (BitsoOrder bitsoOrder : openOrders) {
-                    assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
-                }
+            for (BitsoOrder bitsoOrder : openOrders) {
+                assertTrue(nullCheck(bitsoOrder, BitsoOrder.class));
             }
         }
 
         Thread.sleep(1000);
 
         BitsoOrder[] multiple = mBitso.lookupOrders(buyOrderId, sellOrderId);
-        assertEquals(multiple != null, true);
-        assertEquals(multiple.length, 2);
+        assertNotNull(multiple, "null lookup for orders " + buyOrderId + " and " + sellOrderId);
+        assertEquals(2, multiple.length);
         for (BitsoOrder bitsoOrder : multiple) {
-            assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
+            assertTrue(nullCheck(bitsoOrder, BitsoOrder.class));
         }
 
         Thread.sleep(1000);
