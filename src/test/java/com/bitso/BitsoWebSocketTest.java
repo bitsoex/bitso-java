@@ -1,15 +1,11 @@
 package com.bitso;
 
-import static org.junit.Assert.assertEquals;
-
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import javax.net.ssl.SSLException;
 
 import org.json.JSONObject;
-import org.junit.Before;
-import org.junit.Test;
 
 import com.bitso.exceptions.BitsoExceptionNotExpectedValue;
 import com.bitso.helpers.Helpers;
@@ -19,6 +15,10 @@ import com.bitso.websockets.BitsoStreamTrades;
 import com.bitso.websockets.BitsoWebSocket;
 import com.bitso.websockets.BitsoWebSocketObserver;
 import com.bitso.websockets.BitsoChannels;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BitsoWebSocketTest {
     private final BitsoChannels[] bitsoChannels = { BitsoChannels.TRADES, BitsoChannels.DIFF_ORDERS,
@@ -26,7 +26,7 @@ public class BitsoWebSocketTest {
     private BitsoWebSocket bitsoWebSocket;
     private BitsoWebSocketObserver bitsoWebSocketObserver;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         bitsoWebSocket = new BitsoWebSocket();
         bitsoWebSocketObserver = new BitsoWebSocketObserver();
