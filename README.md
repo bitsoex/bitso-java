@@ -23,7 +23,7 @@ Add the dependency
 <dependency>
     <groupId>com.github.bitsoex</groupId>
     <artifactId>bitso-java</artifactId>
-    <version>v3.0.5</version>
+    <version>v4.0.0</version>
 </dependency>
 ```
 
@@ -43,9 +43,9 @@ On Android Studio find build.gradle file Gradle Scripts -> build.gradle(Module: 
 
 ```gradle
 dependencies {
-    compile 'com.android.support:appcompat-v7:24.2.1'
+    implementation 'com.android.support:appcompat-v7:24.2.1'
     ...
-    compile 'com.github.bitsoex:bitso-java:v3.0.5'
+    implementation 'com.github.bitsoex:bitso-java:v4.0.0'
 }
 ```
 
@@ -193,7 +193,7 @@ When working with currency values in your application, it's important to remembe
 
 ## Tests
 
-Tests for this java can run against the actual server or using mocked responses.
+Tests for this library can run against the actual server or using mocked responses.
 
 ### Testing with mocked reponses
 
