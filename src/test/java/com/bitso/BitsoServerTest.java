@@ -15,7 +15,7 @@ public class BitsoServerTest extends BitsoTest {
         // normally, otherwise, they will be ignored.
         Assumptions.assumeTrue((secret != null && key != null));
 
-        mBitso = new Bitso(key, secret, 0, true, true);
+        mBitso = new Bitso(key, secret, true, Target.production);
     }
 
     @AfterEach

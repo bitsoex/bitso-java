@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
 
+import com.bitso.exceptions.BitsoValidationException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -305,11 +305,12 @@ public class BitsoMockTest extends BitsoTest {
         }
     }
 
+    @Test
     @Override
     public void testOrderBook() {
         try {
             BookInfo[] availableBooks = mBitso.getAvailableBooks();
-            assertEquals(availableBooks != null, true);
+            assertNotNull(availableBooks);
             for (BookInfo bookInfo : availableBooks) {
                 BitsoOrderBook bitsoOrderBook = mBitso.getOrderBook(bookInfo.getBook());
                 assertEquals(nullCheck(bitsoOrderBook, BitsoOrderBook.class), true);
@@ -319,95 +320,100 @@ public class BitsoMockTest extends BitsoTest {
         }
     }
 
+    @Test
     @Override
     public void testTrades() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, BitsoServerException {
         BookInfo[] availableBooks = mBitso.getAvailableBooks();
-        assertEquals(availableBooks != null, true);
+        assertNotNull(availableBooks);
 
         for (BookInfo bookInfo : availableBooks) {
             BitsoTransactions bitsoTransaction = mBitso.getTrades(bookInfo.getBook());
-            assertEquals(nullCheck(bitsoTransaction, BitsoTransactions.class), true);
+            assertTrue(nullCheck(bitsoTransaction, BitsoTransactions.class));
         }
     }
 
+    @Test
     @Override
     public void testLedger() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, BitsoServerException {
         int totalElements = 0;
 
         BitsoOperation[] defaultLedger = mBitso.getLedger("");
-        assertEquals(defaultLedger != null, true);
+        assertNotNull(defaultLedger);
         totalElements = defaultLedger.length;
-        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        assertTrue((totalElements >= 0 && totalElements <= 25));
         for (BitsoOperation bitsoOperation : defaultLedger) {
-            assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
+            assertTrue(nullCheck(bitsoOperation, BitsoOperation.class));
         }
 
         BitsoOperation[] tradesLedger = mBitso.getLedger("trades");
-        assertEquals(tradesLedger != null, true);
+        assertNotNull(tradesLedger);
         totalElements = tradesLedger.length;
-        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        assertTrue((totalElements >= 0 && totalElements <= 25));
         for (BitsoOperation bitsoOperation : tradesLedger) {
-            assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
-            assertEquals(bitsoOperation.getOperationDescription(), "trade");
+            assertTrue(nullCheck(bitsoOperation, BitsoOperation.class));
+            assertEquals("trade", bitsoOperation.getOperationDescription());
         }
 
         BitsoOperation[] feesLedger = mBitso.getLedger("fees");
-        assertEquals(feesLedger != null, true);
+        assertNotNull(feesLedger);
         totalElements = feesLedger.length;
-        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        assertTrue((totalElements >= 0 && totalElements <= 25));
         for (BitsoOperation bitsoOperation : feesLedger) {
-            assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
-            assertEquals(bitsoOperation.getOperationDescription(), "fee");
+            assertTrue(nullCheck(bitsoOperation, BitsoOperation.class));
+            assertEquals("fee", bitsoOperation.getOperationDescription());
         }
 
         BitsoOperation[] fundingsLedger = mBitso.getLedger("fundings");
-        assertEquals(fundingsLedger != null, true);
+        assertNotNull(fundingsLedger);
         totalElements = fundingsLedger.length;
-        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        assertTrue((totalElements >= 0 && totalElements <= 25));
         for (BitsoOperation bitsoOperation : fundingsLedger) {
-            assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
-            assertEquals(bitsoOperation.getOperationDescription(), "funding");
+            assertTrue(nullCheck(bitsoOperation, BitsoOperation.class));
+            assertEquals("funding", bitsoOperation.getOperationDescription());
         }
 
         BitsoOperation[] withdrawalsLedger = mBitso.getLedger("withdrawals");
-        assertEquals(withdrawalsLedger != null, true);
+        assertNotNull(withdrawalsLedger);
         totalElements = withdrawalsLedger.length;
-        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        assertTrue((totalElements >= 0 && totalElements <= 25));
         for (BitsoOperation bitsoOperation : withdrawalsLedger) {
-            assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
-            assertEquals(bitsoOperation.getOperationDescription(), "withdrawal");
+            assertTrue(nullCheck(bitsoOperation, BitsoOperation.class));
+            assertEquals("withdrawal", bitsoOperation.getOperationDescription());
         }
     }
 
+    @Test
     @Override
     public void testWithdrawals() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, BitsoServerException {
         BitsoWithdrawal[] withdrawals = mBitso.getWithdrawals(null);
-        assertEquals(withdrawals != null, true);
+        assertNotNull(withdrawals);
         for (BitsoWithdrawal bitsoWithdrawal : withdrawals) {
-            assertEquals(true, nullCheck(bitsoWithdrawal, BitsoWithdrawal.class));
+            assertTrue(nullCheck(bitsoWithdrawal, BitsoWithdrawal.class));
         }
     }
 
+    @Test
     @Override
-    public void tesFundings() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
+    public void testFundings() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, BitsoServerException {
         BitsoFunding[] fundings = mBitso.getFundings(null);
-        assertEquals(fundings != null, true);
+        assertNotNull(fundings);
         for (BitsoFunding bitsoFunding : fundings) {
-            assertEquals(true, nullCheck(bitsoFunding, BitsoFunding.class));
+            assertTrue(nullCheck(bitsoFunding, BitsoFunding.class));
         }
     }
 
+    @Test
     @Override
     public void testUserTrades() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, BitsoServerException {
         BitsoTrade[] trades = mBitso.getUserTrades(null);
         assertNotNull(trades);
         int totalElements = trades.length;
-        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        assertTrue((totalElements >= 0 && totalElements <= 25));
         for (BitsoTrade current : trades) {
             assertTrue(nullCheck(current, BitsoTrade.class));
         }
@@ -421,16 +427,17 @@ public class BitsoMockTest extends BitsoTest {
         // TODO:
         // This should return a collection of 25 elements, not working limit default value
         BitsoTrade[] trades = mBitso.getUserTrades(null);
-        assertEquals(trades != null, true);
+        assertNotNull(trades);
         totalElements = trades.length;
-        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        assertTrue((totalElements >= 0 && totalElements <= 25));
         for (BitsoTrade current : trades) {
-            assertEquals(true, nullCheck(current, BitsoTrade.class));
+            assertTrue(nullCheck(current, BitsoTrade.class));
         }
     }
 
+    @Test
     @Override
-    public void testTrading() {
-        System.out.println("This test is overriden");
+    public void testTrading() throws JSONException, BitsoNullException, IOException, BitsoAPIException, BitsoPayloadException, BitsoServerException, InterruptedException, BitsoValidationException {
+        //do nothing
     }
 }
