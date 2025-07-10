@@ -30,14 +30,6 @@ public class BlockingHttpClient {
     private long throttleMs = -1;
     private long lastCallTime = 0;
 
-    public BlockingHttpClient() {
-        this(false);
-    }
-
-    public BlockingHttpClient(boolean log) {
-        this(log, -1);
-    }
-
     public BlockingHttpClient(boolean log, long throttleMs) {
         this.log = log;
         this.throttleMs = throttleMs;
