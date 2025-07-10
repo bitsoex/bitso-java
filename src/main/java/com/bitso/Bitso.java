@@ -28,39 +28,43 @@ import com.bitso.exchange.BookInfo;
 import com.bitso.helpers.Helpers;
 import com.bitso.http.BlockingHttpClient;
 
+/**
+ * An implementation of the Bitso API.
+ */
 public class Bitso {
-    private static final String BITSO_BASE_URL_PRODUCTION = "https://api.bitso.com";
-    private static final String BITSO_BASE_URL_DEV = "https://dev.bitso.com";
     private final String ETHER = "ether";
     private final String BITCOIN = "bitcoin";
     public static long THROTTLE_MS = 1000;
 
-    private String key;
-    private String secret;
+    private final String key;
+    private final String secret;
     private boolean log;
     private String baseUrl;
 
     private BlockingHttpClient client = new BlockingHttpClient(false, THROTTLE_MS);
 
     public Bitso(String key, String secret) {
-        this(key, secret, 0);
+        this(key, secret, true, Target.production);
     }
 
-    public Bitso(String key, String secret, int retries) {
-        this(key, secret, retries, true);
+    public Bitso(String key, String secret, boolean log) {
+        this(key, secret, log, Target.production);
     }
 
-    public Bitso(String key, String secret, int retries, boolean log) {
-        this(key, secret, retries, log, true);
-    }
-
-    public Bitso(String key, String secret, int retries, boolean log, boolean production) {
+    /** Creates a new instance with the specified parameters.
+     * @param key The Bitso API key to use.
+     * @param secret The corresponding secret for the specified API key.
+     * @param log Whether to print log messages or not
+     * @param env The target environment to connect to.
+     */
+    public Bitso(String key, String secret, boolean log, Target env) {
         this.key = key;
         this.secret = secret;
         this.log = log;
-        this.baseUrl = production ? BITSO_BASE_URL_PRODUCTION : BITSO_BASE_URL_DEV;
+        this.baseUrl = env.uri();
     }
 
+    /** Changes the base URL to use. */
     public void setBaseURL(String url) {
         baseUrl = url;
     }
