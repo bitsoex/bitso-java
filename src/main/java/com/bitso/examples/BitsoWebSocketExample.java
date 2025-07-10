@@ -12,6 +12,7 @@ import java.util.Observable;
 
 import javax.net.ssl.SSLException;
 
+import com.bitso.Target;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.bitso.Bitso;
@@ -130,14 +131,14 @@ public class BitsoWebSocketExample extends BitsoWebSocketObserver {
     public void getInitialOrderBook() {
         // Public functions in API, no key or secret needed
         if (mBitso == null) {
-            mBitso = new Bitso("", "", 0, Boolean.TRUE, Boolean.TRUE);
+            mBitso = new Bitso("", "", true, Target.production);
         }
 
         try {
-            mLiveOrderBook = mBitso.getOrderBook(BTC_MXN_BOOK, Boolean.FALSE);
+            mLiveOrderBook = mBitso.getOrderBook(BTC_MXN_BOOK, false);
 
             mCurrentSequenceNumber = mLiveOrderBook.getSequence();
-            mOrderBookObtained = Boolean.TRUE;
+            mOrderBookObtained = true;
 
             for (PublicOrder publicOrder : mLiveOrderBook.getAsks()) {
                 mAsks.manageOrder(publicOrder.getOrderId(), new OrderUpdate(publicOrder.getOrderId(),
@@ -154,11 +155,7 @@ public class BitsoWebSocketExample extends BitsoWebSocketObserver {
 
             System.out.println("Best ask: " + mAsks.getMinPrice());
             System.out.println("Best bid: " + mBids.getMaxPrice());
-        } catch (BitsoAPIException e) {
-            e.printStackTrace();
-        } catch (BitsoPayloadException e) {
-            e.printStackTrace();
-        } catch (BitsoServerException e) {
+        } catch (BitsoAPIException | BitsoPayloadException | BitsoServerException e) {
             e.printStackTrace();
         }
     }
@@ -169,9 +166,9 @@ public class BitsoWebSocketExample extends BitsoWebSocketObserver {
         private BigDecimal mMaxPrice;
 
         public Operation() {
-            mOrderUpdatesMap = new HashMap<String, OrderUpdate>();
-            mMinPrice = new BigDecimal(0);
-            mMaxPrice = new BigDecimal(0);
+            mOrderUpdatesMap = new HashMap<>();
+            mMinPrice = BigDecimal.ZERO;
+            mMaxPrice = BigDecimal.ZERO;
         }
 
         public void manageOrder(String orderId, OrderUpdate orderUpdate) {
@@ -197,7 +194,7 @@ public class BitsoWebSocketExample extends BitsoWebSocketObserver {
 
         public void updateMaxMin() {
             ArrayList<BigDecimal> publicOrders = getSortedOrders();
-            if (publicOrders.size() > 0) {
+            if (!publicOrders.isEmpty()) {
                 mMinPrice = publicOrders.get(0);
                 mMaxPrice = publicOrders.get(publicOrders.size() - 1);
             }
@@ -205,19 +202,16 @@ public class BitsoWebSocketExample extends BitsoWebSocketObserver {
 
         public void updateMaxMin(int sequence) {
             ArrayList<BigDecimal> publicOrders = getSortedOrders(sequence);
-            if (publicOrders.size() > 0) {
+            if (!publicOrders.isEmpty()) {
                 mMinPrice = publicOrders.get(0);
                 mMaxPrice = publicOrders.get(publicOrders.size() - 1);
             }
         }
 
         public ArrayList<BigDecimal> getSortedOrders() {
-            ArrayList<BigDecimal> prices = new ArrayList<BigDecimal>();
+            ArrayList<BigDecimal> prices = new ArrayList<>();
 
-            Iterator<Map.Entry<String, OrderUpdate>> it = mOrderUpdatesMap.entrySet().iterator();
-
-            while (it.hasNext()) {
-                Map.Entry<String, OrderUpdate> entry = it.next();
+            for (Map.Entry<String, OrderUpdate> entry : mOrderUpdatesMap.entrySet()) {
                 prices.add(entry.getValue().getPrice());
             }
 
@@ -227,13 +221,10 @@ public class BitsoWebSocketExample extends BitsoWebSocketObserver {
         }
 
         public ArrayList<BigDecimal> getSortedOrders(int sequence) {
-            ArrayList<BigDecimal> prices = new ArrayList<BigDecimal>();
-            ArrayList<String> removableOrders = new ArrayList<String>();
+            ArrayList<BigDecimal> prices = new ArrayList<>();
+            ArrayList<String> removableOrders = new ArrayList<>();
 
-            Iterator<Map.Entry<String, OrderUpdate>> it = mOrderUpdatesMap.entrySet().iterator();
-
-            while (it.hasNext()) {
-                Map.Entry<String, OrderUpdate> entry = it.next();
+            for (Map.Entry<String, OrderUpdate> entry : mOrderUpdatesMap.entrySet()) {
                 if (entry.getValue().getSequence() > sequence) {
                     prices.add(entry.getValue().getPrice());
                 } else {
@@ -297,7 +288,7 @@ public class BitsoWebSocketExample extends BitsoWebSocketObserver {
         }
     }
 
-    public static void main(String args[]) throws SSLException, URISyntaxException, InterruptedException {
+    public static void main(String... args) throws SSLException, URISyntaxException, InterruptedException {
         final BitsoChannels[] bitsoChannels = { BitsoChannels.DIFF_ORDERS };
 
         BitsoWebSocket bitsoWebSocket = new BitsoWebSocket();
@@ -313,7 +304,7 @@ public class BitsoWebSocketExample extends BitsoWebSocketObserver {
 
         bitsoWebSocketExample.getInitialOrderBook();
 
-        Thread.sleep(50000);
+        Thread.sleep(50_000);
 
         bitsoWebSocket.closeConnection();
     }
