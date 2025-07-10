@@ -46,8 +46,7 @@ public class BitsoWebSocket extends Observable{
     private String mMessageReceived;
     private Boolean mConnected;
     
-    public BitsoWebSocket() throws SSLException,
-        URISyntaxException{
+    public BitsoWebSocket() throws SSLException, URISyntaxException {
         mUri = new URI(URL);
         mSslContext = SslContextBuilder.forClient().
                 trustManager(InsecureTrustManagerFactory.INSTANCE).build();
@@ -74,7 +73,7 @@ public class BitsoWebSocket extends Observable{
         final WebSocketClientHandler handler =
                 new WebSocketClientHandler(
                         WebSocketClientHandshakerFactory.newHandshaker(
-                                mUri, WebSocketVersion.V08, null, false,
+                                mUri, WebSocketVersion.V13, null, false,
                                 new DefaultHttpHeaders()));
 
         bootstrap.group(mGroup)
