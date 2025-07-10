@@ -19,6 +19,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BitsoWebSocketTest {
     private final BitsoChannels[] bitsoChannels = { BitsoChannels.TRADES, BitsoChannels.DIFF_ORDERS,
@@ -45,7 +47,7 @@ public class BitsoWebSocketTest {
             bitsoWebSocket.subscribeBitsoChannel(bitsoChannel.toString());
         }
 
-        Thread.sleep(20000);
+        Thread.sleep(20_000);
 
         bitsoWebSocket.closeConnection();
 
@@ -66,23 +68,23 @@ public class BitsoWebSocketTest {
             String type = Helpers.getString(jsonObject, "type");
             BitsoChannels channel = BitsoChannels.getBitsoChannel(type);
 
-            assertEquals(true, (channel != null));
+            assertNotNull(channel);
 
             switch (channel) {
                 case TRADES:
                     BitsoStreamTrades trades = new BitsoStreamTrades(jsonObject);
-                    assertEquals((trades != null), true);
-                    assertEquals(trades.attributesNotNull(), true);
+                    assertNotNull(trades);
+                    assertTrue(trades.attributesNotNull());
                     break;
                 case DIFF_ORDERS:
                     BitsoStreamDiffOrders diff = new BitsoStreamDiffOrders(jsonObject);
-                    assertEquals((diff != null), true);
-                    assertEquals(diff.attributesNotNull(), true);
+                    assertNotNull(diff);
+                    assertTrue(diff.attributesNotNull());
                     break;
                 case ORDERS:
                     BitsoStreamOrders orders = new BitsoStreamOrders(jsonObject);
-                    assertEquals(orders != null, true);
-                    assertEquals(orders.attributesNotNull(), true);
+                    assertNotNull(orders);
+                    assertTrue(orders.attributesNotNull());
                     break;
                 case KA:
                     break;
