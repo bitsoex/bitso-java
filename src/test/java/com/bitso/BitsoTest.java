@@ -6,7 +6,6 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,11 +23,14 @@ import com.bitso.exchange.Ticker;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class BitsoTest {
     protected Bitso mBitso;
+    public static final long SLEEP = 2_000;
 
     // Test public Rest API
     @Test
@@ -39,7 +41,7 @@ public abstract class BitsoTest {
         int totalElements = books.length;
         assertEquals(6, totalElements);
         for (BookInfo bookInfo : books) {
-            assertEquals(nullCheck(bookInfo, BookInfo.class), true);
+            assertTrue(nullCheck(bookInfo, BookInfo.class));
         }
     }
 
@@ -51,7 +53,7 @@ public abstract class BitsoTest {
         int totalElements = tickers.length;
         assertEquals(6, totalElements);
         for (Ticker ticker : tickers) {
-            assertEquals(nullCheck(ticker, BitsoTicker.class), true);
+            assertTrue(nullCheck(ticker, BitsoTicker.class));
         }
     }
 
@@ -62,11 +64,11 @@ public abstract class BitsoTest {
         assertNotNull(availableBooks);
         for (BookInfo bookInfo : availableBooks) {
             BitsoOrderBook bitsoOrderBook = mBitso.getOrderBook(bookInfo.getBook());
-            assertEquals(nullCheck(bitsoOrderBook, BitsoOrderBook.class), true);
+            assertTrue(nullCheck(bitsoOrderBook, BitsoOrderBook.class));
             BitsoOrderBook bitsoOrderBookNoAggreagte = mBitso.getOrderBook(bookInfo.getBook(), false);
-            assertEquals(nullCheck(bitsoOrderBookNoAggreagte, BitsoOrderBook.class), true);
+            assertTrue(nullCheck(bitsoOrderBookNoAggreagte, BitsoOrderBook.class));
             BitsoOrderBook bitsoOrderBookAggregate = mBitso.getOrderBook(bookInfo.getBook(), true);
-            assertEquals(nullCheck(bitsoOrderBookAggregate, BitsoOrderBook.class), true);
+            assertTrue(nullCheck(bitsoOrderBookAggregate, BitsoOrderBook.class));
         }
     }
 
@@ -80,9 +82,9 @@ public abstract class BitsoTest {
             BitsoTransactions.Transaction[] innerTransactions;
 
             BitsoTransactions bitsoTransaction = mBitso.getTrades(bookInfo.getBook());
-            assertEquals(nullCheck(bitsoTransaction, BitsoTransactions.class), true);
+            assertTrue(nullCheck(bitsoTransaction, BitsoTransactions.class));
 
-            Thread.sleep(5000);
+            Thread.sleep(SLEEP);
 
             /*
              * // TODO: // This should return null due it's a negative value on limit try{ BitsoTransactions
@@ -90,40 +92,40 @@ public abstract class BitsoTest {
              * (BitsoAPIException bitsoAPIException) { assertEquals(bitsoAPIException != null, true); }
              */
 
-            Thread.sleep(5000);
+            Thread.sleep(SLEEP);
 
             // TODO:
             // This should return null due limit value is 0
             BitsoTransactions bitsoTransactionCeroLimit = mBitso.getTrades(bookInfo.getBook(), "limit=0");
-            assertEquals(bitsoTransactionCeroLimit != null, true);
+            assertNotNull(bitsoTransactionCeroLimit);
 
-            Thread.sleep(5000);
+            Thread.sleep(SLEEP);
 
             BitsoTransactions bitsoTransactionLowLimit = mBitso.getTrades(bookInfo.getBook(), "limit=1");
             totalElements = bitsoTransactionLowLimit.getTransactionsList().length;
-            assertEquals((totalElements >= 0 && totalElements <= 1), true);
+            assertTrue((totalElements >= 0 && totalElements <= 1));
 
-            Thread.sleep(5000);
+            Thread.sleep(SLEEP);
 
             BitsoTransactions bitsoTransactionMaxLimit = mBitso.getTrades(bookInfo.getBook(), "limit=100");
             totalElements = bitsoTransactionMaxLimit.getTransactionsList().length;
-            assertEquals((totalElements >= 0 && totalElements <= 100), true);
+            assertTrue((totalElements >= 0 && totalElements <= 100));
 
-            Thread.sleep(5000);
+            Thread.sleep(SLEEP);
 
             // TODO:
             // This should return null due the limit value exceeds 100
             BitsoTransactions bitsoTransactionExcedingMaxLimit = mBitso.getTrades(bookInfo.getBook(),
                     "limit=1000");
-            assertEquals(bitsoTransactionExcedingMaxLimit != null, true);
+            assertNotNull(bitsoTransactionExcedingMaxLimit);
 
-            Thread.sleep(5000);
+            Thread.sleep(SLEEP);
 
             BitsoTransactions bitsoTransactionSortAsc = mBitso.getTrades(bookInfo.getBook(), "sort=asc");
             innerTransactions = bitsoTransaction.getTransactionsList();
             totalElements = innerTransactions.length;
-            assertEquals(bitsoTransactionSortAsc != null, true);
-            assertEquals((totalElements >= 0 && totalElements <= 25), true);
+            assertNotNull(bitsoTransactionSortAsc);
+            assertEquals(true, (totalElements >= 0 && totalElements <= 25));
             if (totalElements >= 5) {
                 boolean orderAsc = true;
                 int initialId = Integer.parseInt(innerTransactions[0].getTid());
@@ -132,18 +134,18 @@ public abstract class BitsoTest {
                     orderAsc = (current < initialId);
                     initialId = current;
                 }
-                assertEquals(true, orderAsc);
+                assertTrue(orderAsc);
             }
 
-            Thread.sleep(5000);
+            Thread.sleep(SLEEP);
 
             // TODO:
             // This should return a correct DESC order and is not doing it
             BitsoTransactions bitsoTransactionSortDesc = mBitso.getTrades(bookInfo.getBook(), "sort=desc");
             innerTransactions = bitsoTransaction.getTransactionsList();
             totalElements = innerTransactions.length;
-            assertEquals(bitsoTransactionSortDesc != null, true);
-            assertEquals((totalElements >= 0 && totalElements <= 25), true);
+            assertNotNull(bitsoTransactionSortDesc);
+            assertTrue((totalElements >= 0 && totalElements <= 25));
             if (totalElements >= 5) {
                 boolean orderDesc = true;
                 int initialId = Integer.parseInt(innerTransactions[0].getTid());
@@ -152,16 +154,16 @@ public abstract class BitsoTest {
                     orderDesc = (current < initialId);
                     initialId = current;
                 }
-                assertEquals(true, orderDesc);
+                assertTrue(orderDesc);
             }
 
-            Thread.sleep(5000);
+            Thread.sleep(SLEEP);
 
             BitsoTransactions bitsoTransactionSortLimit = mBitso.getTrades(bookInfo.getBook(), "sort=asc",
                     "limit=15");
             totalElements = bitsoTransactionSortLimit.getTransactionsList().length;
-            assertEquals(bitsoTransactionSortLimit != null, true);
-            assertEquals((totalElements >= 0 && totalElements <= 15), true);
+            assertNotNull(bitsoTransactionSortLimit);
+            assertTrue((totalElements >= 0 && totalElements <= 15));
         }
     }
 
@@ -170,20 +172,19 @@ public abstract class BitsoTest {
     public void testAccountStatus() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, BitsoServerException {
         BitsoAccountStatus bitsoAccountStatus = mBitso.getAccountStatus();
-        assertEquals(nullCheck(bitsoAccountStatus, BitsoAccountStatus.class), true);
+        assertTrue(nullCheck(bitsoAccountStatus, BitsoAccountStatus.class));
     }
 
     @Test
     public void testAccountBalance() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, BitsoServerException {
         BitsoBalance bitsoBalance = mBitso.getAccountBalance();
-        assertEquals(nullCheck(bitsoBalance, BitsoBalance.class), true);
+        assertTrue(nullCheck(bitsoBalance, BitsoBalance.class));
         HashMap<String, BitsoBalance.Balance> balances = bitsoBalance.getBalances();
         Set<String> keys = balances.keySet();
-        Iterator<String> iterator = keys.iterator();
-        while (iterator.hasNext()) {
-            BitsoBalance.Balance currentBalance = balances.get(iterator.next());
-            assertEquals(nullCheck(currentBalance, BitsoBalance.Balance.class), true);
+        for (String key : keys) {
+            Balance currentBalance = balances.get(key);
+            assertTrue(nullCheck(currentBalance, Balance.class));
         }
     }
 
@@ -191,17 +192,16 @@ public abstract class BitsoTest {
     public void testFees() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, BitsoServerException {
         BitsoFee bitsoFee = mBitso.getFees();
-        assertEquals(nullCheck(bitsoFee, BitsoFee.class), true);
+        assertTrue(nullCheck(bitsoFee, BitsoFee.class));
         HashMap<String, BitsoFee.Fee> fees = bitsoFee.getTradeFees();
         Set<String> keys = fees.keySet();
-        Iterator<String> iterator = keys.iterator();
-        while (iterator.hasNext()) {
-            BitsoFee.Fee currentFee = fees.get(iterator.next());
-            assertEquals(nullCheck(currentFee, BitsoFee.Fee.class), true);
+        for (String key : keys) {
+            BitsoFee.Fee currentFee = fees.get(key);
+            assertTrue(nullCheck(currentFee, BitsoFee.Fee.class));
         }
 
         HashMap<String, String> withdrawalFees = bitsoFee.getWithdrawalFees();
-        assertEquals((withdrawalFees != null), true);
+        assertTrue((withdrawalFees != null));
     }
 
     @Test
@@ -210,118 +210,118 @@ public abstract class BitsoTest {
         int totalElements = 0;
 
         BitsoOperation[] defaultLedger = mBitso.getLedger("");
-        assertEquals(defaultLedger != null, true);
+        assertNotNull(defaultLedger);
         totalElements = defaultLedger.length;
-        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        assertTrue((totalElements >= 0 && totalElements <= 25));
         for (BitsoOperation bitsoOperation : defaultLedger) {
-            assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
+            assertTrue(nullCheck(bitsoOperation, BitsoOperation.class));
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         BitsoOperation[] tradesLedger = mBitso.getLedger("trades");
-        assertEquals(tradesLedger != null, true);
+        assertNotNull(tradesLedger);
         totalElements = tradesLedger.length;
-        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        assertTrue((totalElements >= 0 && totalElements <= 25));
         for (BitsoOperation bitsoOperation : tradesLedger) {
-            assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
-            assertEquals(bitsoOperation.getOperationDescription(), "trade");
+            assertTrue(nullCheck(bitsoOperation, BitsoOperation.class));
+            assertEquals("trade", bitsoOperation.getOperationDescription());
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         BitsoOperation[] feesLedger = mBitso.getLedger("fees");
-        assertEquals(feesLedger != null, true);
+        assertNotNull(feesLedger);
         totalElements = feesLedger.length;
-        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        assertTrue((totalElements >= 0 && totalElements <= 25));
         for (BitsoOperation bitsoOperation : feesLedger) {
-            assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
-            assertEquals(bitsoOperation.getOperationDescription(), "fee");
+            assertTrue(nullCheck(bitsoOperation, BitsoOperation.class));
+            assertEquals("fee", bitsoOperation.getOperationDescription());
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         BitsoOperation[] fundingsLedger = mBitso.getLedger("fundings");
-        assertEquals(fundingsLedger != null, true);
+        assertNotNull(fundingsLedger);
         totalElements = fundingsLedger.length;
-        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        assertTrue((totalElements >= 0 && totalElements <= 25));
         for (BitsoOperation bitsoOperation : fundingsLedger) {
-            assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
-            assertEquals(bitsoOperation.getOperationDescription(), "funding");
+            assertTrue(nullCheck(bitsoOperation, BitsoOperation.class));
+            assertEquals("funding", bitsoOperation.getOperationDescription());
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         BitsoOperation[] withdrawalsLedger = mBitso.getLedger("withdrawals");
-        assertEquals(withdrawalsLedger != null, true);
+        assertNotNull(withdrawalsLedger);
         totalElements = withdrawalsLedger.length;
-        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        assertTrue((totalElements >= 0 && totalElements <= 25));
         for (BitsoOperation bitsoOperation : withdrawalsLedger) {
-            assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
-            assertEquals(bitsoOperation.getOperationDescription(), "withdrawal");
+            assertTrue(nullCheck(bitsoOperation, BitsoOperation.class));
+            assertEquals("withdrawal", bitsoOperation.getOperationDescription());
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         // TODO:
         // This should return null due it's a negative value on limit
         BitsoOperation[] negativeLimitLedger = mBitso.getLedger("", "limit=-10");
-        assertEquals((negativeLimitLedger != null || negativeLimitLedger == null), true);
+        assertTrue((negativeLimitLedger != null || negativeLimitLedger == null));
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         // TODO:
         // This should return null due limit value is 0
         BitsoOperation[] ceroLimitLedger = mBitso.getLedger("", "limit=0");
-        assertEquals((ceroLimitLedger != null || ceroLimitLedger == null), true);
+        assertTrue((ceroLimitLedger != null || ceroLimitLedger == null));
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         BitsoOperation[] lowLimitLedger = mBitso.getLedger("", "limit=1");
-        assertEquals(lowLimitLedger != null, true);
+        assertNotNull(lowLimitLedger);
         totalElements = lowLimitLedger.length;
-        assertEquals((totalElements >= 0 && totalElements <= 1), true);
+        assertTrue((totalElements >= 0 && totalElements <= 1));
         for (BitsoOperation bitsoOperation : withdrawalsLedger) {
-            assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
+            assertTrue(nullCheck(bitsoOperation, BitsoOperation.class));
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         BitsoOperation[] maxLimitLedger = mBitso.getLedger("", "limit=100");
-        assertEquals(maxLimitLedger != null, true);
+        assertNotNull(maxLimitLedger);
         totalElements = maxLimitLedger.length;
-        assertEquals((totalElements >= 0 && totalElements <= 100), true);
+        assertTrue((totalElements >= 0 && totalElements <= 100));
         for (BitsoOperation bitsoOperation : withdrawalsLedger) {
-            assertEquals(true, nullCheck(bitsoOperation, BitsoOperation.class));
+            assertTrue(nullCheck(bitsoOperation, BitsoOperation.class));
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         // TODO:
         // This should return null due the limit value exceeds 100
         BitsoOperation[] excedingLimitLedger = mBitso.getLedger("", "limit=1000");
-        assertEquals((excedingLimitLedger != null || excedingLimitLedger == null), true);
+        assertTrue((excedingLimitLedger != null || excedingLimitLedger == null));
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         BitsoOperation[] sortAscLedger = mBitso.getLedger("", "sort=asc");
-        assertEquals(sortAscLedger != null, true);
+        assertNotNull(sortAscLedger);
         totalElements = sortAscLedger.length;
-        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        assertTrue((totalElements >= 0 && totalElements <= 25));
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         BitsoOperation[] sortDescLedger = mBitso.getLedger("", "sort=desc");
-        assertEquals(sortDescLedger != null, true);
+        assertNotNull(sortDescLedger);
         totalElements = sortDescLedger.length;
-        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        assertTrue((totalElements >= 0 && totalElements <= 25));
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         BitsoOperation[] multipleQueryParameterLedger = mBitso.getLedger("", "sort=desc", "limit=15");
-        assertEquals(multipleQueryParameterLedger != null, true);
+        assertNotNull(multipleQueryParameterLedger);
         totalElements = multipleQueryParameterLedger.length;
-        assertEquals((totalElements >= 0 && totalElements <= 15), true);
+        assertTrue((totalElements >= 0 && totalElements <= 15));
     }
 
     @Test
@@ -333,31 +333,30 @@ public abstract class BitsoTest {
         // TODO:
         // This should return a collection of 25 elements, not working limit default value
         BitsoWithdrawal[] withdrawals = mBitso.getWithdrawals(null);
-        assertEquals(withdrawals != null, true);
+        assertNotNull(withdrawals);
         totalElements = withdrawals.length;
         totalElementsFirstCall = totalElements;
         // assertEquals((totalElements >= 0 && totalElements <= 25), true);
         for (BitsoWithdrawal bitsoWithdrawal : withdrawals) {
-            assertEquals(true, nullCheck(bitsoWithdrawal, BitsoWithdrawal.class));
+            assertTrue(nullCheck(bitsoWithdrawal, BitsoWithdrawal.class));
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         if (totalElementsFirstCall > 0) {
             BitsoWithdrawal bitsoWithdrawal = withdrawals[0];
             BitsoWithdrawal[] oneWithdrawal = mBitso
                     .getWithdrawals(new String[] { bitsoWithdrawal.getWithdrawalId() });
-            assertEquals(oneWithdrawal != null, true);
+            assertNotNull(oneWithdrawal);
             totalElements = oneWithdrawal.length;
-            assertEquals((totalElements == 1), true);
+            assertEquals(1, totalElements);
             for (BitsoWithdrawal currentWithdrawal : oneWithdrawal) {
-                assertEquals(nullCheck(currentWithdrawal, BitsoWithdrawal.class), true);
-                assertEquals(currentWithdrawal.getWithdrawalId().equals(bitsoWithdrawal.getWithdrawalId()),
-                        true);
+                assertTrue(nullCheck(currentWithdrawal, BitsoWithdrawal.class));
+                assertEquals(currentWithdrawal.getWithdrawalId(), bitsoWithdrawal.getWithdrawalId());
             }
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         if (totalElementsFirstCall >= 3) {
             BitsoWithdrawal bitsoWithdrawalFirst = withdrawals[0];
@@ -366,63 +365,63 @@ public abstract class BitsoTest {
             BitsoWithdrawal[] threeWithdrawals = mBitso.getWithdrawals(new String[] {
                     bitsoWithdrawalFirst.getWithdrawalId(), bitsoWithdrawalSecond.getWithdrawalId(),
                     bitsoWithdrawalThird.getWithdrawalId() });
-            assertEquals(threeWithdrawals != null, true);
+            assertNotNull(threeWithdrawals);
             totalElements = threeWithdrawals.length;
-            assertEquals((totalElements == 3), true);
+            assertEquals(3, totalElements);
             for (BitsoWithdrawal currentWithdrawal : threeWithdrawals) {
-                assertEquals(true, nullCheck(currentWithdrawal, BitsoWithdrawal.class));
+                assertTrue(nullCheck(currentWithdrawal, BitsoWithdrawal.class));
             }
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         BitsoWithdrawal[] withdrawalsBothParameters = mBitso.getWithdrawals(new String[] { "" }, "");
-        assertEquals(withdrawalsBothParameters == null, true);
+        assertNull(withdrawalsBothParameters);
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         // TODO:
         // This should return null due it's a negative value on limit
         BitsoWithdrawal[] negativeLimitwithdrawals = mBitso.getWithdrawals(null, "limit=-10");
-        assertEquals((negativeLimitwithdrawals != null || negativeLimitwithdrawals == null), true);
+        assertTrue(negativeLimitwithdrawals != null || negativeLimitwithdrawals == null);
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         // TODO:
         // This should return null due limit value is 0
         BitsoWithdrawal[] ceroLimitwithdrawals = mBitso.getWithdrawals(null, "limit=0");
-        assertEquals((ceroLimitwithdrawals != null || ceroLimitwithdrawals == null), true);
+        assertTrue(ceroLimitwithdrawals != null || ceroLimitwithdrawals == null);
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         BitsoWithdrawal[] lowestLimitwithdrawals = mBitso.getWithdrawals(null, "limit=1");
-        assertEquals(lowestLimitwithdrawals != null, true);
+        assertNotNull(lowestLimitwithdrawals);
         totalElements = lowestLimitwithdrawals.length;
-        assertEquals((totalElements >= 0 && totalElements <= 1), true);
+        assertTrue((totalElements >= 0 && totalElements <= 1));
         for (BitsoWithdrawal bitsoWithdrawal : lowestLimitwithdrawals) {
-            assertEquals(true, nullCheck(bitsoWithdrawal, BitsoWithdrawal.class));
+            assertTrue(nullCheck(bitsoWithdrawal, BitsoWithdrawal.class));
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         BitsoWithdrawal[] maxLimitwithdrawals = mBitso.getWithdrawals(null, "limit=100");
-        assertEquals(maxLimitwithdrawals != null, true);
+        assertNotNull(maxLimitwithdrawals);
         totalElements = maxLimitwithdrawals.length;
-        assertEquals((totalElements >= 0 && totalElements <= 100), true);
+        assertTrue((totalElements >= 0 && totalElements <= 100));
         for (BitsoWithdrawal bitsoWithdrawal : maxLimitwithdrawals) {
-            assertEquals(true, nullCheck(bitsoWithdrawal, BitsoWithdrawal.class));
+            assertTrue(nullCheck(bitsoWithdrawal, BitsoWithdrawal.class));
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         // TODO:
         // This should return null limit exceed max
         BitsoWithdrawal[] excedingLimitWithdrawals = mBitso.getWithdrawals(null, "limit=1000");
-        assertEquals((excedingLimitWithdrawals != null || excedingLimitWithdrawals == null), true);
+        assertTrue((excedingLimitWithdrawals != null || excedingLimitWithdrawals == null));
     }
 
     @Test
-    public void tesFundings() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
+    public void testFundings() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, BitsoServerException, InterruptedException {
         int totalElementsFirstCall = 0;
         int totalElements = 0;
@@ -430,29 +429,29 @@ public abstract class BitsoTest {
         // TODO:
         // This should return a collection of 25 elements, not working limit default value
         BitsoFunding[] fundings = mBitso.getFundings(null);
-        assertEquals(fundings != null, true);
+        assertNotNull(fundings);
         totalElements = fundings.length;
         totalElementsFirstCall = totalElements;
         // assertEquals((totalElements >= 0 && totalElements <= 25), true);
         for (BitsoFunding bitsoFunding : fundings) {
-            assertEquals(true, nullCheck(bitsoFunding, BitsoFunding.class));
+            assertTrue(nullCheck(bitsoFunding, BitsoFunding.class));
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         if (totalElementsFirstCall > 0) {
             BitsoFunding bitsoFunding = fundings[0];
             BitsoFunding[] oneFunding = mBitso.getFundings(new String[] { bitsoFunding.getFundingId() });
-            assertEquals(oneFunding != null, true);
+            assertNotNull(oneFunding);
             totalElements = oneFunding.length;
-            assertEquals((totalElements == 1), true);
+            assertEquals(1, totalElements);
             for (BitsoFunding currentFunding : oneFunding) {
-                assertEquals(true, nullCheck(currentFunding, BitsoFunding.class));
-                assertEquals(currentFunding.getFundingId().equals(bitsoFunding.getFundingId()), true);
+                assertTrue(nullCheck(currentFunding, BitsoFunding.class));
+                assertEquals(currentFunding.getFundingId(), bitsoFunding.getFundingId());
             }
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         if (totalElementsFirstCall >= 3) {
             BitsoFunding bitsoFundingFirst = fundings[0];
@@ -460,59 +459,59 @@ public abstract class BitsoTest {
             BitsoFunding bitsoFundingThird = fundings[2];
             BitsoFunding[] threeFundings = mBitso.getFundings(new String[] { bitsoFundingFirst.getFundingId(),
                     bitsoFundingSecond.getFundingId(), bitsoFundingThird.getFundingId() });
-            assertEquals(threeFundings != null, true);
+            assertNotNull(threeFundings);
             totalElements = threeFundings.length;
-            assertEquals((totalElements == 3), true);
+            assertEquals(3, totalElements);
             for (BitsoFunding bitsoFunding : threeFundings) {
-                assertEquals(true, nullCheck(bitsoFunding, BitsoFunding.class));
+                assertTrue(nullCheck(bitsoFunding, BitsoFunding.class));
             }
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         BitsoFunding[] fundingsBothParameters = mBitso.getFundings(new String[] { "" }, "");
-        assertEquals(fundingsBothParameters == null, true);
+        assertNull(fundingsBothParameters);
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         // TODO:
         // This should return null due it's a negative value on limit
         BitsoFunding[] negativeLimit = mBitso.getFundings(null, "limit=-10");
-        assertEquals((negativeLimit != null || negativeLimit == null), true);
+        assertTrue(negativeLimit != null || negativeLimit == null);
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         // TODO:
         // This should return null due limit value is 0
         BitsoFunding[] ceroLimit = mBitso.getFundings(null, "limit=0");
-        assertEquals((ceroLimit != null || ceroLimit == null), true);
+        assertTrue((ceroLimit != null || ceroLimit == null));
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         BitsoFunding[] lowestLimit = mBitso.getFundings(null, "limit=1");
-        assertEquals(lowestLimit != null, true);
+        assertNotNull(lowestLimit);
         totalElements = lowestLimit.length;
-        assertEquals((totalElements >= 0 && totalElements <= 1), true);
+        assertTrue((totalElements >= 0 && totalElements <= 1));
         for (BitsoFunding bitsoFunding : lowestLimit) {
-            assertEquals(true, nullCheck(bitsoFunding, BitsoFunding.class));
+            assertTrue(nullCheck(bitsoFunding, BitsoFunding.class));
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         BitsoFunding[] maxLimit = mBitso.getFundings(null, "limit=100");
-        assertEquals(maxLimit != null, true);
+        assertNotNull(maxLimit);
         totalElements = maxLimit.length;
-        assertEquals((totalElements >= 0 && totalElements <= 100), true);
+        assertTrue((totalElements >= 0 && totalElements <= 100));
         for (BitsoFunding bitsoFunding : maxLimit) {
-            assertEquals(true, nullCheck(bitsoFunding, BitsoFunding.class));
+            assertTrue(nullCheck(bitsoFunding, BitsoFunding.class));
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         // TODO:
         // This should return null limit exceed max
         BitsoFunding[] excedingLimit = mBitso.getFundings(null, "limit=1000");
-        assertEquals((excedingLimit != null || excedingLimit == null), true);
+        assertTrue((excedingLimit != null || excedingLimit == null));
     }
 
     @Test
@@ -524,29 +523,29 @@ public abstract class BitsoTest {
         // TODO:
         // This should return a collection of 25 elements, not working limit default value
         BitsoTrade[] fundings = mBitso.getUserTrades(null);
-        assertEquals(fundings != null, true);
+        assertNotNull(fundings);
         totalElements = fundings.length;
         totalElementsFirstCall = totalElements;
-        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        assertTrue((totalElements >= 0 && totalElements <= 25));
         for (BitsoTrade current : fundings) {
-            assertEquals(true, nullCheck(current, BitsoTrade.class));
+            assertTrue(nullCheck(current, BitsoTrade.class));
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         if (totalElementsFirstCall > 0) {
             BitsoTrade bitso = fundings[0];
             BitsoTrade[] one = mBitso.getUserTrades(new String[] { String.valueOf(bitso.getTid()) });
-            assertEquals(one != null, true);
+            assertNotNull(one);
             totalElements = one.length;
-            assertEquals((totalElements == 1), true);
+            assertTrue((totalElements == 1));
             for (BitsoTrade current : one) {
-                assertEquals(true, nullCheck(current, BitsoTrade.class));
-                assertEquals(String.valueOf(current.getTid()).equals(String.valueOf(bitso.getTid())), true);
+                assertTrue(nullCheck(current, BitsoTrade.class));
+                assertEquals(current.getTid(), bitso.getTid());
             }
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         if (totalElementsFirstCall >= 3) {
             BitsoTrade bitsoFirst = fundings[0];
@@ -554,59 +553,59 @@ public abstract class BitsoTest {
             BitsoTrade bitsoThird = fundings[2];
             BitsoTrade[] three = mBitso.getUserTrades(new String[] { String.valueOf(bitsoFirst.getTid()),
                     String.valueOf(bitsoSecond.getTid()), String.valueOf(bitsoThird.getTid()) });
-            assertEquals(three != null, true);
+            assertNotNull(three);
             totalElements = three.length;
-            assertEquals((totalElements == 3), true);
+            assertEquals(3, totalElements);
             for (BitsoTrade current : three) {
-                assertEquals(true, nullCheck(current, BitsoTrade.class));
+                assertTrue(nullCheck(current, BitsoTrade.class));
             }
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         BitsoTrade[] bothParameters = mBitso.getUserTrades(new String[] { "" }, "");
-        assertEquals(bothParameters == null, true);
+        assertNull(bothParameters);
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         // TODO:
         // This should return null due it's a negative value on limit
         BitsoTrade[] negativeLimit = mBitso.getUserTrades(null, "limit=-10");
-        assertEquals((negativeLimit != null || negativeLimit == null), true);
+        assertTrue((negativeLimit != null || negativeLimit == null));
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         // TODO:
         // This should return null due limit value is 0
         BitsoTrade[] ceroLimit = mBitso.getUserTrades(null, "limit=0");
-        assertEquals((ceroLimit != null || ceroLimit == null), true);
+        assertTrue((ceroLimit != null || ceroLimit == null));
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         BitsoTrade[] lowestLimit = mBitso.getUserTrades(null, "limit=1");
-        assertEquals(lowestLimit != null, true);
+        assertNotNull(lowestLimit);
         totalElements = lowestLimit.length;
-        assertEquals((totalElements >= 0 && totalElements <= 1), true);
+        assertTrue((totalElements >= 0 && totalElements <= 1));
         for (BitsoTrade current : lowestLimit) {
-            assertEquals(true, nullCheck(current, BitsoTrade.class));
+            assertTrue(nullCheck(current, BitsoTrade.class));
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         BitsoTrade[] maxLimit = mBitso.getUserTrades(null, "limit=100");
-        assertEquals(maxLimit != null, true);
+        assertNotNull(maxLimit);
         totalElements = maxLimit.length;
-        assertEquals((totalElements >= 0 && totalElements <= 100), true);
+        assertTrue((totalElements >= 0 && totalElements <= 100));
         for (BitsoTrade current : maxLimit) {
-            assertEquals(true, nullCheck(current, BitsoTrade.class));
+            assertTrue(nullCheck(current, BitsoTrade.class));
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         // TODO:
         // This should return null limit exceed max
         BitsoTrade[] excedingLimit = mBitso.getUserTrades(null, "limit=1000");
-        assertEquals((excedingLimit != null || excedingLimit == null), true);
+        assertTrue((excedingLimit != null || excedingLimit == null));
     }
 
     @Test
@@ -617,23 +616,23 @@ public abstract class BitsoTest {
         // TODO:
         // This should return a collection of 25 elements, not working limit default value
         BitsoTrade[] trades = mBitso.getUserTrades(null);
-        assertEquals(trades != null, true);
+        assertNotNull(trades);
         totalElements = trades.length;
-        assertEquals((totalElements >= 0 && totalElements <= 25), true);
+        assertTrue((totalElements >= 0 && totalElements <= 25));
         for (BitsoTrade current : trades) {
-            assertEquals(true, nullCheck(current, BitsoTrade.class));
+            assertTrue(nullCheck(current, BitsoTrade.class));
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         for (BitsoTrade trade : trades) {
             String order = trade.getOid();
             BitsoTrade[] orderTrades = mBitso.getOrderTrades(order);
-            assertEquals(orderTrades != null, true);
+            assertNotNull(orderTrades);
             for (BitsoTrade orderTrade : orderTrades) {
-                assertEquals(nullCheck(orderTrade, BitsoTrade.class), true);
+                assertTrue(nullCheck(orderTrade, BitsoTrade.class));
             }
-            Thread.sleep(5000);
+            Thread.sleep(SLEEP);
         }
     }
 
@@ -693,7 +692,7 @@ public abstract class BitsoTest {
 
             if (openOrders.length > 0) {
                 for (BitsoOrder bitsoOrder : openOrders) {
-                    assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
+                    assertTrue(nullCheck(bitsoOrder, BitsoOrder.class));
                 }
             }
         }
@@ -701,10 +700,10 @@ public abstract class BitsoTest {
         Thread.sleep(1000);
 
         BitsoOrder[] multiple = mBitso.lookupOrders(buyOrderId, sellOrderId);
-        assertEquals(multiple != null, true);
-        assertEquals(multiple.length, 2);
+        assertNotNull(multiple);
+        assertEquals(2, multiple.length);
         for (BitsoOrder bitsoOrder : multiple) {
-            assertEquals(true, nullCheck(bitsoOrder, BitsoOrder.class));
+            assertTrue(nullCheck(bitsoOrder, BitsoOrder.class));
         }
 
         Thread.sleep(1000);
@@ -713,15 +712,15 @@ public abstract class BitsoTest {
             String orderId = orders.get(i);
 
             BitsoOrder[] specificOrder = mBitso.lookupOrders(orderId);
-            assertEquals(specificOrder != null, true);
-            assertEquals(specificOrder.length, 1);
+            assertNotNull(specificOrder);
+            assertEquals(1, specificOrder.length);
 
             BitsoOrder bitsoOrder = specificOrder[0];
             if (bitsoOrder.getUnfilledAmount().doubleValue() > 0) {
                 canceledOrders = mBitso.cancelOrder(orderId);
 
-                assertEquals(canceledOrders != null, true);
-                assertEquals(canceledOrders.length, 1);
+                assertTrue(canceledOrders != null);
+                assertEquals(1, canceledOrders.length);
             }
         }
     }
@@ -730,33 +729,33 @@ public abstract class BitsoTest {
     public void testFundingDestination() throws JSONException, BitsoNullException, IOException,
             BitsoAPIException, BitsoPayloadException, BitsoServerException, InterruptedException {
         Map<String, String> btcFundingDestination = mBitso.fundingDestination("fund_currency=btc");
-        assertEquals(true, (btcFundingDestination != null));
-        assertEquals(true, (btcFundingDestination.containsKey("account_identifier_name")
-                && btcFundingDestination.containsKey("account_identifier")));
+        assertNotNull(btcFundingDestination);
+        assertTrue(btcFundingDestination.containsKey("account_identifier_name")
+                && btcFundingDestination.containsKey("account_identifier"));
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         Map<String, String> ethFundingDestination = mBitso.fundingDestination("fund_currency=eth");
-        assertEquals(true, (ethFundingDestination != null));
-        assertEquals(true, (ethFundingDestination.containsKey("account_identifier_name")
-                && ethFundingDestination.containsKey("account_identifier")));
+        assertNotNull(ethFundingDestination);
+        assertTrue(ethFundingDestination.containsKey("account_identifier_name")
+                && ethFundingDestination.containsKey("account_identifier"));
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
 
         Map<String, String> mxnFundingDestination = mBitso.fundingDestination("fund_currency=mxn");
-        assertEquals(true, (mxnFundingDestination != null));
-        assertEquals(true, (mxnFundingDestination.containsKey("account_identifier_name")
-                && mxnFundingDestination.containsKey("account_identifier")));
+        assertNotNull(mxnFundingDestination);
+        assertTrue(mxnFundingDestination.containsKey("account_identifier_name")
+                && mxnFundingDestination.containsKey("account_identifier"));
 
-        Thread.sleep(5000);
+        Thread.sleep(SLEEP);
     }
 
     @Test
     public void testGetBanks() throws JSONException, BitsoNullException, IOException, BitsoAPIException,
             BitsoPayloadException, BitsoServerException {
         Map<String, String> bitsoBanks = mBitso.getBanks();
-        assertEquals(true, (bitsoBanks != null));
-        assertEquals(false, bitsoBanks.isEmpty());
+        assertNotNull(bitsoBanks);
+        assertFalse(bitsoBanks.isEmpty());
     }
 
     public static boolean nullCheck(Object object, Class<?> genericType) {
@@ -770,11 +769,7 @@ public abstract class BitsoTest {
                         System.out.println(methodName + " returns a null object");
                         return false;
                     }
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
+                } catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
                     e.printStackTrace();
                 }
             }
