@@ -23,7 +23,7 @@ Add the dependency
 <dependency>
     <groupId>com.github.bitsoex</groupId>
     <artifactId>bitso-java</artifactId>
-    <version>v4.0.0</version>
+    <version>4.1.0</version>
 </dependency>
 ```
 
@@ -45,7 +45,7 @@ On Android Studio find build.gradle file Gradle Scripts -> build.gradle(Module: 
 dependencies {
     implementation 'com.android.support:appcompat-v7:24.2.1'
     ...
-    implementation 'com.github.bitsoex:bitso-java:v4.0.0'
+    implementation 'com.github.bitsoex:bitso-java:4.1.0'
 }
 ```
 
