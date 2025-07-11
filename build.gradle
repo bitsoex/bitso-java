@@ -34,11 +34,17 @@ dependencies {
 
 test.useJUnitPlatform()
 
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
 // To specify a license in the pom:
 publishing {
     publications {
         maven(MavenPublication) {
             pom {
+                name = 'Bitso REST API Client'
                 licenses {
                     license {
                         name = 'The MIT License (MIT)'
@@ -47,6 +53,7 @@ publishing {
                     }
                 }
             }
+            from components.java
         }
     }
 }
