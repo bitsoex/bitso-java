@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "api-guidelines": {
+      "url": "https://api-mcp.bitso.io/sse"
+    }
+  }
+}

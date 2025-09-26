@@ -1,0 +1,7 @@
+---
+applyTo: "**/*"
+description: Java Run Build After Changes
+---
+
+## Run build when changing java code
+After updating java or groovy code you must run a test the application running `./gradlew test`, if any problems are found, try to fix them.
