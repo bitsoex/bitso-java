@@ -1,9 +1,7 @@
 ---
 description: Java Services Standards
 alwaysApply: false
-globs:
-  - "bitso-services/**/*.java"
-  - "bitso-libs/**/*.java"
+globs: bitso-services/**/*.java,bitso-libs/**/*.java
 tags:
   - java
 ---
