@@ -9,6 +9,11 @@ This repository uses AI-assisted development with specific coding guidelines and
 **Description:** Never work directly on main. Always verify your branch and create a new one if needed before making changes.
 **Scope:** Always applies
 
+### Coderabbit Setup
+**File:** [`.claude/coderabbit-setup.md`](.claude/coderabbit-setup.md)
+**Description:** Coderabbit Setup
+**Scope:** Always applies
+
 ### General AI Coding Principles
 **File:** [`.claude/general-principles.md`](.claude/general-principles.md)
 **Description:** General AI Coding Principles
@@ -101,6 +106,6 @@ These rules are automatically applied when using Claude AI assistant in this rep
 
 ## Rule Categories
 
-- **Java**: java specific coding guidelines (18 rules)
+- **Java**: java specific coding guidelines (19 rules)
 
 ---
