@@ -1,7 +1,22 @@
 {
   "mcpServers": {
     "api-guidelines": {
+      "type": "http",
       "url": "https://api-mcp.bitso.io/sse"
+    },
+    "sonarqube": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "SONARQUBE_TOKEN=${env:SONARQUBE_TOKEN}",
+        "-e",
+        "SONARQUBE_URL=${env:SONARQUBE_URL}",
+        "mcp/sonarqube"
+      ],
+      "type": "stdio"
     }
   }
 }

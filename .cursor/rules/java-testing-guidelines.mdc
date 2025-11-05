@@ -13,9 +13,10 @@ This document outlines the guidelines for writing tests in this project.
 
 ## Framework and Naming
 
-*   Tests are written using the **Spock Framework** and **Groovy**.
-*   Test files must follow the naming pattern: `<ClassName>Spec.groovy`.
-*   Tests should follow this structure:
+- Tests are written using the **Spock Framework** and **Groovy**.
+- Test files must follow the naming pattern: `<ClassName>Spec.groovy`.
+- Tests should follow this structure:
+
 ```groovy
    def "should do Y when X"() {
         given:
@@ -29,6 +30,7 @@ This document outlines the guidelines for writing tests in this project.
 ```
 
 ## Mocking
+
 To mock dependencies we use Spock mocks. They are done in the following way:
 
 For Spring Boot integration tests, use `@SpringBean` to inject the mock:
@@ -74,21 +76,22 @@ class SomeSpec extends Specification {
 
 ## Persistence Testing
 
-*   When testing persistence layers (e.g., repositories), always use a **real database instance**.
-*   Use **Testcontainers** with the **PostgreSQL** module to manage the database lifecycle.
-*   Utilize Spring Boot's `@ServiceConnection` annotation on the `PostgreSQLContainer` bean definition within your test configuration. This annotation automatically configures the application's `DataSource` to connect to the Testcontainers database instance, eliminating the need for manual configuration in `application.yml` or `application.yaml` for tests.
+- When testing persistence layers (e.g., repositories), always use a **real database instance**.
+- Use **Testcontainers** with the **PostgreSQL** module to manage the database lifecycle.
+- Utilize Spring Boot's `@ServiceConnection` annotation on the `PostgreSQLContainer` bean definition within your test configuration. This annotation automatically configures the application's `DataSource` to connect to the Testcontainers database instance, eliminating the need for manual configuration in `application.yml` or `application.yaml` for tests.
 
 ### Flyway for Test Schema Management
 
-*   **Dependencies:** Ensure you have the necessary Flyway dependencies in your `build.gradle` (typically `flyway-core` and `flyway-database-postgresql`).
+- **Dependencies:** Ensure you have the necessary Flyway dependencies in your `build.gradle` (typically `flyway-core` and `flyway-database-postgresql`).
 
-*   **Configuration:** Configure Flyway in your test `application.yml` (usually located in `src/test/resources/application.yml`):
-    *   Enable Flyway: `spring.flyway.enabled: true`
-    *   Specify migration locations using the `FLYWAY_MIGRATIONS_DIR` environment variable: `spring.flyway.locations: filesystem:\${FLYWAY_MIGRATIONS_DIR}/db/migrations` (adjust the sub-path `/db/migrations` as needed).
-    *   Consider setting `spring.flyway.postgresql.transactional-lock: false` if needed for specific PostgreSQL test scenarios.
+- **Configuration:** Configure Flyway in your test `application.yml` (usually located in `src/test/resources/application.yml`):
+  - Enable Flyway: `spring.flyway.enabled: true`
+  - Specify migration locations using the `FLYWAY_MIGRATIONS_DIR` environment variable: `spring.flyway.locations: filesystem:\${FLYWAY_MIGRATIONS_DIR}/db/migrations` (adjust the sub-path `/db/migrations` as needed).
+  - Consider setting `spring.flyway.postgresql.transactional-lock: false` if needed for specific PostgreSQL test scenarios.
 
-*   **Environment Variable:** The `FLYWAY_MIGRATIONS_DIR` environment variable must be set when running tests. This variable should point to the root directory containing your Flyway migration scripts (e.g., a top-level `flyway` directory in your project). You can typically set this in your `build.gradle` within the `test` task configuration:
-    ```gradle
+- **Environment Variable:** The `FLYWAY_MIGRATIONS_DIR` environment variable must be set when running tests. This variable should point to the root directory containing your Flyway migration scripts (e.g., a top-level `flyway` directory in your project). You can typically set this in your `build.gradle` within the `test` task configuration:
+
+    ```groovy
     test {
         useJUnitPlatform()
         doFirst {
@@ -98,20 +101,21 @@ class SomeSpec extends Specification {
         // ... other test configurations
     }
     ```
-*   **Execution:** When tests run with the Spring context loaded (`@SpringBootTest`), Flyway will automatically execute the migrations against the Testcontainers database instance managed by `@ServiceConnection` before the tests start.
+
+- **Execution:** When tests run with the Spring context loaded (`@SpringBootTest`), Flyway will automatically execute the migrations against the Testcontainers database instance managed by `@ServiceConnection` before the tests start.
 
 ## gRPC Testing
 
 ### Server Testing
 
-*   Utilize the `grpc-spring-boot-starter` to spin up a real gRPC server instance for integration tests.
-*   Consider using **in-process gRPC** (`InProcessServerBuilder`) for faster and more lightweight server testing when appropriate.
+- Utilize the `grpc-spring-boot-starter` to spin up a real gRPC server instance for integration tests.
+- Consider using **in-process gRPC** (`InProcessServerBuilder`) for faster and more lightweight server testing when appropriate.
 
 ### Client Testing
 
-*   When testing gRPC clients, always use an **in-process gRPC server** (`InProcessServerBuilder`).
-*   Create and start the in-process server within your test setup.
-*   Configure your gRPC client bean to connect to this in-process server during the test run.
+- When testing gRPC clients, always use an **in-process gRPC server** (`InProcessServerBuilder`).
+- Create and start the in-process server within your test setup.
+- Configure your gRPC client bean to connect to this in-process server during the test run.
 
 ## Context Management
 
@@ -123,10 +127,10 @@ Create dedicated `@Configuration` classes for different test scopes (e.g., contr
 
 **Common Annotations and Practices:**
 
-*   `@Configuration`: Marks the class as a source of bean definitions.
-*   `@EnableAutoConfiguration`: Enables Spring Boot's auto-configuration mechanism.
-    *   Optionally use `exclude` to disable specific auto-configurations if needed (e.g., `DataSourceAutoConfiguration` for tests that don't require a database or manage it differently).
-*   **Integration Test Specific Beans**: For integration tests, include beans for test infrastructure like `DSLContext` (for jOOQ) or Testcontainers (e.g., `PostgreSQLContainer` with `@ServiceConnection`).
+- `@Configuration`: Marks the class as a source of bean definitions.
+- `@EnableAutoConfiguration`: Enables Spring Boot's auto-configuration mechanism.
+  - Optionally use `exclude` to disable specific auto-configurations if needed (e.g., `DataSourceAutoConfiguration` for tests that don't require a database or manage it differently).
+- **Integration Test Specific Beans**: For integration tests, include beans for test infrastructure like `DSLContext` (for jOOQ) or Testcontainers (e.g., `PostgreSQLContainer` with `@ServiceConnection`).
 
 **Example Structure for a Controller Test Configuration:**
 
@@ -224,11 +228,11 @@ Create abstract base classes for your Spock specifications. These base classes a
 
 **Common Annotations and Practices:**
 
-*   `@SpringBootTest`: Bootstraps the Spring context for the test.
-    *   Use `webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT` for controller tests that require a running web server.
-*   `@ContextConfiguration(classes = YourTestConfiguration.class)`: Specifies which `@Configuration` class to use for loading the context.
-*   `@Testcontainers`: If using Testcontainers, include this annotation at the class level of your base integration test or individual test specification.
-*   `@SpringBean`: Injects Spring-managed beans (or mocks defined with `@SpringBean`) into the test specification.
+- `@SpringBootTest`: Bootstraps the Spring context for the test.
+  - Use `webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT` for controller tests that require a running web server.
+- `@ContextConfiguration(classes = YourTestConfiguration.class)`: Specifies which `@Configuration` class to use for loading the context.
+- `@Testcontainers`: If using Testcontainers, include this annotation at the class level of your base integration test or individual test specification.
+- `@SpringBean`: Injects Spring-managed beans (or mocks defined with `@SpringBean`) into the test specification.
 
 **Example Base Controller Test:**
 

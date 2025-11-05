@@ -5,17 +5,21 @@ tags:
   - java
 ---
 
+# Java Protobuf Linting
+
 When creating protobuf, remember to run the linting process afterwards. If any linting errors are found, try to fix them based on the output the tool gave.
 
 Protobuf and gRPC linting in Bitso are done using two tools:
 
-# Linting
+## Linting
+
 We use two linters for protobuf and gRPC.
 
 ## Buf
 
 These are the rules for the `buf lint`, in case the repository still don't have the file, make sure to create it still doesn't exist. There are some references to paths in the configuration, you will need to update it accordingly.
-```
+
+```yaml
 version: v2
 lint:
   use:
@@ -68,9 +72,10 @@ Remember to take in to consideration the rules when creating protobuf files.
 ### Custom rules
 
 #### RPC minimal documentation
+
 Validates the minimal documentation of a `rpc`. The expected format of the documentation of a RPC is:
 
-```
+```java
   /**
     Create a withdrawal.
     This is an idempotent API, and clients must provide an idempotency key to ensure that the operation is not executed more than once.
@@ -86,10 +91,11 @@ Validates the minimal documentation of a `rpc`. The expected format of the docum
     | MY_SERVICE_INVALID_FIELD       | FAILED_PRECONDITION | Some payload field provided is invalid | No        |
   */
 ```
+
 The validation uses the following regex:
 
- ```
- (?s)^\s*(?P<description>.*?)\s*
+```regex
+(?s)^\s*(?P<description>.*?)\s*
 \s*Possible error codes for this API are:\s*
 \|\s*Error Code\s*\|\s*gRPC Status Code\s*\|\s*Description\s*\|\s*Retryable\s*\|
 (?:\s*\|[-\s]*\|[-\s]*\|[-\s]*\|[-\s]*\|)?
@@ -99,6 +105,7 @@ The validation uses the following regex:
 More information about the format of the documentation can be found @here
 
 #### No Failure Usage
+
 Rule to validate that failure is not used in responses of `rpc` to transit errors.
 
 The following situation will be invalid:
@@ -126,7 +133,6 @@ For more information about how to handle errors in gRPC, check @here
 ##### Nested Payload in Requests and Responses
 
 This rule evaluates that all requests and responses messages have a nested `Payload` message which has the actual payload of the endpoint.
-
 
 ## grpc-java-classpath-linter
 
@@ -184,17 +190,18 @@ With the plugin applied, it will create two tasks:
 - `lintProtobufClasspath` for all modules that have `.proto` files
 
 ### Configurations
+
 The plugin has a couple of properties that are enabled and disabled with environment variables, they are:
 
 - `IS_CI`: indicates wheter is CI environment or not, when `true` the task generates output files (`protobuf-classpath-linter-output.json` and `grpc-classpath-linter-output.json`)
 - `IS_DRY_RUN`: indicates wheter is a dry run or not, when it is a dry run, no errors will be emitted and the tasks will only log the problems found.
-
 
 ### The rules
 
 Each of the tasks created by the plugin have a set of rules that are applied to the classpath of the Java application, and they are documented below.
 
 #### `lintGrpcClasspath`
+
 This task is applied only in services and jobs modules. It checks the classpath of the module and applies the following rules:
 
 ##### `GRPC_STARTER_IN_PROJECTS_WITH_GRPC`
@@ -235,8 +242,8 @@ This rule checks that all services that have the `grpc-server-spring-boot-starte
 
 > **_NOTE:_** In case you are being warned about this rule and you don't use gRPC server in your service, you will need to clean up your dependencies, removing `grpc-server-spring-boot-starter`.
 
-
 #### `lintProtobufClasspath`
+
 This task is applied to all modules that have `.proto` files. It checks the classpath of the module and applies the following rules:
 
 ##### `PROTOBUF_LIBRARIES_SHOULDNT_HAVE_BUILDED_CLASSES`

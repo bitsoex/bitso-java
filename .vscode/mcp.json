@@ -1,8 +1,36 @@
 {
   "servers": {
     "api-guidelines": {
-      "type": "http",
-      "url": "https://api-mcp.bitso.io/sse"
+      "url": "https://api-mcp.bitso.io/sse",
+      "type": "http"
+    },
+    "sonarqube": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "SONARQUBE_TOKEN",
+        "-e",
+        "SONARQUBE_URL",
+        "mcp/sonarqube"
+      ],
+      "type": "stdio"
     }
-  }
+  },
+  "inputs": [
+    {
+      "id": "SONARQUBE_TOKEN",
+      "type": "promptString",
+      "description": "SonarQube Server User Token",
+      "password": true
+    },
+    {
+      "id": "SONARQUBE_URL",
+      "type": "promptString",
+      "description": "SonarQube Server URL",
+      "password": false
+    }
+  ]
 }

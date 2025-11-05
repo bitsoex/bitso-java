@@ -11,14 +11,16 @@ tags:
 <!-- https://bitsomx.atlassian.net/wiki/spaces/RET/pages/4974247989/Java+services+standard -->
 
 ## Tech Stack
+
 - Java: Last LTS version (Java 21 until April 2025)
 - Gradle: 8.14 (compatible with Java 21)
 - Spring Boot: 3.5.4 for all new services
 - Database Access: JOOQ for accessing database
 - Databases: Postgres and Redis
 - Inter-service Communication: gRPC
-- Use MapStruct for mapping objects. MapStruct mappers should have a `INSTANCE` variable like this one `public static MyConverter INSTANCE = Mappers.getMapper(MyConverter.class)`, no component model needed. Mappers will be abstract classes with public abstract methods. The default configuration for a mapper is: 
-```
+- Use MapStruct for mapping objects. MapStruct mappers should have a `INSTANCE` variable like this one `public static MyConverter INSTANCE = Mappers.getMapper(MyConverter.class)`, no component model needed. Mappers will be abstract classes with public abstract methods. The default configuration for a mapper is:
+
+```java
 @Mapper(
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_DEFAULT,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
@@ -28,9 +30,10 @@ tags:
 ```
 
 ## Project Organization
+
 Projects should be organized with domain-based modules:
 
-```
+```text
 root-project/
 ├── build.gradle
 ├── settings.gradle
@@ -93,12 +96,13 @@ root-project/
 - Data access should be in the `persistence` package using JOOQ
 
 ## Dependency Management
+
 - Use Spring Dependency Management plugin for dependency management
 - All libraries must be placed in `libs.versions.toml`
 - Only define version variables for dependencies that have multiple packages with repeteated versions
 - For `bitso-libs` modules, disable bootJar generation:
 
-```gradle
+```groovy
 bootJar {
     enabled = false
 }
@@ -126,7 +130,7 @@ managed-by-spring-library = { module = "org.springframework:library" } # Version
 
 Spring Dependency Management setup:
 
-```gradle
+```groovy
 plugins {
     alias libs.plugins.spring.boot
     alias libs.plugins.spring.dependency.management
@@ -134,9 +138,11 @@ plugins {
 ```
 
 ## Lombok configuration
+
 To use lombok, add the io.freefair.lombok plugin to your configuration. It injects the latest lombok as a dependency in the proper places, so you don't have to add that dependency yourself:
 
 `libs.versions.toml`
+
 ```toml
 [plugins]
 lombok = { id = "io.freefair.lombok", version = "8.14" }
@@ -144,7 +150,7 @@ lombok = { id = "io.freefair.lombok", version = "8.14" }
 
 And then in your modules:
 
-```gradle
+```groovy
 plugins {
     alias libs.plugins.lombok
 }
@@ -153,11 +159,12 @@ plugins {
 If you are using mapstruct, then you also need the lombok-mapstruct binding library. The lombok plugin detects other annotation processors and makes sure that lombok runs first so that the others can see its modifications.
 To add the lombok-mapstruct binding library:
 
-```gradle
+```groovy
     annotationProcessor libs.lombok.mapstruct.binding
 ```
 
 `libs.versions.toml`
+
 ```toml
 lombok-mapstruct-binding = { module = 'org.projectlombok:lombok-mapstruct-binding', version = '0.2.0' }
 ```

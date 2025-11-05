@@ -1,0 +1,193 @@
+# Java Gradle Commands &amp; Debugging
+
+**Applies to:** All files
+
+# Java Gradle Commands & Debugging
+
+## General Principles
+
+### Core Philosophy: Minimize Context Waste
+
+Always filter Gradle output to show **failures only**, not success messages. This approach
+preserves token budget and keeps output focused on actionable information. Success messages
+provide no value and waste context.
+
+**Implementation**: Use `2>&1 | grep "FAILED"` or similar patterns to capture only
+errors, failures, and warnings.
+
+### Workflow Best Practices
+
+1. **Fail fast with targeted execution**: Run specific tests or modules before full builds
+   to identify issues quickly
+2. **Progressive verbosity**: Start with filtered output, add `--stacktrace` if needed,
+   then `-d` for deep debugging
+3. **Module isolation**: Use `:module:task` syntax to work on specific components
+   without rebuilding everything
+4. **Verify before running**: Check task availability with `./gradlew tasks --all | grep "task-name"`
+5. **Skip unnecessary work**: Use `-x test` or similar flags when tests aren't needed
+   for the current task
+
+## Command Categories & Usage Patterns
+
+### Build Operations
+
+Build commands form the foundation of Gradle workflows.
+
+```bash
+# Build all modules (show failures only)
+./gradlew build 2>&1 | grep -E "FAILED|Error|Exception|BUILD FAILED" || echo "Build successful"
+
+# Build specific module (faster, targeted)
+./gradlew :module:build 2>&1 | grep -E "FAILED|Error" || echo "Build successful"
+```
+
+### Testing Commands
+
+Run specific tests before full test suites to fail fast.
+
+```bash
+# Run all tests (failures only)
+./gradlew test 2>&1 | grep -E "FAILED|Error|Exception" || echo "All tests passed"
+
+# Run specific test class
+./gradlew test --tests "com.bitso.MyTest" 2>&1 | grep -E "FAILED|Error" || echo "Test passed"
+
+# Run specific test method
+./gradlew test --tests "com.bitso.MyTest.testMethod" 2>&1 | grep -E "FAILED" || echo "Test passed"
+```
+
+### Dependency Management
+
+Verify project stability by identifying conflicts and outdated versions.
+
+```bash
+# Check for conflicts (failures only)
+./gradlew :module:dependencyInsight --dependency org.springframework 2>&1 | grep -E "conflicts|ERROR" || echo "No conflicts"
+
+# Show outdated dependencies
+./gradlew dependencyUpdates 2>&1 | grep -E "can be upgraded"
+```
+
+### Code Generation
+
+Code generation must complete successfully before builds can proceed.
+
+```bash
+# Generate protobuf code (errors only)
+./gradlew generateProto 2>&1 | grep -i error || echo "Proto generation successful"
+
+# Generate JOOQ code (errors only)
+./gradlew jooqCodegen 2>&1 | grep -i error || echo "JOOQ generation successful"
+```
+
+### Quality Analysis & Coverage
+
+Run quality checks and verify coverage thresholds before commits.
+
+```bash
+# Check coverage meets requirements (violations only)
+./gradlew check 2>&1 | grep -E "FAILED|coverage" || echo "Coverage verified"
+
+# Run SonarQube analysis (issues only)
+./gradlew sonarqube 2>&1 | grep -E "ERROR|WARN|Quality Gate" || echo "SonarQube scan complete"
+```
+
+## Debugging & Troubleshooting
+
+### Common Problems & Solutions
+
+When issues occur, apply progressive verbosity: start with filtered output, add
+`--stacktrace` if needed, then use `-d` for detailed debugging.
+
+#### Problem: Build Fails with Unclear Error
+
+**Solution**:
+
+```bash
+# Show full error with context (10 lines after error)
+./gradlew build 2>&1 | grep -A 10 "ERROR\|FAILED"
+
+# With stack trace for deeper analysis
+./gradlew build --stacktrace 2>&1 | tail -50
+
+# With debug logging for detailed trace
+./gradlew build -d 2>&1 | grep -E "ERROR|WARNING|DEBUG" | tail -30
+```
+
+#### Problem: Tests Fail in CI but Pass Locally
+
+**Solution**:
+
+```bash
+# Run with info logging to see test execution details
+./gradlew test --info 2>&1 | grep -E "FAILED|Error" -A 5
+
+# Clean and rebuild to eliminate cache-related issues
+./gradlew clean test --rerun-tasks 2>&1 | grep -E "FAILED|Error"
+
+# Run specific test with verbose output to isolate the failure
+./gradlew test --tests "com.bitso.MyTest" -i 2>&1 | grep -E "FAILED\|Executing\|Error"
+```
+
+#### Problem: Dependency Conflict
+
+**Solution**:
+
+```bash
+# Find conflicting versions (shows resolution chain)
+./gradlew :module:dependencyInsight --dependency commons-lang3 2>&1
+
+# Show full tree for specific module (helps visualize hierarchy)
+./gradlew :module:dependencies 2>&1 | grep -A 5 "commons-lang3"
+```
+
+#### Problem: Protocol Buffers or JOOQ Generation Fails
+
+**Solution**:
+
+```bash
+# Show generation errors with context
+./gradlew generateProto --stacktrace 2>&1 | grep -E "ERROR|Exception" -A 10
+
+# Check if generated files exist and are recent
+ls -la src/main/java/generated/ 2>&1 | head -20
+
+# Regenerate from scratch to eliminate stale artifacts
+./gradlew clean generateProto 2>&1 | grep -E "ERROR"
+```
+
+#### Problem: JaCoCo Coverage Report Missing
+
+**Solution**:
+
+```bash
+# Verify JaCoCo tasks are available
+./gradlew tasks --all 2>&1 | grep -i jacoco
+
+# Check if coverage exec file was generated
+ls build/jacoco/test.exec 2>&1
+
+# Regenerate reports with explicit test run
+./gradlew clean test jacocoTestReport 2>&1 | grep -E "FAILED|ERROR"
+```
+
+## Quick Reference Guide
+
+| Task | Command |
+|------|---------|
+| Build | `./gradlew build 2>&1 \| grep -E "FAILED"` |
+| Test | `./gradlew test 2>&1 \| grep -E "FAILED"` |
+| Proto Gen | `./gradlew generateProto 2>&1 \| grep -i error` |
+| JOOQ Gen | `./gradlew jooqCodegen 2>&1 \| grep -i error` |
+| Coverage | `./gradlew check 2>&1 \| grep -E "coverage"` |
+| Deps Check | `./gradlew dependencyInsight --dependency org.x 2>&1` |
+
+## Related Rules
+
+- **Gradle Build Configuration**: [java-gradle-best-practices.md](java-gradle-best-practices.md)
+- **Version & Dependency Management**: [java-versions-and-dependencies.md](java-versions-and-dependencies.md)
+- **JaCoCo Code Coverage**: [java-jacoco-coverage.md](java-jacoco-coverage.md)
+
+---
+*This rule is part of the java category.*
+*Source: java/rules/java-gradle-commands.md*

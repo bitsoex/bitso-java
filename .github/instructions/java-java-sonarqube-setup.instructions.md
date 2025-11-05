@@ -1,0 +1,91 @@
+---
+applyTo: "**/*.java"
+description: Java SonarQube Setup Guide
+---
+
+# Java SonarQube Setup Guide
+
+Quick setup for using SonarQube with AI assistants through MCP.
+
+## Setup Steps
+
+### 1. Generate SonarQube Token
+
+1. Visit: <https://sonarqube.bitso.io/account/security>
+2. Click "Generate Token"
+3. **Type**: Select "User Token" (required for MCP tools)
+4. **Name**: `mcp-integration` or similar
+5. Copy token (shown only once)
+
+### 2. Set Environment Variables
+
+Add to your shell profile (`.zshrc` or `.bashrc`):
+
+```bash
+export SONARQUBE_TOKEN="your_token_here"
+export SONARQUBE_URL="https://sonarqube.bitso.io"
+```
+
+Reload:
+
+```bash
+source ~/.zshrc
+```
+
+### 3. Verify
+
+Run the readiness check:
+
+```bash
+./scripts/check-sonarqube-readiness.sh
+```
+
+Expected output:
+
+```text
+✓ SONARQUBE_TOKEN is set
+✓ SONARQUBE_URL is set
+✓ Token authentication successful
+✓ User Token confirmed
+✅ SonarQube is ready for MCP integration!
+```
+
+## Using SonarQube
+
+The MCP server is configured centrally in `global/mcp/mcp.json`. Just use natural language:
+
+- "Find HIGH severity issues in project-name"
+- "Analyze this Java code for SonarQube issues"
+- "Show me details about rule java:S1128"
+- "What's the quality gate status for project-name?"
+
+**Full tool reference**: See `java/commands/fix-sonarqube-issues.md`
+
+## Troubleshooting
+
+### Authentication fails
+
+Generate a new **User Token** (not Project Analysis Token) at:
+<https://sonarqube.bitso.io/account/security>
+
+### MCP tools not available
+
+1. Check Docker is running: `docker ps`
+2. Verify env vars: `./scripts/check-sonarqube-readiness.sh`
+3. Restart your AI assistant
+
+### Can't find project
+
+Ask the AI: "List all my SonarQube projects"
+
+## Security
+
+- ✗ Never commit `SONARQUBE_TOKEN` to git
+- ✓ Store only in shell profile
+- ✓ Rotate tokens every 90 days
+
+## Related
+
+- **MCP Tools**: `java/commands/fix-sonarqube-issues.md`
+- **MCP Config**: `global/mcp/mcp.json`
+- **SonarQube**: <https://sonarqube.bitso.io>

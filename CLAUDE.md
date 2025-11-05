@@ -4,9 +4,24 @@ This repository uses AI-assisted development with specific coding guidelines and
 
 ## Available Rules
 
+### Never work directly on main. Always verify your branch and create a new one if needed before making changes.
+**File:** [`.claude/branch-protection-workflow.md`](.claude/branch-protection-workflow.md)
+**Description:** Never work directly on main. Always verify your branch and create a new one if needed before making changes.
+**Scope:** Always applies
+
 ### General AI Coding Principles
 **File:** [`.claude/general-principles.md`](.claude/general-principles.md)
 **Description:** General AI Coding Principles
+**Scope:** Always applies
+
+### Gradle configuration standards, multi-module setup, build patterns, and common commands for Java projects
+**File:** [`.claude/java-gradle-best-practices.md`](.claude/java-gradle-best-practices.md)
+**Description:** Gradle configuration standards, multi-module setup, build patterns, and common commands for Java projects
+**Scope:** gradle/**, **/build.gradle, **/settings.gradle, **/gradle.properties
+
+### Java Gradle Commands &amp; Debugging
+**File:** [`.claude/java-gradle-commands.md`](.claude/java-gradle-commands.md)
+**Description:** Java Gradle Commands &amp; Debugging
 **Scope:** Always applies
 
 ### Java GRPC Resilience
@@ -17,6 +32,11 @@ This repository uses AI-assisted development with specific coding guidelines and
 ### Java GRPC Services
 **File:** [`.claude/java-grpc-services.md`](.claude/java-grpc-services.md)
 **Description:** Java GRPC Services
+**Scope:** Always applies
+
+### JaCoCo plugin setup, troubleshooting, and best practices for accurate code coverage reporting
+**File:** [`.claude/java-jacoco-coverage.md`](.claude/java-jacoco-coverage.md)
+**Description:** JaCoCo plugin setup, troubleshooting, and best practices for accurate code coverage reporting
 **Scope:** Always applies
 
 ### Java Jooq
@@ -49,6 +69,16 @@ This repository uses AI-assisted development with specific coding guidelines and
 **Description:** Java Services Standards
 **Scope:** bitso-services/**/*.java, bitso-libs/**/*.java
 
+### SonarQube MCP Tools Reference
+**File:** [`.claude/java-sonarqube-mcp.md`](.claude/java-sonarqube-mcp.md)
+**Description:** SonarQube MCP Tools Reference
+**Scope:** **/*.java
+
+### Java SonarQube Setup Guide
+**File:** [`.claude/java-sonarqube-setup.md`](.claude/java-sonarqube-setup.md)
+**Description:** Java SonarQube Setup Guide
+**Scope:** **/*.java
+
 ### Java Structured Logs
 **File:** [`.claude/java-structured-logs.md`](.claude/java-structured-logs.md)
 **Description:** Java Structured Logs
@@ -59,6 +89,11 @@ This repository uses AI-assisted development with specific coding guidelines and
 **Description:** Java Testing Guidelines
 **Scope:** Always applies
 
+### Version catalog strategy, dependency management, BOMs, and version constraints for Java projects
+**File:** [`.claude/java-versions-and-dependencies.md`](.claude/java-versions-and-dependencies.md)
+**Description:** Version catalog strategy, dependency management, BOMs, and version constraints for Java projects
+**Scope:** gradle/libs.versions.toml, build.gradle, settings.gradle
+
 
 ## Usage
 
@@ -66,6 +101,6 @@ These rules are automatically applied when using Claude AI assistant in this rep
 
 ## Rule Categories
 
-- **Java**: java specific coding guidelines (11 rules)
+- **Java**: java specific coding guidelines (18 rules)
 
 ---

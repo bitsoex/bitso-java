@@ -5,18 +5,21 @@
 # REST API Guidelines (Spring Service)
 
 ## API Guidelines
-Follow Bitso API Guidelines when developing public facing APIs. Use the api-guidelines MCP server to get the latest guidelines.
+
+Follow Bitso API Guidelines when developing public-facing APIs. Use the api-guidelines MCP server to get the latest guidelines.
 
 ## Authentication
 
 This rule outlines the standard procedure for integrating Bitso authentication into Spring-based REST services.
 
-1.  **Dependency**: Add the `com.bitso:api-base-spring-webapi` library to your `build.gradle`. Check the [latest version here](mdc:https:/github.com/bitsoex/artifacts/packages/1866196).
-    ```gradle
+1. **Dependency**: Add the `com.bitso:api-base-spring-webapi` library to your `build.gradle`. Check the [latest version here](https://github.com/bitsoex/artifacts/packages/1866196).
+
+    ```groovy
     implementation libs.bitso.api.base.spring.webapi
     ```
 
-2.  **Configuration (Recommended: Spring gRPC)**: Configure the gRPC client in `application.yml`:
+2. **Configuration (Recommended: Spring gRPC)**: Configure the gRPC client in `application.yml`:
+
     ```yaml
     grpc:
       client:
@@ -24,7 +27,9 @@ This rule outlines the standard procedure for integrating Bitso authentication i
           address: dns:/${USER_SECURITY_HOST:localhost}:${GRPC_PORT:8201}
           negotiation-type: PLAINTEXT
     ```
+
     Define the `AuthenticationService` bean:
+
     ```java
     @Configuration
     public class UserSecurityContextConfiguration {
@@ -38,9 +43,11 @@ This rule outlines the standard procedure for integrating Bitso authentication i
         }
     }
     ```
-    *Reference: [user-management service](mdc:https:/github.com/bitsoex/user-management)*
 
-3.  **Component Scan**: Ensure your main application class scans Bitso components:
+    *Reference: [user-management service](https://github.com/bitsoex/user-management)*
+
+3. **Component Scan**: Ensure your main application class scans Bitso components:
+
     ```java
     @SpringBootApplication
     @ComponentScan("com.bitso.*") // Ensure this package is scanned
@@ -51,8 +58,8 @@ This rule outlines the standard procedure for integrating Bitso authentication i
 
 ### Usage
 
-1.  **Annotate Controllers/Methods**: Use the `@WebAPI` annotation on controller classes or specific methods that require authentication.
-2.  **Access User Info**: Inject `WebAuthenticationContext` to access authenticated user details.
+1. **Annotate Controllers/Methods**: Use the `@WebAPI` annotation on controller classes or specific methods that require authentication.
+2. **Access User Info**: Inject `WebAuthenticationContext` to access authenticated user details.
 
 ```java
 @RestController("/")
@@ -77,7 +84,8 @@ public class ExampleController {
 ### Testing
 
 When testing controllers annotated with `@WebAPI`, you need to provide an alternative implementation for the `AuthenticationService` bean. To do that, create a `BypassAuthenticationService` that will look as following:
-```
+
+```java
 public class BypassAuthenticationService implements AuthenticationService {
 
     private static final User DEFAULT_USER;
@@ -146,6 +154,7 @@ class ExampleControllerSpec extends Specification {
 ```
 
 ## Documentation (OpenAPI Specification)
+
 All the endpoints from a subdomain should be documented under `./docs/api/rest/openapi.yaml`
 
 ---
