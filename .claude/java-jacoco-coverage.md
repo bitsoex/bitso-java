@@ -350,8 +350,38 @@ Generate all formats for different uses:
 reports {
     xml.required = true   // SonarQube, CI/CD tools
     html.required = true  // Local inspection, team review
-    csv.required = true   // Metrics tracking, trending
+    csv.required = true   // Command-line analysis, grep, scripting
 }
+```
+
+**CSV Format Structure:**
+
+The CSV report contains one row per class with columns:
+
+```text
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+```
+
+Example row:
+
+```csv
+api,com.bitso.security.makerchecker.api.handlers,MakerCheckerGrpcServiceV1,0,826,0,50,0,172,0,62,0,37
+```
+
+**Useful CSV Queries:**
+
+```bash
+# Find classes with low line coverage (< 80%)
+awk -F, 'NR>1 && ($8+$9)>0 {cov=$9/($8+$9)*100; if(cov<80) print $2"."$3": "cov"%"}' jacocoTestReport.csv
+
+# List classes with 0% coverage
+awk -F, 'NR>1 && $9==0 && ($8+$9)>0 {print $2"."$3}' jacocoTestReport.csv
+
+# Find classes with uncovered branches
+awk -F, 'NR>1 && $6>0 {print $2"."$3": "$6" uncovered branches"}' jacocoTestReport.csv
+
+# Calculate overall line coverage %
+awk -F, 'NR>1 {missed+=$8; covered+=$9} END {print covered/(missed+covered)*100"%"}' jacocoTestReport.csv
 ```
 
 ### 4. Coverage Verification (Optional)
