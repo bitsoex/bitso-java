@@ -7,23 +7,77 @@
 ## Prerequisites
 
 1. **JaCoCo plugin in all modules** - See `java/rules/java-jacoco-coverage.md`
-2. **CSV report format enabled** in `gradle/jacoco.gradle`
+2. **Gradle 8.14+** - Check with `./gradlew --version`
 3. **Module has tests** - At least one test file in `src/test`
-
-**Verify JaCoCo Configuration:**
-
-```bash
-./gradlew :module-name:tasks | grep jacoco
-# Expected: jacocoTestReport, jacocoTestCoverageVerification
-
-# Verify CSV enabled in gradle/jacoco.gradle
-grep -A5 "reports {" gradle/jacoco.gradle | grep csv
-# Expected: csv.required = true (or csv.required.set(true))
-```
 
 ## Workflow
 
-### 1. Check for Existing Coverage Reports
+### 1. Verify JaCoCo Configuration (Pre-flight Check)
+
+**IMPORTANT**: Run these checks BEFORE executing any test commands to ensure proper coverage reporting.
+
+#### Check 1: JaCoCo Plugin Applied
+
+```bash
+# Verify jacoco tasks exist
+./gradlew tasks --all | grep -i jacoco
+
+# Expected output should include:
+# - jacocoTestReport
+# - jacocoTestCoverageVerification
+```
+
+If missing, JaCoCo plugin is not applied. See `java/rules/java-jacoco-coverage.md` for setup.
+
+#### Check 2: Verify Report Formats Enabled
+
+```bash
+# Check that all three formats are enabled in gradle/jacoco.gradle
+grep -A10 "reports {" gradle/jacoco.gradle | grep -E "(xml|html|csv).required"
+
+# Expected (all three):
+# xml.required = true (or xml.required.set(true))
+# html.required = true (or html.required.set(true))
+# csv.required = true (or csv.required.set(true))
+```
+
+If any missing, update `gradle/jacoco.gradle`:
+
+```groovy
+jacocoTestReport {
+    reports {
+        xml.required.set(true)   // For CI/CD tools
+        html.required.set(true)  // For line-level analysis
+        csv.required.set(true)   // For class-level grep
+    }
+}
+```
+
+#### Check 3: Verify classDumpDir Configuration
+
+```bash
+# Check classDumpDir is set (prevents coverage issues)
+grep -i "classDumpDir" gradle/jacoco.gradle
+
+# Expected:
+# classDumpDir = layout.buildDirectory.dir("jacoco/classpathdumps").get().asFile
+```
+
+If missing, add to `gradle/jacoco.gradle`:
+
+```groovy
+test {
+    jacoco {
+        enabled = true
+        destinationFile = layout.buildDirectory.file("jacoco/test.exec").get().asFile
+        classDumpDir = layout.buildDirectory.dir("jacoco/classpathdumps").get().asFile
+    }
+}
+```
+
+> ✓ Only proceed to next steps after all checks pass
+
+### 2. Check for Existing Coverage Reports
 
 Before running tests, check if coverage reports already exist:
 
@@ -35,9 +89,9 @@ find . -path "*/build/reports/jacoco/test/jacocoTestReport.csv" 2>/dev/null
 find . -path "*/build/reports/jacoco/test/jacocoTestReport.csv" -mtime +1 2>/dev/null
 ```
 
-If recent reports exist, skip to step 3. Otherwise, generate fresh reports.
+If recent reports exist, skip to step 4. Otherwise, generate fresh reports.
 
-### 2. Generate Coverage Reports
+### 3. Generate Coverage Reports
 
 Run tests and generate JaCoCo reports for target module(s):
 
@@ -59,7 +113,7 @@ ls -lh bitso-libs/module-name/build/reports/jacoco/test/
 # Expected: jacocoTestReport.csv, jacocoTestReport.xml, html/
 ```
 
-### 3. Identify Low Coverage Classes
+### 4. Identify Low Coverage Classes (CSV Analysis)
 
 Use CSV report to find classes needing coverage improvements:
 
@@ -96,7 +150,67 @@ GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_
 
 Columns: $1=GROUP, $2=PACKAGE, $3=CLASS, $4-$5=INSTRUCTION, $6-$7=BRANCH, $8-$9=LINE, $10-$11=COMPLEXITY, $12-$13=METHOD
 
-### 4. Identify Tests for Target Class
+### 5. Identify Uncovered Lines (HTML Analysis)
+
+After identifying low-coverage classes from CSV, use HTML reports to find exact uncovered lines.
+
+**Find uncovered/partially covered lines in a specific class:**
+
+```bash
+# Set target class (from CSV analysis above)
+TARGET_CLASS="ErrorCodeMapper"
+
+# Find HTML source file using portable find syntax (no bash-specific ** globstar)
+HTML_FILE=$(find . -path "*/build/reports/jacoco/test/html/*" -name "${TARGET_CLASS}.java.html" 2>/dev/null | head -1)
+
+if [ -z "$HTML_FILE" ]; then
+  echo "Error: HTML report not found for $TARGET_CLASS"
+  exit 1
+fi
+
+# Extract uncovered (nc) and partially covered (pc) line numbers
+echo "=== Uncovered/Partially Covered Lines ==="
+grep -E '<span class="(nc|pc)" id="L[0-9]+">' "$HTML_FILE" | \
+  sed -E 's/.*id="L([0-9]+)".*/\1/' | \
+  sort -n
+```
+
+**Show uncovered lines with source code:**
+
+```bash
+# Get uncovered line numbers
+UNCOVERED_LINES=$(grep -E '<span class="nc" id="L[0-9]+">' "$HTML_FILE" | \
+  sed -E 's/.*id="L([0-9]+)".*/\1/')
+
+if [ -n "$UNCOVERED_LINES" ]; then
+  # Find source file
+  SOURCE_FILE=$(find . -path "*/src/main/**/${TARGET_CLASS}.java" 2>/dev/null | head -1)
+  
+  if [ -n "$SOURCE_FILE" ]; then
+    echo "=== Uncovered Lines in $TARGET_CLASS ==="
+    for line in $UNCOVERED_LINES; do
+      echo "Line $line: $(sed -n "${line}p" "$SOURCE_FILE" | xargs)"
+    done
+  fi
+else
+  echo "✓ All lines covered!"
+fi
+```
+
+**Example output:**
+
+```text
+=== Uncovered Lines in ErrorCodeMapper ===
+Line 48: case "invalid-email-params" -> MakerCheckerErrorCodes.MAKER_CHECKER_ERROR_CODES_INVALID_EMAIL_PARAMS;
+```
+
+**HTML Coverage Classes:**
+
+- `<span class="fc"` - **Fully covered** line (green)
+- `<span class="pc"` - **Partially covered** line (yellow, branch partially covered)
+- `<span class="nc"` - **Not covered** line (red)
+
+### 6. Identify Tests for Target Class
 
 To run only relevant tests when improving coverage, identify which test files cover the target class:
 
@@ -132,7 +246,7 @@ grep -r "import.*${TARGET_CLASS}" --include="*Test.java" --include="*Spec.groovy
 grep "MyService" bitso-libs/module-name/build/reports/jacoco/test/jacocoTestReport.csv
 ```
 
-### 5. Write Tests to Improve Coverage
+### 7. Write Tests to Improve Coverage
 
 Focus on high-value coverage gaps:
 
@@ -169,7 +283,7 @@ def "should reject negative discount"() {
 
 Reference `java/rules/java-testing-guidelines.md` for test patterns and best practices.
 
-### 6. Verify Coverage Increased
+### 8. Verify Coverage Increased
 
 Run only the relevant tests and check coverage delta:
 
@@ -195,7 +309,7 @@ open bitso-libs/module-name/build/reports/jacoco/test/html/index.html
 
 **Target:** 82% line coverage (minimum threshold). Focus on meaningful tests, not coverage chasing.
 
-### 7. Commit Coverage Improvements
+### 9. Commit Coverage Improvements
 
 Use incremental commits with clear messages:
 
@@ -208,7 +322,7 @@ git commit -m "test: add coverage for MyService discount validation
 - Covers branch: discount < 0 validation"
 ```
 
-### 8. Verify Quality Gate
+### 10. Verify Quality Gate
 
 After commit, ensure coverage meets project threshold:
 
