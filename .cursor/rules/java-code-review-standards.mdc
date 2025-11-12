@@ -1,0 +1,31 @@
+---
+description: Java Code Review Standards
+alwaysApply: false
+globs: **/*.java
+tags:
+  - java
+---
+
+# Java Code Review Standards
+
+When reviewing Java code, follow these standards:
+
+## Java 21 Standards
+
+- Review code using Java 21 standards.
+
+## `var` Keyword
+
+- Allow `var` when assigning a cast `null` value.
+
+## Coding Style
+
+- Multi-line expressions should place operators and ternary separators at the end of each line.
+
+## API Usage
+
+- Suggest changes using only Java 21 APIs, avoiding Guava.
+
+## `instanceof` Null Handling
+
+- Ensure `instanceof` correctly handles null values (returns false).

@@ -19,6 +19,21 @@ This repository uses AI-assisted development with specific coding guidelines and
 **Description:** General AI Coding Principles
 **Scope:** Always applies
 
+### Markdown Documentation Review Guidelines
+**File:** [`.claude/markdown-review.md`](.claude/markdown-review.md)
+**Description:** Markdown Documentation Review Guidelines
+**Scope:** **/*.md
+
+### Java Code Review Standards
+**File:** [`.claude/java-code-review-standards.md`](.claude/java-code-review-standards.md)
+**Description:** Java Code Review Standards
+**Scope:** **/*.java
+
+### Flyway SQL Migration Review Guidelines
+**File:** [`.claude/java-flyway-migrations.md`](.claude/java-flyway-migrations.md)
+**Description:** Flyway SQL Migration Review Guidelines
+**Scope:** **/*.sql
+
 ### Gradle configuration standards, multi-module setup, build patterns, and common commands for Java projects
 **File:** [`.claude/java-gradle-best-practices.md`](.claude/java-gradle-best-practices.md)
 **Description:** Gradle configuration standards, multi-module setup, build patterns, and common commands for Java projects
@@ -106,6 +121,6 @@ These rules are automatically applied when using Claude AI assistant in this rep
 
 ## Rule Categories
 
-- **Java**: java specific coding guidelines (19 rules)
+- **Java**: java specific coding guidelines (22 rules)
 
 ---

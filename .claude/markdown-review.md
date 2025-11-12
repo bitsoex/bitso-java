@@ -1,0 +1,24 @@
+# Markdown Documentation Review Guidelines
+
+**Applies to:** **/*.md
+
+# Markdown Documentation Review
+
+Review Markdown documentation for:
+
+## Grammar and Clarity
+
+- Ensure documentation is grammatically correct and easy to understand
+- Use clear, concise language
+- Structure content logically with proper headings
+
+## Accuracy and Consistency
+
+- Verify that information is accurate and consistent throughout the document
+- Check that links work correctly
+- Ensure code examples are correct and up-to-date
+- Maintain consistent formatting and style
+
+---
+*This rule is part of the java category.*
+*Source: global/rules/markdown-review.md*

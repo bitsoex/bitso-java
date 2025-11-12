@@ -294,3 +294,13 @@ spring:
 ```
 
 This setup ensures that tests run in a controlled and isolated Spring environment, tailored to their specific needs.
+
+## Code Review Guidelines for Tests
+
+For test code, focus on:
+
+- **Correctness of test assertions**: Ensure assertions properly validate expected behavior
+- **Test coverage of edge cases**: Verify edge cases are adequately covered
+- **Clear test naming and documentation**: Tests should have descriptive names and clear documentation
+- **Code style leniency**: Be more lenient with code style and minor optimisations in test code
+- **Data-driven tests**: Suggest using data-driven Spock tests with tables when appropriate
