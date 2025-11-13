@@ -5,18 +5,11 @@
       "type": "http"
     },
     "sonarqube": {
-      "command": "docker",
-      "args": [
-        "run",
-        "-i",
-        "--rm",
-        "-e",
-        "SONARQUBE_TOKEN",
-        "-e",
-        "SONARQUBE_URL",
-        "mcp/sonarqube"
-      ],
-      "type": "stdio"
+      "url": "https://sonarqube-mcp.bitso.io/mcp",
+      "type": "http",
+      "headers": {
+        "SONARQUBE_TOKEN": "${input:SONARQUBE_TOKEN}"
+      }
     }
   },
   "inputs": [
@@ -25,12 +18,6 @@
       "type": "promptString",
       "description": "SonarQube Server User Token",
       "password": true
-    },
-    {
-      "id": "SONARQUBE_URL",
-      "type": "promptString",
-      "description": "SonarQube Server URL",
-      "password": false
     }
   ]
 }

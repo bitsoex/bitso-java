@@ -24,6 +24,11 @@ This repository uses AI-assisted development with specific coding guidelines and
 **Description:** Markdown Documentation Review Guidelines
 **Scope:** **/*.md
 
+### Mcp Setup
+**File:** [`.claude/mcp-setup.md`](.claude/mcp-setup.md)
+**Description:** Mcp Setup
+**Scope:** Always applies
+
 ### Java Code Review Standards
 **File:** [`.claude/java-code-review-standards.md`](.claude/java-code-review-standards.md)
 **Description:** Java Code Review Standards
@@ -121,6 +126,6 @@ These rules are automatically applied when using Claude AI assistant in this rep
 
 ## Rule Categories
 
-- **Java**: java specific coding guidelines (22 rules)
+- **Java**: java specific coding guidelines (23 rules)
 
 ---
