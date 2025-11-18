@@ -1,5 +1,5 @@
 {
-  "mcpServers": {
+  "servers": {
     "api-guidelines": {
       "type": "http",
       "url": "https://api-mcp.bitso.io/sse"

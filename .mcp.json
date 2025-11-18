@@ -18,7 +18,7 @@
         "mcp/sonarqube"
       ],
       "env": {
-        "SONARQUBE_TOKEN": "${env:SONARQUBE_TOKEN}",
+        "SONARQUBE_TOKEN": "${SONARQUBE_TOKEN}",
         "SONARQUBE_URL": "https://sonarqube.bitso.io"
       }
     }

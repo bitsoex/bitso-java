@@ -131,7 +131,7 @@ EOF
   echo "✓ Created new IntelliJ MCP configuration (Docker-based)"
 
 else
-  # Merge with existing config (avoid duplicates)
+  # Merge with existing config (preserve other server configs)
   existing=$(cat ~/.config/github-copilot/intellij/mcp.json)
 
   if ! echo "$existing" | jq '.servers.sonarqube = {"type": "stdio", "command": "docker", "args": ["run", "-i", "--rm", "-e", "SONARQUBE_TOKEN", "-e", "SONARQUBE_URL", "mcp/sonarqube"], "env": {"SONARQUBE_TOKEN": "${input:SONARQUBE_TOKEN}", "SONARQUBE_URL": "https://sonarqube.bitso.io"}}' > ~/.config/github-copilot/intellij/mcp.json.tmp; then
@@ -141,7 +141,7 @@ else
   fi
 
   mv ~/.config/github-copilot/intellij/mcp.json.tmp ~/.config/github-copilot/intellij/mcp.json
-  echo "✓ Merged SonarQube config into existing IntelliJ configuration (Docker-based)"
+  echo "✓ Merged SonarQube config into existing IntelliJ configuration (Docker-based, preserving other servers)"
 fi
 
 echo "✓ IntelliJ MCP configuration at ~/.config/github-copilot/intellij/mcp.json"
@@ -199,7 +199,7 @@ EOF
   echo "✓ Created new Copilot CLI MCP configuration (Docker-based)"
 
 else
-  # Merge with existing config (avoid duplicates)
+  # Merge with existing config (preserve other server configs)
   existing=$(cat ~/.copilot/mcp-config.json)
 
   if ! echo "$existing" | jq '.mcpServers.sonarqube = {"command": "docker", "args": ["run", "-i", "--rm", "-e", "SONARQUBE_TOKEN", "-e", "SONARQUBE_URL", "mcp/sonarqube"], "tools": ["*"], "env": {"SONARQUBE_TOKEN": "${env:SONARQUBE_TOKEN}", "SONARQUBE_URL": "https://sonarqube.bitso.io"}}' > ~/.copilot/mcp-config.json.tmp; then
@@ -209,7 +209,7 @@ else
   fi
 
   mv ~/.copilot/mcp-config.json.tmp ~/.copilot/mcp-config.json
-  echo "✓ Merged SonarQube config into existing Copilot CLI configuration (Docker-based)"
+  echo "✓ Merged SonarQube config into existing Copilot CLI configuration (Docker-based, preserving other servers)"
 fi
 
 echo "✓ Copilot CLI MCP configuration at ~/.copilot/mcp-config.json"
