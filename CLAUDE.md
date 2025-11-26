@@ -19,6 +19,11 @@ This repository uses AI-assisted development with specific coding guidelines and
 **Description:** General AI Coding Principles
 **Scope:** Always applies
 
+### Github Cli Pr Lifecycle
+**File:** [`.claude/github-cli-pr-lifecycle.md`](.claude/github-cli-pr-lifecycle.md)
+**Description:** Github Cli Pr Lifecycle
+**Scope:** Always applies
+
 ### Markdown Documentation Review Guidelines
 **File:** [`.claude/markdown-review.md`](.claude/markdown-review.md)
 **Description:** Markdown Documentation Review Guidelines
@@ -126,6 +131,6 @@ These rules are automatically applied when using Claude AI assistant in this rep
 
 ## Rule Categories
 
-- **Java**: java specific coding guidelines (23 rules)
+- **Java**: java specific coding guidelines (24 rules)
 
 ---
