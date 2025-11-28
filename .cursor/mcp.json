@@ -1,12 +1,12 @@
 {
   "mcpServers": {
-    "api-guidelines": {
-      "type": "http",
-      "url": "https://api-mcp.bitso.io/sse"
-    },
     "sonarqube": {
       "type": "http",
       "url": "https://sonarqube-mcp.bitso.io/mcp"
+    },
+    "api-guidelines": {
+      "type": "http",
+      "url": "https://api-mcp.bitso.io/sse"
     }
   }
 }
