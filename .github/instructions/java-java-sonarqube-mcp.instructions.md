@@ -5,9 +5,7 @@ description: SonarQube MCP Tools Reference
 
 # SonarQube MCP Tools Reference
 
-## Prerequisites
-
-See `java/rules/java-sonarqube-setup.md` for setup.
+The SonarQube MCP server is pre-configured and available automatically in supported IDEs.
 
 ## Primary Tools
 

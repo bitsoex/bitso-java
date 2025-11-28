@@ -5,87 +5,54 @@ description: Java SonarQube Setup Guide
 
 # Java SonarQube Setup Guide
 
-Quick setup for using SonarQube with AI assistants through MCP.
+SonarQube MCP integration is pre-configured and requires no local setup.
 
-## Setup Steps
+## How It Works
 
-### 1. Generate SonarQube Token
+The SonarQube MCP server runs remotely at `https://sonarqube-mcp.bitso.io/mcp` and is automatically configured in all supported IDEs through the repository's MCP configuration files.
 
-1. Visit: <https://sonarqube.bitso.io/account/security>
-2. Click "Generate Token"
-3. **Type**: Select "User Token" (required for MCP tools)
-4. **Name**: `mcp-integration` or similar
-5. Copy token (shown only once)
+**No setup required:**
 
-### 2. Set Environment Variables
-
-Add to your shell profile (`.zshrc` or `.bashrc`):
-
-```bash
-export SONARQUBE_TOKEN="your_token_here"
-export SONARQUBE_URL="https://sonarqube.bitso.io"
-```
-
-Reload:
-
-```bash
-source ~/.zshrc
-```
-
-### 3. Verify
-
-Run the readiness check:
-
-```bash
-./scripts/check-sonarqube-readiness.sh
-```
-
-Expected output:
-
-```text
-✓ SONARQUBE_TOKEN is set
-✓ SONARQUBE_URL is set
-✓ Token authentication successful
-✓ User Token confirmed
-✅ SonarQube is ready for MCP integration!
-```
+- No tokens to generate
+- No environment variables to configure
+- No Docker containers to run
 
 ## Using SonarQube
 
-The MCP server is configured centrally in `global/mcp/mcp.json`. Just use natural language:
+Just use natural language in your AI assistant:
 
 - "Find HIGH severity issues in project-name"
 - "Analyze this Java code for SonarQube issues"
 - "Show me details about rule java:S1128"
 - "What's the quality gate status for project-name?"
 
-**Full tool reference**: See `java/commands/fix-sonarqube-issues.md`
+**Full tool reference**: See `java/rules/java-sonarqube-mcp.md`
+
+## Supported IDEs
+
+The SonarQube MCP server is automatically available in:
+
+- **Cursor** - via `.cursor/mcp.json`
+- **VS Code** (with GitHub Copilot) - via `.vscode/mcp.json`
+- **Claude Code** - via `.mcp.json`
+- **IntelliJ IDEA** (with GitHub Copilot) - see `java/commands/add-sonarqube-mcp-to-intellij-and-copilot-cli.md`
+- **GitHub Copilot CLI** - see `java/commands/add-sonarqube-mcp-to-intellij-and-copilot-cli.md`
 
 ## Troubleshooting
 
-### Authentication fails
-
-Generate a new **User Token** (not Project Analysis Token) at:
-<https://sonarqube.bitso.io/account/security>
-
 ### MCP tools not available
 
-1. Check Docker is running: `docker ps`
-2. Verify env vars: `./scripts/check-sonarqube-readiness.sh`
-3. Restart your AI assistant
+1. Ensure your IDE has loaded the repository's MCP configuration
+2. Restart your AI assistant
+3. Verify the remote server is accessible: `curl -s https://sonarqube-mcp.bitso.io/mcp`
 
 ### Can't find project
 
 Ask the AI: "List all my SonarQube projects"
 
-## Security
-
-- ✗ Never commit `SONARQUBE_TOKEN` to git
-- ✓ Store only in shell profile
-- ✓ Rotate tokens every 90 days
-
 ## Related
 
-- **MCP Tools**: `java/commands/fix-sonarqube-issues.md`
-- **MCP Config**: `global/mcp/mcp.json`
+- **MCP Tools**: `java/rules/java-sonarqube-mcp.md`
+- **Fix Command**: `java/commands/fix-sonarqube-issues.md`
+- **MCP Config**: `java/mcp/mcp.json`
 - **SonarQube**: <https://sonarqube.bitso.io>

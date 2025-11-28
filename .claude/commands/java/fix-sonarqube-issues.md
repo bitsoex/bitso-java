@@ -1,88 +1,14 @@
-# Fix SonarQube issues using MCP tools and CI feedback
+# Fix SonarQube issues - see language-specific commands
 
-**Description:** Fix SonarQube issues using MCP tools and CI feedback
+**Description:** Fix SonarQube issues - see language-specific commands
 
 # Fix SonarQube Issues
 
-## Prerequisites
+This command has been split into language-specific versions for better guidance.
 
-- SonarQube MCP configured (see `java/rules/java-sonarqube-setup.md`)
-- Project analyzed at least once in CI
+## Language-Specific Commands
 
-## Workflow
+- **Java**: Use `java/commands/fix-sonarqube-issues-java.md`
+- **Node.js/TypeScript**: Use `nodejs/commands/fix-sonarqube-issues-nodejs.md`
 
-### Get Context
-
-```bash
-git branch --show-current
-```
-
-### Search for Issues
-
-**Use `search_sonar_issues_in_projects` - ALWAYS filter by project and use small page size.**
-
-**Required:**
-
-- `projects: ["project-key"]` - NEVER omit, prevents context overload
-- `ps: 10` - **Start with 10** (default is 100 which causes context overload), increase only if needed
-
-**Optional:**
-
-- `severities: ["HIGH", "BLOCKER"]` - Filter by severity (array format)
-- `pullRequestId: "123"` - For PR-specific issues
-
-**Examples:**
-
-"Find BLOCKER issues in business-reports"
-→ `projects: ["business-reports"], severities: ["BLOCKER"], ps: 10`
-
-"Show issues for PR #456 in dynamic-pricing-tool"
-→ `projects: ["dynamic-pricing-tool"], pullRequestId: "456", ps: 10`
-
-**Priority:** BLOCKER → HIGH → Security vulnerabilities → Auto-fixable
-
-**Note:** Search returns component keys like `"project:path/to/File.java"` - use with `get_component_measures` for file metrics.
-
-### Fix in Small Batches
-
-Work on **max 5 issues** at a time:
-
-1. Read file at component path from search results
-2. If needed: "Show me details about rule [RULE_KEY]"
-3. Apply fix at line number shown
-4. Run tests locally
-5. Move to next issue
-
-### Commit and Push
-
-```bash
-git add -A
-git commit -m "fix: resolve SonarQube issues [RULE_KEYS]"
-git push
-```
-
-SonarQube analysis runs in CI.
-
-### Verify
-
-Check metrics: "Show coverage and violations for [PROJECT_KEY]"
-(Uses `get_component_measures`)
-
-Or check quality gate: "What's the quality gate status for [PROJECT_KEY]?"
-
-If failing, repeat from Search for Issues.
-
-## Guidelines
-
-- **ALWAYS use projectKey** to filter searches
-- **Start with ps: 10** - increase only if you need more results
-- Work in small batches (max 5 issues)
-- Commit and push after each batch
-- Rely on CI for verification
-- Stop when: Quality gate passes, no BLOCKER/HIGH remain, tests pass
-
-## Related
-
-- **MCP Tools**: `java/rules/java-sonarqube-mcp.md`
-- **Setup**: `java/rules/java-sonarqube-setup.md`
-- **Gradle**: `java/rules/java-gradle-best-practices.md`
+Each command includes language-specific rules, examples, and test commands.

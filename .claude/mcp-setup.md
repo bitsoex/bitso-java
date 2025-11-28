@@ -31,7 +31,7 @@ For these tools, follow the setup instructions in:
 
 `java/commands/add-sonarqube-mcp-to-intellij-and-copilot-cli.md`
 
-This guide contains step-by-step instructions to configure both tools to use the SonarQube MCP server.
+This guide contains step-by-step instructions to configure both tools to use the SonarQube MCP server (remote HTTP/SSE - no tokens or environment variables required).
 
 ---
 *This rule is part of the java category.*

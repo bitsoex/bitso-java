@@ -4,30 +4,28 @@
 
 # Add SonarQube MCP to IntelliJ and Copilot CLI
 
-Configures the SonarQube MCP server (Docker-based) for IntelliJ IDEA's GitHub Copilot extension and the GitHub Copilot CLI tool.
+Configures the SonarQube MCP server (remote HTTP/SSE) for IntelliJ IDEA's GitHub Copilot extension and the GitHub Copilot CLI tool.
 
 ## Overview
 
-This command sets up SonarQube MCP integration using Docker containerization for:
+This command sets up SonarQube MCP integration using the remote server at `https://sonarqube-mcp.bitso.io/mcp` for:
 
-- **IntelliJ IDEA**: GitHub Copilot extension MCP configuration (Docker)
-- **Copilot CLI**: Command-line Copilot MCP configuration (Docker)
+- **IntelliJ IDEA**: GitHub Copilot extension MCP configuration
+- **Copilot CLI**: Command-line Copilot MCP configuration
+
+**No tokens or environment variables required** - the remote server handles authentication.
 
 ## Configuration Locations
 
 ### IntelliJ IDEA
 
 - **File**: `~/.config/github-copilot/intellij/mcp.json`
-- **Format**: Docker command with stdio transport
-- **Token Setup**: Configure environment variables via IDE settings or shell exports
-- **Docker Image**: Uses `mcp/sonarqube` Docker image (must be available locally or on Docker Hub)
+- **Format**: HTTP/SSE server URL
 
 ### Copilot CLI
 
 - **File**: `~/.copilot/mcp-config.json`
-- **Format**: Docker command with stdio transport
-- **Token Setup**: Configure environment variables via shell exports
-- **Docker Image**: Uses `mcp/sonarqube` Docker image
+- **Format**: HTTP/SSE server URL
 
 ## Workflow
 
@@ -43,7 +41,6 @@ if [ -f ~/.config/github-copilot/intellij/mcp.json ]; then
   # Validate JSON
   if jq empty ~/.config/github-copilot/intellij/mcp.json 2>/dev/null; then
     intellij_exists=true
-    intellij_has_sonarqube=$(grep -c "sonarqube" ~/.config/github-copilot/intellij/mcp.json 2>/dev/null || echo 0)
   else
     echo "❌ ERROR: IntelliJ config file is not valid JSON"
     echo "   Please fix or remove: ~/.config/github-copilot/intellij/mcp.json"
@@ -62,7 +59,6 @@ if [ -f ~/.copilot/mcp-config.json ]; then
   # Validate JSON
   if jq empty ~/.copilot/mcp-config.json 2>/dev/null; then
     cli_exists=true
-    cli_has_sonarqube=$(grep -c "sonarqube" ~/.copilot/mcp-config.json 2>/dev/null || echo 0)
   else
     echo "❌ ERROR: Copilot CLI config file is not valid JSON"
     echo "   Please fix or remove: ~/.copilot/mcp-config.json"
@@ -108,59 +104,35 @@ if [ "$intellij_exists" = false ]; then
 {
   "servers": {
     "sonarqube": {
-      "type": "stdio",
-      "command": "docker",
-      "args": [
-        "run",
-        "-i",
-        "--rm",
-        "-e",
-        "SONARQUBE_TOKEN",
-        "-e",
-        "SONARQUBE_URL",
-        "mcp/sonarqube"
-      ],
-      "env": {
-        "SONARQUBE_TOKEN": "${input:SONARQUBE_TOKEN}",
-        "SONARQUBE_URL": "https://sonarqube.bitso.io"
-      }
+      "type": "http",
+      "url": "https://sonarqube-mcp.bitso.io/mcp"
     }
   }
 }
 EOF
-  echo "✓ Created new IntelliJ MCP configuration (Docker-based)"
+  echo "✓ Created new IntelliJ MCP configuration"
 
 else
   # Merge with existing config (preserve other server configs)
   existing=$(cat ~/.config/github-copilot/intellij/mcp.json)
 
-  if ! echo "$existing" | jq '.servers.sonarqube = {"type": "stdio", "command": "docker", "args": ["run", "-i", "--rm", "-e", "SONARQUBE_TOKEN", "-e", "SONARQUBE_URL", "mcp/sonarqube"], "env": {"SONARQUBE_TOKEN": "${input:SONARQUBE_TOKEN}", "SONARQUBE_URL": "https://sonarqube.bitso.io"}}' > ~/.config/github-copilot/intellij/mcp.json.tmp; then
+  if ! echo "$existing" | jq '.servers.sonarqube = {"type": "http", "url": "https://sonarqube-mcp.bitso.io/mcp"}' > ~/.config/github-copilot/intellij/mcp.json.tmp; then
     echo "❌ ERROR: Failed to merge IntelliJ config (jq error)"
     echo "   Backup available at: ~/.config/github-copilot/intellij/mcp.json.backup"
     exit 1
   fi
 
   mv ~/.config/github-copilot/intellij/mcp.json.tmp ~/.config/github-copilot/intellij/mcp.json
-  echo "✓ Merged SonarQube config into existing IntelliJ configuration (Docker-based, preserving other servers)"
+  echo "✓ Merged SonarQube config into existing IntelliJ configuration (preserving other servers)"
 fi
 
 echo "✓ IntelliJ MCP configuration at ~/.config/github-copilot/intellij/mcp.json"
 ```
 
-**Important**: After configuring IntelliJ:
+**After configuring IntelliJ:**
 
-1. Ensure Docker is installed and running: `docker --version`
-2. Pull the SonarQube MCP image: `docker pull mcp/sonarqube`
-3. Set environment variables in your shell (or IntelliJ IDE settings):
-
-   ```bash
-   export SONARQUBE_TOKEN="your-sonarqube-token"
-   ```
-
-   **Note:** `SONARQUBE_URL` is hardcoded in the configuration (`https://sonarqube.bitso.io`) and does not need to be exported. Only `SONARQUBE_TOKEN` is read from the environment.
-
-4. Restart IntelliJ IDEA for the configuration to take effect
-5. Test the connection by using SonarQube features in Copilot
+1. Restart IntelliJ IDEA for the configuration to take effect
+2. Test the connection by using SonarQube features in Copilot
 
 ### Step 4: Configure Copilot CLI
 
@@ -176,52 +148,31 @@ if [ "$cli_exists" = false ]; then
 {
   "mcpServers": {
     "sonarqube": {
-      "command": "docker",
-      "args": [
-        "run",
-        "-i",
-        "--rm",
-        "-e",
-        "SONARQUBE_TOKEN",
-        "-e",
-        "SONARQUBE_URL",
-        "mcp/sonarqube"
-      ],
-      "tools": ["*"],
-      "env": {
-        "SONARQUBE_TOKEN": "${env:SONARQUBE_TOKEN}",
-        "SONARQUBE_URL": "https://sonarqube.bitso.io"
-      }
+      "type": "http",
+      "url": "https://sonarqube-mcp.bitso.io/mcp",
+      "tools": ["*"]
     }
   }
 }
 EOF
-  echo "✓ Created new Copilot CLI MCP configuration (Docker-based)"
+  echo "✓ Created new Copilot CLI MCP configuration"
 
 else
   # Merge with existing config (preserve other server configs)
   existing=$(cat ~/.copilot/mcp-config.json)
 
-  if ! echo "$existing" | jq '.mcpServers.sonarqube = {"command": "docker", "args": ["run", "-i", "--rm", "-e", "SONARQUBE_TOKEN", "-e", "SONARQUBE_URL", "mcp/sonarqube"], "tools": ["*"], "env": {"SONARQUBE_TOKEN": "${env:SONARQUBE_TOKEN}", "SONARQUBE_URL": "https://sonarqube.bitso.io"}}' > ~/.copilot/mcp-config.json.tmp; then
+  if ! echo "$existing" | jq '.mcpServers.sonarqube = {"type": "http", "url": "https://sonarqube-mcp.bitso.io/mcp", "tools": ["*"]}' > ~/.copilot/mcp-config.json.tmp; then
     echo "❌ ERROR: Failed to merge Copilot CLI config (jq error)"
     echo "   Backup available at: ~/.copilot/mcp-config.json.backup"
     exit 1
   fi
 
   mv ~/.copilot/mcp-config.json.tmp ~/.copilot/mcp-config.json
-  echo "✓ Merged SonarQube config into existing Copilot CLI configuration (Docker-based, preserving other servers)"
+  echo "✓ Merged SonarQube config into existing Copilot CLI configuration (preserving other servers)"
 fi
 
 echo "✓ Copilot CLI MCP configuration at ~/.copilot/mcp-config.json"
 ```
-
-**Note**: The Copilot CLI uses Docker to run the SonarQube MCP server. Make sure environment variables are exported in your shell:
-
-```bash
-export SONARQUBE_TOKEN="your-sonarqube-token"
-```
-
-**Note:** `SONARQUBE_URL` is hardcoded in the configuration (`https://sonarqube.bitso.io`) and does not need to be exported. Only `SONARQUBE_TOKEN` is read from the environment.
 
 ### Step 5: Verify Configurations
 
@@ -239,16 +190,9 @@ if [ -f ~/.config/github-copilot/intellij/mcp.json ]; then
   if jq empty ~/.config/github-copilot/intellij/mcp.json 2>/dev/null; then
     echo "  ✓ JSON syntax valid"
     if command -v jq &> /dev/null; then
-      command=$(jq -r '.servers.sonarqube.command' ~/.config/github-copilot/intellij/mcp.json 2>/dev/null)
-      if [ -n "$command" ] && [ "$command" != "null" ]; then
-        echo "  ✓ SonarQube Docker command configured: $command"
-        
-        # Check if Docker is available
-        if command -v docker &> /dev/null; then
-          echo "  ✓ Docker is available"
-        else
-          echo "  ⚠ Warning: Docker not found in PATH"
-        fi
+      url=$(jq -r '.servers.sonarqube.url' ~/.config/github-copilot/intellij/mcp.json 2>/dev/null)
+      if [ -n "$url" ] && [ "$url" != "null" ]; then
+        echo "  ✓ SonarQube URL configured: $url"
       else
         echo "  ⚠ Warning: SonarQube configuration not found"
         ((errors++))
@@ -273,16 +217,9 @@ if [ -f ~/.copilot/mcp-config.json ]; then
   if jq empty ~/.copilot/mcp-config.json 2>/dev/null; then
     echo "  ✓ JSON syntax valid"
     if command -v jq &> /dev/null; then
-      command=$(jq -r '.mcpServers.sonarqube.command' ~/.copilot/mcp-config.json 2>/dev/null)
-      if [ -n "$command" ] && [ "$command" != "null" ]; then
-        echo "  ✓ SonarQube Docker command configured: $command"
-        
-        # Check if Docker is available
-        if command -v docker &> /dev/null; then
-          echo "  ✓ Docker is available"
-        else
-          echo "  ⚠ Warning: Docker not found in PATH"
-        fi
+      url=$(jq -r '.mcpServers.sonarqube.url' ~/.copilot/mcp-config.json 2>/dev/null)
+      if [ -n "$url" ] && [ "$url" != "null" ]; then
+        echo "  ✓ SonarQube URL configured: $url"
       else
         echo "  ⚠ Warning: SonarQube configuration not found"
         ((errors++))
@@ -301,14 +238,11 @@ echo
 echo "=== Next Steps ==="
 echo
 echo "IntelliJ IDEA:"
-echo "  1. Open ~/.config/github-copilot/intellij/mcp.json in IntelliJ"
-echo "  2. Click on \${input:SONARQUBE_TOKEN} text"
-echo "  3. Configure token in: Tools > GitHub Copilot > MCP > Special Tokens"
-echo "  4. Test by using Copilot inline suggestions in your IDE"
+echo "  1. Restart IntelliJ IDEA"
+echo "  2. Test by using Copilot inline suggestions in your IDE"
 echo
 echo "Copilot CLI:"
-echo "  1. Token will be prompted when using Copilot CLI"
-echo "  2. Test with: gh copilot suggest 'analyze this code'"
+echo "  1. Test with: gh copilot suggest 'analyze this code'"
 echo
 
 if [ "$errors" -gt 0 ]; then
@@ -323,28 +257,14 @@ echo
 
 ### IntelliJ IDEA Format
 
-Docker-based configuration with stdio transport. Uses `servers` root key (not `mcpServers`) and `${input:VAR}` syntax:
+HTTP/SSE configuration. Uses `servers` root key:
 
 ```json
 {
   "servers": {
     "sonarqube": {
-      "type": "stdio",
-      "command": "docker",
-      "args": [
-        "run",
-        "-i",
-        "--rm",
-        "-e",
-        "SONARQUBE_TOKEN",
-        "-e",
-        "SONARQUBE_URL",
-        "mcp/sonarqube"
-      ],
-      "env": {
-        "SONARQUBE_TOKEN": "${input:SONARQUBE_TOKEN}",
-        "SONARQUBE_URL": "https://sonarqube.bitso.io"
-      }
+      "type": "http",
+      "url": "https://sonarqube-mcp.bitso.io/mcp"
     }
   }
 }
@@ -352,28 +272,15 @@ Docker-based configuration with stdio transport. Uses `servers` root key (not `m
 
 ### Copilot CLI Format
 
-Docker-based configuration with stdio transport and tools array:
+HTTP/SSE configuration with tools array:
 
 ```json
 {
   "mcpServers": {
     "sonarqube": {
-      "command": "docker",
-      "args": [
-        "run",
-        "-i",
-        "--rm",
-        "-e",
-        "SONARQUBE_TOKEN",
-        "-e",
-        "SONARQUBE_URL",
-        "mcp/sonarqube"
-      ],
-      "tools": ["*"],
-      "env": {
-        "SONARQUBE_TOKEN": "${env:SONARQUBE_TOKEN}",
-        "SONARQUBE_URL": "https://sonarqube.bitso.io"
-      }
+      "type": "http",
+      "url": "https://sonarqube-mcp.bitso.io/mcp",
+      "tools": ["*"]
     }
   }
 }
@@ -383,66 +290,37 @@ Docker-based configuration with stdio transport and tools array:
 
 ### IntelliJ IDEA
 
-**Issue**: Docker image not found
+**Issue**: MCP server not connecting
 
-- **Solution**: Pull the image with `docker pull mcp/sonarqube` or build it locally
-
-**Issue**: MCP server not starting
-
-- **Solution**: Ensure Docker is running and environment variables are set:
+- **Solution**: Verify the remote server is accessible:
 
   ```bash
-  export SONARQUBE_TOKEN="your-token"
-  docker --version  # Verify Docker is installed
+  curl -s https://sonarqube-mcp.bitso.io/mcp
   ```
 
-  **Note:** `SONARQUBE_URL` is hardcoded in the configuration and does not need to be exported.
+**Issue**: Configuration not loading
 
-**Issue**: Permission denied when running Docker
-
-- **Solution**: Add your user to the docker group:
-
-  ```bash
-  sudo usermod -aG docker $USER
-  newgrp docker
-  ```
+- **Solution**: Restart IntelliJ IDEA after making configuration changes
 
 ### Copilot CLI
 
-**Issue**: Docker command not found
+**Issue**: SonarQube tools not available
 
-- **Solution**: Ensure Docker is installed and in your PATH:
+- **Solution**: Verify the configuration file exists and is valid:
 
   ```bash
-  which docker
-  docker --version
+  cat ~/.copilot/mcp-config.json | jq '.'
   ```
 
-**Issue**: Environment variables not being picked up
+**Issue**: Connection errors
 
-- **Solution**: Ensure variables are exported in your shell:
-
-  ```bash
-  export SONARQUBE_TOKEN="your-token"
-  env | grep SONARQUBE_TOKEN  # Verify it's set
-  ```
-
-  **Note:** `SONARQUBE_URL` is hardcoded in the configuration (`https://sonarqube.bitso.io`) and does not need to be exported.
-
-**Issue**: Connection refused errors
-
-- **Solution**: Verify the SonarQube server URL is correct and reachable:
+- **Solution**: Check network connectivity to the remote server:
 
   ```bash
-  curl -s "https://sonarqube.bitso.io/api/system/status" | jq .
+  curl -s https://sonarqube-mcp.bitso.io/mcp
   ```
 
 ## Related
 
-- See `java/rules/java-sonarqube-setup.md` for SonarQube MCP setup in VS Code, Cursor, and Claude
+- See `java/rules/java-sonarqube-setup.md` for SonarQube MCP overview
 - See `java/commands/fix-sonarqube-issues.md` for using SonarQube MCP tools
-
-## References
-
-- [IntelliJ Copilot MCP Support Issue](https://github.com/microsoft/copilot-intellij-feedback/issues/653)
-- SonarQube MCP Docker Image: `mcp/sonarqube` (runs locally via Docker)
