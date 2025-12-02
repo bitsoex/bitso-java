@@ -39,6 +39,11 @@ This repository uses AI-assisted development with specific coding guidelines and
 **Description:** Java Code Review Standards
 **Scope:** **/*.java
 
+### Java Dependabot Security Vulnerability Management
+**File:** [`.claude/java-dependabot-security.md`](.claude/java-dependabot-security.md)
+**Description:** Java Dependabot Security Vulnerability Management
+**Scope:** gradle/libs.versions.toml, build.gradle, gradle/dependency-graph-init.gradle
+
 ### Flyway SQL Migration Review Guidelines
 **File:** [`.claude/java-flyway-migrations.md`](.claude/java-flyway-migrations.md)
 **Description:** Flyway SQL Migration Review Guidelines
@@ -131,6 +136,6 @@ These rules are automatically applied when using Claude AI assistant in this rep
 
 ## Rule Categories
 
-- **Java**: java specific coding guidelines (24 rules)
+- **Java**: java specific coding guidelines (25 rules)
 
 ---
