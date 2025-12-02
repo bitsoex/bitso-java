@@ -23,6 +23,7 @@ Generate comprehensive AI-friendly documentation in the `docs/` folder for this 
 ### Before Making Changes
 
 For each document, ask yourself:
+
 - Has the component/feature/integration actually changed?
 - Is the existing documentation accurate?
 - Am I adding new information or just rewording?
@@ -30,6 +31,7 @@ For each document, ask yourself:
 ### What Constitutes a Change
 
 **UPDATE documentation when:**
+
 - New features or concepts are added
 - Existing features have new functionality or business rules
 - Architecture changes (new dependencies, databases, services)
@@ -40,6 +42,7 @@ For each document, ask yourself:
 - Domain concepts or components organization changes
 
 **DO NOT update documentation when:**
+
 - Code formatting or comments change
 - Variable names change but behavior is the same
 - Tests are added/modified but functionality is unchanged
@@ -49,6 +52,7 @@ For each document, ask yourself:
 ### Idempotent Updates
 
 When updating:
+
 1. **Read existing documentation first**
 2. **Compare with current codebase state**
 3. **Only modify sections that are outdated or incomplete**
@@ -58,7 +62,7 @@ When updating:
 
 ### Example Decision Process
 
-```
+```plaintext
 Question: Should I update orders/overview.md?
 
 Check:
@@ -71,7 +75,7 @@ Check:
 Decision: DO NOT UPDATE - documentation is accurate
 ```
 
-```
+```plaintext
 Question: Should I update order-management/order-placement/README.md?
 
 Check:
@@ -88,6 +92,7 @@ Decision: UPDATE - add documentation for new RPC only
 This generates **service-specific** documentation that will be published to a central `bitso-services-docs` repository.
 
 ### What to Document (Service-Specific Only)
+
 - ✅ Business purpose and domain concepts
 - ✅ Service architecture (dependencies, data flow, deployment specifics)
 - ✅ Domain concepts (what the service does, how it's architected, components organization)
@@ -96,6 +101,7 @@ This generates **service-specific** documentation that will be published to a ce
 - ✅ Data models (PostgreSQL schema, Redis patterns)
 
 ### What NOT to Document (Covered in Platform Docs)
+
 - ❌ General local development setup (Docker, Gradle, IDE)
 - ❌ Testing patterns (Spock, Testcontainers, mocking)
 - ❌ Monitoring and logging patterns (Datadog, structured logs)
@@ -119,7 +125,7 @@ These are maintained by the Platform team in the central repository.
 
 The `docs/` folder has a mixed structure where the AI maintains only the service-specific content:
 
-```
+```plaintext
 docs/
 ├── api/                                 # Managed by humans
 ├── decisions/                           # Managed by humans
@@ -137,9 +143,8 @@ docs/
         └── <feature-N>.md
 ```
 
-
-
 **Important Notes**:
+
 - **One folder per service**: Each deployable service in `bitso-services/` gets its own subfolder
 - **Service-centric**: Focus on services, not library modules (`bitso-libs/` are implementation details)
 - **Multiple services**: If the repo has multiple services, document each separately
@@ -149,6 +154,7 @@ docs/
 - **Getting Started**: Optional `getting-started/` folder for tutorials and quick-start guides
 
 **Example**: If a repository has `bitso-services/order-service/` and `bitso-services/order-consumer/`, create:
+
 ```
 docs/
 ├── api/                     # Human-managed
@@ -226,6 +232,7 @@ This directory contains AI-generated documentation for the services in this repo
 Each service has its own documentation folder:
 
 ```
+
 docs/
 ├── README.md (this file)
 ├── <service-1>/
@@ -235,6 +242,7 @@ docs/
 │   └── features/            # Features as individual .md files
 └── <service-2>/
     └── ... (same structure)
+
 ```
 
 ## Documentation Philosophy
@@ -364,9 +372,10 @@ graph TB
 <Describe the purpose of each major module in bitso-libs/>
 
 ### Module: <module-name>
+
 - **Path**: `bitso-libs/<module>/`
 - **Purpose**: <What it does>
-- **Key Packages**: 
+- **Key Packages**:
   - `api/` - gRPC handlers
   - `service/` - Business logic
   - `persistence/` - Data access (JOOQ/Redis)
@@ -378,6 +387,7 @@ graph TB
 ### gRPC Services
 
 #### <External Service Name>
+
 - **Purpose**: <Why we depend on it>
 - **Key RPCs Used**: <List>
 - **Configuration**: `grpc.client.<service-name>`
@@ -388,12 +398,14 @@ graph TB
 ### Databases
 
 #### PostgreSQL
+
 - **Database**: `<db-name>`
 - **Key Tables**: <List main tables>
 - **Access**: JOOQ with HikariCP connection pooling
 - **Read/Write Split**: <Yes/No - explain if yes>
 
 #### Redis
+
 - **Instances Used**:
   - **<Redis Instance 1>**: <Purpose and key patterns>
   - **<Redis Instance 2>**: <Purpose and key patterns>
@@ -424,6 +436,7 @@ sequenceDiagram
 ```
 
 ### Key Flow Characteristics
+
 - **Validation**: <What's validated and where>
 - **Business Logic**: <Main processing steps>
 - **Data Access**: <Read/write patterns>
@@ -445,6 +458,7 @@ graph LR
 ## Deployment Configuration
 
 ### Service Deployment
+
 - **Port**: 8201 (gRPC)
 - **Replica Count**: <Default count>
 - **Resource Limits**: <If noteworthy>
@@ -454,9 +468,11 @@ graph LR
 <Only document service-specific configuration that varies by environment>
 
 #### Production-Specific
+
 <Any prod-only configs>
 
 #### Staging-Specific
+
 <Any stage-only configs>
 
 ### Key Environment Variables
@@ -470,11 +486,13 @@ graph LR
 <Document any important architectural decisions specific to this service>
 
 ### Decision 1: <Title>
+
 **Context**: <Why this was needed>
 **Decision**: <What was decided>
 **Rationale**: <Why this approach>
 
 ### Decision 2: <Title>
+
 <Same pattern>
 ```
 
@@ -538,6 +556,7 @@ C4Context
 <Tables related to this concept>
 
 #### Table: `<table_name>`
+
 - **Purpose**: <What it stores>
 - **Key Columns**: `id`, `field1`, `field2`
 - **Relationships**: <How it relates to other tables>
@@ -547,6 +566,7 @@ C4Context
 <Redis data structures related to this concept>
 
 #### Key Pattern: `<pattern>:*`
+
 - **Type**: <Hash/Set/ZSet/String>
 - **Purpose**: <What it stores>
 - **TTL**: <Duration or none>
@@ -560,15 +580,18 @@ C4Context
 ## Dependencies
 
 ### Internal Dependencies
+
 - **Module/Component**: <How it's used>
 
 ### External Dependencies
+
 - **Service**: <Which external service and why>
 
 ## Related Concepts
 
 - **Concept 1**: <How they relate>
 - **Concept 2**: <How they relate>
+
 ```
 
 ### Template: `<service-name>/features/<feature-name>.md`
@@ -622,12 +645,14 @@ sequenceDiagram
 ### Step-by-Step Breakdown
 
 #### Step 1: <Description>
+
 - **Module**: `bitso-libs/<module>/`
 - **Classes**: `<key classes involved>`
 - **Data**: <What data is used/transformed>
 - **Validation**: <What's validated>
 
 #### Step 2: <Description>
+
 - **Module**: `bitso-libs/<module>/`
 - **Classes**: `<key classes involved>`
 - **Data**: <What data is used/transformed>
@@ -637,17 +662,20 @@ sequenceDiagram
 ## Implementation Details
 
 ### Service Layer
+
 - **Location**: `bitso-libs/<module>/service/<feature>/`
 - **Key Classes**:
   - `<ServiceClassName>` - <What it does>
   - `<ServiceClassName>` - <What it does>
 
 ### Repository Layer
+
 - **Location**: `bitso-libs/<module>/persistence/`
 - **Technology**: JOOQ (PostgreSQL) / Jedis (Redis)
 - **Key Operations**: <List main operations>
 
 ### Domain Models
+
 - **Location**: `bitso-libs/<module>/domain/`
 - **Key Models**:
   - `<ModelName>` - <What it represents>
@@ -663,6 +691,7 @@ sequenceDiagram
 **Purpose**: <What this endpoint does>
 
 **Request**: `<MethodName>Request`
+
 ```protobuf
 message <MethodName>Request {
   string field1 = 1;  // <Description>
@@ -671,6 +700,7 @@ message <MethodName>Request {
 ```
 
 **Response**: `<MethodName>Response`
+
 ```protobuf
 message <MethodName>Response {
   Payload payload = 1;
@@ -678,6 +708,7 @@ message <MethodName>Response {
 ```
 
 **Error Codes**:
+
 - `<SERVICE>_ERROR_CODE_1` - <Description>
 - `<SERVICE>_ERROR_CODE_2` - <Description>
 
@@ -685,11 +716,12 @@ message <MethodName>Response {
 
 <Repeat for each RPC in this feature>
 
-## Data Model
+## Feature Data Model
 
 ### PostgreSQL Tables
 
 #### Table: `<table_name>`
+
 - **Purpose**: <What it stores>
 - **Key Columns**: `id`, `field1`, `field2`
 - **Indexes**: <List important indexes>
@@ -697,11 +729,12 @@ message <MethodName>Response {
 ### Redis Structures
 
 #### Key Pattern: `<pattern>:*`
+
 - **Type**: <Hash/Set/ZSet/String>
 - **Purpose**: <What it stores>
 - **TTL**: <Duration or none>
 
-## Business Rules
+## Feature Business Rules
 
 1. **Rule 1**: <Description of business constraint/logic>
 2. **Rule 2**: <Description>
@@ -710,19 +743,23 @@ message <MethodName>Response {
 ## Error Handling
 
 ### Business Errors
+
 - `<ERROR_CODE>` - <When this occurs and how handled>
 - `<ERROR_CODE>` - <When this occurs and how handled>
 
 ### Technical Errors
+
 - Database errors: <How handled>
 - External service errors: <How handled>
 
-## Dependencies
+## Feature Dependencies
 
 ### Internal Components
+
 - **Module**: `bitso-libs/<module>/` - <How used>
 
 ### External Services
+
 - **Service**: `<service-name>` - <How used and why>
 
 ## Configuration
@@ -740,6 +777,7 @@ feature:
 **Test Location**: `bitso-libs/<module>/src/test/groovy/.../`
 
 **Key Test Scenarios**:
+
 1. <Happy path test>
 2. <Error scenario test>
 3. <Edge case test>
@@ -748,6 +786,7 @@ feature:
 
 - **Feature 1**: <How they relate>
 - **Feature 2**: <How they relate>
+
 ```
 
 
@@ -775,7 +814,9 @@ feature:
 ```
 
 ### Frontmatter
+
 Always include frontmatter with:
+
 - Relevant tags
 - Service name
 - Related components/services
@@ -800,6 +841,7 @@ Always include frontmatter with:
 ## Quality Checklist
 
 Before completing, verify:
+
 - [ ] Checked existing documentation for changes needed
 - [ ] Only updated files where actual changes occurred
 - [ ] **Repository README**: `docs/README.md` lists all services in the repo
@@ -823,6 +865,7 @@ Before completing, verify:
 ## Output Format
 
 Generate all files and present them in a structured format showing:
+
 1. File path
 2. Complete content with proper markdown formatting
 3. Indication if file is NEW, UPDATED, or UNCHANGED
