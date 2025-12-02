@@ -34,6 +34,10 @@
       "env": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_TOKEN}"
       }
+    },
+    "atlas": {
+      "type": "http",
+      "url": "https://atlas-mcp.bitso.io/mcp"
     }
   }
 }
