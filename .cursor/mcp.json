@@ -7,6 +7,29 @@
     "api-guidelines": {
       "type": "http",
       "url": "https://api-mcp.bitso.io/sse"
+    },
+    "github": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "-e",
+        "GITHUB_READ_ONLY=1",
+        "-e",
+        "GITHUB_LOCKDOWN_MODE=1",
+        "-e",
+        "GITHUB_TOOLSETS=dependabot,code_security,secret_protection,security_advisories,labels,pull_requests",
+        "-e",
+        "GITHUB_TOOLS=get_me",
+        "ghcr.io/github/github-mcp-server:0.24.0"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_TOKEN}"
+      }
     }
   }
 }
