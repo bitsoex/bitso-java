@@ -24,6 +24,11 @@ This repository uses AI-assisted development with specific coding guidelines and
 **Description:** Github Cli Pr Lifecycle
 **Scope:** Always applies
 
+### Jira Ticket Workflow for AI Agent Commands
+**File:** [`.claude/jira-ticket-workflow.md`](.claude/jira-ticket-workflow.md)
+**Description:** Jira Ticket Workflow for AI Agent Commands
+**Scope:** Always applies
+
 ### Markdown Documentation Review Guidelines
 **File:** [`.claude/markdown-review.md`](.claude/markdown-review.md)
 **Description:** Markdown Documentation Review Guidelines
@@ -136,6 +141,6 @@ These rules are automatically applied when using Claude AI assistant in this rep
 
 ## Rule Categories
 
-- **Java**: java specific coding guidelines (25 rules)
+- **Java**: java specific coding guidelines (26 rules)
 
 ---

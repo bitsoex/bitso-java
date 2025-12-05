@@ -1,8 +1,16 @@
-# Fix Test Coverage
+# Fix test coverage issues in Java projects - DO NOT use -x codeCoverageReport
 
-Fix Test Coverage
+Fix test coverage issues in Java projects - DO NOT use -x codeCoverageReport
 
-# Fix Test Coverage
+# 🤖 🧪 Fix Test Coverage
+
+**IMPORTANT**: This is the ONE command where coverage reports are essential. **DO NOT use `-x codeCoverageReport`** in this command - coverage is the goal.
+
+## Related Rules (Read First)
+
+- **Jira Ticket Workflow**: `global/rules/jira-ticket-workflow.md` - **MUST create ticket before starting**
+- **JaCoCo plugin in all modules** - See `java/rules/java-jacoco-coverage.md`
+- **Gradle Commands**: `java/rules/java-gradle-commands.md` - Note: This command is the exception to `-x codeCoverageReport`
 
 ## Prerequisites
 
@@ -12,7 +20,28 @@ Fix Test Coverage
 
 ## Workflow
 
-### 1. Verify JaCoCo Configuration (Pre-flight Check)
+### 1. Create Jira Ticket (REQUIRED FIRST STEP)
+
+**Before any code changes**, create a Jira ticket for tracking:
+
+Use `mcp_atlassian_createJiraIssue`:
+
+- **Summary**: `🤖 🧪 Improve test coverage for [module/class] in [repo-name]`
+- **Parent**: Current Sprint/Cycle KTLO Epic
+- **Description**: Include current coverage % and target
+
+**See `global/rules/jira-ticket-workflow.md` for detailed ticket creation steps.**
+
+### 2. Create Branch with Jira Key
+
+```bash
+JIRA_KEY="EN-XX"  # From step 1
+MODULE="payment-service"  # Target module
+
+git checkout -b test/${JIRA_KEY}-coverage-${MODULE}
+```
+
+### 3. Verify JaCoCo Configuration (Pre-flight Check)
 
 **IMPORTANT**: Run these checks BEFORE executing any test commands to ensure proper coverage reporting.
 
@@ -77,7 +106,7 @@ test {
 
 > ✓ Only proceed to next steps after all checks pass
 
-### 2. Check for Existing Coverage Reports
+### 4. Check for Existing Coverage Reports
 
 Before running tests, check if coverage reports already exist:
 
@@ -89,21 +118,26 @@ find . -path "*/build/reports/jacoco/test/jacocoTestReport.csv" 2>/dev/null
 find . -path "*/build/reports/jacoco/test/jacocoTestReport.csv" -mtime +1 2>/dev/null
 ```
 
-If recent reports exist, skip to step 4. Otherwise, generate fresh reports.
+If recent reports exist, skip to step 6. Otherwise, generate fresh reports.
 
-### 3. Generate Coverage Reports
+### 5. Generate Coverage Reports
+
+**⚠️ DO NOT use `-x codeCoverageReport` here - coverage is the goal!**
 
 Run tests and generate JaCoCo reports for target module(s):
 
 ```bash
-# Single module
-./gradlew :module-name:clean :module-name:test :module-name:jacocoTestReport
+# Single module (INCLUDE coverage report - this is the goal!)
+./gradlew :module-name:clean :module-name:test :module-name:jacocoTestReport 2>&1 | tee /tmp/coverage.log
 
 # All modules (slower but comprehensive)
-./gradlew clean test jacocoTestReport
+./gradlew clean test jacocoTestReport 2>&1 | tee /tmp/coverage.log
 
 # Check for errors
 echo $?  # 0 = success, non-zero = failures
+
+# On failure, check the log
+grep -A 10 "FAILED" /tmp/coverage.log
 ```
 
 **Verify reports generated:**
@@ -113,7 +147,7 @@ ls -lh bitso-libs/module-name/build/reports/jacoco/test/
 # Expected: jacocoTestReport.csv, jacocoTestReport.xml, html/
 ```
 
-### 4. Identify Low Coverage Classes (CSV Analysis)
+### 6. Identify Low Coverage Classes (CSV Analysis)
 
 Use CSV report to find classes needing coverage improvements:
 
@@ -150,7 +184,7 @@ GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_
 
 Columns: $1=GROUP, $2=PACKAGE, $3=CLASS, $4-$5=INSTRUCTION, $6-$7=BRANCH, $8-$9=LINE, $10-$11=COMPLEXITY, $12-$13=METHOD
 
-### 5. Identify Uncovered Lines (HTML Analysis)
+### 7. Identify Uncovered Lines (HTML Analysis)
 
 After identifying low-coverage classes from CSV, use HTML reports to find exact uncovered lines.
 
@@ -210,7 +244,7 @@ Line 48: case "invalid-email-params" -> MakerCheckerErrorCodes.MAKER_CHECKER_ERR
 - `<span class="pc"` - **Partially covered** line (yellow, branch partially covered)
 - `<span class="nc"` - **Not covered** line (red)
 
-### 6. Identify Tests for Target Class
+### 8. Identify Tests for Target Class
 
 To run only relevant tests when improving coverage, identify which test files cover the target class:
 
@@ -239,14 +273,14 @@ grep -r "import.*${TARGET_CLASS}" --include="*Test.java" --include="*Spec.groovy
 #### Strategy 3: Run specific test and check coverage
 
 ```bash
-# Run single test class
-./gradlew :module-name:test --tests "*MyServiceSpec" :module-name:jacocoTestReport
+# Run single test class (INCLUDE coverage report!)
+./gradlew :module-name:test --tests "*MyServiceSpec" :module-name:jacocoTestReport 2>&1 | tee /tmp/test-coverage.log
 
 # Check if target class coverage increased in CSV
 grep "MyService" bitso-libs/module-name/build/reports/jacoco/test/jacocoTestReport.csv
 ```
 
-### 7. Write Tests to Improve Coverage
+### 9. Write Tests to Improve Coverage
 
 Focus on high-value coverage gaps:
 
@@ -283,7 +317,7 @@ def "should reject negative discount"() {
 
 Reference `java/rules/java-testing-guidelines.md` for test patterns and best practices.
 
-### 8. Verify Coverage Increased
+### 10. Verify Coverage Increased
 
 Run only the relevant tests and check coverage delta:
 
@@ -291,8 +325,8 @@ Run only the relevant tests and check coverage delta:
 # Save baseline
 OLD_COV=$(awk -F, -v cls="MyService" '$3==cls {print $9/($8+$9)*100}' bitso-libs/module-name/build/reports/jacoco/test/jacocoTestReport.csv)
 
-# Run specific test(s) that cover the class
-./gradlew :module-name:test --tests "*MyServiceSpec" :module-name:jacocoTestReport
+# Run specific test(s) that cover the class (INCLUDE coverage report!)
+./gradlew :module-name:test --tests "*MyServiceSpec" :module-name:jacocoTestReport 2>&1 | tee /tmp/coverage-verify.log
 
 # Check new coverage
 NEW_COV=$(awk -F, -v cls="MyService" '$3==cls {print $9/($8+$9)*100}' bitso-libs/module-name/build/reports/jacoco/test/jacocoTestReport.csv)
@@ -309,32 +343,66 @@ open bitso-libs/module-name/build/reports/jacoco/test/html/index.html
 
 **Target:** 82% line coverage (minimum threshold). Focus on meaningful tests, not coverage chasing.
 
-### 9. Commit Coverage Improvements
-
-Use incremental commits with clear messages:
+### 11. Commit with Emojis and Jira Key
 
 ```bash
-git add java/
-git commit -m "test: add coverage for MyService discount validation
+JIRA_KEY="EN-XX"
+
+git add -A
+git commit -m "🤖 🧪 test: [$JIRA_KEY] improve coverage for MyService
 
 - Added 3 test cases for negative discount edge cases
 - Increased MyService line coverage from 65% to 81%
 - Covers branch: discount < 0 validation"
 ```
 
-### 10. Verify Quality Gate
+### 12. Push and Create PR
+
+```bash
+git push -u origin $(git branch --show-current)
+
+JIRA_KEY="EN-XX"
+
+gh pr create --draft \
+    --title "🤖 🧪 [$JIRA_KEY] test: improve coverage for MyService" \
+    --body "## 🤖 AI-Assisted Test Coverage Improvements
+
+Jira: [$JIRA_KEY](https://bitsomx.atlassian.net/browse/$JIRA_KEY)
+
+## Coverage Changes
+
+| Class | Before | After | Delta |
+|-------|--------|-------|-------|
+| MyService | 65% | 81% | +16% |
+
+## Tests Added
+- testNegativeDiscount
+- testZeroDiscount
+- testMaxDiscount
+
+## Validation
+- [x] Tests pass locally
+- [x] Coverage meets 82% threshold
+- [ ] CI passes
+
+## References
+- JaCoCo report: [link]"
+```
+
+### 13. Verify Quality Gate
 
 After commit, ensure coverage meets project threshold:
 
 ```bash
-# Run coverage verification (enforces 82% minimum)
-./gradlew :module-name:jacocoTestCoverageVerification
+# Run coverage verification (enforces 82% minimum) - INCLUDE coverage!
+./gradlew :module-name:jacocoTestCoverageVerification 2>&1 | tee /tmp/coverage-verify.log
 
 # Check exit code
 if [ $? -eq 0 ]; then
   echo "✓ Coverage meets 82% threshold"
 else
   echo "✗ Coverage below threshold - add more tests"
+  grep -A 5 "FAILED" /tmp/coverage-verify.log
 fi
 ```
 
@@ -397,7 +465,7 @@ Usage:
 # Before changes
 ./scripts/coverage-delta.sh my-module > /tmp/before.txt
 
-# After writing tests
+# After writing tests (INCLUDE coverage report!)
 ./gradlew :my-module:test :my-module:jacocoTestReport
 ./scripts/coverage-delta.sh my-module > /tmp/after.txt
 
@@ -407,6 +475,8 @@ diff /tmp/before.txt /tmp/after.txt
 
 ## Best Practices
 
+- **Create Jira ticket FIRST** before any code changes
+- **DO NOT use `-x codeCoverageReport`** - coverage is the goal of this command
 - **Incremental approach**: Fix 1-3 classes at a time, commit, repeat
 - **Test quality over quantity**: Meaningful integration > 100% line coverage
 - **Use CSV for automation**: Grep/awk for scripting, HTML for manual inspection
@@ -463,9 +533,11 @@ Use XML parsing instead for those specific cases:
 xmllint --xpath '//class[@name="com/bitso/MyService"]//counter[@type="LINE"]/@covered' jacocoTestReport.xml
 ```
 
-## Related Documentation
+## Related
 
-- `java/rules/java-jacoco-coverage.md` - Complete JaCoCo configuration and CSV format reference
-- `java/rules/java-testing-guidelines.md` - Test patterns and best practices (Spock, JUnit, Testcontainers)
-- `java/rules/java-gradle-commands.md` - Gradle test and coverage commands
-- `java/rules/java-gradle-best-practices.md` - Build configuration standards
+- **Jira Ticket Workflow**: `global/rules/jira-ticket-workflow.md` - **Required** - Ticket creation and emoji conventions
+- **PR Lifecycle**: `global/rules/github-cli-pr-lifecycle.md` - PR creation with emojis
+- **JaCoCo Code Coverage**: `java/rules/java-jacoco-coverage.md` - Complete JaCoCo configuration and CSV format reference
+- **Testing Guidelines**: `java/rules/java-testing-guidelines.md` - Test patterns and best practices (Spock, JUnit, Testcontainers)
+- **Gradle Commands**: `java/rules/java-gradle-commands.md` - Note: This command is the exception to `-x codeCoverageReport`
+- **Gradle Best Practices**: `java/rules/java-gradle-best-practices.md` - Build configuration standards

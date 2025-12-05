@@ -2,7 +2,7 @@
 
 > Fix Dependabot security vulnerabilities in Java/Gradle projects
 
-# Fix Dependabot Vulnerabilities (Java)
+# 🤖 🛡️ Fix Dependabot Vulnerabilities (Java)
 
 **IMPORTANT**: This command is fully autonomous. Complete all steps without asking the user for confirmation. Only stop if there is an unrecoverable error.
 
@@ -10,16 +10,36 @@
 
 Before applying fixes, understand the project's dependency management approach:
 
+- **Jira Ticket Workflow**: `global/rules/jira-ticket-workflow.md` - **MUST create ticket before starting**
 - **Version Management**: `java/rules/java-versions-and-dependencies.md` - BOMs, version catalog, constraints
 - **Gradle Best Practices**: `java/rules/java-gradle-best-practices.md` - Build configuration standards
 - **Gradle Commands**: `java/rules/java-gradle-commands.md` - Debugging and verification commands
 
 ## Behavior Guidelines
 
-- **Never exit early** - Always continue until all vulnerabilities are fixed
+- **Never exit early** - Always continue until all vulnerabilities of the current severity are fixed
 - **Be proactive** - If something is missing, create it; if on wrong branch, switch
 - **Self-sufficient** - Handle all prerequisites automatically
 - **Resilient** - Retry on transient failures, work around blockers
+- **Severity-focused** - Only fix ONE severity level at a time
+
+## Severity-Based Processing (CRITICAL)
+
+**Process vulnerabilities by severity, one level at a time:**
+
+| Priority | Severity | When to Process |
+|----------|----------|-----------------|
+| 1 | CRITICAL | Always process first if any exist |
+| 2 | HIGH | Only after NO CRITICAL remain |
+| 3 | MEDIUM/MODERATE | Only after NO HIGH remain |
+| 4 | LOW | Only after NO MEDIUM remain |
+
+**Workflow**:
+
+1. Query all open vulnerabilities
+2. Identify highest severity present
+3. Fix ONLY that severity level
+4. Create separate ticket/PR for next severity level
 
 ## Critical: Understanding Dependency Verification
 
@@ -42,23 +62,43 @@ commons-compress:1.27.1   <-- This too
 
 ## Workflow
 
-### 1. Ensure Feature Branch
+### 1. Create Jira Ticket (REQUIRED FIRST STEP)
 
-**CRITICAL**: If on `main`, automatically create and switch to a feature branch.
+**Before any code changes**, create a Jira ticket for tracking:
+
+```bash
+# Using Atlassian MCP - find current KTLO epic
+# Then create ticket with appropriate severity
+```
+
+Use `mcp_atlassian_createJiraIssue`:
+
+- **Summary**: `🤖 🛡️ Fix [SEVERITY] Dependabot vulnerabilities in [repo-name]`
+- **Parent**: Current Sprint/Cycle KTLO Epic
+- **Description**: Include list of CVEs to fix
+
+**See `global/rules/jira-ticket-workflow.md` for detailed ticket creation steps.**
+
+### 2. Ensure Feature Branch with Jira Key
+
+**CRITICAL**: Branch name must include Jira key.
 
 ```bash
 CURRENT_BRANCH=$(git branch --show-current)
+JIRA_KEY="EN-XX"  # From step 1
+SEVERITY="critical"  # or high, medium, low
+
 if [ "$CURRENT_BRANCH" = "main" ]; then
     git stash --include-untracked 2>/dev/null || true
     git fetch --all
     git pull origin main
-    BRANCH_NAME="fix/dependabot-security-$(date +%Y%m%d-%H%M%S)"
+    BRANCH_NAME="fix/${JIRA_KEY}-${SEVERITY}-vulnerabilities"
     git checkout -b "$BRANCH_NAME"
     echo "Created branch: $BRANCH_NAME"
 fi
 ```
 
-### 2. Setup Dependency Graph Plugin
+### 3. Setup Dependency Graph Plugin
 
 Check if `gradle/dependency-graph-init.gradle` exists. If not, create it:
 
@@ -79,21 +119,48 @@ initscript {
 apply plugin: org.gradle.dependencygraph.simple.SimpleDependencyGraphPlugin
 ```
 
-### 3. Get Dependabot Alerts
+### 4. Get Dependabot Alerts and Determine Severity
 
 ```bash
 REPO=$(gh repo view --json nameWithOwner -q '.nameWithOwner')
+
+# Get all open alerts with severity
 gh api repos/$REPO/dependabot/alerts --jq '.[] | select(.state == "open") | {number, severity: .security_advisory.severity, package: .dependency.package.name, patched_version: .security_vulnerability.first_patched_version.identifier, cve: .security_advisory.cve_id}'
+
+# Count by severity to determine what to fix
+gh api repos/$REPO/dependabot/alerts --jq '[.[] | select(.state == "open")] | group_by(.security_advisory.severity) | map({severity: .[0].security_advisory.severity, count: length})'
 ```
 
-### 4. Generate Dependency Graph (Before Fix)
+**Determine current severity to fix:**
+
+```bash
+# Check for CRITICAL first
+CRITICAL_COUNT=$(gh api repos/$REPO/dependabot/alerts --jq '[.[] | select(.state == "open" and .security_advisory.severity == "critical")] | length')
+
+if [ "$CRITICAL_COUNT" -gt 0 ]; then
+    TARGET_SEVERITY="critical"
+elif [ "$(gh api repos/$REPO/dependabot/alerts --jq '[.[] | select(.state == "open" and .security_advisory.severity == "high")] | length')" -gt 0 ]; then
+    TARGET_SEVERITY="high"
+elif [ "$(gh api repos/$REPO/dependabot/alerts --jq '[.[] | select(.state == "open" and .security_advisory.severity == "medium")] | length')" -gt 0 ]; then
+    TARGET_SEVERITY="medium"
+else
+    TARGET_SEVERITY="low"
+fi
+
+echo "Fixing $TARGET_SEVERITY severity vulnerabilities"
+
+# Get only alerts of target severity
+gh api repos/$REPO/dependabot/alerts --jq ".[] | select(.state == \"open\" and .security_advisory.severity == \"$TARGET_SEVERITY\")"
+```
+
+### 5. Generate Dependency Graph (Before Fix)
 
 ```bash
 ./gradlew -I gradle/dependency-graph-init.gradle \
     --dependency-verification=off \
     --no-configuration-cache \
     --no-configure-on-demand \
-    :ForceDependencyResolutionPlugin_resolveAllDependencies
+    :ForceDependencyResolutionPlugin_resolveAllDependencies 2>&1 | tee /tmp/dep-graph.log
 
 # Check what versions will be reported to GitHub
 grep -i "vulnerable-package" build/reports/dependency-graph-snapshots/dependency-list.txt | sort -u
@@ -101,7 +168,7 @@ grep -i "vulnerable-package" build/reports/dependency-graph-snapshots/dependency
 
 **If you see multiple versions of the same package, ALL of them will be reported to GitHub.**
 
-### 5. Apply Fix - Use Correct Strategy (Hierarchy)
+### 6. Apply Fix - Use Correct Strategy (Hierarchy)
 
 **Always prefer higher-level solutions.** Use this hierarchy:
 
@@ -252,29 +319,33 @@ dependencies {
 
 **When to use**: Only when substitution doesn't work or there are complex resolution conflicts.
 
-### 6. Validate Build and Tests
+### 7. Validate Build and Tests
 
 **CRITICAL**: Build and test failures are unrecoverable errors. Stop execution if they fail.
 
+**Use `-x codeCoverageReport` for faster test execution:**
+
 ```bash
-# Validate build succeeds - halt on failure
-if ! ./gradlew clean build 2>&1 | tee /tmp/build.log | grep -E "BUILD SUCCESSFUL"; then
+# Validate build succeeds - halt on failure (save log for debugging)
+if ! ./gradlew clean build -x codeCoverageReport 2>&1 | tee /tmp/build.log | grep -E "BUILD SUCCESSFUL"; then
     echo "❌ Build failed - cannot proceed"
     grep -E "FAILED|Error|Exception" /tmp/build.log | head -20
     exit 1
 fi
 echo "✅ Build successful"
 
-# Validate tests pass - halt on failure
-if ! ./gradlew test 2>&1 | tee /tmp/test.log | grep -E "BUILD SUCCESSFUL"; then
+# Validate tests pass - halt on failure (save log for debugging)
+if ! ./gradlew test -x codeCoverageReport 2>&1 | tee /tmp/test.log | grep -E "BUILD SUCCESSFUL"; then
     echo "❌ Tests failed - cannot proceed"
     grep -E "FAILED|Error" /tmp/test.log | head -20
+    # For more context without re-running:
+    grep -B 5 -A 20 "FAILED" /tmp/test.log
     exit 1
 fi
 echo "✅ All tests passed"
 ```
 
-### 7. Verify Fix with Dependency Graph (CRITICAL)
+### 8. Verify Fix with Dependency Graph (CRITICAL)
 
 **This determines what GitHub will see. Old versions here = dependency-review failure.**
 
@@ -283,7 +354,7 @@ echo "✅ All tests passed"
     --dependency-verification=off \
     --no-configuration-cache \
     --no-configure-on-demand \
-    :ForceDependencyResolutionPlugin_resolveAllDependencies
+    :ForceDependencyResolutionPlugin_resolveAllDependencies 2>&1 | tee /tmp/dep-verify.log
 
 # CRITICAL: Verify ONLY patched versions appear
 grep -i "commons-compress" build/reports/dependency-graph-snapshots/dependency-list.txt | sort -u
@@ -309,13 +380,16 @@ If old versions still appear:
 2. Add more specific substitution rules or excludes
 3. Regenerate and verify again
 
-### 8. Commit Changes
+### 9. Commit Changes with Emojis and Jira Key
 
 Include the fix strategy reasoning in the commit message:
 
 ```bash
+JIRA_KEY="EN-XX"  # From step 1
+TARGET_SEVERITY="critical"  # From step 4
+
 git add -A
-git commit -m "fix(security): resolve Dependabot vulnerabilities
+git commit -m "🤖 🛡️ fix(security): [$JIRA_KEY] resolve $TARGET_SEVERITY Dependabot vulnerabilities
 
 Fixes:
 - [package]: X.X.X -> Y.Y.Y (CVE-XXXX-XXXXX)
@@ -330,43 +404,46 @@ Example:
 Verified via dependency graph - only patched versions reported"
 ```
 
-### 9. Push and Create Draft PR
+### 10. Push and Create Draft PR
 
 #### PR Description Accuracy (CRITICAL)
 
 Only include information you have **verified**. Do not guess or assume:
 
-- **CVE numbers**: Only include CVEs you confirmed from Dependabot alerts (step 3)
-- **Old versions**: Only include versions you confirmed exist in the dependency graph (step 4)
-- **New versions**: Only include versions you confirmed are being used after the fix (step 7)
+- **CVE numbers**: Only include CVEs you confirmed from Dependabot alerts (step 4)
+- **Old versions**: Only include versions you confirmed exist in the dependency graph (step 5)
+- **New versions**: Only include versions you confirmed are being used after the fix (step 8)
 
 ```bash
 git push -u origin $(git branch --show-current)
 ```
 
-Create PR with **only verified information** and **strategy reasoning**:
+Create PR with **emojis, Jira key, and verified information**:
 
 ```bash
+JIRA_KEY="EN-XX"
+TARGET_SEVERITY="CRITICAL"
+
 gh pr create --draft \
-    --title "fix(security): resolve Dependabot vulnerabilities" \
-    --body "## Security Fixes
+    --title "🤖 🛡️ [$JIRA_KEY] fix(security): resolve $TARGET_SEVERITY Dependabot vulnerabilities" \
+    --body "## 🤖 AI-Assisted Security Fixes
+
+Jira: [$JIRA_KEY](https://bitsomx.atlassian.net/browse/$JIRA_KEY)
+
+## Severity Level
+$TARGET_SEVERITY
+
+## Security Fixes
 
 | Package | Old Version | New Version | CVE | Severity |
 |---------|-------------|-------------|-----|----------|
-| [PACKAGE] | [OLD_VERSION] | [NEW_VERSION] | [CVE_ID] | [SEVERITY] |
+| [PACKAGE] | [OLD_VERSION] | [NEW_VERSION] | [CVE_ID] | $TARGET_SEVERITY |
 
 ## Fix Strategy & Reasoning
 
 | Package | Strategy Used | Why This Strategy |
 |---------|---------------|-------------------|
 | [PACKAGE] | [Strategy N] | [Why alternatives weren't suitable] |
-
-**Example:**
-| Package | Strategy Used | Why This Strategy |
-|---------|---------------|-------------------|
-| logback-core | Version catalog (Strategy 2) | Direct dependency managed by Spring Boot BOM - updated BOM version |
-| tomcat-embed-core | Version catalog (Strategy 2) | Constrained via gradle.properties - Spring Boot BOM will include in next version |
-| commons-lang3 | Substitution (Strategy 3) | BOM doesn't manage this; version catalog alone didn't remove transitive 3.16.0 |
 
 ## Validation
 - [x] Build passes locally
@@ -385,7 +462,7 @@ gh pr create --draft \
 - References to PRs or issues that don't exist
 - Assumptions about which packages are affected
 
-### 10. Monitor CI - Check dependency-review Output
+### 11. Monitor CI - Check dependency-review Output
 
 **Note**: Do not wait indefinitely. Use a timeout to prevent blocking.
 
@@ -433,7 +510,7 @@ fi
 | `Build` | ✅ SUCCESS | Must pass |
 | `Stage Readiness` | ❌ FAILURE | Expected - manual intervention after review |
 
-### 11. If dependency-review Fails
+### 12. If dependency-review Fails
 
 Check the action output for lines like:
 
@@ -441,19 +518,30 @@ Check the action output for lines like:
 + org.apache.commons:commons-compress@1.23.0  <-- This is the problem
 ```
 
-This means the old version is still being reported. Go back to step 5 and:
+This means the old version is still being reported. Go back to step 6 and:
 
 1. Use `dependencySubstitution` instead of `force`
 2. Add `exclude` rules for the old versions
 3. Regenerate dependency graph and verify
 
-### 12. Finalize PR
+### 13. Finalize PR
 
 Once `dependency-review` passes:
 
 ```bash
 gh pr ready $PR_NUMBER
 ```
+
+### 14. Create Ticket for Next Severity (If Applicable)
+
+After this PR is merged, if there are remaining vulnerabilities of lower severity:
+
+```bash
+# Check remaining vulnerabilities
+gh api repos/$REPO/dependabot/alerts --jq '[.[] | select(.state == "open")] | group_by(.security_advisory.severity) | map({severity: .[0].security_advisory.severity, count: length})'
+```
+
+If remaining, create a new Jira ticket for the next severity level and repeat the process.
 
 ## Fix Strategy Comparison
 
@@ -508,6 +596,8 @@ dependencyResolutionManagement {
 
 ## Related
 
+- **Jira Ticket Workflow**: `global/rules/jira-ticket-workflow.md` - **Required** - Ticket creation and emoji conventions
+- **PR Lifecycle**: `global/rules/github-cli-pr-lifecycle.md` - PR creation with emojis
 - **Plugin Docs**: [GitHub Dependency Graph Gradle Plugin](https://github.com/gradle/github-dependency-graph-gradle-plugin)
 - **Dependabot Security Rule**: `java/rules/java-dependabot-security.md`
 - **Version Management**: `java/rules/java-versions-and-dependencies.md`
