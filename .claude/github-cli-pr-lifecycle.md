@@ -320,7 +320,17 @@ All AI-generated commits must follow this format:
 - Detail 2
 
 [Additional context if needed]
+
+Generated with the [Agent Name] by the /[command-name] command.
 ```
+
+**Agent Attribution (REQUIRED):**
+
+| Command | Attribution Line |
+|---------|-----------------|
+| `/fix-dependabot-vulnerabilities` | Generated with the Quality Agent by the /fix-dependabot-vulnerabilities command. |
+| `/fix-test-coverage` | Generated with the Quality Agent by the /fix-test-coverage command. |
+| `/fix-sonarqube-issues` | Generated with the Security Agent by the /fix-sonarqube-issues command. |
 
 **Examples:**
 
@@ -331,7 +341,9 @@ git commit -m "🤖 🛡️ fix(security): [EN-52] resolve critical CVE-2024-xxx
 - Updated commons-compress to 1.27.1
 - Added dependency substitution for transitive deps
 
-Severity: CRITICAL"
+Severity: CRITICAL
+
+Generated with the Quality Agent by the /fix-dependabot-vulnerabilities command."
 
 # Quality fix
 git commit -m "🤖 ✅ fix(quality): [EN-53] resolve BLOCKER SonarQube issues
@@ -339,13 +351,17 @@ git commit -m "🤖 ✅ fix(quality): [EN-53] resolve BLOCKER SonarQube issues
 - Fixed null pointer in PaymentService
 - Added missing @Override annotations
 
-Rules: java:S2259, java:S1161"
+Rules: java:S2259, java:S1161
+
+Generated with the Security Agent by the /fix-sonarqube-issues command."
 
 # Test coverage
 git commit -m "🤖 🧪 test: [EN-54] improve coverage for PaymentService
 
 - Added tests for edge cases
-- Increased coverage from 65% to 82%"
+- Increased coverage from 65% to 82%
+
+Generated with the Quality Agent by the /fix-test-coverage command."
 
 # CodeRabbit feedback
 git commit -m "🤖 fix: address CodeRabbit review feedback
@@ -375,6 +391,28 @@ git commit -m "🤖 fix: address CodeRabbit review feedback
 7. **Reply to CodeRabbit comments** after fixing, referencing commit hash
 8. **Re-request review** after addressing all comments
 9. **Don't wait indefinitely** for CodeRabbit - proceed after critical checks pass
+10. **Work on other tasks while CI runs** - After pushing changes, continue with other PRs or unfinished work instead of waiting for CodeRabbit reviews and CI checks
+
+## Parallel Work During CI/Review (IMPORTANT)
+
+When working on multiple PRs or orchestrating work across repositories:
+
+1. **Push and move on** - After pushing changes to a PR, immediately continue with other pending work
+2. **Don't block on CI** - CodeRabbit reviews and CI checks can take 2-10 minutes; use this time productively
+3. **Batch check status** - Periodically check all pending PRs together rather than waiting on each one
+4. **Prioritize unblocked work** - If one PR is waiting for review, work on the next task
+
+**Example workflow for multiple PRs:**
+
+```text
+1. Push PR #1 changes → Don't wait
+2. Start working on PR #2 → Push changes → Don't wait
+3. Check status of PR #1 → Address feedback if any
+4. Check status of PR #2 → Address feedback if any
+5. Repeat until all PRs are ready
+```
+
+This maximizes productivity and reduces total time to complete multiple tasks.
 
 ## Related
 

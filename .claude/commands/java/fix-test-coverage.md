@@ -8,7 +8,7 @@
 
 ## Related Rules (Read First)
 
-- **Jira Ticket Workflow**: `global/rules/jira-ticket-workflow.md` - **MUST create ticket before starting**
+- **Jira Ticket Workflow**: `global/rules/jira-ticket-workflow.md` - **MUST search for existing tickets first (Step 1), then create if none found**
 - **JaCoCo plugin in all modules** - See `java/rules/java-jacoco-coverage.md`
 - **Gradle Commands**: `java/rules/java-gradle-commands.md` - Note: This command is the exception to `-x codeCoverageReport`
 
@@ -353,7 +353,9 @@ git commit -m "🤖 🧪 test: [$JIRA_KEY] improve coverage for MyService
 
 - Added 3 test cases for negative discount edge cases
 - Increased MyService line coverage from 65% to 81%
-- Covers branch: discount < 0 validation"
+- Covers branch: discount < 0 validation
+
+Generated with the Quality Agent by the /fix-test-coverage command."
 ```
 
 ### 12. Push and Create PR
@@ -384,6 +386,12 @@ Jira: [$JIRA_KEY](https://bitsomx.atlassian.net/browse/$JIRA_KEY)
 - [x] Tests pass locally
 - [x] Coverage meets 82% threshold
 - [ ] CI passes
+
+## AI Agent Details
+- **Agent**: Quality Agent
+- **Command**: /fix-test-coverage
+
+Generated with the Quality Agent by the /fix-test-coverage command.
 
 ## References
 - JaCoCo report: [link]"

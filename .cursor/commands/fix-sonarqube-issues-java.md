@@ -11,7 +11,7 @@ Fix SonarQube issues in Java projects using MCP tools and CI feedback
 
 ## Related Rules (Read First)
 
-- **Jira Ticket Workflow**: `global/rules/jira-ticket-workflow.md` - **MUST create ticket before starting**
+- **Jira Ticket Workflow**: `global/rules/jira-ticket-workflow.md` - **MUST search for existing tickets first (Step 1), then create if none found**
 - **MCP Tools**: `java/rules/java-sonarqube-mcp.md`
 - **Setup**: `java/rules/java-sonarqube-setup.md`
 - **Gradle Commands**: `java/rules/java-gradle-commands.md` - Use `-x codeCoverageReport` for faster tests
@@ -142,7 +142,9 @@ git commit -m "🤖 ✅ fix(quality): [$JIRA_KEY] resolve $TARGET_SEVERITY Sonar
 - Removed unused imports (java:S1128)
 
 Severity: $TARGET_SEVERITY
-Rules: java:S2259, java:S1161, java:S1128"
+Rules: java:S2259, java:S1161, java:S1128
+
+Generated with the Security Agent by the /fix-sonarqube-issues command."
 ```
 
 ### 8. Push and Create PR
@@ -173,6 +175,12 @@ $TARGET_SEVERITY
 - [x] Build passes locally
 - [x] Tests pass locally
 - [ ] SonarQube analysis passes
+
+## AI Agent Details
+- **Agent**: Security Agent
+- **Command**: /fix-sonarqube-issues
+
+Generated with the Security Agent by the /fix-sonarqube-issues command.
 
 ## References
 - SonarQube project: [link]"

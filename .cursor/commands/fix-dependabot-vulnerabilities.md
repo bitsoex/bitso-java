@@ -10,7 +10,7 @@ Fix Dependabot security vulnerabilities in Java/Gradle projects
 
 Before applying fixes, understand the project's dependency management approach:
 
-- **Jira Ticket Workflow**: `global/rules/jira-ticket-workflow.md` - **MUST create ticket before starting**
+- **Jira Ticket Workflow**: `global/rules/jira-ticket-workflow.md` - **MUST search for existing tickets first (Step 1), then create if none found**
 - **Version Management**: `java/rules/java-versions-and-dependencies.md` - BOMs, version catalog, constraints
 - **Gradle Best Practices**: `java/rules/java-gradle-best-practices.md` - Build configuration standards
 - **Gradle Commands**: `java/rules/java-gradle-commands.md` - Debugging and verification commands
@@ -401,7 +401,9 @@ Example:
 - commons-lang3: Substitution used because BOM doesn't manage this dependency
   and version catalog update alone didn't remove transitive 3.16.0
 
-Verified via dependency graph - only patched versions reported"
+Verified via dependency graph - only patched versions reported
+
+Generated with the Quality Agent by the /fix-dependabot-vulnerabilities command."
 ```
 
 ### 10. Push and Create Draft PR
@@ -450,6 +452,12 @@ $TARGET_SEVERITY
 - [x] Tests pass locally
 - [x] Verified via dependency graph - ONLY patched versions appear
 - [ ] dependency-review check passes
+
+## AI Agent Details
+- **Agent**: Quality Agent
+- **Command**: /fix-dependabot-vulnerabilities
+
+Generated with the Quality Agent by the /fix-dependabot-vulnerabilities command.
 
 ## References
 - Dependabot alerts: [link to security/dependabot]"

@@ -28,7 +28,47 @@ All AI-assisted work must be clearly identifiable through standardized emoji pre
 
 AI agents must create a Jira ticket BEFORE starting any work. This ensures traceability and proper sprint/cycle tracking.
 
-### Step 1: Identify Current Sprint/Cycle Epic
+### Step 1: Search for Existing Open Tickets (REQUIRED)
+
+**Before creating a new ticket**, search for existing open tickets that may already cover the work:
+
+Use `mcp_atlassian_searchJiraIssuesUsingJql` with these queries:
+
+**For Dependabot vulnerabilities (search by CVE):**
+
+```text
+project = "PROJECT_KEY" AND status NOT IN (Done, Closed, Resolved) AND (summary ~ "CVE-XXXX-XXXXX" OR description ~ "CVE-XXXX-XXXXX") ORDER BY created DESC
+```
+
+**For SonarQube issues (search by rule and repo):**
+
+```text
+project = "PROJECT_KEY" AND status NOT IN (Done, Closed, Resolved) AND summary ~ "SonarQube" AND summary ~ "[repo-name]" ORDER BY created DESC
+```
+
+**For general KTLO work in the same repo:**
+
+```text
+project = "PROJECT_KEY" AND status NOT IN (Done, Closed, Resolved) AND parent = "KTLO-EPIC-KEY" AND summary ~ "[repo-name]" ORDER BY created DESC
+```
+
+**Validation checklist before creating a new ticket:**
+
+- [ ] Searched for existing tickets with same CVE/vulnerability identifier
+- [ ] Searched for existing tickets with same SonarQube rule in same repo
+- [ ] Searched for any open ticket under current KTLO epic for same repo
+- [ ] Verified project key is correct (e.g., EN)
+- [ ] Verified matching tickets are in open/in-progress state (not done/closed)
+
+**Only create a new ticket if NO matching open ticket exists.**
+
+If an existing ticket is found:
+
+1. Use that ticket's key for the branch name
+2. Add a comment to the ticket noting the new work being done
+3. Skip to Step 3 (Create Branch)
+
+### Step 2: Identify Current Sprint/Cycle Epic
 
 Find the most recent KTLO or Tech Debt epic for the team:
 
@@ -43,7 +83,7 @@ Use `mcp_atlassian_searchJiraIssuesUsingJql` to find the current epic:
 project = "PROJECT_KEY" AND issuetype = Epic AND summary ~ "KTLO" ORDER BY created DESC
 ```
 
-### Step 2: Create the Ticket
+### Step 3: Create the Ticket (Only If No Existing Ticket Found)
 
 Use `mcp_atlassian_createJiraIssue` with:
 
@@ -79,9 +119,9 @@ Use `mcp_atlassian_createJiraIssue` with:
 AI Agent (Cursor/Copilot)
 ```
 
-### Step 3: Create Branch with Jira Key
+### Step 4: Create Branch with Jira Key
 
-After ticket creation, create a branch using the Jira key:
+After ticket creation (or finding existing ticket), create a branch using the Jira key:
 
 ```bash
 # Format: type/JIRA-KEY-short-description[-part-N]
@@ -98,7 +138,7 @@ git checkout -b fix/EN-52-critical-vulnerabilities-part-2  # For multiple iterat
 | Test coverage | `test/JIRA-KEY-coverage-module` | `test/EN-54-coverage-payment-service` |
 | Dependency | `chore/JIRA-KEY-update-dependency` | `chore/EN-55-update-spring-boot` |
 
-### Step 4: Commit with Jira Key and Emojis
+### Step 5: Commit with Jira Key and Emojis
 
 All commits must reference the Jira key and include appropriate emojis:
 
@@ -123,7 +163,7 @@ Strategy: Dependency substitution (BOM doesn't manage this)"
 [Additional context if needed]
 ```
 
-### Step 5: Create PR with Jira Key and Emojis
+### Step 6: Create PR with Jira Key and Emojis
 
 PR titles and bodies must include the Jira key and emojis:
 
@@ -200,6 +240,32 @@ AI agents must process issues by severity level, one level at a time:
 6. Repeat until all severities addressed
 ```
 
+## Agent Attribution (REQUIRED)
+
+All AI-assisted commits and PRs must include attribution indicating which agent and command generated the work:
+
+| Command | Attribution Line |
+|---------|-----------------|
+| `/fix-dependabot-vulnerabilities` | Generated with the Quality Agent by the /fix-dependabot-vulnerabilities command. |
+| `/fix-test-coverage` | Generated with the Quality Agent by the /fix-test-coverage command. |
+| `/fix-sonarqube-issues` | Generated with the Security Agent by the /fix-sonarqube-issues command. |
+
+**Add this attribution to:**
+
+- Commit message body (after the detailed changes)
+- PR description (in the AI Agent Details section)
+
+**Example commit with attribution:**
+
+```bash
+git commit -m "🤖 🛡️ fix(security): [EN-52] resolve critical CVE-2024-xxxxx
+
+- Updated commons-compress to 1.27.1
+- Added dependency substitution for transitive deps
+
+Generated with the Quality Agent by the /fix-dependabot-vulnerabilities command."
+```
+
 ## Integration with Existing Commands
 
 This workflow integrates with:
@@ -211,10 +277,12 @@ This workflow integrates with:
 
 Each command should:
 
-1. Check for existing ticket or create one
-2. Follow severity-based processing
-3. Use appropriate emoji conventions
-4. Reference Jira key in all commits/PRs
+1. **Search for existing open tickets first** (Step 1)
+2. Check for existing ticket or create one
+3. Follow severity-based processing
+4. Use appropriate emoji conventions
+5. Reference Jira key in all commits/PRs
+6. **Include agent attribution in commits and PRs**
 
 ## Best Practices
 
