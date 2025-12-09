@@ -12,9 +12,9 @@ tags:
 
 ## Tech Stack
 
-- Java: Last LTS version (Java 21 until April 2025)
-- Gradle: 8.14 (compatible with Java 21)
-- Spring Boot: 3.5.4 for all new services
+- Java: Last LTS version (Java 21)
+- Gradle: 8.14.3+ (compatible with Java 21)
+- Spring Boot: **3.5.8** for all services (3.4.x EOL end of 2025)
 - Database Access: JOOQ for accessing database
 - Databases: Postgres and Redis
 - Inter-service Communication: gRPC
@@ -115,18 +115,30 @@ Example of `libs.versions.toml`:
 
 ```toml
 [versions]
-spring-boot = "3.5.4"
-# ... other versions
+spring-boot = "3.5.8"
+gradle = "8.14.3"
+java = "21"
+grpc = "1.76.0"
+protobuf = "4.33.0"
+sonarqube = "7.2.0.6526"
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version = "1.1.7" }
+sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 
 [libraries]
 internal-bitso-library = { module = "com.bitso.internal:library", version = "1.0.0" }
 not-managed-by-spring-library = { module = "org.ecma:library", version = "1.0.0" }
 managed-by-spring-library = { module = "org.springframework:library" } # Versions managed by spring don't need an explicit version
 ```
+
+**For Spring Boot 3.5.x upgrades**, use `/upgrade-to-recommended-versions` command. See `java/commands/upgrade-to-recommended-versions.md` for the complete workflow including:
+
+- Priority-ordered upgrades
+- Side-by-side library upgrades (bitso-rds-iam-authn 2.0.0, bitso-commons-redis 4.2.1)
+- Endurance plugin versions
+- Dependency graph verification
 
 Spring Dependency Management setup:
 

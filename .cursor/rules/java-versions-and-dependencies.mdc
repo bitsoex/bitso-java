@@ -20,11 +20,14 @@ Central repository for all dependency versions. Never hardcode versions in build
 [versions]
 gradle = "8.14.3"
 java = "21"
-spring-boot = "3.5.7"
+spring-boot = "3.5.8"
 jacoco = "0.8.14"
 protobuf = "4.33.0"
 grpc = "1.76.0"
 junit-jupiter = "5.10.x"
+
+# Security updates
+commons-lang3 = "3.18.0"
 
 [libraries]
 spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
@@ -125,11 +128,11 @@ Always use explicit versions for full control and predictability:
 ```groovy
 [versions]
 java = "21"              # JDK version
-spring-boot = "3.5.7"    # Spring Boot
+spring-boot = "3.5.8"    # Spring Boot (3.4.x EOL end of 2025)
 mockito = "5.10.0"       # Mockito
 grpc = "1.76.0"          # gRPC
 protobuf = "4.33.0"      # Protobuf
-commons-lang3 = "3.14.0" # Apache Commons
+commons-lang3 = "3.18.0" # Apache Commons (CVE-2025-48924 fix)
 ```
 
 **Benefits:**
@@ -215,12 +218,30 @@ Typical compatibility for Bitso projects:
 
 | Component | Version | Java | Notes |
 |-----------|---------|------|-------|
-| Spring Boot | 3.5.7 | 21+ | LTS support |
+| Spring Boot | **3.5.8** | 21+ | **REQUIRED** - 3.4.x EOL end of 2025 |
 | Spring Cloud | 2024.0.x | 21+ | Compatible with Boot 3.5+ |
 | gRPC | 1.76.0 | 11+ | High performance |
 | Protobuf | 4.33.0 | 8+ | Wire format compatible |
 | JaCoCo | 0.8.14+ | 8+ | Code coverage |
 | Gradle | 8.14.3+ | 11+ | Build tool |
+| Develocity | 0.2.8+ | - | Build insights |
+
+## Spring Boot 3.5.x Upgrade Requirements
+
+**IMPORTANT**: Spring Boot 3.4.x reaches end-of-life by end of 2025. All projects should upgrade to 3.5.8.
+
+For complete upgrade workflow including priority order, side-by-side library upgrades, and dependency graph verification, use:
+
+```text
+/upgrade-to-recommended-versions
+```
+
+See `java/commands/upgrade-to-recommended-versions.md` for the full workflow with:
+
+- Priority-ordered upgrades (Spring Boot → Endurance plugins → Security)
+- Side-by-side library upgrades (bitso-rds-iam-authn 2.0.0, bitso-commons-redis 4.2.1)
+- Dependency graph verification to prevent version downgrades
+- Reference PRs with real-world examples
 
 ## Best Practices
 
@@ -317,6 +338,8 @@ Run periodically:
 
 ## Related Rules
 
+- **Upgrade Command**: java/commands/upgrade-to-recommended-versions.md
+- **Vulnerability Golden Paths**: java/rules/java-vulnerability-golden-paths.md
 - **Gradle Build Best Practices**: java/rules/java-gradle-best-practices.md
 - **JaCoCo Code Coverage**: java/rules/java-jacoco-coverage.md
 - **Java Testing Guidelines**: java/rules/java-testing-guidelines.md
