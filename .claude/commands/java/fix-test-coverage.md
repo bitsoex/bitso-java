@@ -35,7 +35,7 @@ Use `mcp_atlassian_createJiraIssue`:
 ### 2. Create Branch with Jira Key
 
 ```bash
-JIRA_KEY="EN-XX"  # From step 1
+# JIRA_KEY is the actual ticket key from Step 1 (e.g., PROJ-123)
 MODULE="payment-service"  # Target module
 
 git checkout -b test/${JIRA_KEY}-coverage-${MODULE}
@@ -346,7 +346,7 @@ open bitso-libs/module-name/build/reports/jacoco/test/html/index.html
 ### 11. Commit with Emojis and Jira Key
 
 ```bash
-JIRA_KEY="EN-XX"
+# JIRA_KEY is the actual ticket key (e.g., PROJ-123)
 
 git add -A
 git commit -m "🤖 🧪 test: [$JIRA_KEY] improve coverage for MyService
@@ -363,7 +363,7 @@ Generated with the Quality Agent by the /fix-test-coverage command."
 ```bash
 git push -u origin $(git branch --show-current)
 
-JIRA_KEY="EN-XX"
+# JIRA_KEY is the actual ticket key (e.g., PROJ-123)
 
 gh pr create --draft \
     --title "🤖 🧪 [$JIRA_KEY] test: improve coverage for MyService" \

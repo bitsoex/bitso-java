@@ -134,6 +134,11 @@ This repository uses AI-assisted development with specific coding guidelines and
 **Description:** Version catalog strategy, dependency management, BOMs, and version constraints for Java projects
 **Scope:** gradle/libs.versions.toml, build.gradle, settings.gradle
 
+### Proven fix patterns for common Dependabot vulnerabilities in Java/Gradle projects
+**File:** [`.claude/java-vulnerability-golden-paths.md`](.claude/java-vulnerability-golden-paths.md)
+**Description:** Proven fix patterns for common Dependabot vulnerabilities in Java/Gradle projects
+**Scope:** gradle/libs.versions.toml, build.gradle, settings.gradle
+
 
 ## Usage
 
@@ -141,6 +146,6 @@ These rules are automatically applied when using Claude AI assistant in this rep
 
 ## Rule Categories
 
-- **Java**: java specific coding guidelines (26 rules)
+- **Java**: java specific coding guidelines (27 rules)
 
 ---

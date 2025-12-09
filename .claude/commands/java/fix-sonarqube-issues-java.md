@@ -52,7 +52,7 @@ Use `mcp_atlassian_createJiraIssue`:
 ### 2. Create Branch with Jira Key
 
 ```bash
-JIRA_KEY="EN-XX"  # From step 1
+# JIRA_KEY is the actual ticket key from Step 1 (e.g., PROJ-123)
 SEVERITY="blocker"  # or critical, major, minor
 
 git checkout -b fix/${JIRA_KEY}-${SEVERITY}-sonar-issues
@@ -131,7 +131,7 @@ Work on **max 5 issues** at a time:
 ### 7. Commit with Emojis and Jira Key
 
 ```bash
-JIRA_KEY="EN-XX"
+# JIRA_KEY is the actual ticket key (e.g., PROJ-123)
 TARGET_SEVERITY="BLOCKER"
 
 git add -A
@@ -152,7 +152,7 @@ Generated with the Security Agent by the /fix-sonarqube-issues command."
 ```bash
 git push -u origin $(git branch --show-current)
 
-JIRA_KEY="EN-XX"
+# JIRA_KEY is the actual ticket key (e.g., PROJ-123)
 TARGET_SEVERITY="BLOCKER"
 
 gh pr create --draft \

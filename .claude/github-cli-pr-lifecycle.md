@@ -335,8 +335,8 @@ Generated with the [Agent Name] by the /[command-name] command.
 **Examples:**
 
 ```bash
-# Security fix
-git commit -m "🤖 🛡️ fix(security): [EN-52] resolve critical CVE-2024-xxxxx
+# Security fix (use actual Jira key, e.g., PROJ-52)
+git commit -m "🤖 🛡️ fix(security): [PROJ-52] resolve critical CVE-2024-xxxxx
 
 - Updated commons-compress to 1.27.1
 - Added dependency substitution for transitive deps
@@ -346,7 +346,7 @@ Severity: CRITICAL
 Generated with the Quality Agent by the /fix-dependabot-vulnerabilities command."
 
 # Quality fix
-git commit -m "🤖 ✅ fix(quality): [EN-53] resolve BLOCKER SonarQube issues
+git commit -m "🤖 ✅ fix(quality): [PROJ-53] resolve BLOCKER SonarQube issues
 
 - Fixed null pointer in PaymentService
 - Added missing @Override annotations
@@ -356,7 +356,7 @@ Rules: java:S2259, java:S1161
 Generated with the Security Agent by the /fix-sonarqube-issues command."
 
 # Test coverage
-git commit -m "🤖 🧪 test: [EN-54] improve coverage for PaymentService
+git commit -m "🤖 🧪 test: [PROJ-54] improve coverage for PaymentService
 
 - Added tests for edge cases
 - Increased coverage from 65% to 82%
@@ -384,7 +384,7 @@ git commit -m "🤖 fix: address CodeRabbit review feedback
 
 1. **Always use 🤖 emoji** in commits, PR titles, and PR bodies for AI-assisted work
 2. **Auto-assign PRs** to current user using `gh api user --jq '.login'`
-3. **Include Jira key** in branch names, commits, and PR titles (e.g., `[EN-52]`)
+3. **Include Jira key** in branch names, commits, and PR titles (e.g., `[PROJ-52]`)
 4. **Always use echo wrapper** for `gh` commands to prevent buffering
 5. **Always specify `--repo owner/repo`** to avoid directory context issues
 6. **Use GraphQL API** for review threads, comments, and replies

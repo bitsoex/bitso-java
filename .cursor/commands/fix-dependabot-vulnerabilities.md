@@ -10,6 +10,7 @@ Fix Dependabot security vulnerabilities in Java/Gradle projects
 
 Before applying fixes, understand the project's dependency management approach:
 
+- **Vulnerability Golden Paths**: `java/rules/java-vulnerability-golden-paths.md` - **MUST check for proven fix patterns first**
 - **Jira Ticket Workflow**: `global/rules/jira-ticket-workflow.md` - **MUST search for existing tickets first (Step 1), then create if none found**
 - **Version Management**: `java/rules/java-versions-and-dependencies.md` - BOMs, version catalog, constraints
 - **Gradle Best Practices**: `java/rules/java-gradle-best-practices.md` - Build configuration standards
@@ -81,11 +82,11 @@ Use `mcp_atlassian_createJiraIssue`:
 
 ### 2. Ensure Feature Branch with Jira Key
 
-**CRITICAL**: Branch name must include Jira key.
+**CRITICAL**: Branch name must include Jira key. Use the key discovered/created in Step 1 (see `global/rules/jira-ticket-workflow.md` Step 0 for discovery methods).
 
 ```bash
 CURRENT_BRANCH=$(git branch --show-current)
-JIRA_KEY="EN-XX"  # From step 1
+# JIRA_KEY is the actual ticket key from Step 1 (e.g., PROJ-123)
 SEVERITY="critical"  # or high, medium, low
 
 if [ "$CURRENT_BRANCH" = "main" ]; then
@@ -119,17 +120,35 @@ initscript {
 apply plugin: org.gradle.dependencygraph.simple.SimpleDependencyGraphPlugin
 ```
 
-### 4. Get Dependabot Alerts and Determine Severity
+### 4. Get Dependabot Alerts and Check Advisory Details
+
+**CRITICAL**: Always check the security advisory for patched versions and suggested forks before applying fixes.
 
 ```bash
 REPO=$(gh repo view --json nameWithOwner -q '.nameWithOwner')
 
-# Get all open alerts with severity
-gh api repos/$REPO/dependabot/alerts --jq '.[] | select(.state == "open") | {number, severity: .security_advisory.severity, package: .dependency.package.name, patched_version: .security_vulnerability.first_patched_version.identifier, cve: .security_advisory.cve_id}'
+# Get all open alerts with FULL advisory details
+gh api repos/$REPO/dependabot/alerts --jq '.[] | select(.state == "open") | {
+  number,
+  severity: .security_advisory.severity,
+  package: .dependency.package.name,
+  patched_version: .security_vulnerability.first_patched_version.identifier,
+  cve: .security_advisory.cve_id,
+  summary: .security_advisory.summary,
+  references: [.security_advisory.references[].url]
+}'
 
 # Count by severity to determine what to fix
 gh api repos/$REPO/dependabot/alerts --jq '[.[] | select(.state == "open")] | group_by(.security_advisory.severity) | map({severity: .[0].security_advisory.severity, count: length})'
 ```
+
+**Check advisory for fix strategy**:
+
+- `patched_version` present → Update to that version (Golden Path 2-4)
+- `patched_version` is null → Package may be discontinued, check `references` for forks
+- `references` mentions a fork → Use GAV substitution (Golden Path 1)
+
+See `java/rules/java-vulnerability-golden-paths.md` for detailed fix patterns.
 
 **Determine current severity to fix:**
 
@@ -262,6 +281,41 @@ allprojects {
 
 **When to use**: Transitive dependency not covered by any BOM, or when you need to replace one artifact with another (different group/artifact).
 
+#### Strategy 3b: GAV Substitution (For Discontinued Packages)
+
+**CRITICAL**: Some packages are discontinued and have no fix. Check `java/rules/java-vulnerability-golden-paths.md` for known cases.
+
+**Example: lz4-java** (most common - `org.lz4:lz4-java` is discontinued):
+
+```groovy
+// In root build.gradle
+allprojects {
+    configurations.configureEach {
+        resolutionStrategy.dependencySubstitution {
+            // lz4-java: org.lz4 is discontinued, substitute with maintained at.yawk.lz4 fork
+            // Fixes CVE-2025-66566, CVE-2025-12183, CVE-2025-4241
+            substitute module("org.lz4:lz4-java")
+                using module("at.yawk.lz4:lz4-java:1.10.1")
+                because "Security fix - org.lz4:lz4-java is discontinued, at.yawk.lz4 is the maintained fork"
+        }
+    }
+}
+```
+
+Also add to version catalog:
+
+```toml
+# gradle/libs.versions.toml
+[versions]
+# Security fix: lz4-java relocated to at.yawk.lz4 (original org.lz4 discontinued)
+lz4java = "1.10.1"
+
+[libraries]
+lz4-java = { module = "at.yawk.lz4:lz4-java", version.ref = "lz4java" }
+```
+
+**When to use**: Package is discontinued with no upstream fix. The community fork or relocation provides the security fix.
+
 #### Strategy 4: Dependency Constraints
 
 For enforcing minimum versions across all configurations:
@@ -385,7 +439,7 @@ If old versions still appear:
 Include the fix strategy reasoning in the commit message:
 
 ```bash
-JIRA_KEY="EN-XX"  # From step 1
+# JIRA_KEY is the actual ticket key from Step 1 (e.g., PROJ-123)
 TARGET_SEVERITY="critical"  # From step 4
 
 git add -A
@@ -423,7 +477,7 @@ git push -u origin $(git branch --show-current)
 Create PR with **emojis, Jira key, and verified information**:
 
 ```bash
-JIRA_KEY="EN-XX"
+# JIRA_KEY is the actual ticket key from Step 1 (e.g., PROJ-123)
 TARGET_SEVERITY="CRITICAL"
 
 gh pr create --draft \
@@ -604,6 +658,7 @@ dependencyResolutionManagement {
 
 ## Related
 
+- **Vulnerability Golden Paths**: `java/rules/java-vulnerability-golden-paths.md` - **Required** - Proven fix patterns for common vulnerabilities
 - **Jira Ticket Workflow**: `global/rules/jira-ticket-workflow.md` - **Required** - Ticket creation and emoji conventions
 - **PR Lifecycle**: `global/rules/github-cli-pr-lifecycle.md` - PR creation with emojis
 - **Plugin Docs**: [GitHub Dependency Graph Gradle Plugin](https://github.com/gradle/github-dependency-graph-gradle-plugin)

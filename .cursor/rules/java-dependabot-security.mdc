@@ -16,6 +16,7 @@ Standards for managing security vulnerabilities detected by Dependabot in Java/G
 
 This rule works with:
 
+- **Vulnerability Golden Paths**: `java/rules/java-vulnerability-golden-paths.md` - **Check first** - Proven fix patterns for common vulnerabilities
 - **Version Management**: `java/rules/java-versions-and-dependencies.md` - BOMs, version catalog, constraints
 - **Gradle Best Practices**: `java/rules/java-gradle-best-practices.md` - Build configuration standards
 - **Gradle Commands**: `java/rules/java-gradle-commands.md` - Debugging and verification
@@ -187,16 +188,23 @@ Validates the fix deploys successfully in sandboxed environment.
 
 | Package | Common CVEs | Fix Strategy |
 |---------|-------------|--------------|
-| `commons-lang3` | Recursion DoS | Update version catalog |
+| `org.lz4:lz4-java` | CVE-2025-66566, CVE-2025-12183 | **GAV substitution** to `at.yawk.lz4:lz4-java:1.10.1` |
+| `commons-lang3` | CVE-2025-48924 | Update version catalog + substitution |
 | `logback-core` | Arbitrary code execution | Update Spring Boot BOM |
 | `tomcat-embed-core` | Resource leak | Update Spring Boot BOM |
 | `jackson-databind` | Deserialization | Update Spring Boot BOM |
 | `protobuf-java` | DoS attacks | Update Protobuf BOM |
 | `netty-*` | Various | Update gRPC BOM |
 | `commons-compress` | DoS, path traversal | Version catalog or substitution |
+| `okhttp3` | CVE-2023-0833 | Version catalog + substitution |
+| `ion-java` | CVE-2024-21634 | Version catalog + force |
+| `spring-core` | CVE-2025-41249 | Update Spring Boot BOM |
+
+**Note**: For discontinued packages like `org.lz4:lz4-java`, see `java/rules/java-vulnerability-golden-paths.md` for GAV substitution patterns.
 
 ## Related
 
+- **Vulnerability Golden Paths**: `java/rules/java-vulnerability-golden-paths.md` - Proven fix patterns
 - **Command**: `java/commands/fix-dependabot-vulnerabilities.md`
 - **Version Management**: `java/rules/java-versions-and-dependencies.md`
 - **Gradle Best Practices**: `java/rules/java-gradle-best-practices.md`
