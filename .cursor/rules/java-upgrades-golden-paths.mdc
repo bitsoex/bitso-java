@@ -1,0 +1,177 @@
+---
+description: Index of proven upgrade patterns for Java/Gradle projects
+alwaysApply: false
+globs: gradle/libs.versions.toml,build.gradle,settings.gradle,gradle.properties
+tags:
+  - java
+---
+
+# Java Upgrades Golden Paths
+
+This document serves as an index for all Java upgrade golden paths. Each golden path documents proven patterns from real PRs for specific upgrade scenarios.
+
+## Related Documents
+
+- **Vulnerability Fixes**: `java/rules/java-vulnerability-golden-paths.md` - Security fix patterns
+- **Upgrade Command**: `java/commands/upgrade-to-recommended-versions.md` - Automated upgrade workflow
+- **Version Management**: `java/rules/java-versions-and-dependencies.md` - BOMs, version catalog
+
+---
+
+## Quick Reference: Current Recommended Versions
+
+| Component | Version | Notes |
+|-----------|---------|-------|
+| **Spring Boot** | **3.5.8** | CRITICAL - 3.4.x EOL end of 2025 |
+| **Spring Cloud** | **2025.0.0** | Required for Spring Boot 3.5.x |
+| **Spring Dependency Management** | **1.1.7** | Required with Spring Boot 3.5.x |
+| **Gradle** | **8.14.3** | Build tool |
+| **Java** | **21** | LTS version |
+| **JUnit** | **5.14.1** | Testing (via BOM) |
+| **JUnit Platform** | **1.14.1** | Testing platform |
+| **Spock** | **2.4-M7-groovy-4.0** | Groovy testing framework |
+| **JaCoCo** | **0.8.14** | Code coverage |
+| **SonarQube Plugin** | **7.2.0.6526** | Code analysis |
+| **Develocity Plugin** | **0.2.8** | Build insights |
+| **Publish Plugin** | **0.3.6** | Publishing |
+
+---
+
+## Golden Paths Index
+
+### 1. Spring Boot 3.5.x Upgrade
+
+**File**: `java/golden-paths/spring-boot-3.5-upgrade.md`
+
+**When to use**: Upgrading from Spring Boot 3.4.x or earlier to 3.5.x
+
+**Key considerations**:
+
+- Spring Cloud compatibility (requires 2025.0.0)
+- JUnit version alignment (5.14.1)
+- Spock compatibility (2.4-M7-groovy-4.0)
+- Jacoco compatibility (0.8.14)
+
+### 2. JUnit Version Alignment
+
+**File**: `java/golden-paths/junit-version-alignment.md`
+
+**When to use**: Test failures due to JUnit version conflicts
+
+**Key considerations**:
+
+- bitso.java.module plugin forces JUnit 5.10.1
+- Spring Boot 3.5.x brings JUnit 5.12.2+
+- Resolution strategy to force consistent versions
+
+### 3. Gradle Upgrade (Covered in Spring Boot Upgrade)
+
+Gradle upgrade guidance is included in the Spring Boot 3.5 upgrade golden path, as Gradle 8.14.3 is required for Spring Boot 3.5.x compatibility.
+
+**Key considerations**:
+
+- Plugin compatibility
+- Develocity plugin version (0.2.8)
+- JUnit Platform Launcher requirement
+
+### 4. Bitso Libraries Upgrade (Covered in Vulnerability Fixes)
+
+Bitso library upgrade guidance is included in the vulnerability golden path.
+
+**Key considerations**:
+
+- bitso-rds-iam-authn (Hikari 6 compatibility)
+- bitso-commons-redis (Jedis 4 compatibility)
+- bitso.publish plugin versions (0.3.6)
+
+---
+
+## Decision Tree: Which Golden Path?
+
+```
+What are you upgrading?
+├── Spring Boot version
+│   └── Use: spring-boot-3.5-upgrade.md
+│
+├── Gradle version
+│   └── Use: gradle-upgrade.md
+│
+├── Test framework (JUnit/Spock)
+│   └── Use: junit-version-alignment.md
+│
+├── Bitso internal libraries
+│   └── Use: bitso-libs-upgrade.md
+│
+└── Security vulnerabilities
+    └── Use: java/rules/java-vulnerability-golden-paths.md
+```
+
+---
+
+## Verification: Dependency Graph Check
+
+**CRITICAL**: Always verify dependency resolution using the dependency graph plugin:
+
+```bash
+# Generate dependency graph - this is what GitHub will actually see
+./gradlew -I gradle/dependency-graph-init.gradle \
+    --dependency-verification=off \
+    --no-configuration-cache \
+    --no-configure-on-demand \
+    :ForceDependencyResolutionPlugin_resolveAllDependencies
+
+# Check for version conflicts
+grep -i "junit\|spock\|spring" build/reports/dependency-graph-snapshots/dependency-list.txt | sort -u
+```
+
+---
+
+## Common Upgrade Patterns
+
+### Pattern 1: Force Version Alignment
+
+When multiple dependencies bring different versions of the same library:
+
+```groovy
+configurations.all {
+    resolutionStrategy.eachDependency { details ->
+        if (details.requested.group == 'org.junit.jupiter') {
+            details.useVersion '5.14.1'
+        }
+        if (details.requested.group == 'org.junit.platform') {
+            details.useVersion '1.14.1'
+        }
+    }
+}
+```
+
+### Pattern 2: BOM Platform Import
+
+For libraries managed by BOMs:
+
+```groovy
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.14.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+```
+
+### Pattern 3: Bypass Plugin Defaults
+
+When a plugin forces incompatible versions:
+
+```groovy
+// Instead of using plugin's testRuntime configuration
+// bitsoJavaModule.testRuntime(BitsoTestRuntime.SPOCK_2_4_M1_GROOVY_4)
+
+// Configure manually with correct versions
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.14.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation libs.spock.core
+}
+
+test {
+    useJUnitPlatform()
+}
+```

@@ -139,6 +139,21 @@ This repository uses AI-assisted development with specific coding guidelines and
 **Description:** Proven fix patterns for common Dependabot vulnerabilities in Java/Gradle projects
 **Scope:** gradle/libs.versions.toml, build.gradle, settings.gradle
 
+### Index of proven upgrade patterns for Java/Gradle projects
+**File:** [`.claude/java-upgrades-golden-paths.md`](.claude/java-upgrades-golden-paths.md)
+**Description:** Index of proven upgrade patterns for Java/Gradle projects
+**Scope:** gradle/libs.versions.toml, build.gradle, settings.gradle, gradle.properties
+
+### Resolving JUnit version conflicts in Java/Gradle projects
+**File:** [`.claude/junit-version-alignment.md`](.claude/junit-version-alignment.md)
+**Description:** Resolving JUnit version conflicts in Java/Gradle projects
+**Scope:** build.gradle, gradle/libs.versions.toml
+
+### Proven upgrade patterns for Spring Boot 3.5.x with all required side-by-side library upgrades
+**File:** [`.claude/spring-boot-3.5-upgrade.md`](.claude/spring-boot-3.5-upgrade.md)
+**Description:** Proven upgrade patterns for Spring Boot 3.5.x with all required side-by-side library upgrades
+**Scope:** gradle/libs.versions.toml, build.gradle, settings.gradle, gradle.properties
+
 
 ## Usage
 
@@ -146,6 +161,6 @@ These rules are automatically applied when using Claude AI assistant in this rep
 
 ## Rule Categories
 
-- **Java**: java specific coding guidelines (27 rules)
+- **Java**: java specific coding guidelines (30 rules)
 
 ---

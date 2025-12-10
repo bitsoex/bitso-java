@@ -1,0 +1,280 @@
+---
+applyTo: "gradle/libs.versions.toml,build.gradle,settings.gradle,gradle.properties"
+description: Proven upgrade patterns for Spring Boot 3.5.x with all required side-by-side library upgrades
+---
+
+# Spring Boot 3.5.x Upgrade Golden Path
+
+**URGENT**: Spring Boot 3.4.x reaches end-of-life by end of 2025. All projects should be upgraded to Spring Boot 3.5.8 before the code freeze.
+
+## Target Versions
+
+| Component | Version | Notes |
+|-----------|---------|-------|
+| **Spring Boot** | **3.5.8** | CRITICAL - 3.4.x EOL end of 2025 |
+| **Spring Cloud** | **2025.0.0** | Required for Spring Boot 3.5.x |
+| **Spring Dependency Management** | **1.1.7** | Required with Spring Boot 3.5.x |
+| **Gradle** | **8.14.3** | Build tool |
+| **JUnit** | **5.14.1** | Testing (via BOM) |
+| **JUnit Platform** | **1.14.1** | Testing platform |
+| **Spock** | **2.4-M7-groovy-4.0** | Groovy testing framework |
+| **JaCoCo** | **0.8.14** | Code coverage |
+| **Develocity Plugin** | **0.2.8** | Build insights |
+| **Publish Plugin** | **0.3.6** | Publishing |
+
+## ⚠️ CRITICAL: Spring Cloud Compatibility
+
+Spring Boot 3.5.x requires Spring Cloud 2025.0.0.
+
+| Spring Boot | Spring Cloud | Status |
+|-------------|--------------|--------|
+| 3.4.x | 2024.0.x | EOL end of 2025 |
+| **3.5.x** | **2025.0.0** | Current recommended |
+
+If you see this error:
+
+```
+Spring Boot [3.5.8] is not compatible with this Spring Cloud release train
+```
+
+**Fix**: Update Spring Cloud to 2025.0.0:
+
+```toml
+# gradle/libs.versions.toml
+[versions]
+springCloud = "2025.0.0"
+```
+
+---
+
+## ⚠️ CRITICAL: JUnit Version Alignment
+
+Spring Boot 3.5.x brings JUnit 5.12.2+, but the `bitso.java.module` plugin forces JUnit 5.10.1. This causes test failures:
+
+```
+java.lang.NoClassDefFoundError: org/junit/jupiter/api/extension/TestInstantiationAwareExtension$ExtensionContextScope
+```
+
+### Solution: Force JUnit 5.14.1 Across All Configurations
+
+For modules using Spock tests, add this to each module's `build.gradle`:
+
+```groovy
+// Force JUnit 5.14.1 across all configurations to avoid version conflicts
+configurations.all {
+    resolutionStrategy.eachDependency { details ->
+        if (details.requested.group == 'org.junit.jupiter') {
+            details.useVersion '5.14.1'
+        }
+        if (details.requested.group == 'org.junit.platform') {
+            details.useVersion '1.14.1'
+        }
+    }
+}
+
+dependencies {
+    // Test dependencies - manually configured for Spring Boot 3.5.8 compatibility
+    testImplementation platform('org.junit:junit-bom:5.14.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation libs.spock.core
+}
+
+test {
+    useJUnitPlatform()
+}
+```
+
+### If Using bitsoJavaModule.testRuntime()
+
+**Remove** the `bitsoJavaModule.testRuntime()` call and configure manually:
+
+```groovy
+// ❌ REMOVE - causes JUnit version conflicts with Spring Boot 3.5.x
+// import bitso.endurance.java.BitsoTestRuntime
+// bitsoJavaModule {
+//     testRuntime(BitsoTestRuntime.SPOCK_2_4_M1_GROOVY_4)
+// }
+
+// ✅ ADD - Manual configuration with correct versions
+configurations.all {
+    resolutionStrategy.eachDependency { details ->
+        if (details.requested.group == 'org.junit.jupiter') {
+            details.useVersion '5.14.1'
+        }
+        if (details.requested.group == 'org.junit.platform') {
+            details.useVersion '1.14.1'
+        }
+    }
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.14.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation libs.spock.core
+}
+
+test {
+    useJUnitPlatform()
+}
+```
+
+---
+
+## Step-by-Step Upgrade Process
+
+### Step 1: Update Version Catalog
+
+```toml
+# gradle/libs.versions.toml
+[versions]
+springBoot = "3.5.8"
+springCloud = "2025.0.0"  # CRITICAL: Required for Spring Boot 3.5.x
+spock = "2.4-M7-groovy-4.0"
+# Keep protobuf and grpc versions unchanged!
+```
+
+### Step 2: Update gradle.properties
+
+```properties
+# gradle.properties
+sonarqubePluginVersion=5.1.0.4882
+jacocoVersion=0.8.14
+bitsoPublishPluginVersion=0.3.6
+develocityPluginVersion=0.2.8
+# Do NOT change grpcVersion or protobufVersion
+```
+
+### Step 3: Update Gradle Wrapper
+
+```bash
+./gradlew wrapper --gradle-version=8.14.3
+```
+
+### Step 4: Fix JUnit Version Conflicts
+
+For each module with Spock tests, update `build.gradle` as shown above.
+
+### Step 5: Verify Build
+
+```bash
+# Build without tests first
+./gradlew clean build -x test --no-daemon
+
+# Run tests
+./gradlew test --no-daemon
+```
+
+### Step 6: Verify Dependency Resolution
+
+```bash
+# Generate dependency graph
+./gradlew -I gradle/dependency-graph-init.gradle \
+    --dependency-verification=off \
+    --no-configuration-cache \
+    --no-configure-on-demand \
+    :ForceDependencyResolutionPlugin_resolveAllDependencies
+
+# Check JUnit versions - should ALL be 5.14.1 / 1.14.1
+grep -i "junit" build/reports/dependency-graph-snapshots/dependency-list.txt | sort -u
+
+# Check Spring Cloud version - should be 2025.0.0
+grep -i "spring-cloud" build/reports/dependency-graph-snapshots/dependency-list.txt | sort -u
+```
+
+---
+
+## Real PR Examples
+
+### PRs with Spring Cloud Upgrade
+
+- [aum-reconciliation-v2/pull/730](https://github.com/bitsoex/aum-reconciliation-v2/pull/730) - Full Spring Boot 3.5.8 + Spring Cloud 2025.0.0 upgrade
+
+### PRs with JUnit Version Fix
+
+- [aum-reconciliation-v2/pull/730](https://github.com/bitsoex/aum-reconciliation-v2/pull/730) - JUnit 5.14.1 resolution strategy
+
+### PRs without Spring Cloud (simpler upgrades)
+
+- [treasury-management/pull/291](https://github.com/bitsoex/treasury-management/pull/291)
+- [reconciliation-engine/pull/1444](https://github.com/bitsoex/reconciliation-engine/pull/1444)
+- [proof-of-solvency/pull/560](https://github.com/bitsoex/proof-of-solvency/pull/560)
+- [internal-transfer/pull/250](https://github.com/bitsoex/internal-transfer/pull/250)
+- [currency/pull/239](https://github.com/bitsoex/currency/pull/239)
+- [card-reconciliation/pull/509](https://github.com/bitsoex/card-reconciliation/pull/509)
+- [balance-history/pull/587](https://github.com/bitsoex/balance-history/pull/587)
+- [balance-checker-v2/pull/303](https://github.com/bitsoex/balance-checker-v2/pull/303)
+
+---
+
+## Troubleshooting
+
+### Error: Spring Cloud Compatibility Check Failed
+
+```
+Spring Boot [3.5.8] is not compatible with this Spring Cloud release train
+```
+
+**Cause**: Spring Cloud 2024.0.x is not compatible with Spring Boot 3.5.x
+
+**Fix**: Update to Spring Cloud 2025.0.0:
+
+```toml
+springCloud = "2025.0.0"
+```
+
+### Error: NoClassDefFoundError for JUnit Extension
+
+```
+java.lang.NoClassDefFoundError: org/junit/jupiter/api/extension/TestInstantiationAwareExtension$ExtensionContextScope
+```
+
+**Cause**: JUnit version mismatch between 5.10.1 (from bitso.java.module) and 5.12.2+ (from Spring Boot)
+
+**Fix**: Force JUnit 5.14.1 as shown above
+
+### Error: Spock Tests Fail to Discover
+
+**Cause**: Spock version incompatible with JUnit Platform version
+
+**Fix**: Update Spock to 2.4-M7-groovy-4.0:
+
+```toml
+spock = "2.4-M7-groovy-4.0"
+```
+
+### Error: Jacoco Report Generation Fails
+
+**Cause**: Old Jacoco version incompatible with Java 21 / new bytecode
+
+**Fix**: Update Jacoco to 0.8.14:
+
+```properties
+jacocoVersion=0.8.14
+```
+
+### Error: Develocity Plugin Fails
+
+**Cause**: Old Develocity plugin incompatible with Gradle 8.14.3
+
+**Fix**: Update to 0.2.8:
+
+```properties
+develocityPluginVersion=0.2.8
+```
+
+---
+
+## ⚠️ DO NOT UPGRADE
+
+These versions should **NOT** be changed unless explicitly requested:
+
+- **protobuf**: Keep existing version (3.x → 4.x is breaking)
+- **grpc**: Keep existing version
+
+---
+
+## Related Golden Paths
+
+- **JUnit Alignment**: `java/golden-paths/junit-version-alignment.md`
+- **Upgrades Index**: `java/golden-paths/java-upgrades-golden-paths.md`
+- **Vulnerability Fixes**: `java/rules/java-vulnerability-golden-paths.md`
