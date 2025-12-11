@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generatedAt": "2025-12-11T16:34:25.529Z",
+  "generatedAt": "2025-12-11T20:18:26.967Z",
   "sourceRepo": "bitsoex/ai-code-instructions",
   "category": "java",
   "managedDirectories": [
@@ -32,6 +32,7 @@
     ".claude/commands/java/fix-sonarqube-issues.md",
     ".claude/commands/java/fix-test-coverage.md",
     ".claude/commands/java/generate-documentation-atlas.md",
+    ".claude/commands/java/improve-test-quality-with-mutation-testing.md",
     ".claude/commands/java/run-all-tests-and-fix.md",
     ".claude/commands/java/security-review.md",
     ".claude/commands/java/upgrade-to-recommended-versions.md",
@@ -65,6 +66,7 @@
     ".claude/scripts/check-coderabbit-readiness.sh",
     ".claude/scripts/check-dependency-graph-readiness.sh",
     ".claude/scripts/check-github-mcp-readiness.sh",
+    ".claude/scripts/check-pitest-readiness.sh",
     ".claude/spring-boot-3.5-upgrade.md",
     ".cursor/commands/add-sonarqube-mcp-to-intellij-and-copilot-cli.md",
     ".cursor/commands/disable-vscode-mcp-discovery.md",
@@ -74,6 +76,7 @@
     ".cursor/commands/fix-sonarqube-issues.md",
     ".cursor/commands/fix-test-coverage.md",
     ".cursor/commands/generate-documentation-atlas.md",
+    ".cursor/commands/improve-test-quality-with-mutation-testing.md",
     ".cursor/commands/run-all-tests-and-fix.md",
     ".cursor/commands/security-review.md",
     ".cursor/commands/upgrade-to-recommended-versions.md",
@@ -111,6 +114,7 @@
     ".cursor/scripts/check-coderabbit-readiness.sh",
     ".cursor/scripts/check-dependency-graph-readiness.sh",
     ".cursor/scripts/check-github-mcp-readiness.sh",
+    ".cursor/scripts/check-pitest-readiness.sh",
     ".github/instructions/java-branch-protection-workflow.instructions.md",
     ".github/instructions/java-coderabbit-setup.instructions.md",
     ".github/instructions/java-general-principles.instructions.md",
@@ -149,17 +153,21 @@
     ".github/prompts/fix-sonarqube-issues.prompt.md",
     ".github/prompts/fix-test-coverage.prompt.md",
     ".github/prompts/generate-documentation-atlas.prompt.md",
+    ".github/prompts/improve-test-quality-with-mutation-testing.prompt.md",
     ".github/prompts/run-all-tests-and-fix.prompt.md",
     ".github/prompts/security-review.prompt.md",
     ".github/prompts/upgrade-to-recommended-versions.prompt.md",
     ".github/scripts/check-coderabbit-readiness.sh",
     ".github/scripts/check-dependency-graph-readiness.sh",
     ".github/scripts/check-github-mcp-readiness.sh",
+    ".github/scripts/check-pitest-readiness.sh",
     ".mcp.json",
     ".vscode/mcp.json",
     ".vscode/scripts/check-coderabbit-readiness.sh",
     ".vscode/scripts/check-dependency-graph-readiness.sh",
     ".vscode/scripts/check-github-mcp-readiness.sh",
-    "gradle/dependency-graph-init.gradle"
+    ".vscode/scripts/check-pitest-readiness.sh",
+    "gradle/dependency-graph-init.gradle",
+    "gradle/pitest.gradle"
   ]
 }
