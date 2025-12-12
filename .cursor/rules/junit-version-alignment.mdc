@@ -41,39 +41,44 @@ Typical dependency conflict:
 
 ---
 
-## Target Versions
+## Target Versions (December 2025)
 
-| Component | Version |
-|-----------|---------|
-| **JUnit Jupiter** | **5.14.1** |
-| **JUnit Platform** | **1.14.1** |
-| **Spock** | **2.4-M7-groovy-4.0** |
+| Component | Version | Notes |
+|-----------|---------|-------|
+| **JUnit Jupiter** | **5.14.1** | Released Oct 31, 2025 |
+| **JUnit Platform** | **1.14.1** | Released Oct 31, 2025 |
+| **Spock** | **2.4-groovy-4.0** | Stable release (Dec 11, 2025) |
+| **Groovy** | **4.0.24** | Required for Spock 2.4 |
+
+Use the `/improve-test-setup` command (see `java/commands/improve-test-setup.md`) to upgrade all testing libraries.
 
 ---
 
 ## Solution: Force Version Alignment
+
+**IMPORTANT**: Always reference versions from the version catalog (`gradle/libs.versions.toml`). Never hardcode version strings in build files.
 
 ### Option 1: Module-Level Fix (Recommended for modules with Spock)
 
 Add to each module's `build.gradle` that uses Spock tests:
 
 ```groovy
-// Force JUnit 5.14.1 across all configurations to avoid version conflicts
+// Force JUnit version alignment across all configurations using version catalog
 configurations.all {
     resolutionStrategy.eachDependency { details ->
         if (details.requested.group == 'org.junit.jupiter') {
-            details.useVersion '5.14.1'
+            details.useVersion libs.versions.junit.jupiter.get()
         }
         if (details.requested.group == 'org.junit.platform') {
-            details.useVersion '1.14.1'
+            details.useVersion libs.versions.junit.platform.get()
         }
     }
 }
 
 dependencies {
-    // Test dependencies - manually configured for JUnit 5.14.1
-    testImplementation platform('org.junit:junit-bom:5.14.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    // Test dependencies - use version catalog references
+    testImplementation platform(libs.junit.bom)
+    testImplementation libs.junit.jupiter
     testImplementation libs.spock.core
 }
 
@@ -92,16 +97,16 @@ subprojects {
         configurations.configureEach {
             resolutionStrategy.eachDependency { details ->
                 if (details.requested.group == 'org.junit.jupiter') {
-                    details.useVersion '5.14.1'
+                    details.useVersion libs.versions.junit.jupiter.get()
                 }
                 if (details.requested.group == 'org.junit.platform') {
-                    details.useVersion '1.14.1'
+                    details.useVersion libs.versions.junit.platform.get()
                 }
             }
         }
         
         dependencies {
-            testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+            testRuntimeOnly libs.junit.platform.launcher
         }
     }
 }
@@ -144,22 +149,22 @@ plugins {
 
 // Note: Not using bitsoJavaModule.testRuntime() to avoid JUnit version conflicts
 
-// Force JUnit 5.14.1 across all configurations
+// Force JUnit version alignment using version catalog - NEVER hardcode versions
 configurations.all {
     resolutionStrategy.eachDependency { details ->
         if (details.requested.group == 'org.junit.jupiter') {
-            details.useVersion '5.14.1'
+            details.useVersion libs.versions.junit.jupiter.get()
         }
         if (details.requested.group == 'org.junit.platform') {
-            details.useVersion '1.14.1'
+            details.useVersion libs.versions.junit.platform.get()
         }
     }
 }
 
 dependencies {
-    // Test dependencies - manually configured
-    testImplementation platform('org.junit:junit-bom:5.14.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    // Test dependencies - use version catalog references
+    testImplementation platform(libs.junit.bom)
+    testImplementation libs.junit.jupiter
     testImplementation libs.spock.core
 }
 
@@ -235,11 +240,11 @@ grep -i "junit" build/reports/dependency-graph-snapshots/dependency-list.txt | s
 
 If `grep -i junit` still shows mixed versions:
 
-1. Add explicit platform import:
+1. Add explicit enforced platform import using version catalog:
 
    ```groovy
    dependencies {
-       testImplementation enforcedPlatform('org.junit:junit-bom:5.14.1')
+       testImplementation enforcedPlatform(libs.junit.bom)
    }
    ```
 
@@ -247,7 +252,11 @@ If `grep -i junit` still shows mixed versions:
 
 ---
 
-## Related Golden Paths
+## Related Commands & Golden Paths
 
+- **Improve Test Setup**: `java/commands/improve-test-setup.md` - Testing library upgrades and JaCoCo config
+- **Improve Test Coverage**: `java/commands/improve-test-coverage.md` - Write tests to improve coverage
+- **Mutation Testing**: `java/commands/improve-test-quality-with-mutation-testing.md` - Find weak tests
 - **Spring Boot Upgrade**: `java/golden-paths/spring-boot-3.5-upgrade.md`
 - **Upgrades Index**: `java/golden-paths/java-upgrades-golden-paths.md`
+- **Version Management**: `java/rules/java-versions-and-dependencies.md` - Testing library versions

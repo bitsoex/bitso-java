@@ -18,10 +18,25 @@ Central repository for all dependency versions. Never hardcode versions in build
 gradle = "8.14.3"
 java = "21"
 spring-boot = "3.5.8"
-jacoco = "0.8.14"
 protobuf = "4.33.0"
 grpc = "1.76.0"
-junit-jupiter = "5.10.x"
+
+# Testing Libraries - SAFE TO UPDATE DURING CODE FREEZE
+# See java/commands/improve-test-setup.md for upgrade workflow
+spock = "2.4-groovy-4.0"
+junit-jupiter = "5.14.1"
+junit-platform = "1.14.1"
+jacoco = "0.8.14"
+testcontainers = "1.21.3"
+groovy = "4.0.24"
+
+# Mutation Testing
+pitest = "1.22.0"
+pitest-plugin = "1.19.0-rc.2"
+pitest-junit5 = "1.2.3"
+
+# Code Quality
+sonar-plugin = "7.2.0.6526"
 
 # Security updates
 commons-lang3 = "3.18.0"
@@ -30,11 +45,23 @@ commons-lang3 = "3.18.0"
 spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
 grpc-bom = { module = "io.grpc:grpc-bom", version.ref = "grpc" }
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
+
+# Testing Libraries
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit-jupiter" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform" }
+spock-core = { module = "org.spockframework:spock-core", version.ref = "spock" }
+spock-spring = { module = "org.spockframework:spock-spring", version.ref = "spock" }
+testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "testcontainers" }
+
+[plugins]
+pitest = { id = "info.solidsoft.pitest", version.ref = "pitest-plugin" }
+sonarqube = { id = "org.sonarqube", version.ref = "sonar-plugin" }
 
 [bundles]
 spring-boot-web = ["spring-boot-starter-web"]
-testing = ["junit-jupiter"]
+testing = ["junit-jupiter", "junit-platform-launcher"]
+testing-spock = ["spock-core"]
 ```
 
 ### Key Principles
@@ -219,9 +246,27 @@ Typical compatibility for Bitso projects:
 | Spring Cloud | 2024.0.x | 21+ | Compatible with Boot 3.5+ |
 | gRPC | 1.76.0 | 11+ | High performance |
 | Protobuf | 4.33.0 | 8+ | Wire format compatible |
-| JaCoCo | 0.8.14+ | 8+ | Code coverage |
 | Gradle | 8.14.3+ | 11+ | Build tool |
 | Develocity | 0.2.8+ | - | Build insights |
+
+### Testing Library Versions (December 2025)
+
+**SAFE TO UPDATE DURING CODE FREEZE** - These only affect test code.
+
+| Library | Version | Notes |
+|---------|---------|-------|
+| Spock Framework | **2.4-groovy-4.0** | Stable release (Dec 11, 2025), requires Groovy 4.0.x |
+| JUnit Jupiter | **5.14.1** | Released Oct 2025 |
+| JUnit Platform | **1.14.1** | Released Oct 2025 |
+| JaCoCo | **0.8.14** | Released Oct 2025 |
+| Testcontainers | **1.21.3** | Stable 1.x (2.x has breaking changes) |
+| Groovy | **4.0.24** | Required for Spock 2.4 |
+| Pitest | **1.22.0** | Mutation testing core |
+| Pitest Gradle Plugin | **1.19.0-rc.2** | Released Oct 2025 |
+| Pitest JUnit5 Plugin | **1.2.3** | For JUnit 5 support |
+| SonarQube Plugin | **7.2.0.6526** | Released Dec 2025 |
+
+Use `/improve-test-setup` command to upgrade testing libraries.
 
 ## Spring Boot 3.5.x Upgrade Requirements
 
@@ -336,6 +381,9 @@ Run periodically:
 ## Related Rules
 
 - **Upgrade Command**: java/commands/upgrade-to-recommended-versions.md
+- **Improve Test Setup**: java/commands/improve-test-setup.md - Testing library upgrades
+- **Improve Test Coverage**: java/commands/improve-test-coverage.md - Write tests
+- **Mutation Testing**: java/commands/improve-test-quality-with-mutation-testing.md
 - **Vulnerability Golden Paths**: java/rules/java-vulnerability-golden-paths.md
 - **Gradle Build Best Practices**: java/rules/java-gradle-best-practices.md
 - **JaCoCo Code Coverage**: java/rules/java-jacoco-coverage.md

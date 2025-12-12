@@ -668,8 +668,17 @@ After improving tests:
 | Ignoring equivalent mutants | Wasted effort | Some mutants are semantically equivalent - skip them |
 | Too many assertions per test | Hard to diagnose failures | One logical assertion per test |
 
+## Next Steps
+
+Would you like to run one of the related testing improvement commands?
+
+- `/improve-test-setup` - Upgrade testing libraries and configure JaCoCo
+- `/improve-test-coverage` - Write tests to improve coverage
+
 ## Related
 
+- **Test Setup**: `java/commands/improve-test-setup.md` - Testing infrastructure setup
+- **Test Coverage**: `java/commands/improve-test-coverage.md` - Write tests to improve coverage
 - **Jira Ticket Workflow**: `global/rules/jira-ticket-workflow.md` - **Required** - Ticket creation
 - **PR Lifecycle**: `global/rules/github-cli-pr-lifecycle.md` - PR creation with emojis
 - **Testing Guidelines**: `java/rules/java-testing-guidelines.md` - Spock/JUnit patterns

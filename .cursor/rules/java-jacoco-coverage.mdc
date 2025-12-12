@@ -457,6 +457,9 @@ Essential commands to verify JaCoCo setup:
 
 ## Related Resources
 
+- **Improve Test Setup**: java/commands/improve-test-setup.md - Testing infrastructure and library upgrades
+- **Improve Test Coverage**: java/commands/improve-test-coverage.md - Write tests to improve coverage
+- **Mutation Testing**: java/commands/improve-test-quality-with-mutation-testing.md - Find weak tests
 - **Gradle Configuration**: java/rules/java-gradle-best-practices.md
 - **Java Testing Guidelines**: java/rules/java-testing-guidelines.md
 - **Java Services Standards**: java/rules/java-services-standards.md
