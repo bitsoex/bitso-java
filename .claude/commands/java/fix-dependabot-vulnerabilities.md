@@ -262,17 +262,22 @@ When the vulnerable dependency is transitive but NOT managed by any BOM:
 
 ```groovy
 // In root build.gradle - applies to ALL configurations
+// Versions should be in gradle/libs.versions.toml:
+// [versions]
+// commons-compress = "1.27.1"
+// bouncycastle = "1.81"
+
 allprojects {
     configurations.configureEach {
         resolutionStrategy.dependencySubstitution {
             // Substitute old version with new - removes old from graph entirely
             substitute module("org.apache.commons:commons-compress")
-                using module("org.apache.commons:commons-compress:1.27.1")
+                using module("org.apache.commons:commons-compress:${libs.versions.commons.compress.get()}")
                 because "Security fix for CVE-2024-25710, CVE-2024-26308"
 
             // For artifact replacement (e.g., jdk15on -> jdk18on)
             substitute module("org.bouncycastle:bcprov-jdk15on")
-                using module("org.bouncycastle:bcprov-jdk18on:1.81")
+                using module("org.bouncycastle:bcprov-jdk18on:${libs.versions.bouncycastle.get()}")
                 because "Security fix - migrate to jdk18on"
         }
     }
@@ -289,13 +294,17 @@ allprojects {
 
 ```groovy
 // In root build.gradle
+// Version should be in gradle/libs.versions.toml:
+// [versions]
+// lz4java = "1.10.1"
+
 allprojects {
     configurations.configureEach {
         resolutionStrategy.dependencySubstitution {
             // lz4-java: org.lz4 is discontinued, substitute with maintained at.yawk.lz4 fork
             // Fixes CVE-2025-66566, CVE-2025-12183, CVE-2025-4241
             substitute module("org.lz4:lz4-java")
-                using module("at.yawk.lz4:lz4-java:1.10.1")
+                using module("at.yawk.lz4:lz4-java:${libs.versions.lz4java.get()}")
                 because "Security fix - org.lz4:lz4-java is discontinued, at.yawk.lz4 is the maintained fork"
         }
     }

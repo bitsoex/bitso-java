@@ -30,6 +30,8 @@ This document serves as an index for all Java upgrade golden paths. Each golden 
 | **SonarQube Plugin** | **7.2.0.6526** | Code analysis |
 | **Develocity Plugin** | **0.2.8** | Build insights |
 | **Publish Plugin** | **0.3.6** | Publishing |
+| **bitso-commons-redis** | **4.2.1** | Redis (Jedis 6 compatibility) |
+| **jedis4-utils** | **3.0.0** | Jedis utilities |
 
 ---
 
@@ -70,14 +72,33 @@ Gradle upgrade guidance is included in the Spring Boot 3.5 upgrade golden path, 
 - Develocity plugin version (0.2.8)
 - JUnit Platform Launcher requirement
 
-### 4. Bitso Libraries Upgrade (Covered in Vulnerability Fixes)
+### 4. Redis/Jedis Version Compatibility
+
+**File**: `java/golden-paths/redis-jedis-compatibility.md`
+
+**When to use**: Redis `NoSuchMethodError` during Spring Boot upgrade, or any Jedis version conflicts
+
+**Key considerations**:
+
+- Spring Boot 3.5.x uses Jedis 6.x
+- bitso-commons-redis must be 4.2.1+ for Jedis 6 compatibility
+- jedis4-utils must be 3.0.0+ for Jedis 6 compatibility
+- Common error: `SetParams.px(long)` NoSuchMethodError
+
+**Real PR Examples**:
+
+- [assets/pull/640](https://github.com/bitsoex/assets/pull/640) - Redis SetParams.px(long) fix
+- [consumer-wallet/pull/770](https://github.com/bitsoex/consumer-wallet/pull/770) - Bump redis library to 4.2.0
+- [bff-services/pull/1428](https://github.com/bitsoex/bff-services/pull/1428) - Update Jedis version
+
+### 5. Bitso Libraries Upgrade (Covered in Vulnerability Fixes)
 
 Bitso library upgrade guidance is included in the vulnerability golden path.
 
 **Key considerations**:
 
 - bitso-rds-iam-authn (Hikari 6 compatibility)
-- bitso-commons-redis (Jedis 4 compatibility)
+- bitso-commons-redis (Jedis 6 compatibility) - See Redis golden path
 - bitso.publish plugin versions (0.3.6)
 
 ---
@@ -90,13 +111,22 @@ What are you upgrading?
 │   └── Use: spring-boot-3.5-upgrade.md
 │
 ├── Gradle version
-│   └── Use: gradle-upgrade.md
+│   └── Use: spring-boot-3.5-upgrade.md (includes Gradle)
 │
 ├── Test framework (JUnit/Spock)
 │   └── Use: junit-version-alignment.md
 │
+├── Redis/Jedis libraries
+│   └── Use: redis-jedis-compatibility.md
+│
+├── NoSuchMethodError with Redis/Jedis?
+│   └── Use: redis-jedis-compatibility.md
+│
 ├── Bitso internal libraries
-│   └── Use: bitso-libs-upgrade.md
+│   ├── Redis-related (bitso-commons-redis, jedis4-utils)
+│   │   └── Use: redis-jedis-compatibility.md
+│   └── Other Bitso libraries
+│       └── Use: java/rules/java-vulnerability-golden-paths.md
 │
 └── Security vulnerabilities
     └── Use: java/rules/java-vulnerability-golden-paths.md
@@ -129,13 +159,18 @@ grep -i "junit\|spock\|spring" build/reports/dependency-graph-snapshots/dependen
 When multiple dependencies bring different versions of the same library:
 
 ```groovy
+// Versions should be defined in gradle/libs.versions.toml:
+// [versions]
+// junit-jupiter = "5.14.1"
+// junit-platform = "1.14.1"
+
 configurations.all {
     resolutionStrategy.eachDependency { details ->
         if (details.requested.group == 'org.junit.jupiter') {
-            details.useVersion '5.14.1'
+            details.useVersion libs.versions.junit.jupiter.get()
         }
         if (details.requested.group == 'org.junit.platform') {
-            details.useVersion '1.14.1'
+            details.useVersion libs.versions.junit.platform.get()
         }
     }
 }
@@ -146,8 +181,9 @@ configurations.all {
 For libraries managed by BOMs:
 
 ```groovy
+// Use version catalog reference for BOM
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.14.1')
+    testImplementation platform(libs.junit.bom)
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 ```
@@ -160,9 +196,9 @@ When a plugin forces incompatible versions:
 // Instead of using plugin's testRuntime configuration
 // bitsoJavaModule.testRuntime(BitsoTestRuntime.SPOCK_2_4_M1_GROOVY_4)
 
-// Configure manually with correct versions
+// Configure manually with correct versions from version catalog
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.14.1')
+    testImplementation platform(libs.junit.bom)
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation libs.spock.core
 }

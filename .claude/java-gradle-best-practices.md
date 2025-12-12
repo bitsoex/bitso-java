@@ -10,19 +10,66 @@ Standards for Gradle configuration, multi-module setup, and build patterns in Ja
 
 For detailed version management, see: [java/rules/java-versions-and-dependencies.md](java-versions-and-dependencies.md)
 
-Key points:
+**CRITICAL**: All versions MUST be centralized. Never hardcode versions in `build.gradle` files.
 
-- All versions defined in `gradle/libs.versions.toml`
-- Use BOMs (Bill of Materials) for framework dependency management
-- Use Gradle Version Catalog for type-safe dependency declarations
-- Never hardcode versions in individual `build.gradle` files
+### Version Centralization Requirements
 
-**Benefits:**
+| Allowed | Not Allowed |
+|---------|-------------|
+| `libs.spring.boot.starter.web` | `"org.springframework.boot:spring-boot-starter-web:3.5.8"` |
+| `libs.bitso.commons.redis` | `"com.bitso.commons:redis:3.1.0"` |
+| Version in `libs.versions.toml` | Version defined inline in build.gradle |
+
+### Anti-Patterns: NEVER Do This
+
+```groovy
+// ❌ NEVER: Hardcode versions directly
+dependencies {
+    implementation "com.bitso.commons:redis:3.1.0"
+    implementation "org.springframework.boot:spring-boot-starter-web:3.5.8"
+}
+
+// ❌ NEVER: Define versions as local variables
+def redisVersion = "3.1.0"
+dependencies {
+    implementation "com.bitso.commons:redis:${redisVersion}"
+}
+
+// ❌ NEVER: Mix centralized and hardcoded
+dependencies {
+    implementation libs.spring.boot.starter.web  // Good
+    implementation "com.bitso.commons:redis:3.1.0"  // Bad!
+}
+```
+
+### Correct Pattern
+
+```groovy
+// ✅ ALWAYS: Use version catalog
+dependencies {
+    implementation libs.spring.boot.starter.web
+    implementation libs.bitso.commons.redis
+}
+```
+
+### Why This Matters
+
+Hardcoded versions cause runtime failures like:
+
+```
+java.lang.NoSuchMethodError: 'redis.clients.jedis.params.SetParams redis.clients.jedis.params.SetParams.px(long)'
+```
+
+This happens when Spring Boot upgrades Jedis but hardcoded library versions expect the old API.
+
+See `java/golden-paths/redis-jedis-compatibility.md` for real examples.
+
+**Benefits of centralization:**
 
 - Single source of truth for versions
 - Easy to update across all modules
 - Type-safe dependency management
-- Prevent version conflicts
+- Prevent version conflicts and NoSuchMethodError
 
 ### 2. Apply Plugins at Root Level
 
@@ -404,6 +451,8 @@ org.gradle.caching.debug=false
 ## Related Rules
 
 - **Version & Dependency Management**: [java/rules/java-versions-and-dependencies.md](java-versions-and-dependencies.md)
+- **Redis/Jedis Compatibility**: [java/golden-paths/redis-jedis-compatibility.md](../golden-paths/redis-jedis-compatibility.md)
+- **Spring Boot 3.5 Upgrade**: [java/golden-paths/spring-boot-3.5-upgrade.md](../golden-paths/spring-boot-3.5-upgrade.md)
 - **JaCoCo Code Coverage**: [java/rules/java-jacoco-coverage.md](java-jacoco-coverage.md)
 - **Java Testing Guidelines**: [java/rules/java-testing-guidelines.md](java-testing-guidelines.md)
 - **Protocol Buffer Standards**: [java/rules/java-protobuf-linting.md](java-protobuf-linting.md)

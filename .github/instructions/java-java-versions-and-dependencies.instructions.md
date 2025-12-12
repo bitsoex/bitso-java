@@ -7,13 +7,61 @@ description: Version catalog strategy, dependency management, BOMs, and version 
 
 Standards for managing library versions, dependency constraints, and Bill of Materials (BOM) in Java/Gradle projects.
 
+## CRITICAL: Version Centralization Requirements
+
+**All dependency versions MUST be centralized.** Never hardcode versions in individual `build.gradle` files.
+
+### Approved Locations for Version Definitions
+
+| Location | Use Case | Priority |
+|----------|----------|----------|
+| `gradle/libs.versions.toml` | **Primary** - All new projects | 1st |
+| `gradle.properties` | Legacy projects transitioning | 2nd |
+| `versions.gradle` | Legacy - Migrate to TOML | 3rd |
+
+### Anti-Patterns: NEVER Do This
+
+```groovy
+// ❌ NEVER: Hardcode versions in build.gradle
+dependencies {
+    implementation "com.bitso.commons:redis:3.1.0"
+    implementation "redis.clients:jedis:4.3.1"
+    implementation "org.springframework.boot:spring-boot-starter-web:3.2.0"
+}
+
+// ❌ NEVER: Define versions inline in build.gradle
+def redisVersion = "3.1.0"
+dependencies {
+    implementation "com.bitso.commons:redis:${redisVersion}"
+}
+
+// ❌ NEVER: Mix version sources
+dependencies {
+    implementation libs.spring.boot.starter.web  // from catalog
+    implementation "com.bitso.commons:redis:3.1.0"  // hardcoded - BAD!
+}
+```
+
+### Why This Matters
+
+Hardcoded versions cause:
+
+1. **NoSuchMethodError at runtime**: Different modules use incompatible versions
+2. **Version drift**: Hard to track what versions are actually used
+3. **Upgrade failures**: Must find and update versions scattered across files
+4. **Security gaps**: Miss security patches because versions are buried in code
+
+**Real example**: Spring Boot 3.5.x upgrades Jedis to 6.x, but a hardcoded `bitso-commons-redis:3.1.0` still expects Jedis 4.x, causing `NoSuchMethodError: SetParams.px(long)`.
+
+---
+
 ## Version Catalog (`gradle/libs.versions.toml`)
 
 Central repository for all dependency versions. Never hardcode versions in build files.
 
 ### Structure
 
-```groovy
+```toml
 [versions]
 gradle = "8.14.3"
 java = "21"
@@ -149,7 +197,7 @@ dependencies {
 
 Always use explicit versions for full control and predictability:
 
-```groovy
+```toml
 [versions]
 java = "21"              # JDK version
 spring-boot = "3.5.8"    # Spring Boot (3.4.x EOL end of 2025)
@@ -210,7 +258,7 @@ dependencies {
 
 Always use minimum secure versions in version catalog:
 
-```groovy
+```toml
 [versions]
 # Security updates
 commons-compress = "1.24.0"   # CVE-2023-42503 fix
@@ -243,11 +291,27 @@ Typical compatibility for Bitso projects:
 | Component | Version | Java | Notes |
 |-----------|---------|------|-------|
 | Spring Boot | **3.5.8** | 21+ | **REQUIRED** - 3.4.x EOL end of 2025 |
-| Spring Cloud | 2024.0.x | 21+ | Compatible with Boot 3.5+ |
+| Spring Cloud | **2025.0.0** | 21+ | Required for Boot 3.5.x |
 | gRPC | 1.76.0 | 11+ | High performance |
 | Protobuf | 4.33.0 | 8+ | Wire format compatible |
 | Gradle | 8.14.3+ | 11+ | Build tool |
 | Develocity | 0.2.8+ | - | Build insights |
+
+### Redis/Jedis Compatibility (Spring Boot 3.5.x)
+
+| Library | Version | Notes |
+|---------|---------|-------|
+| **bitso-commons-redis** | **4.2.1** | Required for Jedis 6.x (Spring Boot 3.5.x) |
+| **jedis4-utils** | **3.0.0** | Required for locking/Lua scripts |
+| Jedis (managed by Boot) | 6.x | Do not override manually |
+
+**WARNING**: Using older `bitso-commons-redis` versions with Spring Boot 3.5.x causes:
+
+```
+java.lang.NoSuchMethodError: 'redis.clients.jedis.params.SetParams redis.clients.jedis.params.SetParams.px(long)'
+```
+
+See `java/golden-paths/redis-jedis-compatibility.md` for detailed compatibility patterns.
 
 ### Testing Library Versions (December 2025)
 
@@ -289,25 +353,26 @@ See `java/commands/upgrade-to-recommended-versions.md` for the full workflow wit
 
 ### 1. Update BOMs Before Individual Libraries
 
-```groovy
-// Update this first
+```toml
+# In gradle/libs.versions.toml - update this first
+[versions]
 spring-boot = "3.4.0"
 
-// Then individual overrides if needed
-spring-boot-starter-web = { ... }  # Usually not needed
+# Then individual overrides if needed (usually not needed)
+# spring-boot-starter-web = { ... }
 ```
 
 ### 2. Use Explicit Versions
 
-```groovy
+```toml
 [versions]
-// ✅ Explicit versions - full control
+# ✅ Explicit versions - full control
 spring-boot = "3.5.7"
 mockito = "5.10.0"
 
-// ❌ Ranges - unpredictable updates
-spring-boot = "3.5.+"
-mockito = "5.+"
+# ❌ Ranges - unpredictable updates (DON'T use these)
+# spring-boot = "3.5.+"
+# mockito = "5.+"
 ```
 
 ### 3. Document Override Reasons
@@ -370,6 +435,69 @@ Run periodically:
 2. Update BOM if vulnerability in transitive dep
 3. Document reason in commit message
 
+## Migration: Hardcoded to Centralized Versions
+
+If your project has hardcoded versions, follow this migration guide.
+
+### Step 1: Find All Hardcoded Versions
+
+```bash
+# Find hardcoded versions in build files
+grep -rE '"[a-zA-Z0-9.-]+:[a-zA-Z0-9.-]+:[0-9]+\.' --include="*.gradle" .
+
+# Find versions defined as variables in build files
+grep -rE "def .*Version\s*=" --include="*.gradle" .
+```
+
+### Step 2: Add to Version Catalog
+
+Move each version to `gradle/libs.versions.toml`:
+
+```toml
+# Before: build.gradle had
+# implementation "com.bitso.commons:redis:3.1.0"
+
+# After: gradle/libs.versions.toml
+[versions]
+bitso-commons-redis = "4.2.1"
+
+[libraries]
+bitso-commons-redis = { module = "com.bitso.commons:redis", version.ref = "bitso-commons-redis" }
+```
+
+### Step 3: Update build.gradle Files
+
+```groovy
+// Before
+implementation "com.bitso.commons:redis:3.1.0"
+
+// After
+implementation libs.bitso.commons.redis
+```
+
+**Note on accessor naming**: Gradle normalizes library keys from the version catalog.
+Hyphens (`-`) become dots (`.`) in the accessor:
+
+- `bitso-commons-redis` in TOML → `libs.bitso.commons.redis` in Groovy
+- `spring-boot-starter-web` in TOML → `libs.spring.boot.starter.web` in Groovy
+
+### Step 4: Verify
+
+```bash
+./gradlew clean build test --no-daemon
+```
+
+### Common Migration Patterns
+
+| Before (Hardcoded) | After (Centralized) |
+|--------------------|---------------------|
+| `"org.springframework.boot:spring-boot-starter-web:3.5.8"` | `libs.spring.boot.starter.web` |
+| `"com.bitso.commons:redis:3.1.0"` | `libs.bitso.commons.redis` |
+| `"redis.clients:jedis:${jedisVersion}"` | Managed by Spring Boot BOM |
+| `def redisVersion = "3.1.0"` | Delete - use version catalog |
+
+---
+
 ## Links & References
 
 - **Gradle Version Catalog**: <https://docs.gradle.org/current/userguide/platforms.html>
@@ -381,6 +509,8 @@ Run periodically:
 ## Related Rules
 
 - **Upgrade Command**: java/commands/upgrade-to-recommended-versions.md
+- **Redis/Jedis Compatibility**: java/golden-paths/redis-jedis-compatibility.md
+- **Spring Boot 3.5 Upgrade**: java/golden-paths/spring-boot-3.5-upgrade.md
 - **Improve Test Setup**: java/commands/improve-test-setup.md - Testing library upgrades
 - **Improve Test Coverage**: java/commands/improve-test-coverage.md - Write tests
 - **Mutation Testing**: java/commands/improve-test-quality-with-mutation-testing.md

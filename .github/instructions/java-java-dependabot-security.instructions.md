@@ -95,11 +95,15 @@ commons-compress = "1.27.1" # Updated from 1.26.0
 For transitive dependencies not covered by any BOM:
 
 ```groovy
+// Version should be in gradle/libs.versions.toml:
+// [versions]
+// commons-compress = "1.27.1"
+
 allprojects {
     configurations.configureEach {
         resolutionStrategy.dependencySubstitution {
             substitute module("org.apache.commons:commons-compress")
-                using module("org.apache.commons:commons-compress:1.27.1")
+                using module("org.apache.commons:commons-compress:${libs.versions.commons.compress.get()}")
                 because "Security fix for CVE-2024-25710"
         }
     }
@@ -111,10 +115,11 @@ allprojects {
 For enforcing minimum versions:
 
 ```groovy
+// Version should be in gradle/libs.versions.toml
 allprojects {
     dependencies {
         constraints {
-            implementation("org.apache.commons:commons-compress:1.27.1") {
+            implementation(libs.commons.compress) {
                 because "Security fix for CVE-2024-25710"
             }
         }

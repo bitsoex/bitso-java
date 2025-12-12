@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generatedAt": "2025-12-12T15:45:54.032Z",
+  "generatedAt": "2025-12-12T18:36:21.265Z",
   "sourceRepo": "bitsoex/ai-code-instructions",
   "category": "java",
   "managedDirectories": [
@@ -64,6 +64,7 @@
     ".claude/junit-version-alignment.md",
     ".claude/markdown-review.md",
     ".claude/mcp-setup.md",
+    ".claude/redis-jedis-compatibility.md",
     ".claude/scripts/check-coderabbit-readiness.sh",
     ".claude/scripts/check-dependency-graph-readiness.sh",
     ".claude/scripts/check-github-mcp-readiness.sh",
@@ -112,6 +113,7 @@
     ".cursor/rules/junit-version-alignment.mdc",
     ".cursor/rules/markdown-review.mdc",
     ".cursor/rules/mcp-setup.mdc",
+    ".cursor/rules/redis-jedis-compatibility.mdc",
     ".cursor/rules/spring-boot-3.5-upgrade.mdc",
     ".cursor/scripts/check-coderabbit-readiness.sh",
     ".cursor/scripts/check-dependency-graph-readiness.sh",
@@ -146,6 +148,7 @@
     ".github/instructions/java-junit-version-alignment.instructions.md",
     ".github/instructions/java-markdown-review.instructions.md",
     ".github/instructions/java-mcp-setup.instructions.md",
+    ".github/instructions/java-redis-jedis-compatibility.instructions.md",
     ".github/instructions/java-spring-boot-3.5-upgrade.instructions.md",
     ".github/prompts/add-sonarqube-mcp-to-intellij-and-copilot-cli.prompt.md",
     ".github/prompts/disable-vscode-mcp-discovery.prompt.md",

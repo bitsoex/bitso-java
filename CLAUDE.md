@@ -149,6 +149,11 @@ This repository uses AI-assisted development with specific coding guidelines and
 **Description:** Resolving JUnit version conflicts in Java/Gradle projects
 **Scope:** build.gradle, gradle/libs.versions.toml
 
+### Proven patterns for resolving Redis/Jedis version conflicts during Spring Boot upgrades
+**File:** [`.claude/redis-jedis-compatibility.md`](.claude/redis-jedis-compatibility.md)
+**Description:** Proven patterns for resolving Redis/Jedis version conflicts during Spring Boot upgrades
+**Scope:** gradle/libs.versions.toml, build.gradle, settings.gradle, gradle.properties
+
 ### Proven upgrade patterns for Spring Boot 3.5.x with all required side-by-side library upgrades
 **File:** [`.claude/spring-boot-3.5-upgrade.md`](.claude/spring-boot-3.5-upgrade.md)
 **Description:** Proven upgrade patterns for Spring Boot 3.5.x with all required side-by-side library upgrades
@@ -161,6 +166,6 @@ These rules are automatically applied when using Claude AI assistant in this rep
 
 ## Rule Categories
 
-- **Java**: java specific coding guidelines (30 rules)
+- **Java**: java specific coding guidelines (31 rules)
 
 ---

@@ -20,6 +20,8 @@
 | **JaCoCo** | **0.8.14** | Code coverage |
 | **Develocity Plugin** | **0.2.8** | Build insights |
 | **Publish Plugin** | **0.3.6** | Publishing |
+| **bitso-commons-redis** | **4.2.1** | If using Redis (Jedis 6 compatibility) |
+| **jedis4-utils** | **3.0.0** | If using jedis4-utils |
 
 ## ⚠️ CRITICAL: Spring Cloud Compatibility
 
@@ -54,26 +56,32 @@ Spring Boot 3.5.x brings JUnit 5.12.2+, but the `bitso.java.module` plugin force
 java.lang.NoClassDefFoundError: org/junit/jupiter/api/extension/TestInstantiationAwareExtension$ExtensionContextScope
 ```
 
-### Solution: Force JUnit 5.14.1 Across All Configurations
+### Solution: Force JUnit Versions Using Version Catalog
 
 For modules using Spock tests, add this to each module's `build.gradle`:
 
 ```groovy
-// Force JUnit 5.14.1 across all configurations to avoid version conflicts
+// Versions should be defined in gradle/libs.versions.toml:
+// [versions]
+// junit-jupiter = "5.14.1"
+// junit-platform = "1.14.1"
+// [libraries]
+// junit-bom = { module = "org.junit:junit-bom", version.ref = "junit-jupiter" }
+
 configurations.all {
     resolutionStrategy.eachDependency { details ->
         if (details.requested.group == 'org.junit.jupiter') {
-            details.useVersion '5.14.1'
+            details.useVersion libs.versions.junit.jupiter.get()
         }
         if (details.requested.group == 'org.junit.platform') {
-            details.useVersion '1.14.1'
+            details.useVersion libs.versions.junit.platform.get()
         }
     }
 }
 
 dependencies {
-    // Test dependencies - manually configured for Spring Boot 3.5.8 compatibility
-    testImplementation platform('org.junit:junit-bom:5.14.1')
+    // Test dependencies - use version catalog references
+    testImplementation platform(libs.junit.bom)
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation libs.spock.core
 }
@@ -94,20 +102,20 @@ test {
 //     testRuntime(BitsoTestRuntime.SPOCK_2_4_M1_GROOVY_4)
 // }
 
-// ✅ ADD - Manual configuration with correct versions
+// ✅ ADD - Manual configuration with versions from version catalog
 configurations.all {
     resolutionStrategy.eachDependency { details ->
         if (details.requested.group == 'org.junit.jupiter') {
-            details.useVersion '5.14.1'
+            details.useVersion libs.versions.junit.jupiter.get()
         }
         if (details.requested.group == 'org.junit.platform') {
-            details.useVersion '1.14.1'
+            details.useVersion libs.versions.junit.platform.get()
         }
     }
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.14.1')
+    testImplementation platform(libs.junit.bom)
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation libs.spock.core
 }
@@ -261,6 +269,25 @@ jacocoVersion=0.8.14
 develocityPluginVersion=0.2.8
 ```
 
+### Error: Redis NoSuchMethodError
+
+```
+java.lang.NoSuchMethodError: 'redis.clients.jedis.params.SetParams redis.clients.jedis.params.SetParams.px(long)'
+```
+
+**Cause**: Spring Boot 3.5.x uses Jedis 6.x, which is incompatible with older `bitso-commons-redis` versions.
+
+**Fix**: Update Redis libraries in version catalog:
+
+```toml
+# gradle/libs.versions.toml
+[versions]
+bitso-commons-redis = "4.2.1"
+jedis4-utils = "3.0.0"  # If using jedis4-utils
+```
+
+See `java/golden-paths/redis-jedis-compatibility.md` for the full compatibility matrix and additional patterns.
+
 ---
 
 ## ⚠️ DO NOT UPGRADE
@@ -275,6 +302,7 @@ These versions should **NOT** be changed unless explicitly requested:
 ## Related Golden Paths
 
 - **JUnit Alignment**: `java/golden-paths/junit-version-alignment.md`
+- **Redis/Jedis Compatibility**: `java/golden-paths/redis-jedis-compatibility.md`
 - **Upgrades Index**: `java/golden-paths/java-upgrades-golden-paths.md`
 - **Vulnerability Fixes**: `java/rules/java-vulnerability-golden-paths.md`
 
