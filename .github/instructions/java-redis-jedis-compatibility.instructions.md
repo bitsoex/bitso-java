@@ -24,7 +24,7 @@ When upgrading Spring Boot, you may encounter Redis/Jedis version mismatches tha
 java.lang.NoSuchMethodError: 'redis.clients.jedis.params.SetParams redis.clients.jedis.params.SetParams.px(long)'
 ```
 
-**Root Cause**: Spring Boot manages the Jedis version, and when upgraded, it may conflict with Bitso's Redis wrapper libraries (`bitso-commons-redis`, `jedis4-utils`) that were compiled against older Jedis versions.
+**Root Cause**: Spring Boot manages the Jedis version, and when upgraded, it may conflict with Bitso's Redis wrapper libraries (`bitso-commons-redis`, `jedis4-utils`) that were compiled against specific Jedis versions.
 
 ---
 
@@ -35,15 +35,27 @@ Use this matrix to determine compatible library versions:
 | Spring Boot | Jedis Version | bitso-commons-redis | jedis4-utils | Notes |
 |-------------|---------------|---------------------|--------------|-------|
 | 3.1.x | 4.x | 3.x | 1.x-2.x | Legacy |
-| 3.2.x-3.4.x | 5.x | 4.x | 2.x-3.x | EOL by Nov 20, 2025 |
-| **3.5.x** | **6.x** | **4.2.1+** | **3.0.0+** | **Current recommended** |
+| 3.2.x-3.4.x | 5.x | 3.6.x | 2.x | EOL (since Nov 20, 2025) |
+| **3.5.x** | **6.x** | **3.7.0+ / 4.0.0+** | **3.0.0+** | **Current recommended** |
 
 ### Key Bitso Libraries
 
-| Library | Current Version | Purpose |
-|---------|-----------------|---------|
-| `com.bitso.commons:redis` | **4.2.1** | JedisWrapper for Redis operations |
-| `com.bitso.commons:jedis4-utils` | **3.0.0** | Jedis 4+ utilities, locking, Lua scripts |
+| Library | Current Version | Compiled Against | Purpose |
+|---------|-----------------|------------------|---------|
+| `com.bitso.commons:redis` | **4.2.1** | Jedis 6.x | JedisWrapper for Redis operations |
+| `com.bitso.commons:jedis4-utils` | **3.0.0** | Jedis 6.x | Locking, Lua scripts (name is legacy) |
+| `com.bitso.commons:redis-api` | **2.2.0** | - | Redis API |
+| `com.bitso.commons:redis-streams` | **3.0.1** | Jedis 6.x | Redis Streams support |
+| `com.bitso.commons:redis-lettuce` | **2.2.1** | Lettuce 6.x | Lettuce-based Redis client |
+### bitso-commons-redis Version History
+
+| Version | Jedis Version | Notes |
+|---------|---------------|-------|
+| **4.2.1** | 6.x | **Current recommended** |
+| 3.7.0+ | 6.x | First Jedis 6 releases |
+| 3.6.x and earlier | 5.x/4.x | Legacy, do not use with Spring Boot 3.5.x |
+
+**Note**: The library `jedis4-utils` is named with "4" historically but now works with Jedis 6.x.
 
 ---
 
@@ -93,11 +105,12 @@ When upgrading to Spring Boot 3.5.x, update `bitso-commons-redis`:
 ```toml
 # gradle/libs.versions.toml
 [versions]
-# Redis libraries - MUST be updated alongside Spring Boot
 bitso-commons-redis = "4.2.1"
+jedis4-utils = "3.0.0"
 
 [libraries]
 bitso-commons-redis = { module = "com.bitso.commons:redis", version.ref = "bitso-commons-redis" }
+jedis4-utils = { module = "com.bitso.commons:jedis4-utils", version.ref = "jedis4-utils" }
 ```
 
 #### Step 2: Use in build.gradle
@@ -110,38 +123,33 @@ dependencies {
 
 ### Pattern 2: Update jedis4-utils
 
-For projects using `jedis4-utils` for locking or Lua scripts:
-
-```toml
-# gradle/libs.versions.toml
-[versions]
-jedis4-utils = "3.0.0"
-
-[libraries]
-jedis4-utils = { module = "com.bitso.commons:jedis4-utils", version.ref = "jedis4-utils" }
-```
-
-### Pattern 3: Force Jedis Version Alignment
-
-If you have multiple dependencies bringing different Jedis versions:
+For projects using `jedis4-utils` for locking or Lua scripts, add to version catalog as shown above, then:
 
 ```groovy
-// In root build.gradle
-// First, ensure jedis version is defined in gradle/libs.versions.toml:
-// [versions]
-// jedis = "6.2.0"
+dependencies {
+    implementation libs.jedis4.utils
+}
+```
 
+### Pattern 3: Force Jedis Version Alignment (Rarely Needed)
+
+If you have multiple dependencies bringing different Jedis versions, let Spring Boot BOM handle it. Only add explicit constraints if absolutely necessary:
+
+```groovy
+// In root build.gradle - only if Spring Boot BOM isn't resolving correctly
 allprojects {
     configurations.configureEach {
         resolutionStrategy.eachDependency { details ->
             if (details.requested.group == 'redis.clients' && details.requested.name == 'jedis') {
                 details.useVersion libs.versions.jedis.get()
-                details.because 'Align Jedis version with Spring Boot 3.5.x'
+                details.because 'Align Jedis version with Spring Boot BOM'
             }
         }
     }
 }
 ```
+
+**Note**: Prefer letting Spring Boot BOM manage Jedis. Only use this pattern when there are unresolved conflicts.
 
 ### Pattern 4: Remove Lettuce (If Not Needed)
 
@@ -151,6 +159,90 @@ Some projects have both Jedis and Lettuce. If you're using Jedis exclusively:
 // Remove Lettuce dependency if only using Jedis
 configurations.configureEach {
     exclude group: 'io.lettuce', module: 'lettuce-core'
+}
+```
+
+### Pattern 5: Let Spring Boot Manage Jedis (Recommended)
+
+**Best Practice**: Do NOT manually pin Jedis versions. Let Spring Boot manage it, and only use version catalog for Bitso libraries.
+
+```groovy
+// In root build.gradle - use version catalog references
+allprojects {
+    configurations.configureEach {
+        resolutionStrategy.eachDependency { details ->
+            // Ensure compatible bitso-commons-redis version
+            if (details.requested.group == 'com.bitso.commons' && details.requested.name == 'redis') {
+                details.useVersion libs.versions.bitso.commons.redis.get()
+                details.because 'bitso-commons-redis compatible with Jedis 6.x (Spring Boot 3.5.x)'
+            }
+        }
+    }
+}
+```
+
+**Key insight**: Remove any `libs.jedis` references from individual `build.gradle` files. Let Spring Boot BOM manage the Jedis version.
+
+---
+
+## Anti-Pattern: Never Downgrade Jedis Version
+
+### What NOT to Do
+
+```toml
+# ❌ WRONG: Downgrading Jedis to "fix compatibility"
+[versions]
+jedis = "4.4.8"  # DON'T DO THIS - Spring Boot 3.5.x manages Jedis 6.x
+```
+
+```groovy
+// ❌ WRONG: Force rule to downgrade Jedis
+configurations.configureEach {
+    resolutionStrategy.eachDependency { details ->
+        if (details.requested.group == 'redis.clients' && details.requested.name == 'jedis') {
+            details.useVersion '4.4.8'  // WRONG - this is a DOWNGRADE
+            details.because 'Jedis 4.4.8 for compatibility'  // FALSE assumption
+        }
+    }
+}
+```
+
+### Why This Fails
+
+1. **Spring Boot 3.5.x manages Jedis 6.x** automatically
+2. **`bitso-commons-redis` 3.7.0+ is compiled against Jedis 6.x** - NOT Jedis 4.x
+3. **Downgrading causes `NoSuchMethodError`** because the library expects Jedis 6.x APIs
+
+### Real-World Example: PR 643 (assets)
+
+**What went wrong**: Someone had pinned Jedis to 4.4.8, thinking it would fix compatibility with `bitso-commons-redis:4.2.1`. This caused:
+
+```
+java.lang.NoSuchMethodError: 'redis.clients.jedis.params.SetParams redis.clients.jedis.params.SetParams.px(long)'
+```
+
+**The fix (PR 643)**:
+
+1. **Removed** the manual Jedis 4.4.8 pin from `gradle/libs.versions.toml`
+2. **Removed** `libs.jedis` references from individual `build.gradle` files
+3. **Removed** the force rule that downgraded Jedis
+4. **Added** constraint for `bitso-commons-redis` to ensure 4.2.1+
+5. **Added** constraint for Jedis to 6.2.0 (the version bitso-commons-redis was compiled against)
+
+### Correct Approach
+
+```groovy
+// ✅ CORRECT: Use version catalog, don't downgrade
+allprojects {
+    configurations.configureEach {
+        resolutionStrategy.eachDependency { details ->
+            // Ensure compatible bitso-commons-redis from version catalog
+            if (details.requested.group == 'com.bitso.commons' && details.requested.name == 'redis') {
+                details.useVersion libs.versions.bitso.commons.redis.get()
+                details.because 'bitso-commons-redis compatible with Jedis 6.x'
+            }
+        }
+    }
 }
 ```
 
@@ -170,9 +262,9 @@ configurations.configureEach {
 
    ```toml
    [versions]
-   springBoot = "3.5.8"
+   spring-boot = "3.5.8"
    bitso-commons-redis = "4.2.1"
-   jedis4-utils = "3.0.0"  # If using jedis4-utils
+   jedis4-utils = "3.0.0"
    ```
 
 3. **Build and test**:
@@ -206,7 +298,48 @@ configurations.configureEach {
 
 ## Real PR Examples
 
-### Example 1: Redis SetParams.px(long) Fix
+### Example 1: Fix Redis/Jedis Compatibility by Removing Downgrade (CRITICAL)
+
+**PR**: [assets/pull/643](https://github.com/bitsoex/assets/pull/643) (Merged)
+
+**Problem**: `NoSuchMethodError: SetParams.px(long)` caused by incorrect Jedis downgrade to 4.4.8.
+
+**Root Cause**: Someone had manually pinned Jedis to 4.4.8, thinking it would fix compatibility. This was wrong because `bitso-commons-redis:4.2.1` is compiled against Jedis 6.x.
+
+**Solution**:
+
+1. Removed manual Jedis 4.4.8 pin from `gradle/libs.versions.toml`
+2. Removed `libs.jedis` references from individual `build.gradle` files
+3. Removed Jedis 4.4.8 force rule from root `build.gradle`
+4. Added `bitso-commons-redis` 4.2.1 version constraint
+5. Added Jedis 6.2.0 constraint (the version bitso-commons-redis was compiled against)
+
+**Key Changes**:
+
+1. Removed manual Jedis version pin from `gradle/libs.versions.toml`
+2. Removed `libs.jedis` from individual `build.gradle` files
+3. Added version constraint using version catalog reference
+
+**Lesson**: Never downgrade Jedis. If you see a `NoSuchMethodError`, ensure compatible library versions via version catalog.
+
+### Example 2: Add Redis Caching Integration Tests
+
+**PR**: [assets/pull/642](https://github.com/bitsoex/assets/pull/642)
+
+**Problem**: Need to verify Spring Data Redis cache operations work correctly with Jedis 6.x.
+
+**Solution**:
+
+- Added comprehensive integration tests with TTL validation, eviction behavior, and edge cases
+- Upgraded Jedis to 6.2.0 in version catalog
+- Tests verify `RedisCacheManager` works correctly with `SetParams.px()` (Duration-based API)
+
+**Key Tests Added**:
+
+- `SpringDataRedisCacheIntegrationSpec` - Tests Spring Data Redis cache with TTL
+- Regression tests for the `CacheableWrapper.putAll()` pattern that triggered the original error
+
+### Example 3: Redis SetParams.px(long) Fix
 
 **PR**: [assets/pull/640](https://github.com/bitsoex/assets/pull/640)
 
@@ -214,7 +347,7 @@ configurations.configureEach {
 
 **Solution**: Updated `bitso-commons-redis` version and added integration tests for Redis locking.
 
-### Example 2: Bump Redis Library to 4.2.0
+### Example 4: Bump Redis Library to 4.2.0
 
 **PR**: [consumer-wallet/pull/770](https://github.com/bitsoex/consumer-wallet/pull/770)
 
@@ -226,15 +359,7 @@ configurations.configureEach {
 - Updated Jedis from 6.0.0 to 6.2.0
 - Removed Lettuce dependency (only using Jedis)
 
-### Example 3: Update Jedis Version
-
-**PR**: [bff-services/pull/1428](https://github.com/bitsoex/bff-services/pull/1428)
-
-**Problem**: Jedis version incompatibility after Spring Boot upgrade.
-
-**Solution**: Updated Jedis version in `gradle/libs.versions.toml`.
-
-### Example 4: jedis4-utils Upgrade
+### Example 5: jedis4-utils Upgrade
 
 **PR**: [service-health-reports/pull/599](https://github.com/bitsoex/service-health-reports/pull/599)
 
@@ -293,13 +418,9 @@ dependencies {
 ./gradlew dependencies | grep -i jedis
 ```
 
-**Fix**: Add resolution strategy to force single version (using version catalog):
+**Fix**: Let Spring Boot BOM manage Jedis. If still conflicting, add resolution strategy using version catalog:
 
 ```groovy
-// Ensure jedis version is in gradle/libs.versions.toml:
-// [versions]
-// jedis = "6.2.0"
-
 allprojects {
     configurations.configureEach {
         resolutionStrategy.eachDependency { details ->
@@ -355,22 +476,16 @@ grep -r "redis:\|jedis" --include="*.gradle" --include="*.properties"
 # gradle/libs.versions.toml
 [versions]
 bitso-commons-redis = "4.2.1"
-jedis = "6.2.0"
 
 [libraries]
 bitso-commons-redis = { module = "com.bitso.commons:redis", version.ref = "bitso-commons-redis" }
-jedis = { module = "redis.clients:jedis", version.ref = "jedis" }
 ```
+
+**Note**: Do NOT add Jedis to version catalog - let Spring Boot BOM manage it.
 
 ### Step 3: Update build.gradle Files
 
-Replace:
-
-```groovy
-implementation "com.bitso.commons:redis:3.1.0"
-```
-
-With:
+Replace hardcoded versions with version catalog references:
 
 ```groovy
 implementation libs.bitso.commons.redis

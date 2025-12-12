@@ -39,6 +39,16 @@ These principles apply to all repositories regardless of technology stack.
 
 ## Development Practices
 
+### Dependency Version Management
+
+- **Never downgrade pre-existing versions** - If a version already exists in the repo before your PR, do not replace it with an older version
+- **Only adjust versions your PR introduces** - If you upgrade a library and it causes issues, try a different (but still newer) version
+- **Never override BOM-managed versions with older versions** - BOMs (Bill of Materials) like Spring Boot manage transitive dependencies; trust them
+- **When in doubt, warn instead of downgrade** - Add a comment explaining potential incompatibility rather than forcing an older version
+- **Centralize all versions** - Use version catalogs or dedicated version files, never hardcode versions inline
+
+See `java/rules/java-versions-and-dependencies.md` for Java-specific version management policies.
+
 ### Version Control
 
 - Make atomic commits with descriptive messages

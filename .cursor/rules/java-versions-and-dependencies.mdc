@@ -58,6 +58,55 @@ Hardcoded versions cause:
 
 ---
 
+## CRITICAL: Never Downgrade Pre-existing Versions
+
+**Policy**: Never replace a library version with an older version that was pre-existing in the repository.
+
+### Rules
+
+1. **Pre-existing versions are protected** - If a version already exists in the repo before your PR, do not downgrade it
+2. **Only versions your PR introduces can be adjusted** - If you upgrade a library and it causes issues during local validation, you may try a different (but still newer) version
+3. **BOM-managed versions are exempt from override** - Never manually pin a version lower than what a BOM (Spring Boot, gRPC) provides
+4. **When in doubt, warn the user** - Add a comment explaining potential incompatibility instead of downgrading
+
+### Allowed Actions
+
+| Scenario | Allowed | Not Allowed |
+|----------|---------|-------------|
+| Upgrade a library | ✅ Yes | - |
+| Downgrade a version YOUR PR introduced | ✅ Yes (try different newer version) | - |
+| Downgrade a version that existed before your PR | - | ❌ No |
+| Pin BOM-managed dependency to older version | - | ❌ No |
+| Add comment about potential incompatibility | ✅ Yes | - |
+
+### Anti-Pattern Example (from PR 643)
+
+```toml
+# ❌ WRONG: Pinning Jedis to older version than Spring Boot provides
+[versions]
+jedis = "4.4.8"  # DOWNGRADE - caused NoSuchMethodError
+```
+
+```groovy
+# ✅ CORRECT: Remove Jedis pin, use version catalog for Bitso libraries only
+if (details.requested.group == 'com.bitso.commons' && details.requested.name == 'redis') {
+    details.useVersion libs.versions.bitso.commons.redis.get()
+}
+```
+
+### If You Suspect Version Incompatibility
+
+Add a warning comment instead of downgrading:
+
+```groovy
+// ⚠️ WARNING: Potential compatibility issue - investigate root cause
+// DO NOT downgrade - see java/golden-paths/redis-jedis-compatibility.md
+```
+
+See `java/golden-paths/redis-jedis-compatibility.md` for real-world examples.
+
+---
+
 ## Version Catalog (`gradle/libs.versions.toml`)
 
 Central repository for all dependency versions. Never hardcode versions in build files.

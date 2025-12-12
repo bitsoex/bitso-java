@@ -148,16 +148,35 @@ If Redis is used, update version catalog:
 ```toml
 # gradle/libs.versions.toml
 [versions]
-# Redis libraries - MUST be updated with Spring Boot 3.5.x
 bitso-commons-redis = "4.2.1"
-jedis4-utils = "3.0.0"  # If using jedis4-utils
+jedis4-utils = "3.0.0"
 
 [libraries]
 bitso-commons-redis = { module = "com.bitso.commons:redis", version.ref = "bitso-commons-redis" }
 jedis4-utils = { module = "com.bitso.commons:jedis4-utils", version.ref = "jedis4-utils" }
 ```
 
-See `java/golden-paths/redis-jedis-compatibility.md` for detailed compatibility matrix and troubleshooting.
+#### CRITICAL: Never Downgrade Jedis
+
+- Do NOT add Jedis to version catalog - let Spring Boot BOM manage it
+- Do NOT pin Jedis to older versions (e.g., 4.4.8)
+- Remove any `libs.jedis` references from individual `build.gradle` files
+
+If version constraints are needed, use version catalog references:
+
+```groovy
+allprojects {
+    configurations.configureEach {
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'com.bitso.commons' && details.requested.name == 'redis') {
+                details.useVersion libs.versions.bitso.commons.redis.get()
+            }
+        }
+    }
+}
+```
+
+See `java/golden-paths/redis-jedis-compatibility.md` for detailed compatibility matrix and examples.
 
 ### 4. Validate Build
 

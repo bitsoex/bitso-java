@@ -214,6 +214,31 @@ substitute(module("org.apache.commons:commons-lang3"))
 
 This documentation helps future maintainers understand the reasoning and makes it easier to clean up when BOMs are updated.
 
+#### CRITICAL: Never Downgrade Pre-existing Versions
+
+**Policy**: Never replace a library version with an older version that was pre-existing in the repository, even when fixing vulnerabilities.
+
+| Scenario | Allowed |
+|----------|---------|
+| Upgrade a vulnerable library | ✅ Yes |
+| Downgrade a version YOUR PR introduced | ✅ Yes (try different newer version) |
+| Downgrade a version that existed before your PR | ❌ No |
+| Pin BOM-managed dependency to older version | ❌ No |
+
+**Example of what NOT to do**:
+
+```groovy
+// ❌ WRONG: Hardcoded downgrade
+details.useVersion '4.4.8'  // Never hardcode, never downgrade
+
+// ✅ CORRECT: Use version catalog reference
+details.useVersion libs.versions.bitso.commons.redis.get()
+```
+
+If you suspect incompatibility, add a warning comment instead of downgrading. See `java/golden-paths/redis-jedis-compatibility.md`.
+
+See `java/rules/java-versions-and-dependencies.md` for the full policy.
+
 #### Strategy 1: Update BOM/Platform Version (PREFERRED)
 
 If the vulnerable dependency is managed by a BOM (Spring Boot, gRPC, Protobuf, etc.), update the BOM version first. This is the cleanest solution.

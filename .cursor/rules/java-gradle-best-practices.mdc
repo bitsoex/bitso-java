@@ -75,6 +75,27 @@ See `java/golden-paths/redis-jedis-compatibility.md` for real examples.
 - Type-safe dependency management
 - Prevent version conflicts and NoSuchMethodError
 
+### CRITICAL: Never Downgrade Pre-existing Versions
+
+**Policy**: Never replace a library version with an older version that was pre-existing in the repository.
+
+| Scenario | Allowed |
+|----------|---------|
+| Upgrade a library | ✅ Yes |
+| Downgrade a version YOUR PR introduced | ✅ Yes (try different newer version) |
+| Downgrade a version that existed before your PR | ❌ No |
+| Pin BOM-managed dependency to older version | ❌ No |
+
+```groovy
+// ❌ WRONG: Downgrading via hardcoded version
+details.useVersion '4.4.8'  // Hardcoded downgrade
+
+// ✅ CORRECT: Use version catalog reference
+details.useVersion libs.versions.bitso.commons.redis.get()
+```
+
+See `java/rules/java-versions-and-dependencies.md` and `java/golden-paths/redis-jedis-compatibility.md` for detailed policy.
+
 ### 2. Apply Plugins at Root Level
 
 ### Main `build.gradle` Layout
