@@ -46,6 +46,7 @@ Use this matrix to determine compatible library versions:
 | `com.bitso.commons:redis-api` | **2.2.0** | - | Redis API |
 | `com.bitso.commons:redis-streams` | **3.0.1** | Jedis 6.x | Redis Streams support |
 | `com.bitso.commons:redis-lettuce` | **2.2.1** | Lettuce 6.x | Lettuce-based Redis client |
+
 ### bitso-commons-redis Version History
 
 | Version | Jedis Version | Notes |

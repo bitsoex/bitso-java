@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generatedAt": "2025-12-12T23:10:06.708Z",
+  "generatedAt": "2025-12-15T12:17:47.699Z",
   "sourceRepo": "bitsoex/ai-code-instructions",
   "category": "java",
   "managedDirectories": [
@@ -36,6 +36,7 @@
     ".claude/commands/java/improve-test-setup.md",
     ".claude/commands/java/run-all-tests-and-fix.md",
     ".claude/commands/java/security-review.md",
+    ".claude/commands/java/upgrade-to-aws-sdk-v2.md",
     ".claude/commands/java/upgrade-to-recommended-versions.md",
     ".claude/general-principles.md",
     ".claude/github-cli-pr-lifecycle.md",
@@ -82,6 +83,7 @@
     ".cursor/commands/improve-test-setup.md",
     ".cursor/commands/run-all-tests-and-fix.md",
     ".cursor/commands/security-review.md",
+    ".cursor/commands/upgrade-to-aws-sdk-v2.md",
     ".cursor/commands/upgrade-to-recommended-versions.md",
     ".cursor/mcp.json",
     ".cursor/rules/branch-protection-workflow.mdc",
@@ -162,6 +164,7 @@
     ".github/prompts/improve-test-setup.prompt.md",
     ".github/prompts/run-all-tests-and-fix.prompt.md",
     ".github/prompts/security-review.prompt.md",
+    ".github/prompts/upgrade-to-aws-sdk-v2.prompt.md",
     ".github/prompts/upgrade-to-recommended-versions.prompt.md",
     ".github/scripts/check-coderabbit-readiness.sh",
     ".github/scripts/check-dependency-graph-readiness.sh",
