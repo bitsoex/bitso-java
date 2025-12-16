@@ -25,7 +25,7 @@ The code generation configuration for jOOQ is the following (Note that the repo 
 [versions]
 # ...
 postgresql = "42.7.5" # Must match spring version https://docs.spring.io/spring-boot/appendix/dependency-versions/coordinates.html
-testcontainers = '1.20.6' # Must match spring version https://docs.spring.io/spring-boot/appendix/dependency-versions/coordinates.html
+testcontainers = '1.21.4' # Must match spring version https://docs.spring.io/spring-boot/appendix/dependency-versions/coordinates.html
 jooq = '3.19.22' # Must match spring version https://docs.spring.io/spring-boot/appendix/dependency-versions/coordinates.html
 flyway = '10.20.1' # Must match spring version https://docs.spring.io/spring-boot/appendix/dependency-versions/coordinates.html
 #...
@@ -35,7 +35,7 @@ flyway = '10.20.1' # Must match spring version https://docs.spring.io/spring-boo
 [versions]
 # ...
 postgresql = "42.7.5" # Must match spring version https://docs.spring.io/spring-boot/appendix/dependency-versions/coordinates.html
-testcontainers = '1.20.6' # Must match spring version https://docs.spring.io/spring-boot/appendix/dependency-versions/coordinates.html
+testcontainers = '1.21.4' # Must match spring version https://docs.spring.io/spring-boot/appendix/dependency-versions/coordinates.html
 jooq = '3.19.22' # Must match spring version https://docs.spring.io/spring-boot/appendix/dependency-versions/coordinates.html
 flyway = '10.20.1' # Must match spring version https://docs.spring.io/spring-boot/appendix/dependency-versions/coordinates.html
 #...

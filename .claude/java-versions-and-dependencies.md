@@ -123,7 +123,7 @@ spock = "2.4-groovy-4.0"
 junit-jupiter = "5.14.1"
 junit-platform = "1.14.1"
 jacoco = "0.8.14"
-testcontainers = "1.21.3"
+testcontainers = "1.21.4"
 groovy = "4.0.24"
 
 # Mutation Testing
@@ -371,7 +371,7 @@ See `java/golden-paths/redis-jedis-compatibility.md` for detailed compatibility 
 | JUnit Jupiter | **5.14.1** | Released Oct 2025 |
 | JUnit Platform | **1.14.1** | Released Oct 2025 |
 | JaCoCo | **0.8.14** | Released Oct 2025 |
-| Testcontainers | **1.21.3** | Stable 1.x (2.x has breaking changes) |
+| Testcontainers | **1.21.4** | Stable 1.x; use **2.0.3** for 2.x repos |
 | Groovy | **4.0.24** | Required for Spock 2.4 |
 | Pitest | **1.22.0** | Mutation testing core |
 | Pitest Gradle Plugin | **1.19.0-rc.2** | Released Oct 2025 |

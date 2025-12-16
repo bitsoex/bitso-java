@@ -31,7 +31,7 @@
 | **Pitest** | `1.22.0` | Core library |
 | **Pitest Gradle Plugin** | `1.19.0-rc.2` | Released Oct 2025 |
 | **Pitest JUnit5 Plugin** | `1.2.3` | For JUnit 5 support |
-| **Testcontainers** | `1.21.3` | Stable 1.x (2.x has breaking changes) |
+| **Testcontainers** | `1.21.4` | Stable 1.x; use `2.0.3` for 2.x repos |
 | **Groovy** | `4.0.x` | Required for Spock 2.4 |
 
 ## Workflow
@@ -76,7 +76,7 @@ spock = "2.4-groovy-4.0"
 junit-jupiter = "5.14.1"
 junit-platform = "1.14.1"
 jacoco = "0.8.14"
-testcontainers = "1.21.3"
+testcontainers = "1.21.4"
 groovy = "4.0.24"
 
 # Mutation Testing
@@ -438,11 +438,26 @@ spock = "2.4-groovy-4.0"
 
 **Cause:** Testcontainers 2.x renamed all modules with `testcontainers-` prefix
 
-**Fix:** Stay on 1.21.3 (stable 1.x) until migration is planned:
+**Fix options:**
+
+For 1.x (recommended for existing projects):
 
 ```toml
-testcontainers = "1.21.3"
+testcontainers = "1.21.4"
 ```
+
+For 2.x (new projects or planned migrations):
+
+```toml
+testcontainers = "2.0.3"
+```
+
+**2.x Migration Notes:**
+
+- Module names changed: `postgresql` → `testcontainers-postgresql`
+- Package names changed: `org.testcontainers` → `org.testcontainers.containers`
+- Some deprecated methods removed
+- See [Testcontainers 2.0 Migration Guide](https://java.testcontainers.org/migration/2.0/) for details
 
 ## Best Practices
 
