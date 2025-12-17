@@ -118,14 +118,14 @@ spring-boot = "3.5.8"
 protobuf = "4.33.0"
 grpc = "1.76.0"
 
-# Testing Libraries - SAFE TO UPDATE DURING CODE FREEZE
+# Testing Libraries
 # See java/commands/improve-test-setup.md for upgrade workflow
 spock = "2.4-groovy-4.0"
 junit-jupiter = "5.14.1"
 junit-platform = "1.14.1"
 jacoco = "0.8.14"
 testcontainers = "1.21.4"
-groovy = "4.0.24"
+groovy = "4.0.29"
 
 # Mutation Testing
 pitest = "1.22.0"
@@ -346,6 +346,41 @@ Typical compatibility for Bitso projects:
 | Gradle | 8.14.3+ | 11+ | Build tool |
 | Develocity | 0.2.8+ | - | Build insights |
 
+### Jackson Compatibility
+
+**IMPORTANT**: Jackson 3.x will be a major rewrite with new `tools.jackson.core` GAV. For now, stay on Jackson 2.x.
+
+| Library | Version | Notes |
+|---------|---------|-------|
+| **jackson-bom** | **2.20.1** | Use BOM for all Jackson modules |
+| **jackson-core** | **2.20.1** | Core parsing/generation |
+| **jackson-databind** | **2.20.1** | Object binding |
+| **jackson-datatype-*** | **2.20.1** | All data type modules |
+| **jackson-annotations** | **2.20** | **Frozen** - no patch version (just `2.20`) |
+
+**Override Pattern for Spring Boot projects:**
+
+Use the Jackson BOM version to manage all Jackson dependencies consistently:
+
+In `build.gradle`:
+
+```groovy
+allprojects {
+    // Force Jackson 2.20.1 via BOM (annotations frozen at 2.20 without patch)
+    ext['jackson-bom.version'] = libs.versions.jackson.get()
+}
+```
+
+In `gradle/libs.versions.toml`:
+
+```toml
+[versions]
+# Jackson BOM - use 2.20.1 for all modules (annotations is frozen at 2.20, no patch version)
+jackson = "2.20.1"
+```
+
+**Note**: When Jackson 2.19.x is in use, upgrade to 2.20.1 via the BOM. The annotations module is frozen at `2.20` (no patch version - not `2.20.0` but just `2.20`).
+
 ### Redis/Jedis Compatibility (Spring Boot 3.5.x)
 
 | Library | Version | Notes |
@@ -362,9 +397,9 @@ java.lang.NoSuchMethodError: 'redis.clients.jedis.params.SetParams redis.clients
 
 See `java/golden-paths/redis-jedis-compatibility.md` for detailed compatibility patterns.
 
-### Testing Library Versions (December 2025)
+### Testing and Build Tool Versions (December 2025)
 
-**SAFE TO UPDATE DURING CODE FREEZE** - These only affect test code.
+#### Java 21 (Gradle 8.x) - Testing Libraries
 
 | Library | Version | Notes |
 |---------|---------|-------|
@@ -373,13 +408,98 @@ See `java/golden-paths/redis-jedis-compatibility.md` for detailed compatibility 
 | JUnit Platform | **1.14.1** | Released Oct 2025 |
 | JaCoCo | **0.8.14** | Released Oct 2025 |
 | Testcontainers | **1.21.4** | Stable 1.x; use **2.0.3** for 2.x repos |
-| Groovy | **4.0.24** | Required for Spock 2.4 |
+| Groovy | **4.0.29** | Required for Spock 2.4-groovy-4.0 |
 | Pitest | **1.22.0** | Mutation testing core |
 | Pitest Gradle Plugin | **1.19.0-rc.2** | Released Oct 2025 |
 | Pitest JUnit5 Plugin | **1.2.3** | For JUnit 5 support |
 | SonarQube Plugin | **7.2.0.6526** | Released Dec 2025 |
 
+#### Java 25 (Gradle 9.x) - Testing Libraries
+
+| Library | Version | Notes |
+|---------|---------|-------|
+| Spock Framework | **2.4-groovy-5.0** | Must match Groovy 5.x |
+| JUnit Jupiter | **5.14.1** | Released Oct 2025 |
+| JUnit Platform | **1.14.1** | **Required** for Gradle 9 |
+| JaCoCo | **0.8.14** | Released Oct 2025 |
+| Testcontainers | **1.21.4** | Stable 1.x; use **2.0.3** for 2.x repos |
+| Groovy | **5.0.3** | Required for Java 25 bytecode |
+
+#### Java 25 (Gradle 9.x) - Build Plugins & Tools
+
+**NOTE**: Build plugins require careful upgrade planning - they affect the entire build.
+
+| Plugin/Tool | Version | Notes |
+|-------------|---------|-------|
+| Lombok | **1.18.42** | Required for Java 25 bytecode |
+| Lombok Plugin | **9.1.0** | Freefair for Gradle 9 |
+| SonarQube Plugin | **7.2.1.6560** | Gradle 9 compatible |
+| Spotless Plugin | **8.1.0** | Gradle 9 compatible |
+| palantir-java-format | **2.74.0** | Java 25 bytecode support |
+| Flyway Plugin | **11.19.0** | Gradle 9 compatible |
+| jOOQ Plugin | **10.1.1** | Gradle 9 compatible |
+| Protobuf Plugin | **0.9.5** | Gradle 9 compatible |
+
+**⚠️ CRITICAL for Java 25**: Never use `groovy-all` - rely on spock-core transitives.
+
 Use `/improve-test-setup` command to upgrade testing libraries.
+Use `/prepare-to-java-25` command for Java 25 upgrade workflow.
+
+### Java 25 Compatibility Versions
+
+**For projects upgrading to Java 25**, these versions are required:
+
+| Component | Java 21 Version | Java 25 Version | Notes |
+|-----------|-----------------|-----------------|-------|
+| **Gradle** | 8.14.3 | **9.2.1** | Major version required |
+| **Groovy** | 4.0.x | **5.0.3** | Java 25 requires Groovy 5.x |
+| **Spock** | 2.4-groovy-4.0 | **2.4-groovy-5.0** | Must match Groovy version |
+| **Lombok** | 1.18.x | **1.18.42** | Java 25 bytecode support |
+| **Lombok Plugin** | 8.14.2 | **9.1.0** | Freefair plugin for Gradle 9 |
+| **Spotless** | 6.x | **8.1.0** | Gradle 9 compatibility |
+| **palantir-java-format** | - | **2.74.0** | Java 25 bytecode support (use with Spotless) |
+| **SonarQube Plugin** | 6.x | **7.2.1.6560** | Gradle 9 compatibility |
+| **Testcontainers 1.x** | 1.21.x | **1.21.4** | Latest 1.x version |
+| **Testcontainers 2.x** | 2.0.2 | **2.0.3** | Docker socket fix |
+| **ByteBuddy** | 1.14.x | **1.17.5+** | ASM 9.8 for Java 25 |
+| **Flyway Plugin** | 10.x | **11.19.0** | Gradle 9 compatibility |
+| **jOOQ Plugin** | 9.x | **10.1.1** | Gradle 9 compatibility |
+| **Protobuf Plugin** | 0.9.4 | **0.9.5** | Gradle 9 compatibility |
+
+**Groovy Version Strategy:**
+
+- **Primary (recommended)**: Groovy 5.0.3 with Spock 2.4-groovy-5.0
+- **Fallback (if issues)**: Groovy 4.0.29 with Spock 2.4-groovy-4.0
+
+**⚠️ CRITICAL: Do NOT use `groovy-all`:**
+
+The `groovy-all:5.0.3` artifact has broken transitive dependencies that reference Groovy 4.0.29 sub-modules. This causes class incompatibilities and test failures.
+
+```groovy
+// ❌ NEVER: groovy-all has broken transitive deps
+testImplementation 'org.apache.groovy:groovy-all:5.0.3'
+
+// ✅ CORRECT: Let spock-core bring in Groovy 5.0.3 transitively
+testImplementation libs.spock.core
+```
+
+**Lombok Note**: The Freefair Lombok plugin requires Lombok 1.18.42 for Java 25. Configure via version catalog or in `build.gradle`:
+
+```groovy
+lombok {
+    version = "1.18.42"
+}
+```
+
+**ByteBuddy Note**: If your project uses Mockito or other libraries that depend on ByteBuddy, ensure ByteBuddy is at least 1.17.5. Earlier versions will fail with:
+
+```
+java.lang.IllegalStateException: Could not invoke proxy: Type not available on current VM: net.bytebuddy.jar.asmjdkbridge.JdkClassWriter
+```
+
+Use `/prepare-to-java-25` command for the complete Java 25 upgrade workflow.
+
+See `java/golden-paths/java-25-upgrade.md` for detailed patterns and troubleshooting.
 
 ## Spring Boot 3.5.x Upgrade Requirements
 
@@ -558,6 +678,8 @@ Hyphens (`-`) become dots (`.`) in the accessor:
 ## Related Rules
 
 - **Upgrade Command**: java/commands/upgrade-to-recommended-versions.md
+- **Java 25 Upgrade**: java/commands/prepare-to-java-25.md - Java 25 upgrade workflow
+- **Java 25 Golden Path**: java/golden-paths/java-25-upgrade.md - Java 25 patterns
 - **Redis/Jedis Compatibility**: java/golden-paths/redis-jedis-compatibility.md
 - **Spring Boot 3.5 Upgrade**: java/golden-paths/spring-boot-3.5-upgrade.md
 - **Improve Test Setup**: java/commands/improve-test-setup.md - Testing library upgrades

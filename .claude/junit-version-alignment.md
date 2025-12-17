@@ -44,7 +44,7 @@ Typical dependency conflict:
 | **JUnit Jupiter** | **5.14.1** | Released Oct 31, 2025 |
 | **JUnit Platform** | **1.14.1** | Released Oct 31, 2025 |
 | **Spock** | **2.4-groovy-4.0** | Stable release (Dec 11, 2025) |
-| **Groovy** | **4.0.24** | Required for Spock 2.4 |
+| **Groovy** | **4.0.29** | Required for Spock 2.4 |
 
 Use the `/improve-test-setup` command (see `java/commands/improve-test-setup.md`) to upgrade all testing libraries.
 

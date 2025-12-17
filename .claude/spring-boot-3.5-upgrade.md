@@ -4,7 +4,7 @@
 
 # Spring Boot 3.5.x Upgrade Golden Path
 
-**URGENT**: Spring Boot 3.4.x reaches end-of-life by end of 2025. All projects should be upgraded to Spring Boot 3.5.8 before the code freeze.
+**URGENT**: Spring Boot 3.4.x has reached end-of-life. All projects should be upgraded to Spring Boot 3.5.8.
 
 ## Target Versions
 
@@ -16,7 +16,7 @@
 | **Gradle** | **8.14.3** | Build tool |
 | **JUnit** | **5.14.1** | Testing (via BOM) |
 | **JUnit Platform** | **1.14.1** | Testing platform |
-| **Spock** | **2.4-M7-groovy-4.0** | Groovy testing framework |
+| **Spock** | **2.4-groovy-4.0** | Groovy testing framework |
 | **JaCoCo** | **0.8.14** | Code coverage |
 | **Develocity Plugin** | **0.2.8** | Build insights |
 | **Publish Plugin** | **0.3.6** | Publishing |
@@ -136,7 +136,7 @@ test {
 [versions]
 springBoot = "3.5.8"
 springCloud = "2025.0.0"  # CRITICAL: Required for Spring Boot 3.5.x
-spock = "2.4-M7-groovy-4.0"
+spock = "2.4-groovy-4.0"
 # Keep protobuf and grpc versions unchanged!
 ```
 
@@ -243,10 +243,10 @@ java.lang.NoClassDefFoundError: org/junit/jupiter/api/extension/TestInstantiatio
 
 **Cause**: Spock version incompatible with JUnit Platform version
 
-**Fix**: Update Spock to 2.4-M7-groovy-4.0:
+**Fix**: Update Spock to 2.4-groovy-4.0:
 
 ```toml
-spock = "2.4-M7-groovy-4.0"
+spock = "2.4-groovy-4.0"
 ```
 
 ### Error: Jacoco Report Generation Fails

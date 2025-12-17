@@ -4,7 +4,7 @@ Upgrade Java services to recommended versions (Spring Boot 3.5.8, Gradle 8.14.3+
 
 # 🤖 📦 Upgrade to Recommended Versions
 
-**URGENT**: Spring Boot 3.4.x reaches end-of-life by end of 2025. All projects should be upgraded to Spring Boot 3.5.8 before the code freeze.
+**URGENT**: Spring Boot 3.4.x has reached end-of-life. All projects should be upgraded to Spring Boot 3.5.8.
 
 **IMPORTANT**: This command is fully autonomous. Complete all steps without asking for confirmation.
 
@@ -25,7 +25,7 @@ Upgrade Java services to recommended versions (Spring Boot 3.5.8, Gradle 8.14.3+
 | **Gradle** | **8.14.3** | Build tool |
 | **JUnit** | **5.14.1** | Testing (via BOM) |
 | **JUnit Platform** | **1.14.1** | Testing platform |
-| **Spock** | **2.4-M7-groovy-4.0** | Groovy testing framework |
+| **Spock** | **2.4-groovy-4.0** | Groovy testing framework |
 | **JaCoCo** | **0.8.14** | Code coverage |
 | **SonarQube Plugin** | **7.2.0.6526** | Code analysis |
 | **Develocity Plugin** | **0.2.8** | Build insights |
@@ -67,7 +67,7 @@ springBoot = "3.5.8"
 springCloud = "2025.0.0"
 # Keep protobuf and grpc versions unchanged!
 # Update spock if present:
-spock = "2.4-M7-groovy-4.0"
+spock = "2.4-groovy-4.0"
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "springBoot" }
@@ -86,12 +86,21 @@ bitsoPublishPluginVersion=0.3.6
 # Do NOT change grpcVersion or protobufVersion
 ```
 
-#### C. Update `settings.gradle` plugins
+#### C. Update `settings.gradle` plugins (use centralized versions)
+
+**In `gradle.properties`:**
+
+```properties
+develocityPluginVersion=0.2.8
+sonarqubePluginVersion=7.2.0.6526
+```
+
+**In `settings.gradle`:**
 
 ```groovy
 plugins {
-    id 'bitso.develocity' version '0.2.8'
-    id 'org.sonarqube' version '7.2.0.6526'
+    id 'bitso.develocity' version "${develocityPluginVersion}"
+    id 'org.sonarqube' version "${sonarqubePluginVersion}"
     // Other plugins as needed
 }
 ```

@@ -94,6 +94,30 @@ See `java/rules/java-versions-and-dependencies.md` and `java/golden-paths/redis-
 
 ### 2. Apply Plugins at Root Level
 
+### Deprecated Plugins to Remove
+
+**Remove these plugins when found - they are no longer needed:**
+
+| Plugin | Reason |
+|--------|--------|
+| `io.snyk.gradle.plugin.snykplugin` | Snyk scanning is done in CI, not in Gradle builds |
+| Snyk-related properties in `gradle.properties` | Remove `snykPluginVersion` entries |
+
+```groovy
+// ❌ REMOVE: Snyk plugin is obsolete
+plugins {
+    id "io.snyk.gradle.plugin.snykplugin" version "${snykPluginVersion}"  // REMOVE
+}
+
+// ❌ REMOVE: Snyk configuration block
+snyk {
+    severity = 'high'
+    autoDownload = true
+    autoUpdate = true
+    arguments = '--all-sub-projects --configuration-matching=compile'
+}
+```
+
 ### Main `build.gradle` Layout
 
 ```groovy
@@ -106,9 +130,11 @@ plugins {
 }
 
 // Java version enforcement
+// Use Java 21 for Gradle 8.x, Java 25 for Gradle 9.x
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(21)  // or 25 for Java 25 projects
+        vendor = JvmVendorSpec.ADOPTIUM  // Required for Java 25
     }
 }
 
@@ -380,6 +406,11 @@ Key commands summary:
 - ✅ Ensures consistent Gradle version across team
 - ✅ No need to install Gradle locally
 - ❌ Don't rely on system Gradle installation
+- **Gradle 8.14.3+** for Java 21 projects
+- **Gradle 9.2.1+** for Java 25 projects
+
+### 2. Apply Plugins at Root Level
+
 - ✅ Define most plugins in root `build.gradle`
 - ✅ Let subprojects inherit configuration
 - ✅ Override only when necessary in specific modules
@@ -468,6 +499,44 @@ org.gradle.caching.debug=false
 - Use `pluginManagement` in `settings.gradle`
 - Define plugin versions once in version catalog or settings
 - Don't specify versions in plugins {} block of individual modules
+
+### Gradle 9 Deprecated API Errors
+
+Gradle 9 removed several deprecated APIs. Common fixes:
+
+```groovy
+// ❌ Old (Gradle 8.x) - archivesBaseName removed
+jar {
+    archivesBaseName = 'myproject'
+}
+
+// ✅ New (Gradle 9.x)
+base {
+    archivesName = 'myproject'
+}
+
+// ❌ Old - FileNameFinder moved
+new FileNameFinder().getFileNames(...)
+
+// ✅ New
+new groovy.ant.FileNameFinder().getFileNames(...)
+
+// ❌ Old - classDirectories is finalized
+jacocoTestReport {
+    doFirst {
+        classDirectories.setFrom(...)  // Fails in Gradle 9
+    }
+}
+
+// ✅ New - use afterEvaluate
+jacocoTestReport {
+    afterEvaluate {
+        excludeDirectoriesFromJacoco(classDirectories)
+    }
+}
+```
+
+See `java/golden-paths/java-25-upgrade.md` for complete Gradle 9 migration patterns.
 
 ## Related Rules
 

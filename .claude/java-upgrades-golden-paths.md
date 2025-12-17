@@ -10,11 +10,14 @@ This document serves as an index for all Java upgrade golden paths. Each golden 
 
 - **Vulnerability Fixes**: `java/rules/java-vulnerability-golden-paths.md` - Security fix patterns
 - **Upgrade Command**: `java/commands/upgrade-to-recommended-versions.md` - Automated upgrade workflow
+- **Java 25 Command**: `java/commands/prepare-to-java-25.md` - Java 25 upgrade workflow
 - **Version Management**: `java/rules/java-versions-and-dependencies.md` - BOMs, version catalog
 
 ---
 
 ## Quick Reference: Current Recommended Versions
+
+### Java 21 (Gradle 8.x)
 
 | Component | Version | Notes |
 |-----------|---------|-------|
@@ -25,13 +28,39 @@ This document serves as an index for all Java upgrade golden paths. Each golden 
 | **Java** | **21** | LTS version |
 | **JUnit** | **5.14.1** | Testing (via BOM) |
 | **JUnit Platform** | **1.14.1** | Testing platform |
-| **Spock** | **2.4-M7-groovy-4.0** | Groovy testing framework |
+| **Spock** | **2.4-groovy-4.0** | Groovy testing framework |
+| **Groovy** | **4.0.29** | Required for Spock 2.4-groovy-4.0 |
 | **JaCoCo** | **0.8.14** | Code coverage |
 | **SonarQube Plugin** | **7.2.0.6526** | Code analysis |
 | **Develocity Plugin** | **0.2.8** | Build insights |
 | **Publish Plugin** | **0.3.6** | Publishing |
 | **bitso-commons-redis** | **4.2.1** | Redis (Jedis 6 compatibility) |
 | **jedis4-utils** | **3.0.0** | Jedis utilities |
+
+### Java 25 (Gradle 9.x)
+
+| Component | Version | Notes |
+|-----------|---------|-------|
+| **Gradle** | **9.2.1** | Major version required for Java 25 |
+| **Java** | **25** | Early access |
+| **Spring Boot** | **3.5.8** | Compatible with Java 25 |
+| **Spring Cloud** | **2025.0.0** | Required for Boot 3.5.x |
+| **Spring Dependency Management** | **1.1.7** | BOM management |
+| **Groovy** | **5.0.3** | Required for Java 25 bytecode |
+| **Spock** | **2.4-groovy-5.0** | Must match Groovy 5.x |
+| **Lombok** | **1.18.42** | Java 25 bytecode support |
+| **Lombok Plugin** | **9.1.0** | Freefair plugin for Gradle 9 |
+| **Spotless** | **8.1.0** | Gradle 9 compatibility |
+| **palantir-java-format** | **2.74.0** | Java 25 bytecode support |
+| **SonarQube Plugin** | **7.2.1.6560** | Gradle 9 compatibility |
+| **Testcontainers 1.x** | **1.21.4** | Latest 1.x version |
+| **Testcontainers 2.x** | **2.0.3** | Docker socket fix |
+| **ByteBuddy** | **1.17.5+** | ASM 9.8 for Java 25 |
+| **Flyway Plugin** | **11.19.0** | Gradle 9 compatibility |
+| **jOOQ Plugin** | **10.1.1** | Gradle 9 compatibility |
+| **Protobuf Plugin** | **0.9.5** | Gradle 9 compatibility |
+
+**⚠️ CRITICAL for Java 25**: Never use `groovy-all` - rely on spock-core transitives. Add `groovy-json` explicitly if tests use JsonSlurper/JsonOutput.
 
 ---
 
@@ -47,7 +76,7 @@ This document serves as an index for all Java upgrade golden paths. Each golden 
 
 - Spring Cloud compatibility (requires 2025.0.0)
 - JUnit version alignment (5.14.1)
-- Spock compatibility (2.4-M7-groovy-4.0)
+- Spock compatibility (2.4-groovy-4.0 for Java 21, 2.4-groovy-5.0 for Java 25)
 - Jacoco compatibility (0.8.14)
 
 ### 2. JUnit Version Alignment
@@ -101,26 +130,64 @@ Bitso library upgrade guidance is included in the vulnerability golden path.
 - bitso-commons-redis (Jedis 6 compatibility) - See Redis golden path
 - bitso.publish plugin versions (0.3.6)
 
+### 6. Java 25 Upgrade
+
+**File**: `java/golden-paths/java-25-upgrade.md`
+
+**Command**: `java/commands/prepare-to-java-25.md`
+
+**When to use**: Upgrading from Java 21 to Java 25
+
+**Key considerations**:
+
+- Gradle 9.2.1+ required (major version bump)
+- Groovy 5.0.3 required (Java 25 bytecode compatibility)
+- Spock 2.4-groovy-5.0 (must match Groovy version)
+- Lombok 1.18.42 (Java 25 bytecode support)
+- Lombok plugin 9.1.0 (Freefair plugin for Gradle 9)
+- Spotless 8.1.0, SonarQube 7.2.x (Gradle 9 compatibility)
+- Testcontainers 1.21.4 (1.x) or 2.0.3 (2.x)
+- ByteBuddy 1.17.5+ (ASM 9.8 for Java 25 class files)
+
+**Real PR Examples**:
+
+- [motorsito/tree/java25](https://github.com/bitsoex/motorsito/tree/java25) - Complete Java 25 upgrade
+
+**Fallback option**: If Groovy 5.x causes issues, use Groovy 4.0.29 (last 4.x version) with Spock 2.4-groovy-4.0
+
 ---
 
 ## Decision Tree: Which Golden Path?
 
 ```
 What are you upgrading?
+├── Java version (21 → 25)
+│   └── Use: java-25-upgrade.md
+│       Command: /prepare-to-java-25
+│
 ├── Spring Boot version
 │   └── Use: spring-boot-3.5-upgrade.md
 │
 ├── Gradle version
-│   └── Use: spring-boot-3.5-upgrade.md (includes Gradle)
+│   ├── To Gradle 8.x (for Spring Boot 3.5.x)
+│   │   └── Use: spring-boot-3.5-upgrade.md
+│   └── To Gradle 9.x (for Java 25)
+│       └── Use: java-25-upgrade.md
 │
 ├── Test framework (JUnit/Spock)
 │   └── Use: junit-version-alignment.md
+│
+├── Groovy version (4.x → 5.x)
+│   └── Use: java-25-upgrade.md (Groovy 5.x required for Java 25)
 │
 ├── Redis/Jedis libraries
 │   └── Use: redis-jedis-compatibility.md
 │
 ├── NoSuchMethodError with Redis/Jedis?
 │   └── Use: redis-jedis-compatibility.md
+│
+├── ByteBuddy/ASM errors on Java 25?
+│   └── Use: java-25-upgrade.md (ByteBuddy 1.17.5+ required)
 │
 ├── Bitso internal libraries
 │   ├── Redis-related (bitso-commons-redis, jedis4-utils)

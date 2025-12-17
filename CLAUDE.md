@@ -139,6 +139,11 @@ This repository uses AI-assisted development with specific coding guidelines and
 **Description:** Proven fix patterns for common Dependabot vulnerabilities in Java/Gradle projects
 **Scope:** gradle/libs.versions.toml, build.gradle, settings.gradle
 
+### Proven patterns for upgrading Java projects to Java 25 compatibility
+**File:** [`.claude/java-25-upgrade.md`](.claude/java-25-upgrade.md)
+**Description:** Proven patterns for upgrading Java projects to Java 25 compatibility
+**Scope:** gradle/libs.versions.toml, build.gradle, settings.gradle, gradle.properties
+
 ### Index of proven upgrade patterns for Java/Gradle projects
 **File:** [`.claude/java-upgrades-golden-paths.md`](.claude/java-upgrades-golden-paths.md)
 **Description:** Index of proven upgrade patterns for Java/Gradle projects
@@ -166,6 +171,6 @@ These rules are automatically applied when using Claude AI assistant in this rep
 
 ## Rule Categories
 
-- **Java**: java specific coding guidelines (31 rules)
+- **Java**: java specific coding guidelines (32 rules)
 
 ---

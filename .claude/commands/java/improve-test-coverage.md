@@ -4,7 +4,7 @@
 
 # 🤖 🧪 Improve Test Coverage
 
-**IMPORTANT**: This command focuses on **writing tests only**. During code freeze (until January 5th), **NO production code or production library changes are allowed**. Only test code can be added or modified.
+**IMPORTANT**: This command focuses on **writing tests only**. Only test code should be added or modified.
 
 ## Prerequisites
 
@@ -360,7 +360,7 @@ Jira: [$JIRA_KEY](https://bitsomx.atlassian.net/browse/$JIRA_KEY)
 
 Generated with the Quality Agent by the /improve-test-coverage command.
 
-## Code Freeze Notice
+## Scope Notice
 ⚠️ This PR only adds **test code**. No production code or production libraries were changed."
 ```
 

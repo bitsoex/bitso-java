@@ -4,7 +4,7 @@ Upgrade testing libraries and configure JaCoCo for Java projects - NO production
 
 # 🤖 🧪 Improve Test Setup
 
-**IMPORTANT**: This command focuses on **testing infrastructure only**. During code freeze (until January 5th), **NO production code or production library changes are allowed**. Only test dependencies and test configuration can be modified.
+**IMPORTANT**: This command focuses on **testing infrastructure only**. Only test dependencies and test configuration should be modified.
 
 ## Related Rules (Read First)
 
@@ -15,11 +15,15 @@ Upgrade testing libraries and configure JaCoCo for Java projects - NO production
 
 ## Prerequisites
 
-1. **Gradle 8.14+** - Check with `./gradlew --version`
-2. **Java 21** - Project must use Java 21
+1. **Gradle 8.14+** (Java 21) or **Gradle 9.2.1+** (Java 25) - Check with `./gradlew --version`
+2. **Java 21 or Java 25** - Project must use Java 21 or 25
 3. **Access to `gradle/libs.versions.toml`** - Version catalog must exist
 
+**For Java 25 projects**, see also: `java/commands/prepare-to-java-25.md` and `java/golden-paths/java-25-upgrade.md`
+
 ## Target Testing Library Versions (December 2025)
+
+### Java 21 Projects (Gradle 8.x)
 
 | Library | Version | Notes |
 |---------|---------|-------|
@@ -32,7 +36,27 @@ Upgrade testing libraries and configure JaCoCo for Java projects - NO production
 | **Pitest Gradle Plugin** | `1.19.0-rc.2` | Released Oct 2025 |
 | **Pitest JUnit5 Plugin** | `1.2.3` | For JUnit 5 support |
 | **Testcontainers** | `1.21.4` | Stable 1.x; use `2.0.3` for 2.x repos |
-| **Groovy** | `4.0.x` | Required for Spock 2.4 |
+| **Groovy** | `4.0.29` | Required for Spock 2.4-groovy-4.0 |
+
+### Java 25 Projects (Gradle 9.x)
+
+| Library | Version | Notes |
+|---------|---------|-------|
+| **Spock Framework** | `2.4-groovy-5.0` | Must match Groovy 5.x |
+| **JUnit Jupiter** | `5.14.1` | Released Oct 2025 |
+| **JUnit Platform Launcher** | `1.14.1` | **Required** for Gradle 9 |
+| **JaCoCo** | `0.8.14` | Released Oct 2025 |
+| **SonarQube Gradle Plugin** | `7.2.1.6560` | Gradle 9 compatible |
+| **Spotless** | `8.1.0` | Gradle 9 compatible |
+| **Lombok Plugin** | `9.1.0` | Freefair plugin for Gradle 9 |
+| **Testcontainers** | `1.21.4` | Stable 1.x; use `2.0.3` for 2.x repos |
+| **Groovy** | `5.0.3` | Required for Java 25 bytecode |
+| **Lombok** | `1.18.42` | Required for Java 25 bytecode |
+| **Flyway Plugin** | `11.19.0` | Gradle 9 compatible |
+| **jOOQ Plugin** | `10.1.1` | Gradle 9 compatible |
+| **Protobuf Plugin** | `0.9.5` | Gradle 9 compatible |
+
+**⚠️ CRITICAL for Java 25**: Never use `groovy-all` - rely on spock-core transitives. See `java/golden-paths/java-25-upgrade.md`.
 
 ## Workflow
 
@@ -69,15 +93,17 @@ grep -E "(spock|junit|jacoco|testcontainers|pitest|sonar)" gradle/libs.versions.
 
 Update `gradle/libs.versions.toml` with the latest testing library versions:
 
+#### Java 21 Projects (Gradle 8.x)
+
 ```toml
 [versions]
-# Testing Libraries - SAFE TO UPDATE DURING CODE FREEZE
+# Testing Libraries
 spock = "2.4-groovy-4.0"
 junit-jupiter = "5.14.1"
 junit-platform = "1.14.1"
 jacoco = "0.8.14"
 testcontainers = "1.21.4"
-groovy = "4.0.24"
+groovy = "4.0.29"
 
 # Mutation Testing
 pitest = "1.22.0"
@@ -105,7 +131,56 @@ pitest = { id = "info.solidsoft.pitest", version.ref = "pitest-plugin" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonar-plugin" }
 ```
 
-**IMPORTANT**: Only update **test** dependencies. Do not modify production dependencies during code freeze.
+#### Java 25 Projects (Gradle 9.x)
+
+```toml
+[versions]
+# Testing Libraries - Java 25 compatible
+spock = "2.4-groovy-5.0"
+junit-jupiter = "5.14.1"
+junit-platform = "1.14.1"
+jacoco = "0.8.14"
+testcontainers = "1.21.4"  # or "2.0.3" for 2.x repos
+groovy = "5.0.3"
+lombok = "1.18.42"
+
+# Mutation Testing
+pitest = "1.22.0"
+pitest-plugin = "1.19.0-rc.2"
+pitest-junit5 = "1.2.3"
+
+# Code Quality - Gradle 9 compatible
+sonar-plugin = "7.2.1.6560"
+spotless-palantir = "2.74.0"
+
+# Build Plugins - Gradle 9 compatible
+flyway-plugin = "11.19.0"
+jooq-plugin = "10.1.1"
+protobuf-plugin = "0.9.5"
+
+[libraries]
+# JUnit BOM
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit-jupiter" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform" }
+
+# Spock - NEVER use groovy-all, rely on spock-core transitives
+spock-core = { module = "org.spockframework:spock-core", version.ref = "spock" }
+spock-spring = { module = "org.spockframework:spock-spring", version.ref = "spock" }
+
+# Testcontainers BOM
+testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "testcontainers" }
+
+[plugins]
+pitest = { id = "info.solidsoft.pitest", version.ref = "pitest-plugin" }
+sonarqube = { id = "org.sonarqube", version.ref = "sonar-plugin" }
+lombok = { id = "io.freefair.lombok", version = "9.1.0" }
+spotless = { id = "com.diffplug.spotless", version = "8.1.0" }
+```
+
+**⚠️ CRITICAL for Java 25**: Never use `groovy-all` dependency. The `spock-core` artifact correctly brings in Groovy 5.0.3 transitively.
+
+**IMPORTANT**: Only update **test** dependencies. Do not modify production dependencies with this command.
 
 ### 5. Configure JUnit Version Alignment
 
@@ -388,7 +463,7 @@ Jira: [$JIRA_KEY](https://bitsomx.atlassian.net/browse/$JIRA_KEY)
 
 Generated with the Quality Agent by the /improve-test-setup command.
 
-## Code Freeze Notice
+## Scope Notice
 ⚠️ This PR only modifies **test dependencies and test configuration**. No production code or production libraries were changed."
 ```
 
@@ -422,15 +497,23 @@ reports {
 
 **Symptom:** Compilation errors after Spock upgrade
 
-**Cause:** Spock 2.4 requires Groovy 4.0.x
+**Cause:** Spock 2.4 requires matching Groovy version
 
 **Fix:** Ensure Groovy version is aligned:
 
 ```toml
+# For Java 21 (Gradle 8.x)
 [versions]
-groovy = "4.0.24"
+groovy = "4.0.29"
 spock = "2.4-groovy-4.0"
+
+# For Java 25 (Gradle 9.x)
+[versions]
+groovy = "5.0.3"
+spock = "2.4-groovy-5.0"
 ```
+
+**⚠️ CRITICAL for Java 25**: Never use `groovy-all` dependency. See `java/golden-paths/java-25-upgrade.md`.
 
 ### Testcontainers 2.x Breaking Changes
 
@@ -461,7 +544,7 @@ testcontainers = "2.0.3"
 
 ## Best Practices
 
-1. **Test-only changes**: Only modify test dependencies during code freeze
+1. **Test-only changes**: Only modify test dependencies with this command
 2. **Version catalog is mandatory**: **NEVER** hardcode version strings in build files. Always use `gradle/libs.versions.toml` for version management and reference via `libs.versions.X.get()` or `libs.X` in Gradle
 3. **Resolution strategy**: Use JUnit version alignment with version catalog references to prevent conflicts
 4. **All report formats**: Enable XML (CI), HTML (visual), CSV (scripting)

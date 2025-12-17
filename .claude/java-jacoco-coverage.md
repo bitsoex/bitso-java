@@ -15,7 +15,7 @@ configuration in all modules, especially service and library modules with Spring
 
 ### 1. Gradle & JaCoCo Versions
 
-- **Gradle**: 8.14.3+ (see `java/rules/java-gradle-best-practices.md`)
+- **Gradle**: 8.14.3+ (Java 21) or **9.2.1+** (Java 25) - see `java/rules/java-gradle-best-practices.md`
 - **JaCoCo**: 0.8.14+ (minimum)
 - Define in `gradle/libs.versions.toml`:
 
@@ -23,6 +23,26 @@ configuration in all modules, especially service and library modules with Spring
   [versions]
   jacoco = "0.8.14"
   ```
+
+### 2. Gradle 9 Compatibility (Java 25 Projects)
+
+For projects using Gradle 9.x, the `codeCoverageReport` task must use lazy configuration to avoid errors with finalized `classDirectories`:
+
+```groovy
+// ❌ OLD (Gradle 8.x) - Will fail in Gradle 9
+jacocoTestReport {
+    doFirst {
+        classDirectories.setFrom(...)  // Cannot modify finalized property
+    }
+}
+
+// ✅ NEW (Gradle 9.x compatible)
+jacocoTestReport {
+    afterEvaluate {
+        excludeDirectoriesFromJacoco(classDirectories)  // Use afterEvaluate instead
+    }
+}
+```
 
 ## Module Setup
 
