@@ -23,7 +23,7 @@ This document provides proven patterns for upgrading Java projects to Java 25 co
 | **Lombok** | **1.18.42** | Java 25 bytecode support |
 | **Lombok Plugin** | **9.1.0** | Freefair plugin for Gradle 9 |
 | **Spotless** | **8.1.0** | Gradle 9 compatibility |
-| **SonarQube** | **7.2.1.6560** | Gradle 9 compatibility |
+| **SonarQube** | **7.2.2.6593** | Gradle 9 compatibility |
 | **Testcontainers 1.x** | **1.21.4** | Latest 1.x version |
 | **Testcontainers 2.x** | **2.0.3** | Docker socket fix |
 | **ByteBuddy** | **1.17.5+** | ASM 9.8 for Java 25 |
@@ -59,7 +59,7 @@ lombok = "1.18.42"
 [plugins]
 lombok = "io.freefair.lombok:9.1.0"
 spotless = "com.diffplug.spotless:8.1.0"
-sonarqube = "org.sonarqube:7.2.1.6560"
+sonarqube = "org.sonarqube:7.2.2.6593"
 ```
 
 **Lombok Configuration**: The Freefair Lombok plugin needs Lombok 1.18.42 for Java 25.
@@ -152,7 +152,7 @@ pluginManagement {
 # ✅ New versions (Gradle 9.x)
 lombok = "io.freefair.lombok:9.1.0"
 spotless = "com.diffplug.spotless:8.1.0"
-sonarqube = "org.sonarqube:7.2.1.6560"
+sonarqube = "org.sonarqube:7.2.2.6593"
 flyway = { id = "org.flywaydb.flyway", version = "11.19.0" }
 protobuf = "com.google.protobuf:0.9.5"
 ```

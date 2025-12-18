@@ -45,7 +45,7 @@ The toolchain configuration is necessary for local validation but should only be
 | **Lombok Plugin** | **9.1.0** | Freefair plugin for Gradle 9 |
 | **Spotless** | **8.1.0** | Updated for Gradle 9 |
 | **palantir-java-format** | **2.74.0** | Java 25 bytecode support (use with Spotless) |
-| **SonarQube Plugin** | **7.2.1.6560** | Updated for Gradle 9 |
+| **SonarQube Plugin** | **7.2.2.6593** | Updated for Gradle 9 |
 | **Testcontainers** | **1.21.4** or **2.0.3** | Use same major version as project |
 | **ByteBuddy** | **1.17.5+** | Minimum for Java 25 ASM support |
 | **Flyway Plugin** | **11.19.0** | Gradle 9 compatible |

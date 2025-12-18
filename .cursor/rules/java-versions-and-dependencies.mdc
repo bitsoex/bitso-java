@@ -119,7 +119,7 @@ gradle = "8.14.3"
 java = "21"
 spring-boot = "3.5.8"
 protobuf = "4.33.0"
-grpc = "1.76.0"
+grpc = "1.77.0"
 
 # Testing Libraries
 # See java/commands/improve-test-setup.md for upgrade workflow
@@ -136,7 +136,7 @@ pitest-plugin = "1.19.0-rc.2"
 pitest-junit5 = "1.2.3"
 
 # Code Quality
-sonar-plugin = "7.2.0.6526"
+sonar-plugin = "7.2.2.6593"
 
 # Security updates
 commons-lang3 = "3.18.0"
@@ -159,10 +159,76 @@ pitest = { id = "info.solidsoft.pitest", version.ref = "pitest-plugin" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonar-plugin" }
 
 [bundles]
-spring-boot-web = ["spring-boot-starter-web"]
+# ===========================================
+# TESTING BUNDLES (based on common patterns)
+# ===========================================
+# Basic JUnit testing
 testing = ["junit-jupiter", "junit-platform-launcher"]
-testing-spock = ["spock-core"]
+# Spock testing (most common at Bitso - spock-core + spock-spring always together)
+testing-spock = ["spock-core", "spock-spring"]
+# Full testing - JUnit + Spock (recommended for most services)
+testing-full = ["junit-jupiter", "junit-platform-launcher", "spock-core", "spock-spring"]
+# Spring Boot test starter + Spock (very common pattern)
+testing-spring = ["spring-boot-starter-test", "spock-core", "spock-spring"]
+# Integration testing with Testcontainers (postgres + kafka most common)
+testing-integration = ["testcontainers-spock", "testcontainers-postgresql", "testcontainers-kafka"]
+# Testcontainers with LocalStack for AWS testing
+testing-aws = ["testcontainers-spock", "testcontainers-localstack"]
+# Database testing with Flyway (core + postgres always together)
+testing-flyway = ["flyway-core", "flyway-database-postgresql"]
+
+# ===========================================
+# SPRING BOOT SERVICE BUNDLES
+# ===========================================
+# Web service essentials (actuator almost always included)
+spring-boot-service = ["spring-boot-starter-web", "spring-boot-starter-actuator"]
+# Kafka messaging services
+spring-boot-kafka = ["spring-kafka", "spring-kafka-test"]
+
+# ===========================================
+# CODE GENERATION BUNDLES
+# ===========================================
+# Lombok + MapStruct (very common combination)
+codegen = ["lombok", "mapstruct"]
+# Annotation processors for codegen
+codegen-processors = ["lombok", "mapstruct-processor", "lombok-mapstruct-binding"]
+
+# ===========================================
+# gRPC BUNDLES (based on actual usage patterns)
+# ===========================================
+# gRPC client/server essentials
+grpc-core = ["grpc-netty-shaded", "grpc-protobuf", "grpc-stub"]
+# gRPC with API (for advanced usage)
+grpc-full = ["grpc-netty-shaded", "grpc-protobuf", "grpc-stub", "grpc-api"]
+# gRPC testing
+grpc-testing = ["grpc-testing", "grpc-inprocess"]
+
+# ===========================================
+# OBSERVABILITY BUNDLES
+# ===========================================
+# OpenTelemetry essentials (common pattern across services)
+otel = ["opentelemetry-spring-boot-starter", "opentelemetry-exporter-otlp"]
+# OpenTelemetry with gRPC instrumentation
+otel-grpc = ["opentelemetry-spring-boot-starter", "opentelemetry-exporter-otlp", "opentelemetry-grpc"]
+# Full observability with JDBC and Kafka
+otel-full = ["opentelemetry-spring-boot-starter", "opentelemetry-exporter-otlp", "opentelemetry-grpc", "opentelemetry-jdbc", "opentelemetry-kafka"]
+
+# ===========================================
+# PROTOBUF BUNDLES
+# ===========================================
+# Protobuf essentials
+protobuf = ["protobuf-java", "protobuf-java-util"]
+
+# ===========================================
+# JOOQ BUNDLES
+# ===========================================
+# JOOQ code generation
+jooq-codegen = ["jooq", "jooq-codegen", "jooq-meta"]
 ```
+
+> **📚 Reference**: See [Gradle Version Catalogs - Bundles](https://docs.gradle.org/current/userguide/version_catalogs.html) for official documentation on creating and using bundles.
+
+**Note**: These bundle patterns are based on analysis of actual Bitso service repositories and represent the most common dependency groupings.
 
 ### Key Principles
 
@@ -199,17 +265,177 @@ dependencyManagement {
 
 ### Use Bundles for Related Dependencies
 
+Bundles group related libraries that are commonly used together. This makes build files cleaner, reduces duplication, and ensures consistent dependency sets across modules.
+
+> **📚 Reference**: See [Gradle Version Catalogs - Bundles](https://docs.gradle.org/current/userguide/version_catalogs.html) for official documentation.
+
+#### Why Use Bundles?
+
+| Benefit | Description |
+|---------|-------------|
+| **Cleaner build files** | One line instead of many |
+| **Consistency** | Same library set across all modules |
+| **Easy updates** | Change bundle definition once, applies everywhere |
+| **Self-documenting** | Bundle name describes purpose |
+
+#### Bundle Declaration Examples (Based on Bitso Patterns)
+
+These examples are based on analysis of actual Bitso service repositories:
+
+```toml
+[bundles]
+# ===========================================
+# TESTING BUNDLES
+# ===========================================
+# Most services use Spock with Spring (spock-core + spock-spring always together)
+testing-spock = ["spock-core", "spock-spring"]
+
+# Spring Boot test starter + Spock (most common pattern in Bitso services)
+testing-spring = ["spring-boot-starter-test", "spock-core", "spock-spring"]
+
+# Integration testing with Testcontainers
+# PostgreSQL, Kafka, and Spock are the most common Testcontainers modules
+testing-integration = ["testcontainers-spock", "testcontainers-postgresql"]
+testing-integration-kafka = ["testcontainers-spock", "testcontainers-postgresql", "testcontainers-kafka"]
+testing-integration-aws = ["testcontainers-spock", "testcontainers-localstack"]
+
+# Database migrations for testing (Flyway core + postgres always together)
+testing-flyway = ["flyway-core", "flyway-database-postgresql"]
+
+# ===========================================
+# SERVICE BUNDLES
+# ===========================================
+# Web service essentials (actuator is almost always included with web)
+spring-boot-service = ["spring-boot-starter-web", "spring-boot-starter-actuator"]
+
+# Kafka messaging (spring-kafka + spring-kafka-test usually together)
+spring-boot-kafka = ["spring-kafka", "spring-kafka-test"]
+
+# ===========================================
+# CODE GENERATION BUNDLES
+# ===========================================
+# Lombok + MapStruct (very common combination in Bitso services)
+codegen = ["lombok", "mapstruct"]
+
+# Annotation processors (with binding for Lombok+MapStruct interop)
+codegen-processors = ["lombok", "mapstruct-processor", "lombok-mapstruct-binding"]
+
+# ===========================================
+# gRPC BUNDLES
+# ===========================================
+# gRPC essentials (netty-shaded + protobuf + stub always together)
+grpc-core = ["grpc-netty-shaded", "grpc-protobuf", "grpc-stub"]
+
+# gRPC testing
+grpc-testing = ["grpc-testing", "grpc-inprocess"]
+
+# ===========================================
+# OBSERVABILITY BUNDLES (OpenTelemetry)
+# ===========================================
+# OpenTelemetry basics (spring-boot-starter + exporter)
+otel = ["opentelemetry-spring-boot-starter", "opentelemetry-exporter-otlp"]
+
+# OpenTelemetry with gRPC instrumentation
+otel-grpc = ["opentelemetry-spring-boot-starter", "opentelemetry-exporter-otlp", "opentelemetry-grpc"]
+
+# Full observability stack
+otel-full = ["opentelemetry-spring-boot-starter", "opentelemetry-exporter-otlp", "opentelemetry-grpc", "opentelemetry-jdbc"]
+
+# ===========================================
+# PROTOBUF BUNDLES
+# ===========================================
+# Protobuf essentials (java + util usually together)
+protobuf = ["protobuf-java", "protobuf-java-util"]
+```
+
+#### Bundle Usage in Build Files
+
 ```groovy
-// ❌ DON'T: Multiple individual declarations
+// ❌ DON'T: Multiple individual declarations (verbose, error-prone)
 dependencies {
+    // Service dependencies - 2 lines
     implementation libs.spring.boot.starter.web
-    implementation libs.spring.boot.starter.data.jpa
-    implementation libs.spring.boot.starter.security
+    implementation libs.spring.boot.starter.actuator
+    
+    // gRPC dependencies - 3 lines
+    implementation libs.grpc.netty.shaded
+    implementation libs.grpc.protobuf
+    implementation libs.grpc.stub
+    
+    // Code generation - 2 lines
+    annotationProcessor libs.lombok
+    annotationProcessor libs.mapstruct.processor
+    
+    // Test dependencies - 7+ lines!
+    testImplementation libs.spring.boot.starter.test
+    testImplementation libs.spock.core
+    testImplementation libs.spock.spring
+    testImplementation libs.testcontainers.spock
+    testImplementation libs.testcontainers.postgresql
+    testImplementation libs.flyway.core
+    testImplementation libs.flyway.database.postgresql
 }
 
-// ✅ DO: Use bundles
+// ✅ DO: Use bundles (clean, maintainable) - Same dependencies in 5 lines
 dependencies {
-    implementation libs.bundles.spring.boot.web
+    implementation libs.bundles.spring.boot.service
+    implementation libs.bundles.grpc.core
+    
+    annotationProcessor libs.bundles.codegen.processors
+    
+    testImplementation libs.bundles.testing.spring
+    testImplementation libs.bundles.testing.integration
+    testImplementation libs.bundles.testing.flyway
+}
+```
+
+#### Bundle Selection Guide
+
+Choose the right bundles based on your module type:
+
+| Module Type | Recommended Bundles |
+|-------------|---------------------|
+| **Web Service** | `spring-boot-service`, `grpc-core`, `otel`, `testing-spring`, `testing-integration` |
+| **Library** | `codegen`, `testing-spock` |
+| **gRPC Service** | `grpc-core`, `grpc-testing`, `otel-grpc` |
+| **Kafka Consumer** | `spring-boot-kafka`, `testing-integration-kafka` |
+| **Database Module** | `testing-flyway`, `testing-integration` |
+
+```groovy
+// Example: Typical Bitso gRPC Service
+dependencies {
+    // Core service
+    implementation libs.bundles.spring.boot.service
+    implementation libs.bundles.grpc.core
+    implementation libs.bundles.protobuf
+    
+    // Code generation
+    implementation libs.bundles.codegen
+    annotationProcessor libs.bundles.codegen.processors
+    
+    // Observability
+    implementation libs.bundles.otel.grpc
+    
+    // Testing
+    testImplementation libs.bundles.testing.spring
+    testImplementation libs.bundles.testing.integration
+    testImplementation libs.bundles.testing.flyway
+    testImplementation libs.bundles.grpc.testing
+}
+```
+
+#### Combining Bundles with Individual Libraries
+
+Bundles can be combined with individual libraries when needed:
+
+```groovy
+dependencies {
+    // Use bundle for common libraries
+    testImplementation libs.bundles.testing.full
+    
+    // Add specific libraries not in the bundle
+    testImplementation libs.mockito.core
+    testImplementation libs.awaitility
 }
 ```
 
@@ -254,7 +480,7 @@ Always use explicit versions for full control and predictability:
 java = "21"              # JDK version
 spring-boot = "3.5.8"    # Spring Boot (3.4.x EOL end of 2025)
 mockito = "5.10.0"       # Mockito
-grpc = "1.76.0"          # gRPC
+grpc = "1.77.0"          # gRPC
 protobuf = "4.33.0"      # Protobuf
 commons-lang3 = "3.18.0" # Apache Commons (CVE-2025-48924 fix)
 ```

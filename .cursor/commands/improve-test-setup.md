@@ -111,7 +111,7 @@ pitest-plugin = "1.19.0-rc.2"
 pitest-junit5 = "1.2.3"
 
 # Code Quality (test infrastructure)
-sonar-plugin = "7.2.0.6526"
+sonar-plugin = "7.2.2.6593"
 
 [libraries]
 # JUnit BOM
@@ -129,7 +129,17 @@ testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version
 [plugins]
 pitest = { id = "info.solidsoft.pitest", version.ref = "pitest-plugin" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonar-plugin" }
+
+[bundles]
+# Testing bundles (based on Bitso patterns)
+testing-spock = ["spock-core", "spock-spring"]
+testing-spring = ["spring-boot-starter-test", "spock-core", "spock-spring"]
+testing-integration = ["testcontainers-spock", "testcontainers-postgresql"]
+testing-integration-kafka = ["testcontainers-spock", "testcontainers-postgresql", "testcontainers-kafka"]
+testing-flyway = ["flyway-core", "flyway-database-postgresql"]
 ```
+
+> **📚 Reference**: See [Gradle Version Catalogs - Bundles](https://docs.gradle.org/current/userguide/version_catalogs.html) for official documentation.
 
 #### Java 25 Projects (Gradle 9.x)
 
@@ -150,7 +160,7 @@ pitest-plugin = "1.19.0-rc.2"
 pitest-junit5 = "1.2.3"
 
 # Code Quality - Gradle 9 compatible
-sonar-plugin = "7.2.1.6560"
+sonar-plugin = "7.2.2.6593"
 spotless-palantir = "2.74.0"
 
 # Build Plugins - Gradle 9 compatible
@@ -176,7 +186,17 @@ pitest = { id = "info.solidsoft.pitest", version.ref = "pitest-plugin" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonar-plugin" }
 lombok = { id = "io.freefair.lombok", version = "9.1.0" }
 spotless = { id = "com.diffplug.spotless", version = "8.1.0" }
+
+[bundles]
+# Testing bundles (based on Bitso patterns)
+testing-spock = ["spock-core", "spock-spring"]
+testing-spring = ["spring-boot-starter-test", "spock-core", "spock-spring"]
+testing-integration = ["testcontainers-spock", "testcontainers-postgresql"]
+testing-integration-kafka = ["testcontainers-spock", "testcontainers-postgresql", "testcontainers-kafka"]
+testing-flyway = ["flyway-core", "flyway-database-postgresql"]
 ```
+
+> **📚 Reference**: See [Gradle Version Catalogs - Bundles](https://docs.gradle.org/current/userguide/version_catalogs.html) for official documentation.
 
 **⚠️ CRITICAL for Java 25**: Never use `groovy-all` dependency. The `spock-core` artifact correctly brings in Groovy 5.0.3 transitively.
 
@@ -225,13 +245,55 @@ configurations.all {
 }
 
 dependencies {
-    testImplementation platform(libs.junit.bom)
-    testImplementation libs.junit.jupiter
-    testImplementation libs.spock.core
+    // ✅ RECOMMENDED: Use testing bundles for cleaner build files
+    testImplementation libs.bundles.testing.spring
+    
+    // Or use individual dependencies if needed
+    // testImplementation platform(libs.junit.bom)
+    // testImplementation libs.junit.jupiter
+    // testImplementation libs.spock.core
 }
 
 test {
     useJUnitPlatform()
+}
+```
+
+#### Using Testing Bundles (Based on Bitso Patterns)
+
+Testing bundles simplify dependency declarations. Based on analysis of Bitso services, these are the most common patterns:
+
+```toml
+[bundles]
+# Spock testing (spock-core + spock-spring always together)
+testing-spock = ["spock-core", "spock-spring"]
+
+# Spring Boot test + Spock (most common in Bitso services)
+testing-spring = ["spring-boot-starter-test", "spock-core", "spock-spring"]
+
+# Integration testing with Testcontainers
+testing-integration = ["testcontainers-spock", "testcontainers-postgresql"]
+testing-integration-kafka = ["testcontainers-spock", "testcontainers-postgresql", "testcontainers-kafka"]
+testing-integration-aws = ["testcontainers-spock", "testcontainers-localstack"]
+
+# Flyway for database migrations (core + postgres always together)
+testing-flyway = ["flyway-core", "flyway-database-postgresql"]
+```
+
+Use in modules:
+
+```groovy
+dependencies {
+    // Most common Bitso service test setup
+    testImplementation libs.bundles.testing.spring
+    testImplementation libs.bundles.testing.integration
+    testImplementation libs.bundles.testing.flyway
+    
+    // For Kafka services
+    testImplementation libs.bundles.testing.integration.kafka
+    
+    // For AWS services (LocalStack)
+    testImplementation libs.bundles.testing.integration.aws
 }
 ```
 
@@ -546,9 +608,10 @@ testcontainers = "2.0.3"
 
 1. **Test-only changes**: Only modify test dependencies with this command
 2. **Version catalog is mandatory**: **NEVER** hardcode version strings in build files. Always use `gradle/libs.versions.toml` for version management and reference via `libs.versions.X.get()` or `libs.X` in Gradle
-3. **Resolution strategy**: Use JUnit version alignment with version catalog references to prevent conflicts
-4. **All report formats**: Enable XML (CI), HTML (visual), CSV (scripting)
-5. **classDumpDir**: Always configure to prevent coverage issues
+3. **Use bundles for related dependencies**: Define bundles for commonly used test library combinations (see [Gradle Version Catalogs - Bundles](https://docs.gradle.org/current/userguide/version_catalogs.html))
+4. **Resolution strategy**: Use JUnit version alignment with version catalog references to prevent conflicts
+5. **All report formats**: Enable XML (CI), HTML (visual), CSV (scripting)
+6. **classDumpDir**: Always configure to prevent coverage issues
 
 ### Version Catalog Usage Examples
 
@@ -562,6 +625,29 @@ jacoco { toolVersion = "0.8.14" }
 details.useVersion libs.versions.junit.jupiter.get()
 testImplementation platform(libs.junit.bom)
 jacoco { toolVersion = libs.versions.jacoco.get() }
+```
+
+### Bundle Usage Examples
+
+```groovy
+// ❌ DON'T: Verbose individual declarations (12+ lines)
+dependencies {
+    testImplementation libs.spring.boot.starter.test
+    testImplementation libs.spock.core
+    testImplementation libs.spock.spring
+    testImplementation libs.testcontainers.spock
+    testImplementation libs.testcontainers.postgresql
+    testImplementation libs.testcontainers.kafka
+    testImplementation libs.flyway.core
+    testImplementation libs.flyway.database.postgresql
+}
+
+// ✅ DO: Use bundles (4 lines - same dependencies!)
+dependencies {
+    testImplementation libs.bundles.testing.spring
+    testImplementation libs.bundles.testing.integration.kafka
+    testImplementation libs.bundles.testing.flyway
+}
 ```
 
 ## Next Steps

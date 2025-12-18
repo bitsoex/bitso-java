@@ -50,6 +50,14 @@ dependencies {
     implementation libs.spring.boot.starter.web
     implementation libs.bitso.commons.redis
 }
+
+// ✅ EVEN BETTER: Use bundles for related dependencies
+dependencies {
+    implementation libs.bundles.spring.boot.service
+    implementation libs.bundles.codegen
+    
+    testImplementation libs.bundles.testing.spring
+}
 ```
 
 ### Why This Matters
@@ -70,6 +78,70 @@ See `java/golden-paths/redis-jedis-compatibility.md` for real examples.
 - Easy to update across all modules
 - Type-safe dependency management
 - Prevent version conflicts and NoSuchMethodError
+
+### Use Bundles for Related Dependencies
+
+Bundles group libraries that are commonly used together, making build files cleaner and more maintainable.
+
+> **📚 Reference**: See [Gradle Version Catalogs - Bundles](https://docs.gradle.org/current/userguide/version_catalogs.html) for official documentation.
+
+#### Recommended Bundles (Based on Bitso Patterns)
+
+These patterns are derived from analysis of actual Bitso service repositories:
+
+```toml
+[bundles]
+# Testing (Spock + Spring is most common at Bitso)
+testing-spock = ["spock-core", "spock-spring"]
+testing-spring = ["spring-boot-starter-test", "spock-core", "spock-spring"]
+testing-integration = ["testcontainers-spock", "testcontainers-postgresql"]
+testing-integration-kafka = ["testcontainers-spock", "testcontainers-postgresql", "testcontainers-kafka"]
+testing-flyway = ["flyway-core", "flyway-database-postgresql"]
+
+# Service essentials (actuator almost always with web)
+spring-boot-service = ["spring-boot-starter-web", "spring-boot-starter-actuator"]
+spring-boot-kafka = ["spring-kafka", "spring-kafka-test"]
+
+# Code generation (Lombok + MapStruct very common)
+codegen = ["lombok", "mapstruct"]
+codegen-processors = ["lombok", "mapstruct-processor", "lombok-mapstruct-binding"]
+
+# gRPC (netty-shaded + protobuf + stub always together)
+grpc-core = ["grpc-netty-shaded", "grpc-protobuf", "grpc-stub"]
+grpc-testing = ["grpc-testing", "grpc-inprocess"]
+
+# OpenTelemetry (common in newer services)
+otel = ["opentelemetry-spring-boot-starter", "opentelemetry-exporter-otlp"]
+otel-grpc = ["opentelemetry-spring-boot-starter", "opentelemetry-exporter-otlp", "opentelemetry-grpc"]
+```
+
+#### Before/After Comparison
+
+```groovy
+// ❌ BEFORE: 12 lines of test dependencies
+dependencies {
+    testImplementation libs.spring.boot.starter.test
+    testImplementation libs.spock.core
+    testImplementation libs.spock.spring
+    testImplementation libs.testcontainers.spock
+    testImplementation libs.testcontainers.postgresql
+    testImplementation libs.testcontainers.kafka
+    testImplementation libs.flyway.core
+    testImplementation libs.flyway.database.postgresql
+    testImplementation libs.grpc.testing
+    testImplementation libs.grpc.inprocess
+}
+
+// ✅ AFTER: 4 lines with bundles
+dependencies {
+    testImplementation libs.bundles.testing.spring
+    testImplementation libs.bundles.testing.integration.kafka
+    testImplementation libs.bundles.testing.flyway
+    testImplementation libs.bundles.grpc.testing
+}
+```
+
+See `java/rules/java-versions-and-dependencies.md` for comprehensive bundle examples and selection guide.
 
 ### CRITICAL: Never Downgrade Pre-existing Versions
 
@@ -267,6 +339,8 @@ include 'bitso-services:service-b'
 
 ### Service Module (`build.gradle`)
 
+Example based on typical Bitso gRPC service patterns:
+
 ```groovy
 plugins {
     id 'java'
@@ -277,13 +351,28 @@ plugins {
 }
 
 dependencies {
+    // Internal project dependencies
     implementation project(':bitso-libs:domain')
     implementation project(':bitso-libs:api')
     
-    implementation libs.bundles.spring.boot.web
-    implementation libs.bundles.grpc.all
+    // Service essentials (web + actuator)
+    implementation libs.bundles.spring.boot.service
     
-    testImplementation libs.bundles.testing
+    // gRPC (netty-shaded + protobuf + stub)
+    implementation libs.bundles.grpc.core
+    
+    // Observability
+    implementation libs.bundles.otel.grpc
+    implementation libs.logstash.logback.encoder
+    
+    // Code generation
+    implementation libs.bundles.codegen
+    annotationProcessor libs.bundles.codegen.processors
+    
+    // Testing - common Bitso pattern
+    testImplementation libs.bundles.testing.spring
+    testImplementation libs.bundles.testing.integration
+    testImplementation libs.bundles.testing.flyway
 }
 
 test {
@@ -298,7 +387,7 @@ test {
 ```groovy
 plugins {
     id 'java-library'
-    id 'org.springframework.boot'
+    id 'groovy'
     id 'io.spring.dependency-management'
     id 'jacoco'
 }
@@ -307,10 +396,12 @@ dependencies {
     // Transitive dependencies visible to consumers
     api libs.spring.boot.starter.data.jpa
     
-    // Internal dependencies
-    implementation libs.lombok
+    // Code generation bundle
+    implementation libs.bundles.codegen
+    annotationProcessor libs.bundles.codegen.processors
     
-    testImplementation libs.junit.jupiter
+    // Testing bundle - Spock is standard for libraries
+    testImplementation libs.bundles.testing.spock
 }
 ```
 

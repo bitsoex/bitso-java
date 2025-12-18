@@ -247,7 +247,7 @@ If the vulnerable dependency is managed by a BOM (Spring Boot, gRPC, Protobuf, e
 # gradle/libs.versions.toml
 [versions]
 spring-boot = "3.5.8"    # Includes patched tomcat, jackson, logback
-grpc = "1.76.0"          # Includes patched netty, protobuf
+grpc = "1.77.0"          # Includes patched netty, protobuf
 protobuf = "4.33.0"      # Patched protobuf-java
 ```
 

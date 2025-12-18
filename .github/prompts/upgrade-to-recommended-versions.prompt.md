@@ -27,7 +27,7 @@
 | **JUnit Platform** | **1.14.1** | Testing platform |
 | **Spock** | **2.4-groovy-4.0** | Groovy testing framework |
 | **JaCoCo** | **0.8.14** | Code coverage |
-| **SonarQube Plugin** | **7.2.0.6526** | Code analysis |
+| **SonarQube Plugin** | **7.2.2.6593** | Code analysis |
 | **Develocity Plugin** | **0.2.8** | Build insights |
 | **Publish Plugin** | **0.3.6** | Publishing |
 | **bitso-rds-iam-authn** | **2.0.0** | If using RDS IAM (Hikari 6) |
@@ -79,7 +79,7 @@ spring-dependency-management = { id = "io.spring.dependency-management", version
 ```properties
 springBootVersion=3.5.8
 springDependencyManagementVersion=1.1.7
-sonarqubePluginVersion=7.2.0.6526
+sonarqubePluginVersion=7.2.2.6593
 jacocoVersion=0.8.14
 develocityPluginVersion=0.2.8
 bitsoPublishPluginVersion=0.3.6
@@ -92,7 +92,7 @@ bitsoPublishPluginVersion=0.3.6
 
 ```properties
 develocityPluginVersion=0.2.8
-sonarqubePluginVersion=7.2.0.6526
+sonarqubePluginVersion=7.2.2.6593
 ```
 
 **In `settings.gradle`:**
@@ -122,11 +122,31 @@ subprojects {
     // Required for JUnit 5.11+ with Gradle 8.14.3
     plugins.withType(JavaPlugin).configureEach {
         dependencies {
-            testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+            testRuntimeOnly libs.junit.platform.launcher
         }
     }
 }
 ```
+
+**RECOMMENDED**: Use testing bundles instead of individual dependencies. Add to version catalog:
+
+```toml
+# gradle/libs.versions.toml
+[bundles]
+testing = ["junit-jupiter", "junit-platform-launcher"]
+testing-spock = ["spock-core", "spock-spring"]
+testing-full = ["junit-jupiter", "junit-platform-launcher", "spock-core", "spock-spring"]
+```
+
+Then in modules:
+
+```groovy
+dependencies {
+    testImplementation libs.bundles.testing.full  // Includes platform-launcher
+}
+```
+
+> **📚 Reference**: See [Gradle Version Catalogs - Bundles](https://docs.gradle.org/current/userguide/version_catalogs.html) for official documentation.
 
 #### F. Update bitso-rds-iam-authn (if using RDS IAM)
 
@@ -264,9 +284,13 @@ configurations.all {
 }
 
 dependencies {
-    testImplementation platform(libs.junit.bom)
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testImplementation libs.spock.core
+    // ✅ RECOMMENDED: Use testing bundles
+    testImplementation libs.bundles.testing.full
+    
+    // Or individual dependencies if bundles not available
+    // testImplementation platform(libs.junit.bom)
+    // testImplementation libs.junit.jupiter
+    // testImplementation libs.spock.core
 }
 
 test {

@@ -219,6 +219,7 @@ bitso-commons-aws = "X.Y.Z"  # Update to version using SDK v2
 | `bitso-rds-iam-authn` | `2.0.0+` | RDS IAM authentication |
 | `bitso-commons-aws` | Check latest | AWS utilities |
 | `bitso-commons-s3` | Check latest | S3 operations |
+| `bitso-aux-utils` | `5.2.1+` | Auxiliary utilities with AWS SDK v2 |
 
 **Example from successful migration PRs:**
 
@@ -234,7 +235,7 @@ If v1 cannot be removed by updating libraries, substitute v1 with v2:
 // In root build.gradle
 // Version should be in gradle/libs.versions.toml:
 // [versions]
-// aws-sdk-v2 = "2.29.0"
+// aws-sdk-v2 = "2.40.10"
 
 allprojects {
     configurations.configureEach {
@@ -273,7 +274,7 @@ Add to version catalog:
 ```toml
 # gradle/libs.versions.toml
 [versions]
-aws-sdk-v2 = "2.29.0"
+aws-sdk-v2 = "2.40.10"
 
 [libraries]
 aws-s3 = { module = "software.amazon.awssdk:s3", version.ref = "aws-sdk-v2" }
