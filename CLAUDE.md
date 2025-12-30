@@ -64,6 +64,11 @@ This repository uses AI-assisted development with specific coding guidelines and
 **Description:** Java Gradle Commands &amp; Debugging
 **Scope:** Always applies
 
+### Java Gradle Lint Plugin
+**File:** [`.claude/java-gradle-lint-plugin.md`](.claude/java-gradle-lint-plugin.md)
+**Description:** Java Gradle Lint Plugin
+**Scope:** Always applies
+
 ### Java GRPC Resilience
 **File:** [`.claude/java-grpc-resilience.md`](.claude/java-grpc-resilience.md)
 **Description:** Java GRPC Resilience
@@ -171,6 +176,6 @@ These rules are automatically applied when using Claude AI assistant in this rep
 
 ## Rule Categories
 
-- **Java**: java specific coding guidelines (32 rules)
+- **Java**: java specific coding guidelines (33 rules)
 
 ---
