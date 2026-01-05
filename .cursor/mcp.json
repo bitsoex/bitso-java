@@ -42,6 +42,10 @@
     "atlas": {
       "type": "http",
       "url": "https://atlas-mcp.bitso.io/mcp"
+    },
+    "pg-aiguide": {
+      "type": "http",
+      "url": "https://mcp.tigerdata.com/docs"
     }
   }
 }
