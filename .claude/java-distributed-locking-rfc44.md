@@ -1,0 +1,267 @@
+# RFC-44 Distributed Locking Standards for Java Services
+
+**Applies to:** **/*.java, **/*.groovy, **/build.gradle, **/libs.versions.toml
+
+# RFC-44: Distributed Locking Standards
+
+This rule defines the standards for distributed locking in Java services, as established by [RFC-44: Scheduler Tasks and Distributed Locking](https://bitsomx.atlassian.net/wiki/spaces/BAB/pages/4743987229/RFC-44+Scheduler+Tasks+and+Distributed+Locking).
+
+## Quick Reference
+
+| Approach | Status | Use Case |
+|----------|--------|----------|
+| PostgreSQL Advisory Locks (`distributed-locking-api`) | **Recommended** | All new implementations |
+| ShedLock | Allowed | Quick tasks (no immediate migration required) |
+| Kubernetes CronJobs (`bitso-jobs`) | Allowed | Resource-intensive or long-running tasks |
+| Redis via `jedis4-utils` | Allowed (niche) | Only if PostgreSQL is not available |
+| Fabric8 Leader Election | **Forbidden** | Do NOT use |
+| Redis `tryAutoclosingLock` | **Deprecated** | Migrate to PostgreSQL advisory locks |
+| In-repo incubated locking libs | **Deprecated** | Migrate to jvm-generic-libraries |
+
+## Approved Libraries
+
+For all new distributed locking implementations, use the PostgreSQL advisory locks library from `jvm-generic-libraries`:
+
+```toml
+# gradle/libs.versions.toml
+[versions]
+distributed-locking-api = "2.0.0"
+distributed-locking-postgres-jooq = "2.0.0"
+
+[libraries]
+distributed-locking-api = { module = "com.bitso.commons:distributed-locking-api", version.ref = "distributed-locking-api" }
+distributed-locking-postgres-jooq = { module = "com.bitso.commons:distributed-locking-postgres-jooq", version.ref = "distributed-locking-postgres-jooq" }
+```
+
+**Note**: Version 2.0.0 is built for Java 21 and is the recommended version.
+
+### Performance
+
+- **PostgreSQL Advisory Locks**: ~0.01ms to acquire locks
+- **ShedLock**: ~400ms to acquire locks
+
+## Deprecated Patterns to Flag in Code Review
+
+### 1. Redis-Based Locking (Deprecated)
+
+**Flag this code** - migrate to PostgreSQL advisory locks:
+
+```java
+// ❌ DEPRECATED: RedisOperations.tryAutoclosingLock
+redis.tryAutoclosingLock("lock_key", LOCK_TIMEOUT.toMillis(), LOCK_TTL.toMillis())
+
+// ❌ DEPRECATED: RedisLock.isAcquired
+.filter(RedisLock::isAcquired)
+
+// ❌ DEPRECATED: JedisWrapper locking
+jedisWrapper.tryAutoclosingLock(...)
+```
+
+**Imports to flag**:
+
+```java
+import com.bitso.util.redis.RedisLock;
+import com.bitso.util.redis.RedisOperations;
+```
+
+### 2. Fabric8 Leader Election (Forbidden)
+
+**Flag this code** - do NOT use for scheduled tasks:
+
+```java
+// ❌ FORBIDDEN: Leader election for locking
+@EventListener(OnGrantedEvent.class)
+public void onLeaderGranted(OnGrantedEvent event) {
+    isLeader = true;
+}
+
+@EventListener(OnRevokedEvent.class)
+public void onLeaderRevoked(OnRevokedEvent event) {
+    isLeader = false;
+}
+
+// ❌ FORBIDDEN: Leader check in scheduled task
+@Scheduled(fixedRate = 2000)
+public void scheduledTask() {
+    if (isLeader) {
+        // ...
+    }
+}
+```
+
+**Dependencies to flag**:
+
+```groovy
+// ❌ FORBIDDEN
+implementation 'org.springframework.cloud:spring-cloud-kubernetes-fabric8-leader'
+```
+
+**Configuration to flag**:
+
+```yaml
+# ❌ FORBIDDEN
+spring:
+  cloud:
+    kubernetes:
+      leader:
+        enabled: true
+```
+
+### 3. Incubated In-Repo Locking Libraries (Deprecated)
+
+**Flag these packages** - they should be replaced with `com.bitso.commons` versions:
+
+```java
+// ❌ DEPRECATED: Incubated in-repo libraries (non-commons packages)
+import com.bitso.distributed.locking.LockingUtil;
+import com.bitso.distributed.locking.LockingHashUtil;
+import com.bitso.distributed.locking.LockingException;
+import com.bitso.distributed.locking.postgres.jooq.JooqPostgresSessionLockingUtil;
+import com.bitso.distributed.locking.postgres.jooq.JooqPostgresTransactionLockingUtil;
+```
+
+**Note**: The correct package is `com.bitso.distributed.locking` from `com.bitso.commons:distributed-locking-api`, NOT from in-repo incubated libraries.
+
+## Recommended Implementation
+
+### Spring Configuration
+
+```java
+import com.bitso.distributed.locking.DistributedLockManager;
+import com.bitso.distributed.locking.postgres.jooq.JooqPostgresSessionDistributedLockManager;
+import org.jooq.DSLContext;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class DistributedLockConfiguration {
+    @Bean
+    DistributedLockManager<Long> distributedLockManager(@Qualifier("write-dslcontext") DSLContext dslContext) {
+        return new JooqPostgresSessionDistributedLockManager(dslContext);
+    }
+}
+```
+
+### Usage in Scheduled Tasks
+
+```java
+import com.bitso.distributed.locking.DistributedLock;
+import com.bitso.distributed.locking.DistributedLockManager;
+import io.vavr.control.Option;
+import io.vavr.control.Try;
+
+@Component
+public class ScheduledTask {
+    private final DistributedLockManager<Long> distributedLockManager;
+
+    @Scheduled(cron = "${task.cron:-}", zone = "UTC")
+    public void runTask() {
+        log.info("Starting scheduled task");
+        Try.withResources(() -> distributedLockManager.tryLock("task_lock_key"))
+            .of(lock -> Option.of(lock)
+                .filter(DistributedLock::acquired)
+                .onEmpty(() -> log.info("Task is already running on another instance"))
+                .peek(lockAcquired -> executeTask()));
+        log.info("Scheduled task finished");
+    }
+}
+```
+
+### Alternative Usage Pattern (try-with-resources)
+
+```java
+@Scheduled(fixedDelay = 1, timeUnit = TimeUnit.MINUTES)
+public void emitMetrics() {
+    try (var lock = distributedLockManager.tryLock("metrics-emitter-lock")) {
+        if (!lock.acquired()) {
+            return;
+        }
+        // Execute critical section
+        doWork();
+    } catch (Exception e) {
+        log.error("Failed while trying to acquire a lock", e);
+    }
+}
+```
+
+### Usage with Retry
+
+```java
+// Try to acquire the lock with retries
+try (var lock = distributedLockManager.tryLock(
+        "lock_key",
+        Duration.ofSeconds(10),   // Maximum time to try
+        Duration.ofMillis(500),   // Initial retry interval
+        Duration.ofMillis(50)     // Amount to decrease retry interval on each attempt
+)) {
+    if (lock.acquired()) {
+        performCriticalOperation();
+    } else {
+        handleLockFailure();
+    }
+}
+```
+
+## Migration Checklist
+
+When reviewing code that uses deprecated locking patterns:
+
+- [ ] Replace `RedisOperations.tryAutoclosingLock()` with `DistributedLockManager.tryLock()`
+- [ ] Replace `RedisLock.isAcquired()` with `DistributedLock.acquired()`
+- [ ] Remove `@Qualifier("ephemeralRedis")` Redis injection for locking
+- [ ] Add `distributed-locking-api` and `distributed-locking-postgres-jooq` dependencies
+- [ ] Create `DistributedLockConfiguration` bean
+- [ ] Update tests to mock `DistributedLockManager<Long>`
+- [ ] Remove unused Redis dependencies if locking was the only use case
+
+## Example Migration PRs
+
+These PRs demonstrate successful migrations to RFC-44 compliant locking:
+
+| Repository | PR | Description |
+|------------|-----|-------------|
+| balance-history | [PR 389](https://github.com/bitsoex/balance-history/pull/389) | Remove incubated library, adopt jvm-generic-libraries |
+| balance-checker-v2 | [PR 245](https://github.com/bitsoex/balance-checker-v2/pull/245) | Add distributed locking for scheduled metric emission |
+| card-reconciliation | [PR 435](https://github.com/bitsoex/card-reconciliation/pull/435) | Implement Postgres advisory locks for file polling |
+| aum-reconciliation-v2 | [PR 646](https://github.com/bitsoex/aum-reconciliation-v2/pull/646) | Add locking for delta computation background job |
+| proof-of-solvency | [PR 503](https://github.com/bitsoex/proof-of-solvency/pull/503) | Replace Redis lock with Postgres advisory lock |
+| spei-user-clabe | [PR 603](https://github.com/bitsoex/spei-user-clabe/pull/603) | Replace Redis locking across multiple schedulers |
+| ramps-adapter-bind | [PR 651](https://github.com/bitsoex/ramps-adapter-bind/pull/651) | Add locking for balance snapshot scheduler |
+
+## Session vs Transaction Locks
+
+PostgreSQL advisory locks come in two flavors:
+
+### Session-Level Locks (Recommended for Scheduled Tasks)
+
+- Persist until explicitly released or session ends
+- Use `JooqPostgresSessionDistributedLockManager`
+- **WARNING**: Do not use with connection pools if multiple instances try to acquire the same lock concurrently
+
+### Transaction-Level Locks
+
+- Automatically released at transaction end
+- Use `JooqPostgresTransactionDistributedLockManager`
+- **WARNING**: Acquiring the same lock key within the same transaction always succeeds
+
+## Avoiding Deadlocks
+
+Advisory locks don't inherently cause deadlocks like transactional locks, but improper usage can cause indefinite waits.
+
+**Best practices**:
+
+1. Use the retry and timeout parameters
+2. Always acquire locks in the same order across the application
+3. If any lock fails, release others and retry later
+
+## Related Documents
+
+- **RFC-44 Confluence**: [RFC-44: Scheduler Tasks and Distributed Locking](https://bitsomx.atlassian.net/wiki/spaces/BAB/pages/4743987229/RFC-44+Scheduler+Tasks+and+Distributed+Locking)
+- **Library Source**: [distributed-locking-api](https://github.com/bitsoex/jvm-generic-libraries/tree/master/libs/commons/distributed-locking-api)
+- **Implementation Source**: [distributed-locking-postgres-jooq](https://github.com/bitsoex/jvm-generic-libraries/tree/master/libs/commons/distributed-locking-postgres-jooq)
+- **Migration Command**: `java/commands/migrate-lock-to-rfc-44-compliant.md`
+
+---
+*This rule is part of the java category.*
+*Source: java/rules/java-distributed-locking-rfc44.md*

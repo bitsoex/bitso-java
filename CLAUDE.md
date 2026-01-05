@@ -49,6 +49,11 @@ This repository uses AI-assisted development with specific coding guidelines and
 **Description:** Java Dependabot Security Vulnerability Management
 **Scope:** gradle/libs.versions.toml, build.gradle, gradle/dependency-graph-init.gradle
 
+### RFC-44 Distributed Locking Standards for Java Services
+**File:** [`.claude/java-distributed-locking-rfc44.md`](.claude/java-distributed-locking-rfc44.md)
+**Description:** RFC-44 Distributed Locking Standards for Java Services
+**Scope:** **/*.java, **/*.groovy, **/build.gradle, **/libs.versions.toml
+
 ### Flyway SQL Migration Review Guidelines
 **File:** [`.claude/java-flyway-migrations.md`](.claude/java-flyway-migrations.md)
 **Description:** Flyway SQL Migration Review Guidelines
@@ -176,6 +181,6 @@ These rules are automatically applied when using Claude AI assistant in this rep
 
 ## Rule Categories
 
-- **Java**: java specific coding guidelines (33 rules)
+- **Java**: java specific coding guidelines (34 rules)
 
 ---
