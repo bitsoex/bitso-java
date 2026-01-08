@@ -1,31 +1,78 @@
-# Migrate distributed locking to RFC-44 compliant PostgreSQL advisory locks
+# Align distributed locking with RFC-44 standards (PostgreSQL or Redis)
 
-Migrate distributed locking to RFC-44 compliant PostgreSQL advisory locks
+Align distributed locking with RFC-44 standards (PostgreSQL or Redis)
 
-# 🤖 ♻️ Migrate Lock to RFC-44 Compliant
+# Migrate Lock to RFC-44 Compliant
 
 **IMPORTANT**: This command is autonomous for all technical steps. Complete all steps without asking for confirmation.
 
-This command migrates legacy distributed locking mechanisms (Redis-based, Fabric8 leader election, or incubated in-repo libraries) to the RFC-44 compliant PostgreSQL advisory locks.
+This command aligns distributed locking mechanisms with RFC-44 standards. RFC-44 supports **both PostgreSQL advisory locks and Redis-based locking** as valid approaches.
 
 ## Related Documents
 
 - **RFC-44 Confluence**: [RFC-44: Scheduler Tasks and Distributed Locking](https://bitsomx.atlassian.net/wiki/spaces/BAB/pages/4743987229/RFC-44+Scheduler+Tasks+and+Distributed+Locking)
 - **Rule**: `java/rules/java-distributed-locking-rfc44.md`
-- **Library Source**: [distributed-locking-api](https://github.com/bitsoex/jvm-generic-libraries/tree/master/libs/commons/distributed-locking-api)
-- **Implementation Source**: [distributed-locking-postgres-jooq](https://github.com/bitsoex/jvm-generic-libraries/tree/master/libs/commons/distributed-locking-postgres-jooq)
+- **PostgreSQL Library Source**: [distributed-locking-api](https://github.com/bitsoex/jvm-generic-libraries/tree/master/libs/commons/distributed-locking-api)
+- **PostgreSQL Implementation Source**: [distributed-locking-postgres-jooq](https://github.com/bitsoex/jvm-generic-libraries/tree/master/libs/commons/distributed-locking-postgres-jooq)
+- **Redis Library Source**: [jedis4-utils](https://github.com/bitsoex/jvm-generic-libraries/tree/master/libs/commons/jedis4-utils)
 - **Jira Ticket Workflow**: `global/rules/jira-ticket-workflow.md`
 
-## Prerequisites
+## Understanding RFC-44 Options
 
-1. **PostgreSQL database available** - The service must have a PostgreSQL connection
-2. **jOOQ configured** - DSLContext bean must be available
-3. **Gradle project** - Using version catalog (`gradle/libs.versions.toml`)
-4. **Jira ticket created or found** - Follow `global/rules/jira-ticket-workflow.md` for ticket creation
+RFC-44 explicitly supports **two valid locking implementations**:
+
+| Implementation | When to Use |
+|----------------|-------------|
+| **PostgreSQL Advisory Locks** (Default) | Services with PostgreSQL available |
+| **Redis Locking** (Allowed) | Services without PostgreSQL, or with valid Redis use case |
+
+**Important**: Redis-based locking is NOT deprecated. It is an explicitly supported option per RFC-44.
 
 ## Workflow
 
-### 1. Create or Find Jira Ticket
+### 1. Assess Infrastructure Availability
+
+**Before any migration**, determine what infrastructure the service has:
+
+```bash
+# Check for PostgreSQL/jOOQ configuration
+grep -rn "DSLContext\|jooq\|postgresql\|postgres" --include="*.java" --include="*.groovy" --include="*.yaml" --include="*.properties" src/
+
+# Check for Redis configuration
+grep -rn "RedisOperations\|jedis\|redis" --include="*.java" --include="*.groovy" --include="*.yaml" --include="*.properties" src/
+```
+
+### 2. Determine Migration Path
+
+Based on infrastructure availability:
+
+| Scenario | Action |
+|----------|--------|
+| PostgreSQL available, no Redis | Migrate to PostgreSQL advisory locks |
+| Redis available, no PostgreSQL | Keep Redis, ensure using `jedis4-utils` |
+| Both available | **Default**: PostgreSQL. **Alternative**: Redis is acceptable with justification |
+| Fabric8 leader election | **Always migrate** to PostgreSQL or Redis |
+| Incubated in-repo libraries | **Always migrate** to `jvm-generic-libraries` |
+
+### 3. Identify Legacy Patterns
+
+Search for patterns that need attention:
+
+```bash
+# Redis-based locking (valid, but check if PostgreSQL migration is preferred)
+grep -rn "tryAutoclosingLock\|RedisLock\|isAcquired" --include="*.java" --include="*.groovy" .
+
+# Fabric8 leader election (MUST migrate)
+grep -rn "OnGrantedEvent\|OnRevokedEvent\|isLeader" --include="*.java" --include="*.groovy" .
+
+# Incubated in-repo distributed-locking libraries (MUST migrate)
+grep -rn "distributed-locking-api\|distributed-locking-postgres" --include="*.gradle" --include="*.toml" .
+
+# Check for incubated library directories
+find . -type d -name "distributed-locking*" 2>/dev/null
+```
+
+### 4. Create or Find Jira Ticket
 
 **Before any code changes**, create or find a Jira ticket using the Atlassian MCP tools:
 
@@ -37,35 +84,23 @@ project = "PROJECT_KEY" AND status NOT IN (Done, Closed, Resolved) AND summary ~
 
 If none found, create with `mcp_atlassian_createJiraIssue`:
 
-- **Summary**: `🤖 ♻️ Migrate [repo-name] to RFC-44 compliant distributed locking`
+- **Summary**: `Align [repo-name] with RFC-44 distributed locking standards`
 - **Parent**: Current Sprint/Cycle KTLO Epic
 
-### 2. Create Feature Branch
+### 5. Create Feature Branch
 
 ```bash
 git fetch --all && git pull origin main
 git checkout -b "refactor/${JIRA_KEY}-rfc44-distributed-locking"
 ```
 
-### 3. Identify Legacy Locking Patterns
+---
 
-Search for deprecated patterns:
+## Path A: PostgreSQL Advisory Locks Migration
 
-```bash
-# Redis-based locking
-grep -rn "tryAutoclosingLock\|RedisLock\|isAcquired" --include="*.java" --include="*.groovy" .
+Use this path when PostgreSQL is available and is the chosen implementation.
 
-# Fabric8 leader election
-grep -rn "OnGrantedEvent\|OnRevokedEvent\|isLeader" --include="*.java" --include="*.groovy" .
-
-# Incubated in-repo distributed-locking libraries
-grep -rn "distributed-locking-api\|distributed-locking-postgres" --include="*.gradle" --include="*.toml" .
-
-# Check for incubated library directories
-find . -type d -name "distributed-locking*" 2>/dev/null
-```
-
-### 4. Add Dependencies to Version Catalog
+### A1. Add Dependencies to Version Catalog
 
 Add to `gradle/libs.versions.toml`:
 
@@ -81,7 +116,7 @@ distributed-locking-postgres-jooq = { module = "com.bitso.commons:distributed-lo
 
 **Note**: Version 2.0.0 is built for Java 21.
 
-### 5. Add Dependencies to build.gradle
+### A2. Add Dependencies to build.gradle
 
 Add to the appropriate module's `build.gradle`:
 
@@ -92,7 +127,7 @@ dependencies {
 }
 ```
 
-### 6. Create DistributedLockConfiguration Bean
+### A3. Create DistributedLockConfiguration Bean
 
 Create a new configuration class:
 
@@ -117,7 +152,7 @@ public class DistributedLockConfiguration {
 
 **Note**: Adjust the `@Qualifier` to match your DSLContext bean name (e.g., `"dslContext"`, `"write-dslcontext"`).
 
-### 7. Migrate Locking Code
+### A4. Migrate Locking Code
 
 #### Before (Redis-based)
 
@@ -175,25 +210,25 @@ public void emitMetrics() {
 }
 ```
 
-### 8. Update Imports
+### A5. Update Imports
 
-Remove deprecated imports:
+Remove Redis imports (if migrating from Redis):
 
 ```java
-// ❌ Remove these
+// Remove these
 import com.bitso.util.redis.RedisLock;
 import com.bitso.util.redis.RedisOperations;
 ```
 
-Add new imports:
+Add PostgreSQL imports:
 
 ```java
-// ✅ Add these
+// Add these
 import com.bitso.distributed.locking.DistributedLock;
 import com.bitso.distributed.locking.DistributedLockManager;
 ```
 
-### 9. Update Tests
+### A6. Update Tests
 
 #### Before (Mocking Redis)
 
@@ -241,165 +276,170 @@ class ScheduledJobSpec extends Specification {
 }
 ```
 
-### 10. Remove Incubated Libraries (If Present)
+---
 
-If the project has incubated distributed-locking libraries in `bitso-libs/` or similar:
+## Path B: Redis Locking (Valid Alternative)
 
-1. **Delete the incubated modules**:
+Use this path when:
+
+- Service does not have PostgreSQL available
+- Team has justified continued use of Redis for locking
+- Service already uses Redis extensively
+
+### B1. Ensure Using jedis4-utils
+
+Verify the service is using `jedis4-utils` from `jvm-generic-libraries`:
+
+```toml
+# gradle/libs.versions.toml
+[versions]
+jedis4-utils = "3.0.0"
+
+[libraries]
+jedis4-utils = { module = "com.bitso.commons:jedis4-utils", version.ref = "jedis4-utils" }
+```
+
+### B2. Create Redis Lock Configuration (Recommended)
+
+`JedisLockingUtil` implements `DistributedLockManager<String>`, providing a unified API:
+
+```java
+import com.bitso.distributed.locking.DistributedLockManager;
+import com.bitso.jedis.locking.JedisLockingUtil;
+import io.micrometer.core.instrument.MeterRegistry;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import redis.clients.jedis.JedisPooled;
+
+@Configuration
+public class RedisDistributedLockConfiguration {
+    @Bean
+    DistributedLockManager<String> distributedLockManager(JedisPooled jedisPooled, MeterRegistry meterRegistry) {
+        return new JedisLockingUtil(jedisPooled, meterRegistry);
+    }
+}
+```
+
+### B3. Redis Locking Pattern (Unified API)
+
+With the configuration above, usage is nearly identical to PostgreSQL:
+
+```java
+import com.bitso.distributed.locking.DistributedLock;
+import com.bitso.distributed.locking.DistributedLockManager;
+
+@Component
+public class ScheduledTask {
+    private final DistributedLockManager<String> distributedLockManager;
+
+    @Scheduled(cron = "${task.cron:-}", zone = "UTC")
+    public void runTask() {
+        try (var lock = distributedLockManager.tryLock("lock_key")) {
+            if (!lock.acquired()) {
+                log.info("Task is already running on another instance");
+                return;
+            }
+            executeTask();
+        }
+    }
+}
+```
+
+### B4. Redis Locking Pattern (Legacy - Still Valid)
+
+The legacy `RedisOperations` pattern is still valid for existing code:
+
+```java
+import com.bitso.util.redis.RedisLock;
+import com.bitso.util.redis.RedisOperations;
+
+@Component
+public class ScheduledTask {
+    @Autowired
+    @Qualifier("ephemeralRedis")
+    private RedisOperations<?, ?, ?, ?, ?> redis;
+
+    @Scheduled(cron = "${task.cron:-}", zone = "UTC")
+    public void runTask() {
+        Try.withResources(() -> redis.tryAutoclosingLock("lock_key", 10000, 3600000))
+            .of(redisLock -> Option.of(redisLock)
+                .filter(RedisLock::isAcquired)
+                .peek(lockAcquired -> executeTask()));
+    }
+}
+```
+
+---
+
+## Path C: Incubated Library Migration (Always Required)
+
+If the project has incubated distributed-locking libraries in `bitso-libs/` or similar, these **must** be migrated to `jvm-generic-libraries`.
+
+### C1. Delete Incubated Modules
 
 ```bash
 rm -rf bitso-libs/distributed-locking-api
 rm -rf bitso-libs/distributed-locking-postgres-jooq
 ```
 
-1. **Remove from `settings.gradle`**:
+### C2. Remove from settings.gradle
 
 ```groovy
-// ❌ Remove these lines
+// Remove these lines
 include 'bitso-libs:distributed-locking-api'
 include 'bitso-libs:distributed-locking-postgres-jooq'
 ```
 
-1. **Update references in other modules** to use the centralized library.
+### C3. Update Dependencies
 
-### 11. Remove Unused Redis Dependencies (Optional)
-
-If Redis was only used for locking, remove the dependency:
+Update `build.gradle` to use centralized libraries:
 
 ```groovy
-// ❌ Remove if only used for locking
-implementation libs.bitso.commons.redis
-```
-
-Also remove `@Qualifier("ephemeralRedis")` injections.
-
-### 12. Build and Test
-
-```bash
-# Build
-./gradlew clean build -x test --no-daemon
-
-# Run tests
-./gradlew test --no-daemon 2>&1 | tee /tmp/test.log
-
-# Check for failures
-grep -E "FAILED|BUILD FAILED" /tmp/test.log && echo "❌ Tests failed" || echo "✅ Tests passed"
-```
-
-### 13. Commit and Push
-
-```bash
-git add -A
-git commit -m "🤖 ♻️ refactor: [$JIRA_KEY] migrate to RFC-44 compliant distributed locking
-
-- Replaced Redis-based locking with PostgreSQL advisory locks
-- Added distributed-locking-api and distributed-locking-postgres-jooq dependencies
-- Created DistributedLockConfiguration bean
-- Updated scheduled tasks to use DistributedLockManager
-- Updated tests to mock DistributedLockManager
-
-RFC-44: https://bitsomx.atlassian.net/wiki/spaces/BAB/pages/4743987229
-
-Generated with the Quality Agent by the /migrate-lock-to-rfc-44-compliant command."
-
-git push -u origin $(git branch --show-current)
-```
-
-### 14. Create PR
-
-```bash
-gh pr create --draft \
-    --title "🤖 ♻️ [$JIRA_KEY] refactor: migrate to RFC-44 compliant distributed locking" \
-    --body "## 🤖 AI-Assisted Refactoring
-
-Jira: [$JIRA_KEY](https://bitsomx.atlassian.net/browse/$JIRA_KEY)
-
-## Summary
-
-Migrates distributed locking to RFC-44 compliant PostgreSQL advisory locks.
-
-## Changes
-
-- Added \`distributed-locking-api\` and \`distributed-locking-postgres-jooq\` dependencies (v2.0.0)
-- Created \`DistributedLockConfiguration\` Spring bean
-- Replaced \`RedisOperations.tryAutoclosingLock()\` with \`DistributedLockManager.tryLock()\`
-- Updated tests to mock \`DistributedLockManager<Long>\`
-
-## RFC-44 Reference
-
-[RFC-44: Scheduler Tasks and Distributed Locking](https://bitsomx.atlassian.net/wiki/spaces/BAB/pages/4743987229)
-
-## Validation
-
-- [ ] Build passes locally
-- [ ] Tests pass locally
-- [ ] Reviewed migration against example PRs
-
-## Example PRs
-
-| Repository | PR | Description |
-|------------|-----|-------------|
-| balance-history | [PR 389](https://github.com/bitsoex/balance-history/pull/389) | Remove incubated library |
-| proof-of-solvency | [PR 503](https://github.com/bitsoex/proof-of-solvency/pull/503) | Replace Redis lock |
-| spei-user-clabe | [PR 603](https://github.com/bitsoex/spei-user-clabe/pull/603) | Replace Redis locking |
-
-## AI Agent Details
-
-- **Agent**: Quality Agent
-- **Command**: /migrate-lock-to-rfc-44-compliant
-
-Generated with the Quality Agent by the /migrate-lock-to-rfc-44-compliant command."
-```
-
-## Common Migration Scenarios
-
-### Scenario 1: Scheduled Task with Redis Lock
-
-**Before**:
-
-```java
-@Scheduled(cron = "${job.cron:-}")
-public void job() {
-    Try.withResources(() -> redis.tryAutoclosingLock("key", 10000, 3600000))
-        .of(lock -> Option.of(lock).filter(RedisLock::isAcquired).peek(l -> work()));
+dependencies {
+    // Replace project(':bitso-libs:distributed-locking-api') with:
+    api libs.distributed.locking.api
+    implementation libs.distributed.locking.postgres.jooq
 }
 ```
 
-**After**:
+### C4. Imports Remain the Same
+
+The package structure is identical, so imports don't need to change:
 
 ```java
-@Scheduled(cron = "${job.cron:-}")
-public void job() {
-    Try.withResources(() -> distributedLockManager.tryLock("key"))
-        .of(lock -> Option.of(lock).filter(DistributedLock::acquired).peek(l -> work()));
-}
+import com.bitso.distributed.locking.DistributedLock;
+import com.bitso.distributed.locking.DistributedLockManager;
 ```
 
-### Scenario 2: Simple try-with-resources
+---
 
-**Before**:
+## Path D: Fabric8 Leader Election Migration (Always Required)
 
-```java
-try (RedisLock lock = redis.tryAutoclosingLock("key", timeout, ttl)) {
-    if (lock.isAcquired()) {
-        work();
-    }
-}
+Fabric8 leader election is **forbidden** per RFC-44 and must be migrated.
+
+### D1. Remove Fabric8 Dependency
+
+```groovy
+// Remove this
+implementation 'org.springframework.cloud:spring-cloud-kubernetes-fabric8-leader'
 ```
 
-**After**:
+### D2. Remove Configuration
 
-```java
-try (var lock = distributedLockManager.tryLock("key")) {
-    if (lock.acquired()) {
-        work();
-    }
-}
+Remove from `application.yaml`:
+
+```yaml
+# Remove this section
+spring:
+  cloud:
+    kubernetes:
+      leader:
+        enabled: true
 ```
 
-### Scenario 3: Fabric8 Leader Election Migration
+### D3. Migrate Code
 
-**Before**:
+#### Before (Fabric8 Leader Election)
 
 ```java
 private boolean isLeader = false;
@@ -416,7 +456,7 @@ public void task() {
 }
 ```
 
-**After**:
+#### After (PostgreSQL or Redis)
 
 ```java
 @Scheduled(fixedRate = 5000)
@@ -427,16 +467,77 @@ public void task() {
 }
 ```
 
-### Scenario 4: Incubated In-Repo Library Migration
+---
 
-If your repo has `bitso-libs/distributed-locking-api` or similar:
+## Build and Test
 
-1. Delete the local directories
-2. Remove from `settings.gradle`
-3. Update `build.gradle` to use `libs.distributed.locking.api`
-4. Imports remain the same (`com.bitso.distributed.locking.*`)
+```bash
+# Build
+./gradlew clean build -x test --no-daemon
 
-See [balance-history PR 389](https://github.com/bitsoex/balance-history/pull/389) for a complete example.
+# Run tests
+./gradlew test --no-daemon 2>&1 | tee /tmp/test.log
+
+# Check for failures
+grep -E "FAILED|BUILD FAILED" /tmp/test.log && echo "Tests failed" || echo "Tests passed"
+```
+
+## Commit and Push
+
+```bash
+git add -A
+git commit -m "refactor: [$JIRA_KEY] align with RFC-44 distributed locking standards
+
+- Aligned distributed locking with RFC-44 standards
+- [Describe specific changes: PostgreSQL migration, Redis validation, incubated lib removal, etc.]
+
+RFC-44: https://bitsomx.atlassian.net/wiki/spaces/BAB/pages/4743987229
+
+Generated with the Quality Agent by the /migrate-lock-to-rfc-44-compliant command."
+
+git push -u origin $(git branch --show-current)
+```
+
+## Create PR
+
+```bash
+gh pr create --draft \
+    --title "[$JIRA_KEY] refactor: align with RFC-44 distributed locking standards" \
+    --body "## AI-Assisted Refactoring
+
+Jira: [$JIRA_KEY](https://bitsomx.atlassian.net/browse/$JIRA_KEY)
+
+## Summary
+
+Aligns distributed locking with RFC-44 standards.
+
+## RFC-44 Context
+
+RFC-44 supports **both PostgreSQL advisory locks and Redis-based locking** as valid approaches:
+- **PostgreSQL Advisory Locks**: Default recommendation for services with PostgreSQL
+- **Redis Locking**: Valid alternative for services without PostgreSQL or with justified Redis use
+
+## Changes
+
+[Describe the specific changes made]
+
+## RFC-44 Reference
+
+[RFC-44: Scheduler Tasks and Distributed Locking](https://bitsomx.atlassian.net/wiki/spaces/BAB/pages/4743987229)
+
+## Validation
+
+- [ ] Build passes locally
+- [ ] Tests pass locally
+- [ ] Reviewed migration against RFC-44 guidance
+
+## AI Agent Details
+
+- **Agent**: Quality Agent
+- **Command**: /migrate-lock-to-rfc-44-compliant
+
+Generated with the Quality Agent by the /migrate-lock-to-rfc-44-compliant command."
+```
 
 ## Troubleshooting
 
@@ -466,7 +567,7 @@ If locks are not being released, ensure you're using try-with-resources or expli
 
 ## Example PRs
 
-These PRs demonstrate successful RFC-44 migrations:
+These PRs demonstrate successful RFC-44 alignment:
 
 | Repository | PR | Migration Type |
 |------------|-----|----------------|

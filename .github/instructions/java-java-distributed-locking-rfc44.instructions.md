@@ -11,17 +11,56 @@ This rule defines the standards for distributed locking in Java services, as est
 
 | Approach | Status | Use Case |
 |----------|--------|----------|
-| PostgreSQL Advisory Locks (`distributed-locking-api`) | **Recommended** | All new implementations |
+| PostgreSQL Advisory Locks (`distributed-locking-api`) | **Default/Recommended** | Services with PostgreSQL available |
+| Redis via `jedis4-utils` | **Allowed** | Services without PostgreSQL, or with valid Redis use case |
 | ShedLock | Allowed | Quick tasks (no immediate migration required) |
 | Kubernetes CronJobs (`bitso-jobs`) | Allowed | Resource-intensive or long-running tasks |
-| Redis via `jedis4-utils` | Allowed (niche) | Only if PostgreSQL is not available |
 | Fabric8 Leader Election | **Forbidden** | Do NOT use |
-| Redis `tryAutoclosingLock` | **Deprecated** | Migrate to PostgreSQL advisory locks |
 | In-repo incubated locking libs | **Deprecated** | Migrate to jvm-generic-libraries |
+
+## Choosing Between PostgreSQL and Redis
+
+RFC-44 explicitly supports **both PostgreSQL and Redis** for distributed locking. Use the following guidance:
+
+### Use PostgreSQL Advisory Locks when
+
+- Your service already has a PostgreSQL connection
+- You want the default recommended approach
+- You need the fastest lock acquisition (~0.01ms)
+
+### Use Redis Locking when
+
+- Your service does not have PostgreSQL available
+- Your service already relies on Redis and the team has valid reasons to continue using it
+- Both PostgreSQL and Redis are available, but the team justifies Redis for their use case
+
+**Important**: Both implementations are valid per RFC-44. Redis-based locking is **NOT deprecated** - it is an explicitly supported option. The RFC-44 migration plan includes making `distributed-locking-redis` implement the `distributed-locking-api` interfaces.
+
+## Code Review Guidance
+
+During code review, determine what infrastructure the service uses and make suggestions accordingly:
+
+### Decision Matrix for Code Reviewers
+
+| Service Infrastructure | Recommendation |
+|------------------------|----------------|
+| PostgreSQL only (no Redis) | Suggest `distributed-locking-postgres-jooq` |
+| Redis only (no PostgreSQL) | Current Redis locking (`jedis4-utils` or `RedisOperations`) is fine |
+| Both PostgreSQL and Redis | User chooses; suggest PostgreSQL as default, but Redis is acceptable with justification |
+| Neither | Suggest adding PostgreSQL for locking, or Redis if more appropriate for the use case |
+
+### Key Points
+
+- Using Redis for distributed locking is **NOT a violation** of RFC-44
+- Redis is explicitly supported per the RFC
+- Do NOT flag Redis locking as requiring migration if the team has a valid reason (e.g., service already uses Redis, no PostgreSQL available)
+- Only suggest PostgreSQL migration if the service has PostgreSQL available AND the team is open to switching
 
 ## Approved Libraries
 
-For all new distributed locking implementations, use the PostgreSQL advisory locks library from `jvm-generic-libraries`:
+### PostgreSQL Implementation (Default)
+
+For services with PostgreSQL, use the advisory locks library from `jvm-generic-libraries`:
 
 ```toml
 # gradle/libs.versions.toml
@@ -36,41 +75,37 @@ distributed-locking-postgres-jooq = { module = "com.bitso.commons:distributed-lo
 
 **Note**: Version 2.0.0 is built for Java 21 and is the recommended version.
 
+### Redis Implementation
+
+For services without PostgreSQL, use `jedis4-utils` from `jvm-generic-libraries`:
+
+```toml
+# gradle/libs.versions.toml
+[versions]
+jedis4-utils = "3.0.0"
+
+[libraries]
+jedis4-utils = { module = "com.bitso.commons:jedis4-utils", version.ref = "jedis4-utils" }
+```
+
+Refer to the [Jedis4-utils GitHub project](https://github.com/bitsoex/jvm-generic-libraries/tree/master/libs/commons/jedis4-utils) for usage details.
+
+**Note**: `JedisLockingUtil` already implements the `DistributedLockManager<String>` interface from `distributed-locking-api`, providing a unified API across both PostgreSQL and Redis implementations.
+
 ### Performance
 
 - **PostgreSQL Advisory Locks**: ~0.01ms to acquire locks
+- **Redis Locking**: Sub-millisecond (varies by network latency)
 - **ShedLock**: ~400ms to acquire locks
 
-## Deprecated Patterns to Flag in Code Review
+## Patterns to Flag in Code Review
 
-### 1. Redis-Based Locking (Deprecated)
-
-**Flag this code** - migrate to PostgreSQL advisory locks:
-
-```java
-// ❌ DEPRECATED: RedisOperations.tryAutoclosingLock
-redis.tryAutoclosingLock("lock_key", LOCK_TIMEOUT.toMillis(), LOCK_TTL.toMillis())
-
-// ❌ DEPRECATED: RedisLock.isAcquired
-.filter(RedisLock::isAcquired)
-
-// ❌ DEPRECATED: JedisWrapper locking
-jedisWrapper.tryAutoclosingLock(...)
-```
-
-**Imports to flag**:
-
-```java
-import com.bitso.util.redis.RedisLock;
-import com.bitso.util.redis.RedisOperations;
-```
-
-### 2. Fabric8 Leader Election (Forbidden)
+### 1. Fabric8 Leader Election (Forbidden)
 
 **Flag this code** - do NOT use for scheduled tasks:
 
 ```java
-// ❌ FORBIDDEN: Leader election for locking
+// FORBIDDEN: Leader election for locking
 @EventListener(OnGrantedEvent.class)
 public void onLeaderGranted(OnGrantedEvent event) {
     isLeader = true;
@@ -81,7 +116,7 @@ public void onLeaderRevoked(OnRevokedEvent event) {
     isLeader = false;
 }
 
-// ❌ FORBIDDEN: Leader check in scheduled task
+// FORBIDDEN: Leader check in scheduled task
 @Scheduled(fixedRate = 2000)
 public void scheduledTask() {
     if (isLeader) {
@@ -93,14 +128,14 @@ public void scheduledTask() {
 **Dependencies to flag**:
 
 ```groovy
-// ❌ FORBIDDEN
+// FORBIDDEN
 implementation 'org.springframework.cloud:spring-cloud-kubernetes-fabric8-leader'
 ```
 
 **Configuration to flag**:
 
 ```yaml
-# ❌ FORBIDDEN
+# FORBIDDEN
 spring:
   cloud:
     kubernetes:
@@ -108,12 +143,12 @@ spring:
         enabled: true
 ```
 
-### 3. Incubated In-Repo Locking Libraries (Deprecated)
+### 2. Incubated In-Repo Locking Libraries (Deprecated)
 
 **Flag these packages** - they should be replaced with `com.bitso.commons` versions:
 
 ```java
-// ❌ DEPRECATED: Incubated in-repo libraries (non-commons packages)
+// DEPRECATED: Incubated in-repo libraries (non-commons packages)
 import com.bitso.distributed.locking.LockingUtil;
 import com.bitso.distributed.locking.LockingHashUtil;
 import com.bitso.distributed.locking.LockingException;
@@ -123,9 +158,29 @@ import com.bitso.distributed.locking.postgres.jooq.JooqPostgresTransactionLockin
 
 **Note**: The correct package is `com.bitso.distributed.locking` from `com.bitso.commons:distributed-locking-api`, NOT from in-repo incubated libraries.
 
+### 3. Redis Locking (Context-Dependent)
+
+Redis locking is **NOT deprecated**. Only flag if ALL the following are true:
+
+- Service has PostgreSQL available
+- No valid justification for using Redis over PostgreSQL
+- Team is not aware of the PostgreSQL option
+
+If Redis usage is intentional and justified, it is compliant with RFC-44.
+
+```java
+// VALID if service doesn't have PostgreSQL or team has justified Redis use:
+redis.tryAutoclosingLock("lock_key", LOCK_TIMEOUT.toMillis(), LOCK_TTL.toMillis())
+jedisWrapper.tryAutoclosingLock(...)
+
+// Imports are VALID for Redis-based services:
+import com.bitso.util.redis.RedisLock;
+import com.bitso.util.redis.RedisOperations;
+```
+
 ## Recommended Implementation
 
-### Spring Configuration
+### PostgreSQL: Spring Configuration
 
 ```java
 import com.bitso.distributed.locking.DistributedLockManager;
@@ -144,7 +199,7 @@ public class DistributedLockConfiguration {
 }
 ```
 
-### Usage in Scheduled Tasks
+### PostgreSQL: Usage in Scheduled Tasks
 
 ```java
 import com.bitso.distributed.locking.DistributedLock;
@@ -169,7 +224,7 @@ public class ScheduledTask {
 }
 ```
 
-### Alternative Usage Pattern (try-with-resources)
+### PostgreSQL: Alternative Usage Pattern (try-with-resources)
 
 ```java
 @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.MINUTES)
@@ -186,7 +241,7 @@ public void emitMetrics() {
 }
 ```
 
-### Usage with Retry
+### PostgreSQL: Usage with Retry
 
 ```java
 // Try to acquire the lock with retries
@@ -204,9 +259,101 @@ try (var lock = distributedLockManager.tryLock(
 }
 ```
 
+### Redis: Spring Configuration
+
+```java
+import com.bitso.distributed.locking.DistributedLockManager;
+import com.bitso.jedis.locking.JedisLockingUtil;
+import io.micrometer.core.instrument.MeterRegistry;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import redis.clients.jedis.JedisPooled;
+
+@Configuration
+public class RedisDistributedLockConfiguration {
+    @Bean
+    DistributedLockManager<String> distributedLockManager(JedisPooled jedisPooled, MeterRegistry meterRegistry) {
+        return new JedisLockingUtil(jedisPooled, meterRegistry);
+    }
+}
+```
+
+### Redis: Usage Pattern (Unified API)
+
+`JedisLockingUtil` implements `DistributedLockManager<String>`, so usage is nearly identical to PostgreSQL:
+
+```java
+import com.bitso.distributed.locking.DistributedLock;
+import com.bitso.distributed.locking.DistributedLockManager;
+
+@Component
+public class ScheduledTask {
+    private final DistributedLockManager<String> distributedLockManager;
+
+    @Scheduled(cron = "${task.cron:-}", zone = "UTC")
+    public void runTask() {
+        log.info("Starting scheduled task");
+        try (var lock = distributedLockManager.tryLock("lock_key")) {
+            if (!lock.acquired()) {
+                log.info("Task is already running on another instance");
+                return;
+            }
+            executeTask();
+        }
+        log.info("Scheduled task finished");
+    }
+}
+```
+
+### Redis: Usage Pattern with Timeout and TTL
+
+For more control over lock acquisition timeout and TTL:
+
+```java
+@Scheduled(cron = "${task.cron:-}", zone = "UTC")
+public void runTask() {
+    // Cast to JedisLockingUtil for extended API
+    var jedisLocking = (JedisLockingUtil) distributedLockManager;
+    
+    try (var lock = jedisLocking.tryLock("lock_key", 
+            Duration.ofSeconds(10).toMillis(),  // timeout to acquire
+            Duration.ofHours(1).toMillis())) {  // lock TTL
+        if (!lock.acquired()) {
+            log.info("Task is already running on another instance");
+            return;
+        }
+        executeTask();
+    }
+}
+```
+
+### Redis: Legacy Pattern (Still Valid)
+
+The legacy `RedisOperations` pattern is still valid for existing code:
+
+```java
+import com.bitso.util.redis.RedisLock;
+import com.bitso.util.redis.RedisOperations;
+
+@Component
+public class ScheduledTask {
+    @Autowired
+    @Qualifier("ephemeralRedis")
+    private RedisOperations<?, ?, ?, ?, ?> redis;
+
+    @Scheduled(cron = "${task.cron:-}", zone = "UTC")
+    public void runTask() {
+        Try.withResources(() -> redis.tryAutoclosingLock("lock_key", 10000, 3600000))
+            .of(redisLock -> Option.of(redisLock)
+                .filter(RedisLock::isAcquired)
+                .peek(lockAcquired -> executeTask()));
+    }
+}
+```
+
 ## Migration Checklist
 
-When reviewing code that uses deprecated locking patterns:
+### When migrating FROM Redis TO PostgreSQL (optional, only if desired)
 
 - [ ] Replace `RedisOperations.tryAutoclosingLock()` with `DistributedLockManager.tryLock()`
 - [ ] Replace `RedisLock.isAcquired()` with `DistributedLock.acquired()`
@@ -215,6 +362,13 @@ When reviewing code that uses deprecated locking patterns:
 - [ ] Create `DistributedLockConfiguration` bean
 - [ ] Update tests to mock `DistributedLockManager<Long>`
 - [ ] Remove unused Redis dependencies if locking was the only use case
+
+### When migrating FROM incubated libraries TO jvm-generic-libraries
+
+- [ ] Remove in-repo `bitso-libs/distributed-locking-*` directories
+- [ ] Update `settings.gradle` to remove incubated module includes
+- [ ] Add `com.bitso.commons:distributed-locking-api` from version catalog
+- [ ] Imports remain the same (`com.bitso.distributed.locking.*`)
 
 ## Example Migration PRs
 
@@ -259,6 +413,7 @@ Advisory locks don't inherently cause deadlocks like transactional locks, but im
 ## Related Documents
 
 - **RFC-44 Confluence**: [RFC-44: Scheduler Tasks and Distributed Locking](https://bitsomx.atlassian.net/wiki/spaces/BAB/pages/4743987229/RFC-44+Scheduler+Tasks+and+Distributed+Locking)
-- **Library Source**: [distributed-locking-api](https://github.com/bitsoex/jvm-generic-libraries/tree/master/libs/commons/distributed-locking-api)
-- **Implementation Source**: [distributed-locking-postgres-jooq](https://github.com/bitsoex/jvm-generic-libraries/tree/master/libs/commons/distributed-locking-postgres-jooq)
+- **PostgreSQL Library Source**: [distributed-locking-api](https://github.com/bitsoex/jvm-generic-libraries/tree/master/libs/commons/distributed-locking-api)
+- **PostgreSQL Implementation Source**: [distributed-locking-postgres-jooq](https://github.com/bitsoex/jvm-generic-libraries/tree/master/libs/commons/distributed-locking-postgres-jooq)
+- **Redis Library Source**: [jedis4-utils](https://github.com/bitsoex/jvm-generic-libraries/tree/master/libs/commons/jedis4-utils)
 - **Migration Command**: `java/commands/migrate-lock-to-rfc-44-compliant.md`
