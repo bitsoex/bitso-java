@@ -1,16 +1,16 @@
 {
   "servers": {
-    "atlassian": {
-      "type": "http",
-      "url": "https://mcp.atlassian.com/v1/sse"
-    },
-    "sonarqube": {
-      "type": "http",
-      "url": "https://sonarqube-mcp.bitso.io/mcp"
-    },
     "api-guidelines": {
       "type": "http",
       "url": "https://api-mcp.bitso.io/sse"
+    },
+    "atlas": {
+      "type": "http",
+      "url": "https://atlas-mcp.bitso.io/mcp"
+    },
+    "atlassian": {
+      "type": "http",
+      "url": "https://mcp.atlassian.com/v1/sse"
     },
     "github": {
       "type": "stdio",
@@ -20,7 +20,7 @@
         "-i",
         "--rm",
         "-v",
-        "~/cloudflare-certificates/2025_cloudflare_ca_certificate.pem:/etc/ssl/custom/cf-custom-ca.pem:ro",
+        "~/cloudflare-certificates/cloudflare_ca_certificate.pem:/etc/ssl/custom/cf-custom-ca.pem:ro",
         "-e",
         "SSL_CERT_FILE=/etc/ssl/custom/cf-custom-ca.pem",
         "-e",
@@ -39,9 +39,9 @@
         "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_TOKEN}"
       }
     },
-    "atlas": {
+    "sonarqube": {
       "type": "http",
-      "url": "https://atlas-mcp.bitso.io/mcp"
+      "url": "https://sonarqube-mcp.bitso.io/mcp"
     },
     "pg-aiguide": {
       "type": "http",

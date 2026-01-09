@@ -1,8 +1,16 @@
 {
-  "version": "1.0",
-  "generatedAt": "2026-01-08T12:48:42.416Z",
+  "version": "2.0",
+  "generatedAt": "2026-01-09T21:39:21.703Z",
   "sourceRepo": "bitsoex/ai-code-instructions",
   "category": "java",
+  "parentCategories": [
+    "global"
+  ],
+  "targetPath": "/",
+  "targeting": {
+    "includedByRules": [],
+    "excludedByRules": []
+  },
   "managedDirectories": [
     ".cursor/rules",
     ".cursor/commands",
