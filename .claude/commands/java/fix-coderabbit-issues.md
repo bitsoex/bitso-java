@@ -1,148 +1,91 @@
-# Fix code quality issues identified by CodeRabbit CLI
+# Address CodeRabbit review comments systematically
 
-**Description:** Fix code quality issues identified by CodeRabbit CLI
+**Description:** Address CodeRabbit review comments systematically
 
 # Fix CodeRabbit Issues
 
-## Prerequisites
+This command uses the **`coderabbit-interactions` skill** to systematically address CodeRabbit review comments.
 
-- CodeRabbit CLI installed (see `global/rules/coderabbit-setup.md`)
-- CodeRabbit authentication configured and validated
-- Project has git repository initialized
-- Working with a feature branch (not main/master)
+## Skill Location
 
-## Workflow
-
-### Get Context
-
-```bash
-git branch --show-current
-git status
+```
+global/skills/coderabbit-interactions/
 ```
 
-Ensure you're on a feature branch with uncommitted or recent changes.
+> **Note**: Script references use `.skills/` which is a symlink to `global/skills/` for shorter paths.
 
-### Run CodeRabbit Analysis
+## Quick Workflow
 
-Run CodeRabbit with `--prompt-only` mode for AI-optimized output:
+### 1. Export Comments
 
 ```bash
-coderabbit --prompt-only --type uncommitted
+node .skills/coderabbit-interactions/scripts/export-comments.js --pr 123
 ```
 
-**Key flags explained:**
-
-- `--prompt-only` - Optimizes output for AI agents (token-efficient, includes locations and suggestions)
-- `--type uncommitted` - Reviews only uncommitted changes (faster, focused)
-- `--base main` - Compare against main branch (use `--base develop` if needed)
-
-**Expected duration:** CodeRabbit analysis typically takes 7-30+ minutes depending on code changes.
-
-### Analyze Issues
-
-Once CodeRabbit completes, review the findings:
-
-1. **Read the summary** - CodeRabbit lists issues by category
-2. **Prioritize by severity**:
-   - 🔴 Critical/Security issues → Fix first
-   - 🟡 High-severity issues → Fix next
-   - 🟢 Nits/style issues → Fix last (optional)
-3. **Note locations** - Each issue includes file path and line number
-
-### Fix in Small Batches
-
-Work on **3-5 issues at a time**:
-
-1. **Read the file** - Use file path from CodeRabbit output
-2. **Understand the issue** - Review the problem description and suggestion
-3. **Apply the fix** - Implement the suggested change or similar fix
-4. **Run tests** - Verify changes:
-
-   ```bash
-   npm test        # Node.js
-   gradle test     # Java
-   ```
-
-5. **Move to next issue** - Repeat for next batch
-
-### Commit Changes
-
-After each batch of fixes:
+### 2. Review and Fix by Severity
 
 ```bash
-git add -A
-git commit -m "fix: address CodeRabbit issues
+# View pending issues
+jq -r '.comments[] | select(.status == "pending") | "\(.severity) | \(.path):\(.line)"' .tmp/coderabbit-pr-*.json
+```
 
-- Issue 1: Brief description of fix
-- Issue 2: Brief description of fix
-- Issue 3: Brief description of fix"
+Fix critical → major → minor.
+
+### 3. Commit with Co-Author
+
+```bash
+git commit -m "🤖 fix: address CodeRabbit review feedback" \
+  -m "- [file.js]: Description of fix" \
+  -m "Co-authored-by: coderabbitai[bot] <136622811+coderabbitai[bot]@users.noreply.github.com>"
+```
+
+### 4. Push and Reply
+
+```bash
 git push
+node .skills/coderabbit-interactions/scripts/reply-to-threads.js --file .tmp/coderabbit-pr-*.json
 ```
 
-### Re-run Analysis (Optional)
+## Skill Contents
 
-After fixing a batch, optionally re-run to verify progress:
+| Resource | Description |
+|----------|-------------|
+| `SKILL.md` | Complete skill documentation |
+| `scripts/run-local-review.js` | Run CodeRabbit CLI locally |
+| `scripts/export-comments.js` | Export PR comments to JSON |
+| `scripts/reply-to-threads.js` | Batch reply to threads |
+| `references/setup.md` | Installation and authentication |
+| `references/commit-formats.md` | All commit message templates |
+| `references/cli-integration.md` | CLI commands and async workflow |
+| `references/workflow-examples.md` | Complete workflow examples |
 
-```bash
-coderabbit --prompt-only --type uncommitted
+## Commit Formats
+
+### Local CLI Review
+
+```text
+🤖 fix: address CodeRabbit CLI review findings
+
+- [path/file.js]: Description
+
+Reviewed-by: CodeRabbit CLI (local)
+Co-authored-by: coderabbitai[bot] <136622811+coderabbitai[bot]@users.noreply.github.com>
 ```
 
-**Typical workflow:**
+### PR Thread Fix
 
-- Fix batch 1 → Re-run (check progress)
-- Fix batch 2 → Re-run (verify improvements)
-- All critical issues fixed → Done
+```text
+🤖 fix: address CodeRabbit PR feedback
 
-## Guidelines
+Thread: PRRT_kwDOxxxxxx
+- [path/file.js:42]: Description
 
-- **Always use `--prompt-only`** - Optimizes for AI integration
-- **Use `--type uncommitted`** - Reviews current changes first
-- **Work in small batches** - Max 3-5 issues per commit
-- **Run tests locally** - Verify fixes before pushing
-- **Commit frequently** - Small, focused commits
-- **Focus on severity** - Critical/High > Medium > Low/Nits
+Co-authored-by: coderabbitai[bot] <136622811+coderabbitai[bot]@users.noreply.github.com>
+```
 
-## Troubleshooting
-
-### CodeRabbit not finding issues
-
-1. **Verify authentication**: `coderabbit auth status`
-2. **Check git status**: `git status` - Must have changes tracked
-3. **Verify base branch**: `git branch -a` - Confirm target branch exists
-4. **Try different scope**:
-
-   ```bash
-   coderabbit --prompt-only --type all        # Include committed changes
-   coderabbit --prompt-only --base develop    # Different base branch
-   ```
-
-### CodeRabbit CLI not installed
-
-See **Prerequisites** → `global/rules/coderabbit-setup.md` for installation steps.
-
-### Authentication issues
-
-1. Run: `coderabbit auth status`
-2. If not authenticated: `coderabbit auth login`
-3. Follow the browser flow to authorize with GitHub
-4. Return to terminal and paste token
-
-### Slow performance
-
-- Use `--type uncommitted` to focus on current changes
-- Break changes into smaller feature branches
-- Target specific files: `coderabbit --prompt-only --include "src/**/*.ts"`
-
-## Integration with CI/CD
-
-After fixing and pushing:
-
-1. **PR validation** - CI runs CodeRabbit automatically
-2. **Quality gates** - Check CI status before merging
-3. **Re-review if needed** - Update PR with fixes if CI catches more issues
+See `references/commit-formats.md` in the skill for all templates.
 
 ## Related
 
-- **Setup**: `global/rules/coderabbit-setup.md`
-- **Readiness Check**: `global/scripts/check-coderabbit-readiness.sh`
-- **CodeRabbit Docs**: <https://docs.coderabbit.ai/cli/overview>
+- **Skill**: `global/skills/coderabbit-interactions/`
+- **CLI Docs**: [CodeRabbit Cursor Integration](https://docs.coderabbit.ai/cli/cursor-integration)

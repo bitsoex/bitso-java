@@ -6,101 +6,39 @@ description: >
   pull requests, or refactoring existing code.
 compatibility: Works with any codebase
 metadata:
-  version: "1.0"
+  version: "2.0.0-draft"
 ---
 
 # Coding Standards
 
-This skill provides guidance on maintaining consistent coding standards across your codebase.
+> **Work in Progress**: Full content migration is tracked in EN-111. Reference the language-specific rules in this repository for current guidance.
 
 ## When to use this skill
 
-- Writing new code (classes, functions, modules)
-- Reviewing pull requests for standards compliance
-- Refactoring existing code
-- Setting up new projects
-- Onboarding new team members
+- When writing new code
+- During code reviews
+- When refactoring existing code
+- When onboarding to a new codebase
 
-## Instructions
+## Standards Categories
 
-### Step 1: Assess Current State
-
-Before applying standards, understand the current codebase:
-
-1. Review existing naming conventions in the project
-2. Check for existing style guides or linter configurations
-3. Identify any project-specific conventions
-
-### Step 2: Apply Naming Conventions
-
-Use the naming conventions script to check for violations:
-
-```bash
-./scripts/check-naming-conventions.sh
-```
-
-For detailed naming rules, see [references/naming-conventions.md](references/naming-conventions.md).
-
-### Step 3: Organize Code
-
-Follow code organization principles:
-
-1. Group related functionality together
-2. Keep files focused on a single responsibility
-3. Use consistent module/package structure
-
-For detailed guidelines, see [references/code-organization.md](references/code-organization.md).
-
-### Step 4: Add Documentation
-
-Ensure proper documentation:
-
-1. Add file headers where required
-2. Document public APIs
-3. Include usage examples for complex functions
-
-Use the template at [assets/templates/file-header-template.txt](assets/templates/file-header-template.txt).
-
-For documentation standards, see [references/documentation-standards.md](references/documentation-standards.md).
-
-## Available Scripts
-
-| Script | Description |
-|--------|-------------|
-| `scripts/check-naming-conventions.sh` | Validates naming conventions across the codebase |
-
-## Reference Materials
-
-| Document | Description |
+| Category | Description |
 |----------|-------------|
-| [naming-conventions.md](references/naming-conventions.md) | Naming rules for variables, functions, classes |
-| [code-organization.md](references/code-organization.md) | File and module organization guidelines |
-| [documentation-standards.md](references/documentation-standards.md) | Documentation requirements and formats |
+| Naming conventions | Variable, function, class naming rules |
+| Code organization | File structure, module organization |
+| Documentation | Comment style, README requirements |
 
-## Examples
+## References
 
-### Example 1: Checking a Java Project
+| Reference | Description |
+|-----------|-------------|
+| `references/naming-conventions.md` | Naming rules by language |
+| `references/code-organization.md` | Project structure patterns |
+| `references/documentation-standards.md` | Documentation requirements |
 
-```bash
-# Run naming convention check
-./scripts/check-naming-conventions.sh src/main/java
+## TODO
 
-# Expected output:
-# Checking naming conventions in src/main/java...
-# ✓ 42 files checked
-# ✓ All naming conventions followed
-```
-
-### Example 2: Fixing Common Issues
-
-When the script finds issues:
-
-```
-src/main/java/UserManager.java:15 - Variable 'Str' should be lowercase
-src/main/java/utils/Helper.java:8 - Function 'GetData' should be camelCase
-```
-
-Fix by:
-
-1. Rename `Str` to `str` or a more descriptive name
-2. Rename `GetData` to `getData`
+- [ ] Define naming conventions by language
+- [ ] Document code organization patterns
+- [ ] Specify documentation requirements
+- [ ] Create linting rule mappings
