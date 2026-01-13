@@ -10,29 +10,30 @@ description: >
   consistent code quality. Use when making significant code changes or before completing a task.
 compatibility: Requires Node.js 24+; works with any codebase
 metadata:
-  version: "0.1"
+  version: "1.0"
 ---
 
 # Quality Gateway
 
-> **Placeholder**: This skill will be fully developed during the content migration phase.
+Orchestrates quality checks at key lifecycle points in the development workflow. This skill coordinates sub-skills to ensure consistent code quality.
 
-## When to use this skill
+## When to Use This Skill
 
-- Before starting significant code changes (pre-edit)
-- After completing code changes (post-edit)
-- Before marking a task as complete (on-stop)
+- Before starting significant code changes (pre-edit baseline)
+- After completing code changes (post-edit validation)
+- Before marking a task as complete (final quality gate)
+- When running the `/quality-check` command
 
 ## Sub-Skills
 
 The quality gateway orchestrates these sub-skills:
 
-| Sub-Skill | Purpose |
-|-----------|---------|
-| `test-augmentation` | Validates test coverage |
-| `doc-sync` | Validates documentation |
-| `coding-standards` | Enforces code style |
-| `security-review` | Checks for vulnerabilities |
+| Sub-Skill | Purpose | Skill Location |
+|-----------|---------|----------------|
+| `test-augmentation` | Validates test coverage | `.skills/test-augmentation/` |
+| `doc-sync` | Validates documentation | `.skills/doc-sync/` |
+| `coding-standards` | Enforces code style | `.skills/coding-standards/` |
+| `security-review` | Checks for vulnerabilities | `.skills/security-review/` |
 
 ## Lifecycle Hooks
 
@@ -42,9 +43,59 @@ The quality gateway orchestrates these sub-skills:
 | `post-edit` | After changes | Validate changes meet standards |
 | `on-stop` | Before completion | Final quality gate |
 
-## TODO
+## IDE Integration
 
-- [ ] Define orchestration logic for sub-skills
-- [ ] Implement baseline capture for pre-edit
-- [ ] Define quality thresholds and gates
-- [ ] Integrate with IDE lifecycle events
+The quality gateway integrates with AI IDEs through hooks:
+
+| IDE | Integration Method | Reference |
+|-----|-------------------|-----------|
+| Claude Code | Native hooks in settings.json | `assets/claude-quality-hooks.md` |
+| Cursor IDE | Rules + Commands | `assets/cursor-quality-integration.md` |
+
+For hook implementation patterns, see the `agent-hooks` skill in `.skills/agent-hooks/`.
+
+## Quality Checks
+
+### Pre-Edit (Baseline)
+
+Before making changes:
+1. Record current test coverage
+2. Note existing linting errors
+3. Capture documentation state
+
+### Post-Edit (Validation)
+
+After making changes:
+1. Verify test coverage maintained or improved
+2. Check for new linting errors
+3. Validate documentation is in sync
+
+### On-Stop (Final Gate)
+
+Before completing:
+1. Run full test suite
+2. Verify no regressions
+3. Check all quality thresholds met
+
+## Commands
+
+| Command | Purpose |
+|---------|---------|
+| `/quality-check` | Run full quality gate |
+| `/add-tests` | Generate missing tests |
+| `/sync-docs` | Update documentation |
+
+## Assets
+
+| Asset | Description |
+|-------|-------------|
+| `assets/claude-quality-hooks.md` | Claude Code hook configurations |
+| `assets/cursor-quality-integration.md` | Cursor IDE integration guide |
+
+## Related Skills
+
+- `agent-hooks` - Hook implementation patterns (in `targeted/skills/`)
+- `test-augmentation` - Test coverage validation
+- `doc-sync` - Documentation synchronization
+- `coding-standards` - Code style enforcement
+- `security-review` - Security vulnerability checks

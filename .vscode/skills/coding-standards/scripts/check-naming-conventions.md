@@ -5,14 +5,14 @@
 ## Location
 
 ```
-.skills/coding-standards/scripts/check-naming-conventions.sh
+.skills/coding-standards/scripts/check-naming-conventions.js
 ```
 
 ## Usage
 
 ```bash
 # From repository root:
-./.skills/coding-standards/scripts/check-naming-conventions.sh
+node .skills/coding-standards/scripts/check-naming-conventions.js
 ```
 
 ---
