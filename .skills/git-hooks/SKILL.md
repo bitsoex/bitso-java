@@ -9,9 +9,9 @@ description: >
   best practices. Ensures hooks are version-controlled, automatically installed, 
   and follow consistent patterns across the team. Use when creating new hooks,
   debugging hook issues, or ensuring hook compliance.
-compatibility: Requires Node.js 24+; works with any Git repository
+compatibility: Requires Node.js 20+; works with any Git repository
 metadata:
-  version: "1.0"
+  version: "2.0"
   targeting:
     include:
       - repo: "bitsoex/ai-code-instructions"
@@ -28,6 +28,80 @@ This skill provides guidance for implementing and maintaining Git hooks that enf
 - Debugging hook installation or execution issues
 - Ensuring hooks follow team standards
 - Migrating from manual hooks to version-controlled hooks
+- Integrating with existing hook systems (Husky, pre-commit, lefthook)
+
+## Distributed Hooks (Informative Mode)
+
+For repositories receiving distributed AI rules, we provide **informative hooks** that:
+
+- **Never block** commits or pushes (always exit 0)
+- **Warn** about issues with clear fix commands
+- **Auto-detect Node.js** via nvm, fnm, or system PATH (shows setup instructions if not found)
+- **Coexist** with existing hook setups (Husky, pre-commit, lefthook)
+
+### How It Works
+
+```
+# Source location: global/skills/git-hooks/assets/
+# Deployed to target repo as:
+
+.git-hooks/
+├── pre-commit          → Delegates to hooks-bootstrap.sh (same directory)
+├── pre-push            → Delegates to hooks-bootstrap.sh (same directory)
+├── ensure-node.sh      → Ensures Node.js 20+ is available
+├── hooks-bootstrap.sh  → Entry point, loads Node, runs checks
+└── hooks-checks.js     → Multi-language quality checks
+```
+
+### Enabling Distributed Hooks
+
+```bash
+# Set Git to use our hooks directory
+git config core.hooksPath .git-hooks
+
+# Verify
+git config --get core.hooksPath
+# Should output: .git-hooks
+```
+
+### Output Example
+
+```
+============================================================
+  Bitso Quality Checks (Informative)
+============================================================
+
+  Pre-commit checks found some issues:
+
+  [!] Linting: ESLint errors detected
+      Run: pnpm run lint:fix
+
+  [!] TypeScript: Type errors detected
+      Run: npx tsc --noEmit
+
+  These are recommendations. Your commit will proceed.
+  For AI agents: Please address these issues before completing.
+
+============================================================
+```
+
+### Coexistence with Existing Hooks
+
+See `assets/hooks-bridge-strategy.md` for detailed integration patterns with:
+- **Husky**: Add our checks to `.husky/pre-commit`
+- **pre-commit (Python)**: Add as a `local` hook in `.pre-commit-config.yaml`
+- **lefthook**: Add to `lefthook.yml` commands
+
+## Assets
+
+| Asset | Purpose |
+|-------|---------|
+| `assets/ensure-node.sh` | Node.js detection and auto-installation |
+| `assets/hooks-bootstrap.sh` | Hook entry point (ensures Node, runs checks) |
+| `assets/hooks-checks.js` | Multi-language quality checks |
+| `assets/pre-commit` | Pre-commit hook entry point |
+| `assets/pre-push` | Pre-push hook entry point |
+| `assets/hooks-bridge-strategy.md` | Integration patterns for existing setups |
 
 ## Architecture
 
@@ -289,6 +363,15 @@ git push --no-verify
 }
 ```
 
+## Informative vs Enforcing Mode
+
+| Mode | Exit Code | Use Case |
+|------|-----------|----------|
+| **Informative** (default) | Always 0 | Distributed hooks for all repos |
+| **Enforcing** | Non-zero on failure | AI agent hooks, CI validation |
+
+The distributed hooks use **informative mode** to guide developers and AI agents without blocking workflow. For enforcing mode, see the `agent-hooks` skill which integrates with Claude Code and Cursor IDE.
+
 ## References
 
 Technology-specific hook patterns are available in the `references/` folder:
@@ -299,6 +382,22 @@ Technology-specific hook patterns are available in the `references/` folder:
 | TypeScript/JavaScript | `references/typescript/hook-patterns.md` |
 | Python | `references/python/hook-patterns.md` |
 | Go | `references/go/hook-patterns.md` |
+
+## Documentation
+
+For comprehensive documentation, see:
+
+- [Git Hooks Architecture](../../../docs/ai-ide-management/concepts/git-hooks-architecture.md) - System design and flow diagrams
+- [How to Enable Git Hooks](../../../docs/ai-ide-management/how-tos/enable-git-hooks.md) - Setup and troubleshooting
+- [Conflict Detection](../../../docs/ai-ide-management/concepts/conflict-detection.md) - How conflicts are detected during distribution
+
+## Related Skills
+
+| Skill | Purpose |
+|-------|---------|
+| `agent-hooks` | AI IDE hooks (Claude Code, Cursor) with enforcing mode |
+| `quality-gateway` | Quality gate orchestration |
+| `coding-standards` | Code style enforcement |
 
 ## Troubleshooting
 

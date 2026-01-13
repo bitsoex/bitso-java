@@ -1,0 +1,6 @@
+#!/bin/bash
+# Git pre-push hook
+# Delegates to hooks-bootstrap.sh for Node setup and check execution
+# Always runs in informative mode (never blocks pushes)
+
+exec "$(dirname "$0")/hooks-bootstrap.sh" pre-push
