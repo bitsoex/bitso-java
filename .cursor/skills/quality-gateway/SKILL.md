@@ -92,6 +92,27 @@ Before completing:
 | `assets/claude-quality-hooks.md` | Claude Code hook configurations |
 | `assets/cursor-quality-integration.md` | Cursor IDE integration guide |
 
+## References
+
+| Reference | Description |
+|-----------|-------------|
+| `references/test-result-caching.md` | How to save and reuse test results |
+
+## Test Result Caching
+
+Always save test output to `.tmp/` instead of running tests multiple times:
+
+```bash
+# Run once and save
+pnpm test 2>&1 | tee .tmp/pnpm-test-latest.txt
+
+# Then grep from file (don't run tests again!)
+grep "FAIL" .tmp/pnpm-test-latest.txt
+tail -20 .tmp/pnpm-test-latest.txt
+```
+
+See [references/test-result-caching.md](references/test-result-caching.md) for all tools.
+
 ## Related Skills
 
 - `agent-hooks` - Hook implementation patterns (in `targeted/skills/`)

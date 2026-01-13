@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "generatedAt": "2026-01-13T22:04:44.301Z",
+  "generatedAt": "2026-01-13T22:13:08.127Z",
   "sourceRepo": "bitsoex/ai-code-instructions",
   "category": "java",
   "parentCategories": [
@@ -282,6 +282,7 @@
     ".skills/quality-gateway/SKILL.md",
     ".skills/quality-gateway/assets/claude-quality-hooks.md",
     ".skills/quality-gateway/assets/cursor-quality-integration.md",
+    ".skills/quality-gateway/references/test-result-caching.md",
     ".skills/rfc-37-documentation/SKILL.md",
     ".skills/rfc-37-documentation/assets/doclinterrc.yml.template",
     ".skills/rfc-37-documentation/assets/local-execution.md.template",
