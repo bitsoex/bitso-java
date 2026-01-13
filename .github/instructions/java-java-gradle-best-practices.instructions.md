@@ -639,3 +639,7 @@ See `java/golden-paths/java-25-upgrade.md` for complete Gradle 9 migration patte
 - **Java Testing Guidelines**: [java/rules/java-testing-guidelines.md](java-testing-guidelines.md)
 - **Protocol Buffer Standards**: [java/rules/java-protobuf-linting.md](java-protobuf-linting.md)
 - **JOOQ Best Practices**: [java/rules/java-jooq.md](java-jooq.md)
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-gradle-best-practices.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

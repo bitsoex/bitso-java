@@ -91,3 +91,7 @@ Include appropriate metadata in markdown files to ensure proper mirroring:
 ---
 *This rule is part of the java category.*
 *Source: java/rules/java-service-documentation.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-service-documentation.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

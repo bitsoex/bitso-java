@@ -559,3 +559,7 @@ Make sure to replace `<your_domain_or_job>` with the actual domain or job name. 
 ---
 *This rule is part of the java category.*
 *Source: java/rules/java-jooq.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-jooq.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

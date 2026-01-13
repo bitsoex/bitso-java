@@ -219,3 +219,7 @@ After this PR is merged, if there are remaining issues of lower severity, create
 - **Setup**: `java/rules/java-sonarqube-setup.md`
 - **Gradle**: `java/rules/java-gradle-best-practices.md`
 - **Gradle Commands**: `java/rules/java-gradle-commands.md`
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/commands/fix-sonarqube-issues-java.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

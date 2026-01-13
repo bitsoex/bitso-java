@@ -689,3 +689,7 @@ spock = "2.4-groovy-4.0"
 ---
 *This rule is part of the java category.*
 *Source: java/golden-paths/java-25-upgrade.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/golden-paths/java-25-upgrade.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

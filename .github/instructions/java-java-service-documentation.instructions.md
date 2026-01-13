@@ -88,3 +88,7 @@ Include appropriate metadata in markdown files to ensure proper mirroring:
 <!-- Parent: Stocks ADRs -->
 <!-- Title: 0001 Buy Flow -->
 ```
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-service-documentation.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

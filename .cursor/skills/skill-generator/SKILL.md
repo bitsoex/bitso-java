@@ -1,3 +1,7 @@
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/skill-generator/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+
 ---
 name: skill-generator
 description: >
@@ -49,7 +53,7 @@ mkdir -p {technology}/skills/{skill-name}
 touch {technology}/skills/{skill-name}/SKILL.md
 
 # Full structure (optional)
-mkdir -p {technology}/skills/{skill-name}/{scripts,references,assets}
+mkdir -p {technology}/skills/{skill-name}/{references,assets}
 ```
 
 ### Step 3: Write SKILL.md
@@ -107,32 +111,58 @@ More instructions...
 
 #### Node.js Implementation (`.scripts/lib/skills/`)
 
+**IMPORTANT**: All skill scripts MUST be in JavaScript (not shell scripts).
+
 For skills that need programmatic functionality, create a Node.js module:
 
 ```javascript
 // .scripts/lib/skills/my-skill.js
-const { logger, colors } = require('./utils');
+import { logger, colors } from './utils.js';
 
-async function runMyCheck(targetDir) {
+export async function runMyCheck(targetDir) {
   logger.info('Running my skill check...');
   // Implementation
   return { passed: true };
 }
 
-module.exports = { runMyCheck };
+export async function validate(targetDir) {
+  // Validation logic
+  return { passed: true, errors: [] };
+}
 ```
 
 Then register it in `.scripts/lib/skills/index.js` and `.scripts/skills-cli.js`.
 
+**Script Location Rules:**
+- Scripts go in `.scripts/lib/skills/` (NOT in the skill's internal `scripts/` folder)
+- Use JavaScript (`.js`), NOT shell scripts (`.sh`)
+- Shell scripts in skill folders will be rejected by pre-commit hooks
+
 #### References (`references/`)
 
-Add detailed documentation for complex topics:
+Add detailed documentation for lazy discovery:
 
 ```markdown
 # references/detailed-guide.md
 
 Detailed information that would bloat the main SKILL.md...
 ```
+
+**Reference organization for global skills:**
+
+For skills that span technologies, organize references by technology:
+
+```
+references/
+├── java/
+│   └── specific-java-guide.md
+├── typescript/
+│   └── specific-ts-guide.md
+└── common/
+    └── shared-concepts.md
+```
+
+This enables lazy loading - agents only read what's needed for the current technology.
 
 #### Assets (`assets/`)
 
@@ -145,6 +175,11 @@ assets/
 └── config/
     └── default-config.json
 ```
+
+**Asset guidelines:**
+- Keep assets minimal and focused
+- Use templates with placeholders (e.g., `[SERVICE_NAME]`)
+- Link to external documentation when possible (avoid duplication)
 
 ### Step 5: Validate the Skill
 
@@ -223,6 +258,10 @@ When modifying a skill's content, you must bump the `metadata.version`:
 4. **Document prerequisites**: What's needed before using the skill
 5. **Reference other skills**: Link to related skills when appropriate
 6. **Bump version on changes**: Update `metadata.version` when modifying content
+7. **No shell scripts in skills**: Use JavaScript in `.scripts/lib/skills/` instead
+8. **Lazy discovery**: Organize references so agents can find specific info without loading everything
+9. **No duplication**: Link to external docs instead of copying content
+10. **Technology-specific references**: For global skills, organize refs by technology (java/, typescript/, etc.)
 
 ## Bitso-Specific Conventions
 

@@ -260,3 +260,7 @@ If `grep -i junit` still shows mixed versions:
 ---
 *This rule is part of the java category.*
 *Source: java/golden-paths/junit-version-alignment.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/golden-paths/junit-version-alignment.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

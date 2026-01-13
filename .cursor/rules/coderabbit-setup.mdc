@@ -251,3 +251,7 @@ coderabbit --prompt-only --include "src/new-feature/**/*.ts"
 - **Command Reference**: `global/commands/fix-coderabbit-issues.md`
 - **Readiness Check**: `global/scripts/check-coderabbit-readiness.sh`
 - **Official Docs**: <https://docs.coderabbit.ai/cli/overview>
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/rules/coderabbit-setup.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

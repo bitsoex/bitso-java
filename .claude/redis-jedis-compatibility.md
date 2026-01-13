@@ -509,3 +509,7 @@ implementation libs.bitso.commons.redis
 ---
 *This rule is part of the java category.*
 *Source: java/golden-paths/redis-jedis-compatibility.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/golden-paths/redis-jedis-compatibility.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

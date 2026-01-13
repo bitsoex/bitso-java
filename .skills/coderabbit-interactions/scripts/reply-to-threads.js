@@ -1,4 +1,8 @@
 #!/usr/bin/env node
+// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+// Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/scripts/reply-to-threads.js
+// To modify, edit the source file and run the distribution workflow
+
 /**
  * Reply to CodeRabbit PR threads based on processed JSON file
  * 
@@ -148,8 +152,14 @@ function main() {
       continue;
     }
     
-    const status = comment.status === 'fixed' ? '✅' :
-                   comment.status === 'wontfix' ? '📝' : '⏭';
+    let status = '⏭';
+    if (comment.status === 'fixed') {
+      status = '✅';
+    } else if (comment.status === 'wontfix') {
+      status = '📝';
+    } else if (comment.status === 'not-applicable') {
+      status = 'ℹ️';
+    }
     
     console.log(`${status} ${comment.path}:${comment.line || 'file'}`);
     

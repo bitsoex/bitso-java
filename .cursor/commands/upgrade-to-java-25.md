@@ -205,3 +205,7 @@ java {
 - `/prepare-to-java-25` - Prepare dependencies and validate locally (run first)
 - `/upgrade-to-recommended-versions` - Upgrade to Spring Boot 3.5.x
 - `/improve-test-setup` - Configure JaCoCo and testing libraries
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/commands/upgrade-to-java-25.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

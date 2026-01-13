@@ -46,3 +46,7 @@ Provide findings in this format:
 - **Severity**: Critical/High/Medium/Low
 - **Recommendation**: How to fix the issue
 - **File/Line**: Location of the issue
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/commands/security-review.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

@@ -317,3 +317,7 @@ compileOnly 'org.projectlombok:lombok'
 ---
 *This rule is part of the java category.*
 *Source: java/rules/java-gradle-lint-plugin.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-gradle-lint-plugin.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

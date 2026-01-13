@@ -1,3 +1,7 @@
+# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+# Source: bitsoex/ai-code-instructions → java/templates/dependency-graph-init.gradle
+# To modify, edit the source file and run the distribution workflow
+
 /**
  * Init script for GitHub Dependency Graph Gradle Plugin
  * 

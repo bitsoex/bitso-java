@@ -1,3 +1,7 @@
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/test-augmentation/references/java/test-patterns.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+
 # Java Test Patterns
 
 > **Placeholder**: This reference will be populated during the content migration phase.

@@ -485,3 +485,7 @@ Essential commands to verify JaCoCo setup:
 - **Java Services Standards**: java/rules/java-services-standards.md
 - **Fix SonarQube Issues**: java/commands/fix-sonarqube-issues.md
 - **SonarQube Setup**: java/rules/java-sonarqube-setup.md
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-jacoco-coverage.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

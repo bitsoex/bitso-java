@@ -685,3 +685,7 @@ Would you like to run one of the related testing improvement commands?
 - **JaCoCo Coverage**: `java/rules/java-jacoco-coverage.md` - Line coverage (complementary)
 - **PIT Template**: `java/templates/pitest.gradle` - Gradle configuration template
 - **Readiness Script**: `java/scripts/check-pitest-readiness.sh` - Environment validation
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/commands/improve-test-quality-with-mutation-testing.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

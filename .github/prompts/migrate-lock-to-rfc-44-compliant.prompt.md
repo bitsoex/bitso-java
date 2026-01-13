@@ -584,3 +584,7 @@ These PRs demonstrate successful RFC-44 alignment:
 - **Rule**: `java/rules/java-distributed-locking-rfc44.md`
 - **Jira Ticket Workflow**: `global/rules/jira-ticket-workflow.md`
 - **PR Lifecycle**: `global/rules/github-cli-pr-lifecycle.md`
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/commands/migrate-lock-to-rfc-44-compliant.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

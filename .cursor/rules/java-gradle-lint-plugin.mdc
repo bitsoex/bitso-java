@@ -316,3 +316,7 @@ compileOnly 'org.projectlombok:lombok'
 - **Cleanup Command**: `java/commands/gradle-dependencies-cleanup.md`
 - **Version Management**: `java/rules/java-versions-and-dependencies.md`
 - **Gradle Best Practices**: `java/rules/java-gradle-best-practices.md`
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-gradle-lint-plugin.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

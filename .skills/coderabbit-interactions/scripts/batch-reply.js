@@ -1,4 +1,8 @@
 #!/usr/bin/env node
+// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+// Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/scripts/batch-reply.js
+// To modify, edit the source file and run the distribution workflow
+
 import { spawnSync } from 'child_process';
 import fs from 'fs';
 

@@ -1,3 +1,7 @@
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/skill-generator/references/agent-skills-spec.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+
 # Agent Skills Specification Reference
 
 This document summarizes the [Agent Skills specification](https://agentskills.io/specification) for quick reference when creating new skills.

@@ -19,3 +19,7 @@ Review Markdown documentation for:
 - Check that links work correctly
 - Ensure code examples are correct and up-to-date
 - Maintain consistent formatting and style
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/rules/markdown-review.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

@@ -1,4 +1,8 @@
 #!/bin/bash
+# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+# Source: bitsoex/ai-code-instructions → global/skills/coding-standards/scripts/check-naming-conventions.sh
+# To modify, edit the source file and run the distribution workflow
+
 set -euo pipefail
 
 # check-naming-conventions.sh

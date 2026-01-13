@@ -1,4 +1,8 @@
 #!/usr/bin/env node
+// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+// Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/scripts/export-comments.js
+// To modify, edit the source file and run the distribution workflow
+
 /**
  * Export CodeRabbit PR comments to local JSON file for processing
  * 
@@ -61,9 +65,9 @@ function parseArgs() {
 }
 
 function extractSeverity(body) {
-  if (body.includes('🔴 Critical') || body.includes('_🔴 Critical_')) return 'critical';
-  if (body.includes('🟠 Major') || body.includes('_🟠 Major_')) return 'major';
-  if (body.includes('🟡 Minor') || body.includes('_🟡 Minor_')) return 'minor';
+  if (body.includes('🔴 Critical') || body.includes('_🔴 Critical_')) {return 'critical';}
+  if (body.includes('🟠 Major') || body.includes('_🟠 Major_')) {return 'major';}
+  if (body.includes('🟡 Minor') || body.includes('_🟡 Minor_')) {return 'minor';}
   return 'unknown';
 }
 
@@ -153,7 +157,7 @@ function generateCommitTemplate(comments, single = false) {
     return `🤖 fix: address CodeRabbit PR feedback
 
 Thread: ${c.id}
-- [${c.path}${c.line ? ':' + c.line : ''}]: ${c.title.slice(0, 50)}
+- [${c.path}${c.line ? `:${c.line}` : ''}]: ${c.title.slice(0, 50)}
 
 ${COAUTHOR}`;
   }
@@ -164,8 +168,12 @@ ${COAUTHOR}`;
     minor: comments.filter(c => c.severity === 'minor')
   };
   
-  const highest = bySeverity.critical.length > 0 ? 'critical' :
-                  bySeverity.major.length > 0 ? 'major' : 'minor';
+  let highest = 'minor';
+  if (bySeverity.critical.length > 0) {
+    highest = 'critical';
+  } else if (bySeverity.major.length > 0) {
+    highest = 'major';
+  }
   
   const threads = comments.slice(0, 5).map(c => 
     `- ${c.id}: ${c.title.slice(0, 40)}`
@@ -262,7 +270,12 @@ function main() {
     console.log('Pending issues:');
     console.log('─'.repeat(60));
     for (const c of comments.slice(0, 10)) {
-      const sev = c.severity === 'critical' ? '🔴' : c.severity === 'major' ? '🟠' : '🟡';
+      let sev = '🟡';
+      if (c.severity === 'critical') {
+        sev = '🔴';
+      } else if (c.severity === 'major') {
+        sev = '🟠';
+      }
       console.log(`${sev} ${c.path}:${c.line || 'file'} - ${c.title.slice(0, 40)}`);
     }
     if (comments.length > 10) {

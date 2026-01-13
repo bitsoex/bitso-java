@@ -249,3 +249,7 @@ This task is applied to all modules that have `.proto` files. It checks the clas
 ##### `PROTOBUF_LIBRARIES_SHOULDNT_HAVE_BUILDED_CLASSES`
 
 This rule validates that there are no builded classes in the module that contains the `.proto` files. This is to ensure that the module with such files will only export the protobuf files and not the generated classes.
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-protobuf-linting.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

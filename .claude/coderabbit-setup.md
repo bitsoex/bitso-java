@@ -252,3 +252,7 @@ coderabbit --prompt-only --include "src/new-feature/**/*.ts"
 ---
 *This rule is part of the java category.*
 *Source: global/rules/coderabbit-setup.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/rules/coderabbit-setup.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

@@ -362,3 +362,7 @@ Each command should:
 ---
 *This rule is part of the java category.*
 *Source: global/rules/jira-ticket-workflow.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/rules/jira-ticket-workflow.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

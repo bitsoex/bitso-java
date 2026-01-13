@@ -157,3 +157,7 @@ The MCP configuration mounts the Cloudflare certificate into the Docker containe
 ---
 *This rule is part of the java category.*
 *Source: global/rules/mcp-setup.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/rules/mcp-setup.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

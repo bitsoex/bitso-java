@@ -307,3 +307,7 @@ For test code, focus on:
 ---
 *This rule is part of the java category.*
 *Source: java/rules/java-testing-guidelines.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-testing-guidelines.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

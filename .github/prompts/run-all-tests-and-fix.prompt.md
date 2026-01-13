@@ -27,3 +27,7 @@ Execute the full test suite and systematically fix any failures, ensuring code q
 - Start with the most critical failures
 - Fix one issue at a time
 - Re-run tests after each fix
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/commands/run-all-tests-and-fix.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

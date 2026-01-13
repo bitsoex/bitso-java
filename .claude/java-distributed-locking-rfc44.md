@@ -420,3 +420,7 @@ Advisory locks don't inherently cause deadlocks like transactional locks, but im
 ---
 *This rule is part of the java category.*
 *Source: java/rules/java-distributed-locking-rfc44.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-distributed-locking-rfc44.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

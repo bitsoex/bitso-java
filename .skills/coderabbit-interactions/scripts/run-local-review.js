@@ -1,4 +1,8 @@
 #!/usr/bin/env node
+// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+// Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/scripts/run-local-review.js
+// To modify, edit the source file and run the distribution workflow
+
 /**
  * Run CodeRabbit CLI locally and save findings to .tmp/
  * 
@@ -83,7 +87,8 @@ function parseFindings(output) {
   const lines = output.split('\n');
   
   let currentFile = null;
-  let currentIssue = null;
+  // currentIssue is reserved for future enhanced parsing
+  // const currentIssue = null;
   
   for (const line of lines) {
     // Look for file references

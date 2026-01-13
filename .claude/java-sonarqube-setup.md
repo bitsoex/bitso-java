@@ -59,3 +59,7 @@ Ask the AI: "List all my SonarQube projects"
 ---
 *This rule is part of the java category.*
 *Source: java/rules/java-sonarqube-setup.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-sonarqube-setup.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

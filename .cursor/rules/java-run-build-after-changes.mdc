@@ -20,3 +20,7 @@ After updating Java or Groovy code, verify your changes:
 If problems are found, fix them before committing.
 
 **For comprehensive build commands and troubleshooting**, see: [java-gradle-commands](./java-gradle-commands.md)
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-run-build-after-changes.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

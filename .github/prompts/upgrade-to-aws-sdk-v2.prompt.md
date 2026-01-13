@@ -643,3 +643,7 @@ StaticCredentialsProvider.create(
 - **Gradle Commands**: `java/rules/java-gradle-commands.md` - Debugging commands
 - [AWS SDK v2 Developer Guide](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/)
 - [AWS SDK v2 Migration Guide](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/migration.html)
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/commands/upgrade-to-aws-sdk-v2.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

@@ -161,3 +161,7 @@ class ExampleControllerSpec extends Specification {
 ## Documentation (OpenAPI Specification)
 
 All the endpoints from a subdomain should be documented under `./docs/api/rest/openapi.yaml`
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-rest-api-guidelines.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

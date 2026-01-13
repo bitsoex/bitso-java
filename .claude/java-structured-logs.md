@@ -63,3 +63,7 @@
 ---
 *This rule is part of the java category.*
 *Source: java/rules/java-structured-logs.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-structured-logs.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

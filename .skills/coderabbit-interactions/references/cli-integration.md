@@ -1,3 +1,7 @@
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/references/cli-integration.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+
 # CodeRabbit CLI Integration
 
 Based on [CodeRabbit CLI Cursor Integration](https://docs.coderabbit.ai/cli/cursor-integration).

@@ -250,3 +250,7 @@ This rule validates that there are no builded classes in the module that contain
 ---
 *This rule is part of the java category.*
 *Source: java/rules/java-protobuf-linting.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-protobuf-linting.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

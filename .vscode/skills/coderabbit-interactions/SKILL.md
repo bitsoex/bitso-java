@@ -1,3 +1,7 @@
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+
 ---
 name: coderabbit-interactions
 description: Systematic workflow for CodeRabbit reviews - local CLI, PR threads, and commit attribution

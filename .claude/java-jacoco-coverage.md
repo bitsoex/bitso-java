@@ -486,3 +486,7 @@ Essential commands to verify JaCoCo setup:
 ---
 *This rule is part of the java category.*
 *Source: java/rules/java-jacoco-coverage.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-jacoco-coverage.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

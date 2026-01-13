@@ -424,3 +424,7 @@ This maximizes productivity and reduces total time to complete multiple tasks.
 ---
 *This rule is part of the java category.*
 *Source: global/rules/github-cli-pr-lifecycle.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/rules/github-cli-pr-lifecycle.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

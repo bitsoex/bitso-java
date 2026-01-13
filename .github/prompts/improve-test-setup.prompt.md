@@ -664,3 +664,7 @@ Would you like to run one of the related testing improvement commands?
 - **JaCoCo Coverage**: `java/rules/java-jacoco-coverage.md` - Complete JaCoCo reference
 - **JUnit Alignment**: `java/golden-paths/junit-version-alignment.md` - Version conflict resolution
 - **Testing Guidelines**: `java/rules/java-testing-guidelines.md` - Spock/JUnit patterns
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/commands/improve-test-setup.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

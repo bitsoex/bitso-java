@@ -180,3 +180,7 @@ lombok-mapstruct-binding = { module = 'org.projectlombok:lombok-mapstruct-bindin
 ---
 *This rule is part of the java category.*
 *Source: java/rules/java-services-standards.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-services-standards.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

@@ -59,3 +59,7 @@ Ask the AI: "List all my SonarQube projects"
 - **Fix Command**: `java/commands/fix-sonarqube-issues.md`
 - **MCP Config**: `java/mcp/mcp.json`
 - **SonarQube**: <https://sonarqube.bitso.io>
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-sonarqube-setup.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

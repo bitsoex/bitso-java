@@ -437,3 +437,7 @@ annotationProcessor 'org.projectlombok:lombok'
 - **Setup Script**: `java/scripts/gradle-lint-setup.sh`
 - **Analysis Script**: `java/scripts/gradle-lint-analyze.sh`
 - **Static Analysis Script**: `java/scripts/analyze-unused-deps.sh`
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/commands/gradle-dependencies-cleanup.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

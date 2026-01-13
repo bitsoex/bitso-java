@@ -44,3 +44,7 @@ Do not rename columns/tables in use. Instead:
 - **Reversible migrations**: Prefer reversible migrations. If destructive changes are needed, preserve data first.
 - **Schema changes separation**: Ensure no application code is tied to schema changes in the same PR.
 - **Postgres version**: Confirm Postgres 14.18 behaviors (e.g., index rebuilds, transactional DDL) are accounted for.
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-flyway-migrations.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

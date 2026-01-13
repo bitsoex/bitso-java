@@ -50,3 +50,7 @@ git checkout -b feat/your-feature-name
 - Ensure main is up-to-date before branching
 
 **Never push directly to `main`. Use pull requests.**
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/rules/branch-protection-workflow.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

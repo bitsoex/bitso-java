@@ -304,3 +304,7 @@ For test code, focus on:
 - **Clear test naming and documentation**: Tests should have descriptive names and clear documentation
 - **Code style leniency**: Be more lenient with code style and minor optimisations in test code
 - **Data-driven tests**: Suggest using data-driven Spock tests with tables when appropriate
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-testing-guidelines.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

@@ -1,3 +1,7 @@
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/references/commit-formats.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+
 # CodeRabbit Commit Message Formats
 
 All commits that address CodeRabbit feedback must include proper attribution to create an audit trail.

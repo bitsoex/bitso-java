@@ -492,3 +492,7 @@ Would you like to run one of the related testing improvement commands?
 - **Mutation Testing**: `java/commands/improve-test-quality-with-mutation-testing.md` - Find weak tests
 - **Testing Guidelines**: `java/rules/java-testing-guidelines.md` - Spock/JUnit patterns
 - **JaCoCo Coverage**: `java/rules/java-jacoco-coverage.md` - Report analysis
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/commands/improve-test-coverage.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

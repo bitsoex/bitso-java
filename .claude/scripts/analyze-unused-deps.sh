@@ -1,4 +1,8 @@
 #!/bin/bash
+# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+# Source: bitsoex/ai-code-instructions → java/scripts/analyze-unused-deps.sh
+# To modify, edit the source file and run the distribution workflow
+
 #
 # Gradle Unused Dependencies Analyzer
 #

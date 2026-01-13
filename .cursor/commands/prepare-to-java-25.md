@@ -521,3 +521,7 @@ keytool -list -keystore "$JAVA_HOME/lib/security/cacerts" -storepass changeit | 
 
 - `/upgrade-to-recommended-versions` - Upgrade to Spring Boot 3.5.x first
 - `/improve-test-setup` - Configure JaCoCo and testing libraries
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/commands/prepare-to-java-25.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

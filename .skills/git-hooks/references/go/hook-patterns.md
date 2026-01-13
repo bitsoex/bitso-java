@@ -1,3 +1,7 @@
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/git-hooks/references/go/hook-patterns.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+
 # Go Hook Patterns
 
 Pre-commit and pre-push hook patterns for Go projects.

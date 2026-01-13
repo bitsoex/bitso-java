@@ -116,3 +116,7 @@ Get detailed rule information. **Use only when actively working on an issue.**
 
 - **Fix Command**: `java/commands/fix-sonarqube-issues.md`
 - **Setup**: `java/rules/java-sonarqube-setup.md`
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-sonarqube-mcp.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

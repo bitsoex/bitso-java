@@ -915,3 +915,7 @@ Hyphens (`-`) become dots (`.`) in the accessor:
 - **Gradle Build Best Practices**: java/rules/java-gradle-best-practices.md
 - **JaCoCo Code Coverage**: java/rules/java-jacoco-coverage.md
 - **Java Testing Guidelines**: java/rules/java-testing-guidelines.md
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-versions-and-dependencies.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

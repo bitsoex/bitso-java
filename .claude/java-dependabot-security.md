@@ -212,3 +212,7 @@ Validates the fix deploys successfully in sandboxed environment.
 ---
 *This rule is part of the java category.*
 *Source: java/rules/java-dependabot-security.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-dependabot-security.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

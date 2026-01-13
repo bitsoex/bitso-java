@@ -22,3 +22,7 @@ Review Markdown documentation for:
 ---
 *This rule is part of the java category.*
 *Source: global/rules/markdown-review.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/rules/markdown-review.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

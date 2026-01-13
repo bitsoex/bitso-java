@@ -556,3 +556,7 @@ public class JooqConfiguration {
 ```
 
 Make sure to replace `<your_domain_or_job>` with the actual domain or job name. Inject the appropriate `DSLContext` (`readDslContext` or `writeDslContext`) into your repository/DAO classes based on whether the operation is a read or a write. Standard Spring `@Transactional` annotations will work with the primary (`writeDslContext`) datasource by default due to the `DataSourceTransactionManager` setup. For read-only transactions potentially on the read replica, you might use `@Transactional(readOnly = true)` and ensure your service logic routes to the `readDslContext`.
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-jooq.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

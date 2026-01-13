@@ -309,3 +309,7 @@ These versions should **NOT** be changed unless explicitly requested:
 ---
 *This rule is part of the java category.*
 *Source: java/golden-paths/spring-boot-3.5-upgrade.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/golden-paths/spring-boot-3.5-upgrade.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

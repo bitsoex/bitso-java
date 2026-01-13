@@ -129,3 +129,7 @@ Edit `~/Library/Application Support/Code/User/settings.json` and change `false` 
 ```bash
 cp ~/Library/Application\ Support/Code/User/settings.json.backup ~/Library/Application\ Support/Code/User/settings.json
 ```
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/commands/disable-vscode-mcp-discovery.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

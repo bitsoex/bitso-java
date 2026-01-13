@@ -1,4 +1,8 @@
 #!/bin/bash
+# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+# Source: bitsoex/ai-code-instructions → global/scripts/check-coderabbit-readiness.sh
+# To modify, edit the source file and run the distribution workflow
+
 # Check CodeRabbit readiness for AI integration
 # Verifies CLI installation, authentication, and configuration
 

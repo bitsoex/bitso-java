@@ -870,3 +870,7 @@ Generate all files and present them in a structured format showing:
 2. Complete content with proper markdown formatting
 3. Indication if file is NEW, UPDATED, or UNCHANGED
 4. Brief explanation of changes for updated files
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/commands/generate-documentation-atlas.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

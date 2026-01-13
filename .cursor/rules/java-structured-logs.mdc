@@ -62,3 +62,7 @@ tags:
 - Ensure single-line paragraphs for better readability
 - For logs containing objects, properly structure them rather than using toString()
 - Utilize log provider features like splunk `spath` and `table` commands for analysis
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-structured-logs.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

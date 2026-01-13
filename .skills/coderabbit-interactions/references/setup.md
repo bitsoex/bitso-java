@@ -1,3 +1,7 @@
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/references/setup.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+
 # CodeRabbit CLI Setup
 
 Based on [CodeRabbit CLI Overview](https://docs.coderabbit.ai/cli/overview).

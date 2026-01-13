@@ -509,3 +509,7 @@ implementation libs.bitso.commons.redis
 - **Recommended Libraries**: [Confluence - Recommended Libraries](https://bitsomx.atlassian.net/wiki/spaces/BAB/pages/3706749839/Recommended+Libraries)
 - **RFC-12**: [Reinstate JedisWrapper](https://bitsomx.atlassian.net/wiki/spaces/BAB/pages/3727917398/RFC-12+Reinstate+JedisWrapper+and+make+Jedis+main+redis+client+library+again)
 - **jvm-generic-libraries**: [Redis library source](https://github.com/bitsoex/jvm-generic-libraries/tree/master/libs/commons/redis)
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/golden-paths/redis-jedis-compatibility.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

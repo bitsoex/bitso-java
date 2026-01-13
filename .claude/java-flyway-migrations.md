@@ -47,3 +47,7 @@ Do not rename columns/tables in use. Instead:
 ---
 *This rule is part of the java category.*
 *Source: java/rules/java-flyway-migrations.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-flyway-migrations.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

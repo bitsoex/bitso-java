@@ -177,3 +177,7 @@ To add the lombok-mapstruct binding library:
 ```toml
 lombok-mapstruct-binding = { module = 'org.projectlombok:lombok-mapstruct-binding', version = '0.2.0' }
 ```
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-services-standards.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

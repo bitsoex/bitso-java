@@ -278,3 +278,7 @@ ls build/jacoco/test.exec 2>&1
 - **Version & Dependency Management**: [java-versions-and-dependencies.md](java-versions-and-dependencies.md)
 - **JaCoCo Code Coverage**: [java-jacoco-coverage.md](java-jacoco-coverage.md)
 - **Jira Ticket Workflow**: `global/rules/jira-ticket-workflow.md` - Ticket creation for AI agents
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-gradle-commands.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

@@ -311,3 +311,7 @@ These versions should **NOT** be changed unless explicitly requested:
 - **Redis/Jedis Compatibility**: `java/golden-paths/redis-jedis-compatibility.md`
 - **Upgrades Index**: `java/golden-paths/java-upgrades-golden-paths.md`
 - **Vulnerability Fixes**: `java/rules/java-vulnerability-golden-paths.md`
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/golden-paths/spring-boot-3.5-upgrade.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

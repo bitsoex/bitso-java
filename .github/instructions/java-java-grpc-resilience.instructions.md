@@ -252,3 +252,7 @@ the client with the cause being a `CallNotPermittedException`.
 | `circuit-breaker.automatic-transition-from-open-to-half-open-enabled` | If enabled, the CircuitBreaker transitions to half open automatically after the waitDurationInOpenState.                                                                         | `boolean`                   | `false`, `true`             |
 | `circuit-breaker.writable-stack-trace-enabled`                        | Enables writable stack traces.                                                                                                                                                   | `boolean`                   | `false`, `true`             |
 | `circuit-breaker.ok-statuses`                                         | The list of status codes that are considered as 'OK' and do not count as failures. | `List<Integer>`             | `200`, `201`                |
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-grpc-resilience.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

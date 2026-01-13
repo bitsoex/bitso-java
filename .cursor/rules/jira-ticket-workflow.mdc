@@ -361,3 +361,7 @@ Each command should:
 3. **Clear descriptions**: Document what was fixed and why
 4. **Link everything**: Jira ticket ↔ Branch ↔ Commits ↔ PR
 5. **Update ticket status**: Move ticket through workflow as work progresses
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/rules/jira-ticket-workflow.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

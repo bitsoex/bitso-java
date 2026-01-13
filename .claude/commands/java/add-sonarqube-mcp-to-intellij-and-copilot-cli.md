@@ -324,3 +324,7 @@ HTTP/SSE configuration with tools array:
 
 - See `java/rules/java-sonarqube-setup.md` for SonarQube MCP overview
 - See `java/commands/fix-sonarqube-issues.md` for using SonarQube MCP tools
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/commands/add-sonarqube-mcp-to-intellij-and-copilot-cli.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

@@ -686,3 +686,7 @@ spock = "2.4-groovy-4.0"
 - **Gradle 9.0 release notes**: <https://docs.gradle.org/9.0/release-notes.html>
 - **Groovy 5.0 release notes**: <https://groovy-lang.org/releasenotes/groovy-5.0.html>
 - **Spock 2.4 release**: <https://github.com/spockframework/spock/releases>
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/golden-paths/java-25-upgrade.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

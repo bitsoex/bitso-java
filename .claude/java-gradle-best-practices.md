@@ -642,3 +642,7 @@ See `java/golden-paths/java-25-upgrade.md` for complete Gradle 9 migration patte
 ---
 *This rule is part of the java category.*
 *Source: java/rules/java-gradle-best-practices.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-gradle-best-practices.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

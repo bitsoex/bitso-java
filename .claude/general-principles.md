@@ -65,3 +65,7 @@ See `java/rules/java-versions-and-dependencies.md` for Java-specific version man
 ---
 *This rule is part of the java category.*
 *Source: global/rules/general-principles.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/rules/general-principles.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

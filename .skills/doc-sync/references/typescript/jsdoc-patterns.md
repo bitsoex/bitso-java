@@ -1,3 +1,7 @@
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/doc-sync/references/typescript/jsdoc-patterns.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+
 # TypeScript JSDoc Patterns
 
 > **Placeholder**: This reference will be populated during the content migration phase.

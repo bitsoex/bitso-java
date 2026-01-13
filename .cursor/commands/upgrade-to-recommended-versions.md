@@ -351,3 +351,7 @@ See `java/golden-paths/redis-jedis-compatibility.md` for the full compatibility 
 ## Reference
 
 - [jvm-generic-libraries#651](https://github.com/bitsoex/jvm-generic-libraries/pull/651) - rds-iam-authn Hikari 6 fix
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/commands/upgrade-to-recommended-versions.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

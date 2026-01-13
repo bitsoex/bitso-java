@@ -119,3 +119,7 @@ Get detailed rule information. **Use only when actively working on an issue.**
 ---
 *This rule is part of the java category.*
 *Source: java/rules/java-sonarqube-mcp.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-sonarqube-mcp.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

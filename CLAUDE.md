@@ -39,6 +39,11 @@ This repository uses AI-assisted development with specific coding guidelines and
 **Description:** Mcp Setup
 **Scope:** Always applies
 
+### Quality checks for code changes
+**File:** [`.claude/quality-gate.md`](.claude/quality-gate.md)
+**Description:** Quality checks for code changes
+**Scope:** **/*.ts, **/*.tsx, **/*.js, **/*.jsx, **/*.java, **/*.py, **/*.go
+
 ### Java Code Review Standards
 **File:** [`.claude/java-code-review-standards.md`](.claude/java-code-review-standards.md)
 **Description:** Java Code Review Standards
@@ -181,6 +186,10 @@ These rules are automatically applied when using Claude AI assistant in this rep
 
 ## Rule Categories
 
-- **Java**: java specific coding guidelines (34 rules)
+- **Java**: java specific coding guidelines (35 rules)
 
 ---
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions -->
+<!-- To modify, edit the source files and run the distribution workflow -->

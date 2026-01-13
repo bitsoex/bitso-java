@@ -89,3 +89,7 @@ See `references/commit-formats.md` in the skill for all templates.
 
 - **Skill**: `global/skills/coderabbit-interactions/`
 - **CLI Docs**: [CodeRabbit Cursor Integration](https://docs.coderabbit.ai/cli/cursor-integration)
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/commands/fix-coderabbit-issues.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

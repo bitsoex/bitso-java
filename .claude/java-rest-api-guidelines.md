@@ -160,3 +160,7 @@ All the endpoints from a subdomain should be documented under `./docs/api/rest/o
 ---
 *This rule is part of the java category.*
 *Source: java/rules/java-rest-api-guidelines.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-rest-api-guidelines.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

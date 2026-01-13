@@ -423,3 +423,7 @@ This maximizes productivity and reduces total time to complete multiple tasks.
 - **CodeRabbit Setup**: `global/rules/coderabbit-setup.md` - CodeRabbit CLI installation and configuration
 - **Fix CodeRabbit Issues**: `global/commands/fix-coderabbit-issues.md` - Command for fixing CodeRabbit findings
 - **Branch Protection**: `global/rules/branch-protection-workflow.md` - Branch naming and protection rules
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/rules/github-cli-pr-lifecycle.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
