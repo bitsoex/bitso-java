@@ -17,7 +17,7 @@ This command invokes the **quality-gateway skill** to run all quality checks:
 ## Skill Location
 
 ```
-.skills/quality-gateway/
+.agent-skills/quality-gateway/
 ```
 
 ## Quick Workflow

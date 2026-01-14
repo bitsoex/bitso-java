@@ -12,14 +12,14 @@ This command uses the **`coderabbit-interactions` skill** to systematically addr
 global/skills/coderabbit-interactions/
 ```
 
-> **Note**: Script references use `.skills/` which is a symlink to `global/skills/` for shorter paths.
+> **Note**: Scripts reference `.agent-skills/` which is the distributed output folder generated from `global/skills/` by CI.
 
 ## Quick Workflow
 
 ### 1. Export Comments
 
 ```bash
-node .skills/coderabbit-interactions/scripts/export-comments.js --pr 123
+node .agent-skills/coderabbit-interactions/scripts/export-comments.js --pr 123
 ```
 
 ### 2. Review and Fix by Severity
@@ -43,7 +43,7 @@ git commit -m "🤖 fix: address CodeRabbit review feedback" \
 
 ```bash
 git push
-node .skills/coderabbit-interactions/scripts/reply-to-threads.js --file .tmp/coderabbit-pr-*.json
+node .agent-skills/coderabbit-interactions/scripts/reply-to-threads.js --file .tmp/coderabbit-pr-*.json
 ```
 
 ## Skill Contents

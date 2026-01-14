@@ -16,7 +16,7 @@ This command invokes the **doc-sync skill** to:
 ## Skill Location
 
 ```
-.skills/doc-sync/
+.agent-skills/doc-sync/
 ```
 
 ## Quick Workflow
@@ -41,7 +41,7 @@ For each changed file, verify:
 
 ### Step 3: Update Documentation
 
-Follow patterns in `.skills/doc-sync/references/` for:
+Follow patterns in `.agent-skills/doc-sync/references/` for:
 - JSDoc (TypeScript/JavaScript)
 - Javadoc (Java)
 - Docstrings (Python)

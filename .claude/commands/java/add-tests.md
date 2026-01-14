@@ -16,7 +16,7 @@ This command invokes the **test-augmentation skill** to:
 ## Skill Location
 
 ```
-.skills/test-augmentation/
+.agent-skills/test-augmentation/
 ```
 
 ## Quick Workflow

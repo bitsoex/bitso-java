@@ -66,7 +66,7 @@ For comprehensive checks:
 
 ## Related
 
-Full procedure: `.skills/quality-gateway/`
+Full procedure: `.agent-skills/quality-gateway/`
 
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → global/rules/quality-gate.md -->
