@@ -16,7 +16,7 @@ tags:
 - Name request/response messages as `{OperationName}Request` and `{OperationName}Response`
 - Use nested `Payload` message in requests/responses for business data
 - Define an enum for all possible business error codes, the enum name format is `UserProfileServiceErrorCode`, `UserKYCServiceErrorCode`''
-- You should always configure and execute linters when creating protobufs, check [protobuf-linting](.cursor/rules/java-protobuf-linting/RULE.md) for details on the linting process
+- You should always configure and execute linters when creating protobufs, check [protobuf-linting](.cursor/rules/java-protobuf-linting/java-protobuf-linting.mdc) for details on the linting process
 
 ## Documentation
 

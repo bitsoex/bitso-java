@@ -212,7 +212,7 @@ chmod +x .cursor/hooks/*.sh
 
 ## Quality Gate Rule (Supplementary)
 
-Even with hooks, a rule provides additional guidance. Create `.cursor/rules/quality-gate/RULE.md`:
+Even with hooks, a rule provides additional guidance. Create `.cursor/rules/quality-gate/quality-gate.mdc`:
 
 ```yaml
 ---
@@ -484,7 +484,7 @@ cat > .cursor/hooks.json << 'EOF'
 EOF
 
 # 4. Copy rules and commands (from this file's examples)
-# Create quality-gate/RULE.md, quality-check.md, add-tests.md, sync-docs.md
+# Create quality-gate/quality-gate.mdc, quality-check.md, add-tests.md, sync-docs.md
 
 # 5. Restart Cursor
 ```
