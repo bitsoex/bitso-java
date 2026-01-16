@@ -1,6 +1,6 @@
 # Java Gradle Commands &amp; Debugging
 
-**Applies to:** All files
+**Applies to:** gradle/**, **/build.gradle, **/settings.gradle, **/gradle.properties, **/gradlew, **/*.gradle, flyway/**, **/src/**
 
 # Java Gradle Commands & Debugging
 

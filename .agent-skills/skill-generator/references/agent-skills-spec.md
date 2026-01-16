@@ -243,7 +243,7 @@ metadata:
 
 ```yaml
 metadata:
-  alwaysApply: true  # Include in all contexts
+  alwaysApply: false  # Include in all contexts
   globs:
     - "**/*.java"    # File pattern triggers
 ```

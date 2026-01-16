@@ -3,51 +3,39 @@ applyTo: "**/*"
 description: Never work directly on main. Always verify your branch and create a new one if needed before making changes.
 ---
 
-# Always Work on Feature Branches
+# Never work directly on main. Always verify your branch and create a new one if needed before making changes.
 
 **Rule**: Never commit directly to `main`. All work must happen on a feature/fix/chore branch.
 
-## Before Starting
-
-Fetch all remotes to ensure latest:
+## Quick Reference
 
 ```bash
+# Fetch latest
 git fetch --all
-```
 
-Check your current branch:
-
-```bash
+# Check current branch
 git branch --show-current
-```
 
-If on `main`, update and create a new branch:
-
-```bash
+# If on main, create feature branch
 git checkout main
 git pull origin main
-git checkout -b feat/your-feature-name
+
+## 📚 Full Documentation
+
+For complete guidelines, scripts, and references, see the skill:
+
+```
+.agent-skills/pr-lifecycle/SKILL.md
 ```
 
-## Branch Naming: `{type}/{description}`
+The skill includes:
+- **SKILL.md** - Complete instructions and quick start
+- **scripts/** - Executable automation scripts
+- **references/** - Detailed documentation
+- **assets/** - Templates and resources
 
-- `feat/` - New features
-- `fix/` - Bug fixes
-- `chore/` - Maintenance
-- `docs/` - Documentation
-- `refactor/` - Code restructuring
+> **Note**: This is a shallow reference. The full content is maintained in the skill to avoid duplication.
 
-## AI Assistant Requirement
-
-**AI must:**
-
-- Verify branch before accepting changes
-- Block if on `main` - refuse to proceed
-- Suggest: `git fetch --all` before creating branch
-- Ask to create new branch if needed
-- Ensure main is up-to-date before branching
-
-**Never push directly to `main`. Use pull requests.**
 
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → global/rules/branch-protection-workflow.md -->

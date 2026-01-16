@@ -11,6 +11,7 @@ description: >
 compatibility: Works with Java (JaCoCo), JavaScript/TypeScript (Jest/NYC), Python (coverage.py), Go (go test)
 metadata:
   version: "1.0.0"
+  technology: global
 ---
 
 # Test Augmentation

@@ -2,50 +2,52 @@
 
 > Security Review Workflow
 
-# Security Review Workflow
+# Security Review
 
-This command provides a step-by-step security review process for any codebase.
+Perform a security review of code changes.
 
-## Review Steps
+## Purpose
 
-### 1. Credential Scanning
+This command invokes the **security-review skill** to analyze code for security vulnerabilities.
 
-- [ ] Search for hardcoded passwords, API keys, or tokens
-- [ ] Check for exposed database connection strings
-- [ ] Verify secrets are properly externalized
+## Skill Location
 
-### 2. Input Validation
+```
+.skills/security-review/
+```
 
-- [ ] Review all user input handling
-- [ ] Check for SQL injection vulnerabilities
-- [ ] Verify XSS protection measures
+## Quick Checklist
 
-### 3. Authentication & Authorization
-
-- [ ] Review authentication mechanisms
-- [ ] Check authorization controls
-- [ ] Verify session management
-
-### 4. Data Protection
-
-- [ ] Review data encryption at rest and in transit
-- [ ] Check for sensitive data exposure
-- [ ] Verify proper data sanitization
-
-### 5. Dependency Security
-
-- [ ] Scan for known vulnerable dependencies
-- [ ] Review third-party library usage
-- [ ] Check for outdated packages
+1. **Credential Scanning** - Search for hardcoded secrets
+2. **Input Validation** - Check SQL injection, XSS, command injection
+3. **Authentication & Authorization** - Review auth mechanisms
+4. **Data Protection** - Check encryption and data handling
+5. **Dependency Security** - Scan for vulnerable packages
 
 ## Output Format
 
-Provide findings in this format:
+For each finding, provide:
 
 - **Finding**: Description of the issue
 - **Severity**: Critical/High/Medium/Low
-- **Recommendation**: How to fix the issue
-- **File/Line**: Location of the issue
+- **Recommendation**: How to fix
+- **File/Line**: Location
+
+## Skill Contents
+
+| Resource | Description |
+|----------|-------------|
+| `SKILL.md` | Full security review documentation |
+| `references/workflow.md` | Step-by-step review process |
+| `references/java/security-patterns.md` | Java security patterns |
+| `references/typescript/security-patterns.md` | TypeScript security patterns |
+| `references/python/security-patterns.md` | Python security patterns |
+| `references/go/security-patterns.md` | Go security patterns |
+
+## Related
+
+- `.skills/dependency-security` - npm audit and vulnerability management
+- `.skills/sonarqube-remediation` - SonarQube issue fixing
 
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → global/commands/security-review.md -->

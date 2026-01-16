@@ -1,5 +1,5 @@
 ---
-description: Java Gradle Lint Plugin
+description: Gradle Lint Plugin Configuration
 alwaysApply: true
 tags:
   - java

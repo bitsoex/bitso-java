@@ -11,6 +11,7 @@ description: >
 compatibility: Java projects using Gradle with JaCoCo plugin
 metadata:
   version: "1.0.0"
+  technology: java
   category: quality
   tags:
     - java

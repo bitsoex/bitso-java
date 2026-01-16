@@ -1,4 +1,4 @@
-# Java Gradle Lint Plugin
+# Gradle Lint Plugin Configuration
 
 **Applies to:** All files
 

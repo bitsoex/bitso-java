@@ -7,11 +7,11 @@ This repository uses AI-assisted development with specific coding guidelines and
 ### Never work directly on main. Always verify your branch and create a new one if needed before making changes.
 **File:** [`.claude/branch-protection-workflow.md`](.claude/branch-protection-workflow.md)
 **Description:** Never work directly on main. Always verify your branch and create a new one if needed before making changes.
-**Scope:** Always applies
+**Scope:** **/*
 
-### Coderabbit Setup
+### CodeRabbit Setup
 **File:** [`.claude/coderabbit-setup.md`](.claude/coderabbit-setup.md)
-**Description:** Coderabbit Setup
+**Description:** CodeRabbit Setup
 **Scope:** Always applies
 
 ### General AI Coding Principles
@@ -19,24 +19,24 @@ This repository uses AI-assisted development with specific coding guidelines and
 **Description:** General AI Coding Principles
 **Scope:** Always applies
 
-### Github Cli Pr Lifecycle
+### GitHub CLI PR Lifecycle
 **File:** [`.claude/github-cli-pr-lifecycle.md`](.claude/github-cli-pr-lifecycle.md)
-**Description:** Github Cli Pr Lifecycle
+**Description:** GitHub CLI PR Lifecycle
 **Scope:** Always applies
 
 ### Jira Ticket Workflow for AI Agent Commands
 **File:** [`.claude/jira-ticket-workflow.md`](.claude/jira-ticket-workflow.md)
 **Description:** Jira Ticket Workflow for AI Agent Commands
-**Scope:** Always applies
+**Scope:** **/commands/**
 
 ### Markdown Documentation Review Guidelines
 **File:** [`.claude/markdown-review.md`](.claude/markdown-review.md)
 **Description:** Markdown Documentation Review Guidelines
 **Scope:** **/*.md
 
-### Mcp Setup
+### MCP Setup
 **File:** [`.claude/mcp-setup.md`](.claude/mcp-setup.md)
-**Description:** Mcp Setup
+**Description:** MCP Setup
 **Scope:** Always applies
 
 ### Quality checks for code changes
@@ -72,11 +72,11 @@ This repository uses AI-assisted development with specific coding guidelines and
 ### Java Gradle Commands &amp; Debugging
 **File:** [`.claude/java-gradle-commands.md`](.claude/java-gradle-commands.md)
 **Description:** Java Gradle Commands &amp; Debugging
-**Scope:** Always applies
+**Scope:** gradle/**, **/build.gradle, **/settings.gradle, **/gradle.properties, **/gradlew, **/*.gradle, flyway/**, **/src/**
 
-### Java Gradle Lint Plugin
+### Gradle Lint Plugin Configuration
 **File:** [`.claude/java-gradle-lint-plugin.md`](.claude/java-gradle-lint-plugin.md)
-**Description:** Java Gradle Lint Plugin
+**Description:** Gradle Lint Plugin Configuration
 **Scope:** Always applies
 
 ### Java GRPC Resilience

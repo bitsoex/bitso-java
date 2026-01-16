@@ -11,6 +11,7 @@ description: >
 compatibility: Java projects using Gradle 8.x or 9.x
 metadata:
   version: "1.0.0"
+  technology: java
   category: build
   tags:
     - gradle

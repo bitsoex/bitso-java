@@ -11,6 +11,7 @@ description: >
 compatibility: Java projects using Spock Framework
 metadata:
   version: "1.0.0"
+  technology: java
   category: testing
   tags:
     - java

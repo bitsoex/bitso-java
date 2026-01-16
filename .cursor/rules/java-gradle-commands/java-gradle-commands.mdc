@@ -1,6 +1,7 @@
 ---
 description: Java Gradle Commands &amp; Debugging
-alwaysApply: true
+alwaysApply: false
+globs: gradle/**,**/build.gradle,**/settings.gradle,**/gradle.properties,**/gradlew,**/*.gradle,flyway/**,**/src/**
 tags:
   - java
 ---

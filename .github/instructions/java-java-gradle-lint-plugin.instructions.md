@@ -1,6 +1,6 @@
 ---
 applyTo: "**/*"
-description: Java Gradle Lint Plugin
+description: Gradle Lint Plugin Configuration
 ---
 
 # Gradle Lint Plugin Configuration

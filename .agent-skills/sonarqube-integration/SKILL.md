@@ -11,6 +11,7 @@ description: >
 compatibility: All Java projects with SonarQube analysis
 metadata:
   version: "1.0.0"
+  technology: java
   category: quality
   tags:
     - java

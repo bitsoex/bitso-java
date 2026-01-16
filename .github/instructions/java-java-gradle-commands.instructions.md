@@ -1,5 +1,5 @@
 ---
-applyTo: "**/*"
+applyTo: "gradle/**,**/build.gradle,**/settings.gradle,**/gradle.properties,**/gradlew,**/*.gradle,flyway/**,**/src/**"
 description: Java Gradle Commands &amp; Debugging
 ---
 
