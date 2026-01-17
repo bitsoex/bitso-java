@@ -1,7 +1,8 @@
 ---
 description: Jira Ticket Workflow for AI Agent Commands
 alwaysApply: false
-globs: **/commands/**
+globs:
+  - "**/commands/**"
 tags:
   - java
 ---

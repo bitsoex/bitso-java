@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/stacked-prs/SKILL.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 ---
 name: stacked-prs
 description: Manage stacked PRs with proper visualization, merge-based updates, and iterative CodeRabbit feedback cycles
@@ -32,6 +28,34 @@ Provides workflows for managing stacked (dependent) pull requests with proper vi
 3. **Bottom-Up Processing** - Address feedback from lowest PR in stack first
 4. **Comprehensive Reviews** - Address all CodeRabbit comments including nitpicks
 5. **Visual Stack** - Use PR titles and descriptions to show stack relationships
+
+## Skill Contents
+
+### Sections
+
+- [Core Principles](#core-principles) (L24-L31)
+- [Workflow Overview](#workflow-overview) (L60-L68)
+- [Quick Reference](#quick-reference) (L69-L99)
+- [Scripts](#scripts) (L100-L105)
+- [References](#references) (L106-L115)
+- [Key Requirement: CodeRabbit Approval](#key-requirement-coderabbit-approval) (L116-L126)
+- [Programmatic Automation](#programmatic-automation) (L127-L152)
+- [Skill Dependencies](#skill-dependencies) (L153-L162)
+- [Related](#related) (L163-L166)
+
+### Available Resources
+
+**📚 references/** - Detailed documentation
+- [automation patterns](references/automation-patterns.md)
+- [merge workflow](references/merge-workflow.md)
+- [pr formatting](references/pr-formatting.md)
+- [readiness checklist](references/readiness-checklist.md)
+- [review cycles](references/review-cycles.md)
+
+**🔧 scripts/** - Automation scripts
+- [check stack status](scripts/check-stack-status.js)
+
+---
 
 ## Workflow Overview
 
@@ -109,13 +133,13 @@ For autonomous AI agents, use polling loops to monitor status:
 async function waitForPRReady(prNumber, repo, maxAttempts = 30, intervalMs = 60000) {
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     const status = await checkPRStatus(prNumber, repo);
-    
+
     if (status.ciPassed && status.coderabbitApproved && status.openComments === 0) {
       return { ready: true, status };
     }
-    
+
     console.log(`Attempt ${attempt}/${maxAttempts}: CI=${status.ciPassed}, CR=${status.coderabbitApproved}, Comments=${status.openComments}`);
-    
+
     if (attempt < maxAttempts) {
       await sleep(intervalMs);
     }
@@ -140,3 +164,7 @@ Reference the dependent skill for detailed patterns rather than duplicating cont
 
 - `.agent-skills/coderabbit-interactions` - Detailed CodeRabbit interaction patterns
 - `global/rules/github-cli-pr-lifecycle.md` - GitHub CLI commands for PR management
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/stacked-prs/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

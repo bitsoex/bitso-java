@@ -1,6 +1,6 @@
 ---
 description: MCP Setup
-alwaysApply: true
+alwaysApply: false
 tags:
   - java
 ---

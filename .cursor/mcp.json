@@ -2,7 +2,7 @@
   "mcpServers": {
     "api-guidelines": {
       "type": "http",
-      "url": "https://api-mcp.bitso.io/sse"
+      "url": "https://api-mcp.bitso.io/mcp"
     },
     "atlas": {
       "type": "http",

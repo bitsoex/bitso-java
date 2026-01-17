@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/pr-lifecycle/references/branch-protection.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Branch Protection
 
 Never commit directly to `main`. All work must happen on a feature/fix/chore branch.
@@ -60,3 +56,7 @@ All changes must go through pull requests:
 git push -u origin $(git branch --show-current)
 gh pr create --draft --title "🤖 feat: description" --body "..."
 ```
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/pr-lifecycle/references/branch-protection.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

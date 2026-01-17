@@ -1,9 +1,19 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/stacked-prs/references/review-cycles.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Review Cycles for Stacked PRs
 
+## Contents
+
+- [Multi-Cycle Review Process](#multi-cycle-review-process) (L17-L20)
+- [Cycle Structure](#cycle-structure) (L21-L34)
+- [Processing Order: Bottom-Up](#processing-order-bottom-up) (L35-L54)
+- [Addressing ALL Comments](#addressing-all-comments) (L55-L87)
+- [Reply Strategy](#reply-strategy) (L88-L111)
+- [Batch Reply Script](#batch-reply-script) (L112-L126)
+- [Waiting for CodeRabbit](#waiting-for-coderabbit) (L127-L141)
+- [CodeRabbit Approval](#coderabbit-approval) (L142-L164)
+- [Example Review Cycle](#example-review-cycle) (L165-L185)
+- [Parallel Work](#parallel-work) (L186-L201)
+
+---
 ## Multi-Cycle Review Process
 
 CodeRabbit reviews are iterative. After each push, CodeRabbit may find new issues or acknowledge fixes. Plan for multiple review cycles.
@@ -31,12 +41,12 @@ Always process the stack from bottom to top:
    - Address all CodeRabbit comments
    - Push fixes
    - Merge to #80
-   
+
 2. Check PR #80
    - Address CodeRabbit comments (may have new ones from merged code)
    - Push fixes
    - Merge to #81
-   
+
 3. Check PR #81
    - Address CodeRabbit comments
    - Push fixes
@@ -88,14 +98,14 @@ After fixing issues, reply to each CodeRabbit thread:
 ### Not Applicable
 
 ```text
-🤖 This doesn't apply here because [reason]. 
+🤖 This doesn't apply here because [reason].
 The current approach is correct because [explanation].
 ```
 
 ### Acknowledged for Later
 
 ```text
-🤖 Good point! Out of scope for this PR. 
+🤖 Good point! Out of scope for this PR.
 Created [JIRA-KEY] to track this.
 ```
 
@@ -189,3 +199,7 @@ While waiting for CodeRabbit:
    - Or address comments on PR #80
 3. Check back after 5-10 minutes
 ```
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/stacked-prs/references/review-cycles.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

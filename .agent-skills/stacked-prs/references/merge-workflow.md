@@ -1,9 +1,17 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/stacked-prs/references/merge-workflow.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Merge Workflow for Stacked PRs
 
+## Contents
+
+- [Core Principle: Merge, Never Rebase](#core-principle-merge-never-rebase) (L15-L28)
+- [Propagating Changes Through the Stack](#propagating-changes-through-the-stack) (L29-L60)
+- [Merge Commit Messages](#merge-commit-messages) (L61-L70)
+- [Handling Merge Conflicts](#handling-merge-conflicts) (L71-L92)
+- [Order of Operations](#order-of-operations) (L93-L110)
+- [Verification After Merge](#verification-after-merge) (L111-L123)
+- [Common Mistakes to Avoid](#common-mistakes-to-avoid) (L124-L159)
+- [Diagram: Merge Flow](#diagram-merge-flow) (L160-L176)
+
+---
 ## Core Principle: Merge, Never Rebase
 
 When working with stacked PRs, **always use merge commits** to propagate changes through the stack. Never rebase or force-push.
@@ -90,7 +98,7 @@ Always work from the **bottom of the stack upward**:
 1. Fix issues in PR #79 (bottom of open stack)
    ↓ merge
 2. Update PR #80
-   ↓ merge  
+   ↓ merge
 3. Update PR #81 (top of stack)
 ```
 
@@ -166,3 +174,7 @@ main ─────────────────────────
 ```
 
 Each arrow represents a `git merge` operation, preserving history and allowing incremental CodeRabbit reviews.
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/stacked-prs/references/merge-workflow.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

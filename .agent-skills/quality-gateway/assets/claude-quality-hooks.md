@@ -1,11 +1,16 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/quality-gateway/assets/claude-quality-hooks.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Claude Code Quality Hooks
 
 This document provides Claude Code hook configurations specific to the quality gateway.
 
+## Contents
+
+- [Configuration](#configuration) (L14-L59)
+- [Hook Scripts](#hook-scripts) (L60-L194)
+- [Setup Instructions](#setup-instructions) (L195-L212)
+- [Customization](#customization) (L213-L239)
+- [Related](#related) (L240-L244)
+
+---
 ## Configuration
 
 Add to `.claude/settings.json`:
@@ -237,3 +242,7 @@ fi
 - General hook patterns: See `agent-hooks` skill
 - Test coverage checks: See `test-augmentation` skill
 - Documentation validation: See `doc-sync` skill
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/quality-gateway/assets/claude-quality-hooks.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

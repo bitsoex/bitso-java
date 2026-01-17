@@ -1,6 +1,5 @@
 # General AI Coding Principles
 
-**Applies to:** All files
 
 # General AI Coding Principles
 

@@ -1,8 +1,4 @@
 #!/usr/bin/env node
-// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
-// Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/scripts/export-comments.js
-// To modify, edit the source file and run the distribution workflow
-
 /**
  * Export CodeRabbit PR comments to local JSON file for processing
  * 
@@ -286,3 +282,7 @@ function main() {
 }
 
 main();
+// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+// Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/scripts/export-comments.js
+// To modify, edit the source file and run the distribution workflow
+

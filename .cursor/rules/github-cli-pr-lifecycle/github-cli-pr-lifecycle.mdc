@@ -1,6 +1,6 @@
 ---
 description: GitHub CLI PR Lifecycle
-alwaysApply: true
+alwaysApply: false
 tags:
   - java
 ---

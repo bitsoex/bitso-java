@@ -1,8 +1,4 @@
 #!/usr/bin/env node
-// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
-// Source: bitsoex/ai-code-instructions → global/skills/coding-standards/scripts/check-naming-conventions.js
-// To modify, edit the source file and run the distribution workflow
-
 /**
  * check-naming-conventions.js
  * Validates naming conventions across the codebase
@@ -130,3 +126,7 @@ if (errors === 0) {
   console.log(`✗ ${errors} naming convention violations found`);
   process.exit(1);
 }
+// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+// Source: bitsoex/ai-code-instructions → global/skills/coding-standards/scripts/check-naming-conventions.js
+// To modify, edit the source file and run the distribution workflow
+

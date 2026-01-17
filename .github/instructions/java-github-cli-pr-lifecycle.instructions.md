@@ -1,5 +1,5 @@
 ---
-applyTo: "**/*"
+applyTo: ""
 description: GitHub CLI PR Lifecycle
 ---
 

@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/test-augmentation/SKILL.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 ---
 name: test-augmentation
 description: >
@@ -24,6 +20,19 @@ metadata:
 - When refactoring existing code
 - To identify gaps in test coverage
 - During test quality improvements
+
+## Skill Contents
+
+### Available Resources
+
+**📚 references/** - Detailed documentation
+- [go](references/go)
+- [java](references/java)
+- [python](references/python)
+- [test patterns](references/test-patterns.md)
+- [typescript](references/typescript)
+
+---
 
 ## Coverage Tools
 
@@ -49,3 +58,7 @@ metadata:
 - [ ] Implement coverage change detection
 - [ ] Add test quality metrics
 - [ ] Create test pattern guidance by technology
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/test-augmentation/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

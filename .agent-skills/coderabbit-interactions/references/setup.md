@@ -1,11 +1,20 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/references/setup.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # CodeRabbit CLI Setup
 
 Based on [CodeRabbit CLI Overview](https://docs.coderabbit.ai/cli/overview).
 
+## Contents
+
+- [Overview](#overview) (L18-L27)
+- [Prerequisites](#prerequisites) (L28-L53)
+- [Installation](#installation) (L54-L116)
+- [Configuration](#configuration) (L117-L120)
+- [Common Commands](#common-commands) (L121-L158)
+- [Integration with AI Tools](#integration-with-ai-tools) (L159-L201)
+- [Troubleshooting](#troubleshooting) (L202-L248)
+- [Best Practices](#best-practices) (L249-L258)
+- [Related Resources](#related-resources) (L259-L263)
+
+---
 ## Overview
 
 CodeRabbit CLI integrates code review capabilities into your development workflow. It analyzes code changes and identifies issues like race conditions, memory leaks, security vulnerabilities, and logic errors.
@@ -154,7 +163,7 @@ coderabbit --help
 CodeRabbit works seamlessly with Claude Code:
 
 ```text
-Tell Claude Code: "Run coderabbit --prompt-only --type uncommitted, 
+Tell Claude Code: "Run coderabbit --prompt-only --type uncommitted,
 let it run in the background, and fix any issues it finds"
 ```
 
@@ -180,13 +189,13 @@ CodeRabbit integrates with Cursor for AI-driven development.
 ```text
 # Running the CodeRabbit CLI
 
-CodeRabbit is already installed in the terminal. Run it as a way to review your code. 
-Run the command: cr -h for details on commands available. 
+CodeRabbit is already installed in the terminal. Run it as a way to review your code.
+Run the command: cr -h for details on commands available.
 
-In general, I want you to run coderabbit with the `--prompt-only` flag. 
+In general, I want you to run coderabbit with the `--prompt-only` flag.
 To review uncommitted changes, run: `coderabbit --prompt-only -t uncommitted`.
 
-IMPORTANT: When running CodeRabbit to review code changes, don't run it more 
+IMPORTANT: When running CodeRabbit to review code changes, don't run it more
 than 3 times in a given set of changes.
 ```
 
@@ -252,3 +261,7 @@ coderabbit --prompt-only --include "src/new-feature/**/*.ts"
 - [CodeRabbit CLI Overview](https://docs.coderabbit.ai/cli/overview)
 - [Cursor Integration](https://docs.coderabbit.ai/cli/cursor-integration)
 - [Claude Code Integration](https://docs.coderabbit.ai/cli/claude-code-integration)
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/references/setup.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

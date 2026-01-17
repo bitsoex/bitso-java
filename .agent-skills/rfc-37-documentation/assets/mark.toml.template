@@ -1,7 +1,3 @@
-# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
-# Source: bitsoex/ai-code-instructions → global/skills/rfc-37-documentation/assets/mark.toml.template
-# To modify, edit the source file and run the distribution workflow
-
 # mark.toml - Confluence publishing configuration
 #
 # This file configures how documentation is mirrored to Confluence.
@@ -71,3 +67,7 @@ files = "**/*.md"
 # pattern = "<!--:anchor::(\\w+)::-->"
 # template = "ac:anchor"
 # anchor = "${1}"
+# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+# Source: bitsoex/ai-code-instructions → global/skills/rfc-37-documentation/assets/mark.toml.template
+# To modify, edit the source file and run the distribution workflow
+

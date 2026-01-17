@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/SKILL.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 ---
 name: coderabbit-interactions
 description: Systematic workflow for CodeRabbit reviews - local CLI, PR threads, and commit attribution
@@ -29,6 +25,24 @@ Provides workflows for CodeRabbit code reviews: local CLI usage, PR thread proce
 |------|------|-----------|
 | **Local CLI** | Before push, get early feedback | `references/cli-integration.md` |
 | **PR Threads** | After CodeRabbit reviews your PR | `references/workflow-examples.md` |
+
+## Skill Contents
+
+### Available Resources
+
+**📚 references/** - Detailed documentation
+- [cli integration](references/cli-integration.md)
+- [commit formats](references/commit-formats.md)
+- [setup](references/setup.md)
+- [workflow examples](references/workflow-examples.md)
+
+**🔧 scripts/** - Automation scripts
+- [batch reply](scripts/batch-reply.js)
+- [export comments](scripts/export-comments.js)
+- [reply to threads](scripts/reply-to-threads.js)
+- [run local review](scripts/run-local-review.js)
+
+---
 
 ## Scripts
 
@@ -61,3 +75,7 @@ See `references/commit-formats.md` for all templates.
 
 - [CodeRabbit CLI Docs](https://docs.coderabbit.ai/cli/overview)
 - [Cursor Integration](https://docs.coderabbit.ai/cli/cursor-integration)
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

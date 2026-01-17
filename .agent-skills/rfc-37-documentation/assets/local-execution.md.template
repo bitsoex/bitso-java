@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/rfc-37-documentation/assets/local-execution.md.template -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 <!-- Parent: [Your Service Name] - How-to Guides -->
 <!-- Title: [Your Service Name] - Local Execution -->
 
@@ -371,3 +367,7 @@ Now that you have the application running locally:
 - [Architecture Overview](../[service]/concepts/architecture-overview.md)
 - [Configuration Guide](../[service]/concepts/configuration.md)
 - [Contributing Guide](../../CONTRIBUTING.md)
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/rfc-37-documentation/assets/local-execution.md.template -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

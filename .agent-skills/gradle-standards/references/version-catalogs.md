@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → java/skills/gradle-standards/references/version-catalogs.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Version Catalogs Guide
 
 ## Overview
@@ -49,7 +45,7 @@ plugins {
 dependencies {
     implementation libs.spring.boot.starter.web
     implementation libs.bundles.testing.spring
-    
+
     // Access version for string interpolation
     implementation "com.example:lib:${libs.versions.example.get()}"
 }
@@ -61,3 +57,7 @@ dependencies {
 2. **Version References**: Use `version.ref` for shared versions
 3. **Bundles**: Create bundles for commonly-used combinations
 4. **Documentation**: Add comments for non-obvious dependencies
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/skills/gradle-standards/references/version-catalogs.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

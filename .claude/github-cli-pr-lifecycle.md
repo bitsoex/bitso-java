@@ -1,6 +1,5 @@
 # GitHub CLI PR Lifecycle
 
-**Applies to:** All files
 
 # GitHub CLI PR Lifecycle
 

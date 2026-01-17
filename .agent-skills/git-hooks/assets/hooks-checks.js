@@ -1,8 +1,4 @@
 #!/usr/bin/env node
-// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
-// Source: bitsoex/ai-code-instructions → global/skills/git-hooks/assets/hooks-checks.js
-// To modify, edit the source file and run the distribution workflow
-
 /**
  * AI Agents Quality Checks - Informative Mode
  * 
@@ -482,3 +478,7 @@ function main() {
 }
 
 main();
+// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+// Source: bitsoex/ai-code-instructions → global/skills/git-hooks/assets/hooks-checks.js
+// To modify, edit the source file and run the distribution workflow
+

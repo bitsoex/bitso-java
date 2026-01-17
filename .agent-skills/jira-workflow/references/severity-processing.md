@@ -1,11 +1,18 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/jira-workflow/references/severity-processing.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Severity-Based Processing
 
 AI agents must process issues by severity level, one level at a time.
 
+## Contents
+
+- [Vulnerability Severity Order](#vulnerability-severity-order) (L16-L24)
+- [SonarQube Severity Order](#sonarqube-severity-order) (L25-L34)
+- [Processing Rules](#processing-rules) (L35-L41)
+- [Example Workflow](#example-workflow) (L42-L52)
+- [Commit Examples by Severity](#commit-examples-by-severity) (L53-L93)
+- [When to Stop](#when-to-stop) (L94-L103)
+- [One Severity Per PR](#one-severity-per-pr) (L104-L110)
+
+---
 ## Vulnerability Severity Order
 
 | Priority | Severity | When to Process |
@@ -101,3 +108,7 @@ Keep PRs focused and reviewable:
 - Each PR should address one severity level
 - Create separate tickets/PRs for each severity level
 - This makes review and rollback easier
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/jira-workflow/references/severity-processing.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

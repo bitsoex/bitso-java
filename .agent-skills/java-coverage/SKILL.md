@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → java/skills/java-coverage/SKILL.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 ---
 name: java-coverage
 description: >
@@ -32,6 +28,31 @@ JaCoCo code coverage configuration for Java/Gradle projects.
 - Integrating with SonarQube
 - Troubleshooting coverage reports
 
+## Skill Contents
+
+### Sections
+
+- [When to use this skill](#when-to-use-this-skill) (L23-L30)
+- [Quick Start](#quick-start) (L56-L93)
+- [Coverage Thresholds](#coverage-thresholds) (L94-L118)
+- [Exclusions](#exclusions) (L119-L138)
+- [Multi-Module Aggregation](#multi-module-aggregation) (L139-L189)
+- [SonarQube Integration](#sonarqube-integration) (L190-L200)
+- [References](#references) (L201-L207)
+- [Related Rules](#related-rules) (L208-L211)
+- [Related Skills](#related-skills) (L212-L218)
+
+### Available Resources
+
+**📚 references/** - Detailed documentation
+- [coverage targets](references/coverage-targets.md)
+- [exclusion patterns](references/exclusion-patterns.md)
+- [improvement workflow](references/improvement-workflow.md)
+- [multi module](references/multi-module.md)
+- [prioritization](references/prioritization.md)
+
+---
+
 ## Quick Start
 
 ### 1. Apply JaCoCo Plugin
@@ -51,7 +72,7 @@ jacoco {
 ```groovy
 jacocoTestReport {
     dependsOn test
-    
+
     reports {
         xml.required = true  // For SonarQube
         html.required = true // For local viewing
@@ -80,7 +101,7 @@ jacocoTestCoverageVerification {
                 minimum = 0.80  // 80% minimum coverage
             }
         }
-        
+
         rule {
             element = 'CLASS'
             excludes = ['*.generated.*', '*.config.*']
@@ -148,17 +169,17 @@ For older Gradle versions, use a manual task with defensive filtering:
 // In root build.gradle (Gradle < 7.4)
 task jacocoRootReport(type: JacocoReport) {
     dependsOn subprojects*.test
-    
+
     // Use defensive filtering to avoid missing-directory errors
     def srcDirs = files(subprojects*.sourceSets*.main*.allSource*.srcDirs).filter { it.exists() }
     def classDirs = files(subprojects*.sourceSets*.main*.output).filter { it.exists() }
     def execData = files(subprojects*.jacocoTestReport*.executionData).filter { it.exists() }
-    
+
     additionalSourceDirs.from(srcDirs)
     sourceDirectories.from(srcDirs)
     classDirectories.from(classDirs)
     executionData.from(execData)
-    
+
     reports {
         xml.required = true
         html.required = true
@@ -186,7 +207,7 @@ sonar {
 
 ## Related Rules
 
-- `java/rules/java-jacoco-coverage.md` - Full JaCoCo reference
+- `.cursor/rules/java-jacoco-coverage.mdc` - Full JaCoCo reference
 
 ## Related Skills
 
@@ -195,3 +216,7 @@ sonar {
 | [java-testing](../java-testing/SKILL.md) | Test configuration |
 | [sonarqube-integration](../sonarqube-integration/SKILL.md) | SonarQube setup |
 | [gradle-standards](../gradle-standards/SKILL.md) | Gradle configuration |
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/skills/java-coverage/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

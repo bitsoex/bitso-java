@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/coding-standards/references/documentation-standards.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Documentation Standards
 
 > **Work in Progress**: Full content tracked in EN-111. Use the interim guidance below.
@@ -46,3 +42,7 @@
 
 - [ ] Migrate full content from existing documentation rules
 - [ ] Add template examples
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/coding-standards/references/documentation-standards.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

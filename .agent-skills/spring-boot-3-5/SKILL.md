@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → java/skills/spring-boot-3-5/SKILL.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 ---
 name: spring-boot-3-5
 description: >
@@ -27,6 +23,25 @@ Upgrade Java services to Spring Boot 3.5.8 with all required dependency updates.
 - Project uses Spring Boot 3.4.x or earlier (3.4.x reached EOL)
 - Need features from Spring Boot 3.5.x
 - Preparing for Java 25 upgrade (requires Spring Boot 3.5.x first)
+
+## Skill Contents
+
+### Sections
+
+- [When to Use](#when-to-use) (L21-L26)
+- [Target Versions](#target-versions) (L46-L60)
+- [⚠️ DO NOT Upgrade](#do-not-upgrade) (L61-L65)
+- [Quick Start](#quick-start) (L66-L124)
+- [References](#references) (L125-L130)
+- [Related Command](#related-command) (L131-L134)
+- [Related Skills](#related-skills) (L135-L139)
+
+### Available Resources
+
+**📚 references/** - Detailed documentation
+- [troubleshooting](references/troubleshooting.md)
+
+---
 
 ## Target Versions
 
@@ -122,3 +137,7 @@ This skill is referenced by: [`/upgrade-to-recommended-versions`](../../commands
 The following skills in this category depend on Spring Boot 3.5.x:
 - `java-25` - Java 25 upgrade (requires Spring Boot 3.5.x first)
 - `gradle-9` - Gradle 9 upgrade patterns
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/skills/spring-boot-3-5/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

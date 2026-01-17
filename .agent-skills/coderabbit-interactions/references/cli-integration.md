@@ -1,11 +1,22 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/references/cli-integration.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # CodeRabbit CLI Integration
 
 Based on [CodeRabbit CLI Cursor Integration](https://docs.coderabbit.ai/cli/cursor-integration).
 
+## Contents
+
+- [Overview](#overview) (L20-L23)
+- [Installation](#installation) (L24-L36)
+- [Authentication](#authentication) (L37-L46)
+- [Key Commands](#key-commands) (L47-L79)
+- [Expected Duration](#expected-duration) (L80-L89)
+- [Async Workflow (Recommended)](#async-workflow-recommended) (L90-L116)
+- [Integration with Cursor/IDE](#integration-with-cursoride) (L117-L136)
+- [When to Use CLI vs PR Review](#when-to-use-cli-vs-pr-review) (L137-L147)
+- [Commit Attribution After CLI Review](#commit-attribution-after-cli-review) (L148-L163)
+- [Troubleshooting](#troubleshooting) (L164-L192)
+- [Links](#links) (L193-L197)
+
+---
 ## Overview
 
 CodeRabbit CLI enables local code review before pushing to a PR, providing the same analysis that runs on PRs but earlier in the development cycle.
@@ -184,3 +195,7 @@ coderabbit auth status
 - [CodeRabbit CLI Overview](https://docs.coderabbit.ai/cli/overview)
 - [Cursor Integration](https://docs.coderabbit.ai/cli/cursor-integration)
 - [Claude Code Integration](https://docs.coderabbit.ai/cli/claude-code-integration)
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/references/cli-integration.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

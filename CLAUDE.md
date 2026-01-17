@@ -12,17 +12,17 @@ This repository uses AI-assisted development with specific coding guidelines and
 ### CodeRabbit Setup
 **File:** [`.claude/coderabbit-setup.md`](.claude/coderabbit-setup.md)
 **Description:** CodeRabbit Setup
-**Scope:** Always applies
+**Scope:** 
 
 ### General AI Coding Principles
 **File:** [`.claude/general-principles.md`](.claude/general-principles.md)
 **Description:** General AI Coding Principles
-**Scope:** Always applies
+**Scope:** 
 
 ### GitHub CLI PR Lifecycle
 **File:** [`.claude/github-cli-pr-lifecycle.md`](.claude/github-cli-pr-lifecycle.md)
 **Description:** GitHub CLI PR Lifecycle
-**Scope:** Always applies
+**Scope:** 
 
 ### Jira Ticket Workflow for AI Agent Commands
 **File:** [`.claude/jira-ticket-workflow.md`](.claude/jira-ticket-workflow.md)
@@ -37,7 +37,7 @@ This repository uses AI-assisted development with specific coding guidelines and
 ### MCP Setup
 **File:** [`.claude/mcp-setup.md`](.claude/mcp-setup.md)
 **Description:** MCP Setup
-**Scope:** Always applies
+**Scope:** 
 
 ### Quality checks for code changes
 **File:** [`.claude/quality-gate.md`](.claude/quality-gate.md)
@@ -49,100 +49,100 @@ This repository uses AI-assisted development with specific coding guidelines and
 **Description:** Java Code Review Standards
 **Scope:** **/*.java
 
-### Java Dependabot Security Vulnerability Management
+### Fix strategy hierarchy for Dependabot vulnerabilities in Java projects
 **File:** [`.claude/java-dependabot-security.md`](.claude/java-dependabot-security.md)
-**Description:** Java Dependabot Security Vulnerability Management
-**Scope:** gradle/libs.versions.toml, build.gradle, gradle/dependency-graph-init.gradle
+**Description:** Fix strategy hierarchy for Dependabot vulnerabilities in Java projects
+**Scope:** gradle/libs.versions.toml, build.gradle
 
-### RFC-44 Distributed Locking Standards for Java Services
+### RFC-44 compliant distributed locking with PostgreSQL advisory locks or Redis
 **File:** [`.claude/java-distributed-locking-rfc44.md`](.claude/java-distributed-locking-rfc44.md)
-**Description:** RFC-44 Distributed Locking Standards for Java Services
-**Scope:** **/*.java, **/*.groovy, **/build.gradle, **/libs.versions.toml
+**Description:** RFC-44 compliant distributed locking with PostgreSQL advisory locks or Redis
+**Scope:** **/*Lock*.java, **/*Scheduler*.java, **/application*.yml
 
 ### Flyway SQL Migration Review Guidelines
 **File:** [`.claude/java-flyway-migrations.md`](.claude/java-flyway-migrations.md)
 **Description:** Flyway SQL Migration Review Guidelines
 **Scope:** **/*.sql
 
-### Gradle configuration standards, multi-module setup, build patterns, and common commands for Java projects
+### Gradle configuration standards, multi-module setup, and build patterns
 **File:** [`.claude/java-gradle-best-practices.md`](.claude/java-gradle-best-practices.md)
-**Description:** Gradle configuration standards, multi-module setup, build patterns, and common commands for Java projects
+**Description:** Gradle configuration standards, multi-module setup, and build patterns
 **Scope:** gradle/**, **/build.gradle, **/settings.gradle, **/gradle.properties
 
-### Java Gradle Commands &amp; Debugging
+### Common Gradle commands for building, testing, and dependency management
 **File:** [`.claude/java-gradle-commands.md`](.claude/java-gradle-commands.md)
-**Description:** Java Gradle Commands &amp; Debugging
-**Scope:** gradle/**, **/build.gradle, **/settings.gradle, **/gradle.properties, **/gradlew, **/*.gradle, flyway/**, **/src/**
+**Description:** Common Gradle commands for building, testing, and dependency management
+**Scope:** **/build.gradle, **/settings.gradle, gradlew
 
-### Gradle Lint Plugin Configuration
+### Nebula Gradle Lint plugin rules and violation fixes
 **File:** [`.claude/java-gradle-lint-plugin.md`](.claude/java-gradle-lint-plugin.md)
-**Description:** Gradle Lint Plugin Configuration
-**Scope:** Always applies
+**Description:** Nebula Gradle Lint plugin rules and violation fixes
+**Scope:** **/build.gradle, **/settings.gradle
 
-### Java GRPC Resilience
+### Retry, bulkhead, circuit breaker, and deadline propagation for gRPC clients
 **File:** [`.claude/java-grpc-resilience.md`](.claude/java-grpc-resilience.md)
-**Description:** Java GRPC Resilience
-**Scope:** Always applies
+**Description:** Retry, bulkhead, circuit breaker, and deadline propagation for gRPC clients
+**Scope:** **/application*.yml, **/*GrpcClient*.java
 
-### Java GRPC Services
+### RFC-33 compliant gRPC service implementation patterns
 **File:** [`.claude/java-grpc-services.md`](.claude/java-grpc-services.md)
-**Description:** Java GRPC Services
-**Scope:** Always applies
+**Description:** RFC-33 compliant gRPC service implementation patterns
+**Scope:** **/*Handler.java, **/*GrpcService*.java, **/*.proto
 
-### JaCoCo plugin setup, troubleshooting, and best practices for accurate code coverage reporting
+### JaCoCo setup, multi-module aggregation, and coverage thresholds
 **File:** [`.claude/java-jacoco-coverage.md`](.claude/java-jacoco-coverage.md)
-**Description:** JaCoCo plugin setup, troubleshooting, and best practices for accurate code coverage reporting
-**Scope:** Always applies
+**Description:** JaCoCo setup, multi-module aggregation, and coverage thresholds
+**Scope:** **/jacoco.gradle, **/build.gradle
 
-### Java Jooq
+### jOOQ code generation, Spring configuration, and read/write splitting patterns
 **File:** [`.claude/java-jooq.md`](.claude/java-jooq.md)
-**Description:** Java Jooq
-**Scope:** Always applies
+**Description:** jOOQ code generation, Spring configuration, and read/write splitting patterns
+**Scope:** **/jooq/**, **/build.gradle, **/JooqConfiguration.java
 
-### Java Protobuf Linting
+### Buf linting setup and custom rules for protobuf contracts
 **File:** [`.claude/java-protobuf-linting.md`](.claude/java-protobuf-linting.md)
-**Description:** Java Protobuf Linting
-**Scope:** Always applies
+**Description:** Buf linting setup and custom rules for protobuf contracts
+**Scope:** **/*.proto, **/buf.yaml, **/buf.gen.yaml
 
-### Java Rest Api Guidelines
+### Bitso REST API standards, authentication, and OpenAPI documentation
 **File:** [`.claude/java-rest-api-guidelines.md`](.claude/java-rest-api-guidelines.md)
-**Description:** Java Rest Api Guidelines
-**Scope:** Always applies
+**Description:** Bitso REST API standards, authentication, and OpenAPI documentation
+**Scope:** **/*Controller.java, **/openapi.yaml
 
 ### Java Run Build After Changes
 **File:** [`.claude/java-run-build-after-changes.md`](.claude/java-run-build-after-changes.md)
 **Description:** Java Run Build After Changes
-**Scope:** Always applies
+**Scope:** 
 
-### Java Service Documentation
+### RFC-37 documentation structure for Java services
 **File:** [`.claude/java-service-documentation.md`](.claude/java-service-documentation.md)
-**Description:** Java Service Documentation
-**Scope:** bitso-services/**/*.java, bitso-libs/**/*.java
+**Description:** RFC-37 documentation structure for Java services
+**Scope:** docs/**, **/mark.toml
 
-### Java Services Standards
+### Tech stack, project organization, and coding standards for Bitso Java services
 **File:** [`.claude/java-services-standards.md`](.claude/java-services-standards.md)
-**Description:** Java Services Standards
-**Scope:** bitso-services/**/*.java, bitso-libs/**/*.java
+**Description:** Tech stack, project organization, and coding standards for Bitso Java services
+**Scope:** **/*.java, **/build.gradle
 
-### SonarQube MCP Tools Reference
+### Using SonarQube MCP server for Java code quality analysis
 **File:** [`.claude/java-sonarqube-mcp.md`](.claude/java-sonarqube-mcp.md)
-**Description:** SonarQube MCP Tools Reference
+**Description:** Using SonarQube MCP server for Java code quality analysis
 **Scope:** **/*.java
 
-### Java SonarQube Setup Guide
+### SonarQube plugin configuration for Java/Gradle projects
 **File:** [`.claude/java-sonarqube-setup.md`](.claude/java-sonarqube-setup.md)
-**Description:** Java SonarQube Setup Guide
-**Scope:** **/*.java
+**Description:** SonarQube plugin configuration for Java/Gradle projects
+**Scope:** **/build.gradle, gradle.properties
 
-### Java Structured Logs
+### RFC-34 structured logging with JSON format and key-value pairs
 **File:** [`.claude/java-structured-logs.md`](.claude/java-structured-logs.md)
-**Description:** Java Structured Logs
-**Scope:** Always applies
+**Description:** RFC-34 structured logging with JSON format and key-value pairs
+**Scope:** **/*.java, **/logback*.xml
 
-### Java Testing Guidelines
+### Testing patterns with JUnit, Spock, and Testcontainers
 **File:** [`.claude/java-testing-guidelines.md`](.claude/java-testing-guidelines.md)
-**Description:** Java Testing Guidelines
-**Scope:** Always applies
+**Description:** Testing patterns with JUnit, Spock, and Testcontainers
+**Scope:** **/*Test.java, **/*Spec.groovy, **/test/**
 
 ### Version catalog strategy, dependency management, BOMs, and version constraints for Java projects
 **File:** [`.claude/java-versions-and-dependencies.md`](.claude/java-versions-and-dependencies.md)
@@ -154,31 +154,6 @@ This repository uses AI-assisted development with specific coding guidelines and
 **Description:** Proven fix patterns for common Dependabot vulnerabilities in Java/Gradle projects
 **Scope:** gradle/libs.versions.toml, build.gradle, settings.gradle
 
-### Proven patterns for upgrading Java projects to Java 25 compatibility
-**File:** [`.claude/java-25-upgrade.md`](.claude/java-25-upgrade.md)
-**Description:** Proven patterns for upgrading Java projects to Java 25 compatibility
-**Scope:** gradle/libs.versions.toml, build.gradle, settings.gradle, gradle.properties
-
-### Index of proven upgrade patterns for Java/Gradle projects
-**File:** [`.claude/java-upgrades-golden-paths.md`](.claude/java-upgrades-golden-paths.md)
-**Description:** Index of proven upgrade patterns for Java/Gradle projects
-**Scope:** gradle/libs.versions.toml, build.gradle, settings.gradle, gradle.properties
-
-### Resolving JUnit version conflicts in Java/Gradle projects
-**File:** [`.claude/junit-version-alignment.md`](.claude/junit-version-alignment.md)
-**Description:** Resolving JUnit version conflicts in Java/Gradle projects
-**Scope:** build.gradle, gradle/libs.versions.toml
-
-### Proven patterns for resolving Redis/Jedis version conflicts during Spring Boot upgrades
-**File:** [`.claude/redis-jedis-compatibility.md`](.claude/redis-jedis-compatibility.md)
-**Description:** Proven patterns for resolving Redis/Jedis version conflicts during Spring Boot upgrades
-**Scope:** gradle/libs.versions.toml, build.gradle, settings.gradle, gradle.properties
-
-### Proven upgrade patterns for Spring Boot 3.5.x with all required side-by-side library upgrades
-**File:** [`.claude/spring-boot-3.5-upgrade.md`](.claude/spring-boot-3.5-upgrade.md)
-**Description:** Proven upgrade patterns for Spring Boot 3.5.x with all required side-by-side library upgrades
-**Scope:** gradle/libs.versions.toml, build.gradle, settings.gradle, gradle.properties
-
 
 ## Usage
 
@@ -186,7 +161,7 @@ These rules are automatically applied when using Claude AI assistant in this rep
 
 ## Rule Categories
 
-- **Java**: java specific coding guidelines (35 rules)
+- **Java**: java specific coding guidelines (30 rules)
 
 ---
 

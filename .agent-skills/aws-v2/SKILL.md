@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → java/skills/aws-v2/SKILL.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 ---
 name: aws-v2
 description: >
@@ -28,6 +24,24 @@ Migrate Java projects from AWS SDK v1 (`com.amazonaws`) to v2 (`software.amazon.
 - Project uses deprecated AWS SDK v1 (`com.amazonaws.*` imports)
 - Dependabot/security scans flag v1 vulnerabilities
 - Need features only available in v2 (async clients, HTTP/2, etc.)
+
+## Skill Contents
+
+### Sections
+
+- [When to Use](#when-to-use) (L22-L27)
+- [Migration Strategy (Priority Order)](#migration-strategy-priority-order) (L46-L54)
+- [Quick Start](#quick-start) (L55-L94)
+- [References](#references) (L95-L100)
+- [Related Command](#related-command) (L101-L104)
+- [Related Resources](#related-resources) (L105-L108)
+
+### Available Resources
+
+**📚 references/** - Detailed documentation
+- [migration patterns](references/migration-patterns.md)
+
+---
 
 ## Migration Strategy (Priority Order)
 
@@ -92,3 +106,7 @@ This skill is referenced by: [`/upgrade-to-aws-sdk-v2`](../../commands/upgrade-t
 
 - [AWS SDK v2 Developer Guide](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/)
 - [AWS SDK v2 Migration Guide](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/migration.html)
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/skills/aws-v2/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

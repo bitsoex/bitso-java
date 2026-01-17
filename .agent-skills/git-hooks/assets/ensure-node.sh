@@ -1,8 +1,4 @@
 #!/bin/bash
-# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
-# Source: bitsoex/ai-code-instructions → global/skills/git-hooks/assets/ensure-node.sh
-# To modify, edit the source file and run the distribution workflow
-
 # Ensures Node.js is available, installing if necessary
 # Returns 0 if Node is available, 1 if installation failed
 #
@@ -149,3 +145,7 @@ ensure_node() {
 
 # Run if sourced or executed directly
 ensure_node
+# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+# Source: bitsoex/ai-code-instructions → global/skills/git-hooks/assets/ensure-node.sh
+# To modify, edit the source file and run the distribution workflow
+

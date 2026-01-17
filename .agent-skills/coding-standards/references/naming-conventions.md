@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/coding-standards/references/naming-conventions.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Naming Conventions
 
 > **Work in Progress**: Full content tracked in EN-111. Use the interim guidance below.
@@ -18,10 +14,12 @@
 
 | Language | Reference |
 |----------|-----------|
-| Java | `java/rules/java-services-standards.md` |
-| TypeScript | `nodejs/rules/typescript-standards.md` |
-| Python | `python/rules/` directory |
-| Go | `go/rules/` directory |
+| Java | `.cursor/rules/java-services-standards.mdc` |
+| TypeScript | `.cursor/rules/typescript-standards.mdc` |
+| Python | `.cursor/rules/` directory (Python rules) |
+| Go | `.cursor/rules/` directory (Go rules) |
+
+> **Note**: `.cursor/rules/` paths refer to distributed artifacts in consumer repos.
 
 ### Quick Reference
 
@@ -37,3 +35,7 @@
 
 - [ ] Migrate full content from existing language rules
 - [ ] Add technology-specific detailed examples
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/coding-standards/references/naming-conventions.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

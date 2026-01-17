@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/git-hooks/references/go/hook-patterns.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Go Hook Patterns
 
 Pre-commit and pre-push hook patterns for Go projects.
@@ -138,3 +134,7 @@ go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 go install github.com/securego/gosec/v2/cmd/gosec@latest
 go install golang.org/x/vuln/cmd/govulncheck@latest
 ```
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/git-hooks/references/go/hook-patterns.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

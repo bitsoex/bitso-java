@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/mcp-configuration/SKILL.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 ---
 name: mcp-configuration
 description: MCP (Model Context Protocol) server configurations for various IDEs including setup, troubleshooting, and discovery management
@@ -27,6 +23,26 @@ Configuration and setup for MCP (Model Context Protocol) servers across differen
 ## Overview
 
 MCP server configurations are distributed to IDEs in different ways depending on the tool.
+
+## Skill Contents
+
+### Sections
+
+- [Overview](#overview) (L23-L26)
+- [IDE Configuration Paths](#ide-configuration-paths) (L47-L56)
+- [Quick Reference](#quick-reference) (L57-L71)
+- [References](#references) (L72-L79)
+- [GitHub MCP Server](#github-mcp-server) (L80-L101)
+- [Related](#related) (L102-L105)
+
+### Available Resources
+
+**📚 references/** - Detailed documentation
+- [github mcp setup](references/github-mcp-setup.md)
+- [ide configurations](references/ide-configurations.md)
+- [troubleshooting](references/troubleshooting.md)
+
+---
 
 ## IDE Configuration Paths
 
@@ -59,7 +75,6 @@ These tools require configuration in the user's home directory:
 |-----------|---------|
 | `references/ide-configurations.md` | Configuration paths for each IDE |
 | `references/github-mcp-setup.md` | GitHub MCP server setup with Docker |
-| `references/vscode-discovery.md` | VS Code MCP discovery management |
 | `references/troubleshooting.md` | Common issues and solutions |
 
 ## GitHub MCP Server
@@ -84,18 +99,11 @@ The GitHub MCP server provides access to:
 ./global/scripts/check-github-mcp-readiness.sh
 ```
 
-## VS Code MCP Discovery
-
-Disable MCP discovery to prevent conflicts between tools:
-
-```bash
-# Check current status
-cat ~/Library/Application\ Support/Code/User/settings.json | grep -A 5 "chat.mcp.discovery.enabled"
-```
-
-See `references/vscode-discovery.md` for the disable script.
-
 ## Related
 
 - `java/commands/add-sonarqube-mcp-to-intellij-and-copilot-cli.md` - IntelliJ & CLI setup
 - `global/scripts/check-github-mcp-readiness.sh` - GitHub MCP readiness script
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/mcp-configuration/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

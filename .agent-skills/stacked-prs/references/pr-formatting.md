@@ -1,9 +1,15 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/stacked-prs/references/pr-formatting.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # PR Formatting for Stacked PRs
 
+## Contents
+
+- [PR Title Format](#pr-title-format) (L13-L42)
+- [PR Description Template](#pr-description-template) (L43-L79)
+- [Stack Visualization Status Icons](#stack-visualization-status-icons) (L80-L89)
+- [⚠️ dpulls Compatibility](#dpulls-compatibility) (L90-L105)
+- [Examples](#examples) (L106-L128)
+- [Updating Stack Status](#updating-stack-status) (L129-L137)
+
+---
 ## PR Title Format
 
 All stacked PRs must include position indicators:
@@ -129,3 +135,7 @@ When a PR is merged, update the stack visualization in all remaining PRs:
 3. Adjust dependency references
 
 **Always use merge commits to propagate changes, never rebase.**
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/stacked-prs/references/pr-formatting.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

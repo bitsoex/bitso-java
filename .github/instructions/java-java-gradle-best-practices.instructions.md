@@ -1,11 +1,18 @@
 ---
 applyTo: "gradle/**,**/build.gradle,**/settings.gradle,**/gradle.properties"
-description: Gradle configuration standards, multi-module setup, build patterns, and common commands for Java projects
+description: Gradle configuration standards, multi-module setup, and build patterns
 ---
 
-# Gradle configuration standards, multi-module setup, build patterns, and common commands for Java projects
+# Gradle configuration standards, multi-module setup, and build patterns
 
-Standards for Gradle configuration, multi-module setup, and build patterns in Java projects.
+Standards for Gradle configuration in Java projects.
+
+## Skill Locations
+
+| Skill | Coverage |
+|-------|----------|
+| `.claude/skills/gradle-standards/` | Multi-module, optimization, cleanup |
+| `.claude/skills/dependency-management/` | Versions, BOMs, bundles |
 
 ## 📚 Full Documentation
 

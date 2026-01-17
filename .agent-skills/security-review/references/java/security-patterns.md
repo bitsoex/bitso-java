@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/security-review/references/java/security-patterns.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Java Security Patterns
 
 > **Placeholder**: This reference will be populated during the content migration phase.
@@ -12,3 +8,7 @@
 - [ ] Migrate relevant content from existing rules/commands
 - [ ] Add technology-specific examples
 - [ ] Include best practices and patterns
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/security-review/references/java/security-patterns.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

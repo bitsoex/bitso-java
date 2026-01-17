@@ -1,8 +1,4 @@
 #!/usr/bin/env node
-// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
-// Source: bitsoex/ai-code-instructions → global/skills/doc-sync/scripts/check-docs-updated.js
-// To modify, edit the source file and run the distribution workflow
-
 /**
  * Documentation Update Validator
  * 
@@ -259,3 +255,7 @@ function main() {
 }
 
 main();
+// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+// Source: bitsoex/ai-code-instructions → global/skills/doc-sync/scripts/check-docs-updated.js
+// To modify, edit the source file and run the distribution workflow
+

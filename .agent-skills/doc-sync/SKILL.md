@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/doc-sync/SKILL.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 ---
 name: doc-sync
 description: >
@@ -24,6 +20,35 @@ This skill ensures documentation stays synchronized with code changes. It provid
 - During code review to verify documentation completeness
 - To check for broken links in documentation
 - When setting up documentation validation in a repository
+
+## Skill Contents
+
+### Sections
+
+- [When to use this skill](#when-to-use-this-skill) (L16-L23)
+- [Quick Start](#quick-start) (L53-L73)
+- [Documentation Validation Checks](#documentation-validation-checks) (L74-L83)
+- [Integration with RFC-37](#integration-with-rfc-37) (L84-L101)
+- [Pre-Push Documentation Check](#pre-push-documentation-check) (L102-L141)
+- [Available Functions](#available-functions) (L142-L169)
+- [Documentation Tools by Project Type](#documentation-tools-by-project-type) (L170-L178)
+- [Best Practices](#best-practices) (L179-L210)
+- [References](#references) (L211-L219)
+- [Related Skills](#related-skills) (L220-L227)
+- [Documentation in This Repository](#documentation-in-this-repository) (L228-L236)
+
+### Available Resources
+
+**📚 references/** - Detailed documentation
+- [go](references/go)
+- [java](references/java)
+- [python](references/python)
+- [typescript](references/typescript)
+
+**🔧 scripts/** - Automation scripts
+- [check docs updated](scripts/check-docs-updated.js)
+
+---
 
 ## Quick Start
 
@@ -119,7 +144,7 @@ No docs update needed - cosmetic change only"
 The doc-sync module exports these functions:
 
 ```javascript
-import { 
+import {
   validateDocs,      // Run all documentation checks
   checkReadme,       // Verify README presence
   checkBrokenLinks,  // Find broken internal links
@@ -209,3 +234,7 @@ For ai-code-instructions documentation, see `docs/ai-ide-management/`:
 - `how-tos/` - Step-by-step guides
 - `mcp/` - MCP configuration docs
 - `overview.md` - Main entry point
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/doc-sync/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

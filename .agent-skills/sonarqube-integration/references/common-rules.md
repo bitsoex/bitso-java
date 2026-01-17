@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → java/skills/sonarqube-integration/references/common-rules.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Common SonarQube Java Rules
 
 ## BLOCKER Rules
@@ -69,3 +65,7 @@ public String toString() { ... }
 @Override
 public String toString() { ... }
 ```
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/skills/sonarqube-integration/references/common-rules.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

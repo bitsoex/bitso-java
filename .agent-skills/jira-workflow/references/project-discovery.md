@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/jira-workflow/references/project-discovery.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Project Discovery
 
 Discover the user's Jira project key dynamically. **Never hardcode project keys.**
@@ -53,7 +49,7 @@ gh pr list --state merged --limit 10 --json title,body
 If discovery fails, ask the user:
 
 ```text
-I couldn't automatically determine your Jira project key. 
+I couldn't automatically determine your Jira project key.
 What is your team's Jira project key?
 ```
 
@@ -71,3 +67,7 @@ Once discovered, store and use the project key consistently:
 - 3-5 uppercase letters
 - Examples: `PROJ`, `ALTS`, `MMCC`, `SBP`, `COREXP`
 - Always followed by hyphen and number: `PROJ-123`
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/jira-workflow/references/project-discovery.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

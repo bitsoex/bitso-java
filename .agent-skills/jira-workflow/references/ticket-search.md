@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/jira-workflow/references/ticket-search.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Ticket Search
 
 **Before creating a new ticket**, search for existing open tickets that may already cover the work.
@@ -56,3 +52,7 @@ project = "PROJECT_KEY" AND issuetype = Epic AND summary ~ "KTLO" ORDER BY creat
 ```
 
 Example: `[C6]: AI Enablement KTLO` for cycle 6
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/jira-workflow/references/ticket-search.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

@@ -1,8 +1,4 @@
 #!/bin/bash
-# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
-# Source: bitsoex/ai-code-instructions → global/skills/git-hooks/assets/hooks-bootstrap.sh
-# To modify, edit the source file and run the distribution workflow
-
 # =============================================================================
 # Bitso Git Hooks Bridge
 # =============================================================================
@@ -130,3 +126,7 @@ fi
 # Propagate exit code from existing hooks
 # Our checks are informative (don't block), but existing hooks can block
 exit $EXISTING_HOOK_EXIT
+# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+# Source: bitsoex/ai-code-instructions → global/skills/git-hooks/assets/hooks-bootstrap.sh
+# To modify, edit the source file and run the distribution workflow
+

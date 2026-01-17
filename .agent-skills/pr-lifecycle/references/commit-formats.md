@@ -1,11 +1,16 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/pr-lifecycle/references/commit-formats.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Commit Message Formats
 
 All AI-generated commits must follow these formats for proper attribution and tracking.
 
+## Contents
+
+- [Standard Format](#standard-format) (L14-L26)
+- [Agent Attribution (REQUIRED)](#agent-attribution-required) (L27-L36)
+- [Examples by Work Type](#examples-by-work-type) (L37-L128)
+- [Emoji Quick Reference](#emoji-quick-reference) (L129-L141)
+- [Format Rules](#format-rules) (L142-L149)
+
+---
 ## Standard Format
 
 ```text
@@ -142,3 +147,7 @@ git commit -m "🤖 ♻️ refactor: [PROJ-58] simplify error handling
 4. **Include Jira key** - In brackets: `[PROJ-123]`
 5. **Add attribution footer** - For commands that have specific agents
 6. **Add co-author for CodeRabbit** - When fixing CodeRabbit issues
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/pr-lifecycle/references/commit-formats.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

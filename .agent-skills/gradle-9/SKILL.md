@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → java/skills/gradle-9/SKILL.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 ---
 name: gradle-9
 description: >
@@ -28,6 +24,25 @@ Upgrade from Gradle 8.x to Gradle 9.x with all required plugin updates.
 - Upgrading to Java 25 (requires Gradle 9.x)
 - Need Gradle 9 features
 - Current Gradle 8.x plugins are deprecated
+
+## Skill Contents
+
+### Sections
+
+- [When to Use](#when-to-use) (L22-L27)
+- [Target Versions](#target-versions) (L47-L59)
+- [Quick Start](#quick-start) (L60-L105)
+- [References](#references) (L106-L111)
+- [Plugin Migration Details](#plugin-migration-details) (L112-L153)
+- [Related Skills](#related-skills) (L154-L158)
+- [Related Commands](#related-commands) (L159-L164)
+
+### Available Resources
+
+**📚 references/** - Detailed documentation
+- [plugin compatibility](references/plugin-compatibility.md)
+
+---
 
 ## Target Versions
 
@@ -147,3 +162,7 @@ This skill is referenced by:
 
 - [`/prepare-to-gradle-9`](../../commands/prepare-to-gradle-9.md) - Prepare for Gradle 9 upgrade
 - [`/prepare-to-java-25`](../../commands/prepare-to-java-25.md) - Java 25 preparation (requires Gradle 9)
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/skills/gradle-9/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

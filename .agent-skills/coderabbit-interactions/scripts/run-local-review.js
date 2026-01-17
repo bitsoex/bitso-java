@@ -1,8 +1,4 @@
 #!/usr/bin/env node
-// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
-// Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/scripts/run-local-review.js
-// To modify, edit the source file and run the distribution workflow
-
 /**
  * Run CodeRabbit CLI locally and save findings to .tmp/
  * 
@@ -217,3 +213,7 @@ function main() {
 }
 
 main();
+// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+// Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/scripts/run-local-review.js
+// To modify, edit the source file and run the distribution workflow
+

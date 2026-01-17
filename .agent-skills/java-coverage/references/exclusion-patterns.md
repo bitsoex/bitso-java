@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → java/skills/java-coverage/references/exclusion-patterns.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # JaCoCo Exclusion Patterns
 
 ## Common Exclusions
@@ -58,3 +54,7 @@ jacocoTestCoverageVerification {
     }
 }
 ```
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/skills/java-coverage/references/exclusion-patterns.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

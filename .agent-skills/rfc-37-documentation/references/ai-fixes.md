@@ -1,11 +1,19 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/rfc-37-documentation/references/ai-fixes.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # AI-Assisted Documentation Fixes
 
 Use AI assistants to automatically fix documentation violations.
 
+## Contents
+
+- [Overview](#overview) (L17-L23)
+- [Setup Atlassian MCP](#setup-atlassian-mcp) (L24-L49)
+- [Workflow](#workflow) (L50-L101)
+- [Common Fixes](#common-fixes) (L102-L141)
+- [Best Practices](#best-practices) (L142-L149)
+- [Example Session](#example-session) (L150-L169)
+- [Troubleshooting](#troubleshooting) (L170-L190)
+- [See Also](#see-also) (L191-L195)
+
+---
 ## Overview
 
 This workflow combines:
@@ -185,3 +193,7 @@ AI: [shows 100% compliance]
 - [Official AI Fixes Guide](https://github.com/bitsoex/bitso-documentation-linter/blob/main/docs/how-tos/how-to-fix-documentation-using-ai.md)
 - [Atlassian MCP Documentation](https://github.com/atlassian/mcp-server)
 - [Validation Rules Reference](validation-rules.md)
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/rfc-37-documentation/references/ai-fixes.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

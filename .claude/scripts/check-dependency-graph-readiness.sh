@@ -1,8 +1,4 @@
 #!/bin/bash
-# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
-# Source: bitsoex/ai-code-instructions → java/scripts/check-dependency-graph-readiness.sh
-# To modify, edit the source file and run the distribution workflow
-
 # Check readiness for GitHub Dependency Graph Gradle Plugin
 # This script validates the environment for local vulnerability analysis
 
@@ -118,4 +114,8 @@ else
     echo "❌ $ERRORS check(s) failed. Please fix the issues above."
     exit 1
 fi
+
+# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+# Source: bitsoex/ai-code-instructions → java/scripts/check-dependency-graph-readiness.sh
+# To modify, edit the source file and run the distribution workflow
 

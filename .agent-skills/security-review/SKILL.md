@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/security-review/SKILL.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 ---
 name: security-review
 description: >
@@ -23,6 +19,19 @@ metadata:
 - Before completing changes to authentication/authorization code
 - When adding new dependencies
 - During security-focused code reviews
+
+## Skill Contents
+
+### Available Resources
+
+**📚 references/** - Detailed documentation
+- [go](references/go)
+- [java](references/java)
+- [python](references/python)
+- [typescript](references/typescript)
+- [workflow](references/workflow.md)
+
+---
 
 ## Security Checks
 
@@ -48,3 +57,7 @@ metadata:
 - [ ] Integrate with SonarQube MCP
 - [ ] Add credential pattern detection
 - [ ] Define severity levels and thresholds
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/security-review/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

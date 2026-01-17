@@ -1,11 +1,18 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/quality-gateway/assets/cursor-quality-integration.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Cursor IDE Quality Integration
 
 This document describes how to integrate the quality gateway with Cursor IDE using **native hooks** (preferred) and **rules + commands** (supplementary).
 
+## Contents
+
+- [Overview](#overview) (L16-L25)
+- [Native Hooks Configuration](#native-hooks-configuration) (L26-L219)
+- [Quality Gate Rule (Supplementary)](#quality-gate-rule-supplementary) (L220-L295)
+- [Quality Commands](#quality-commands) (L296-L468)
+- [Setup Instructions](#setup-instructions) (L469-L509)
+- [Cursor Hook Events Reference](#cursor-hook-events-reference) (L510-L523)
+- [Related](#related) (L524-L528)
+
+---
 ## Overview
 
 Cursor now supports native hooks similar to Claude Code. The quality gateway integrates via:
@@ -218,7 +225,7 @@ Even with hooks, a rule provides additional guidance. Create `.cursor/rules/qual
 ---
 description: Quality checks for code changes
 alwaysApply: false
-globs: 
+globs:
   - "**/*.ts"
   - "**/*.tsx"
   - "**/*.js"
@@ -519,3 +526,7 @@ mkdir -p .cursor/commands
 - General hook patterns: See `agent-hooks` skill
 - Claude Code integration: See `claude-quality-hooks.md`
 - Testing checklist: See `agent-hooks/references/testing-checklist.md`
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/quality-gateway/assets/cursor-quality-integration.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

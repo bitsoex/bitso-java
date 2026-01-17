@@ -10,21 +10,22 @@ When reviewing Java code, follow these standards:
 
 - Review code using Java 21 standards.
 
-## `var` Keyword
+## 📚 Full Documentation
 
-- Allow `var` when assigning a cast `null` value.
+For complete guidelines, scripts, and references, see the skill:
 
-## Coding Style
+```
+.agent-skills/java-standards/SKILL.md
+```
 
-- Multi-line expressions should place operators and ternary separators at the end of each line.
+The skill includes:
+- **SKILL.md** - Complete instructions and quick start
+- **scripts/** - Executable automation scripts
+- **references/** - Detailed documentation
+- **assets/** - Templates and resources
 
-## API Usage
+> **Note**: This is a shallow reference. The full content is maintained in the skill to avoid duplication.
 
-- Suggest changes using only Java 21 APIs, avoiding Guava.
-
-## `instanceof` Null Handling
-
-- Ensure `instanceof` correctly handles null values (returns false).
 
 ---
 *This rule is part of the java category.*

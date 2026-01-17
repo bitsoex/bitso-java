@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → java/skills/java-testing/references/testcontainers-setup.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Testcontainers Setup
 
 ## Dependencies
@@ -63,3 +59,7 @@ abstract class BaseIntegrationTest extends Specification {
     // Common setup
 }
 ```
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/skills/java-testing/references/testcontainers-setup.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

@@ -1,7 +1,3 @@
-# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
-# Source: bitsoex/ai-code-instructions → global/skills/rfc-37-documentation/assets/doclinterrc.yml.template
-# To modify, edit the source file and run the distribution workflow
-
 # .doclinterrc.yml - Bitso Documentation Linter configuration
 #
 # This file configures the bitso-documentation-linter for your repository.
@@ -164,3 +160,7 @@ logging:
 #   documentation: "docs"      # Use 'documentation' instead of 'docs'
 #   guides: "how-tos"          # Use 'guides' instead of 'how-tos'
 #   adrs: "decisions"          # Use 'adrs' instead of 'decisions'
+# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+# Source: bitsoex/ai-code-instructions → global/skills/rfc-37-documentation/assets/doclinterrc.yml.template
+# To modify, edit the source file and run the distribution workflow
+

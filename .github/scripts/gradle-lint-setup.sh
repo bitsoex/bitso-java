@@ -1,8 +1,4 @@
 #!/bin/bash
-# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
-# Source: bitsoex/ai-code-instructions → java/scripts/gradle-lint-setup.sh
-# To modify, edit the source file and run the distribution workflow
-
 #
 # Gradle Lint Plugin Setup Script
 #
@@ -311,4 +307,8 @@ echo "annotation processor dependencies. Always review git diff before committin
 echo ""
 echo "Report location: build/reports/gradleLint/<project-name>.txt"
 echo ""
+
+# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+# Source: bitsoex/ai-code-instructions → java/scripts/gradle-lint-setup.sh
+# To modify, edit the source file and run the distribution workflow
 

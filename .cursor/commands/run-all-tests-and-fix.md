@@ -1,6 +1,6 @@
-# Run All Tests And Fix
+# Execute the full test suite and systematically fix any failures
 
-Run All Tests And Fix
+Execute the full test suite and systematically fix any failures
 
 # Run All Tests and Fix Failures
 

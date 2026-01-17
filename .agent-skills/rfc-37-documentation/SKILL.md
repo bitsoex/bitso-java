@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/rfc-37-documentation/SKILL.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 ---
 name: rfc-37-documentation
 description: >
@@ -27,6 +23,37 @@ Implements [RFC-37](https://bitsomx.atlassian.net/wiki/spaces/BAB/pages/44858409
 - Fixing documentation linting violations
 - Setting up Confluence mirroring configuration
 - Understanding documentation requirements
+
+## Skill Contents
+
+### Sections
+
+- [When to use this skill](#when-to-use-this-skill) (L19-L26)
+- [Quick Start](#quick-start) (L58-L87)
+- [Standard Directory Structure](#standard-directory-structure) (L88-L104)
+- [Required Documentation](#required-documentation) (L105-L115)
+- [Validation](#validation) (L116-L135)
+- [Available Scripts](#available-scripts) (L136-L152)
+- [References](#references) (L153-L162)
+- [Assets](#assets) (L163-L170)
+- [External Documentation](#external-documentation) (L171-L179)
+- [Related Skills](#related-skills) (L180-L184)
+
+### Available Resources
+
+**📚 references/** - Detailed documentation
+- [ai fixes](references/ai-fixes.md)
+- [confluence metadata](references/confluence-metadata.md)
+- [installation](references/installation.md)
+- [rfc 37](references/rfc-37.md)
+- [validation rules](references/validation-rules.md)
+
+**📦 assets/** - Templates and resources
+- [doclinterrc.yml](assets/doclinterrc.yml.template)
+- [local execution.md](assets/local-execution.md.template)
+- [mark.toml](assets/mark.toml.template)
+
+---
 
 ## Quick Start
 
@@ -155,3 +182,7 @@ The linter has extensive documentation at [github.com/bitsoex/bitso-documentatio
 - `agent-hooks` - For integrating linting into IDE hooks
 - `quality-gateway` - For comprehensive quality checks
 - `doc-sync` - For keeping docs in sync with code
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/rfc-37-documentation/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

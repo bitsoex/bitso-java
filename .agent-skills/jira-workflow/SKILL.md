@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/jira-workflow/SKILL.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 ---
 name: jira-workflow
 description: Jira ticket creation and management for AI agent commands, with severity-based processing and proper integration
@@ -32,6 +28,30 @@ Best practices for AI agents to create and manage Jira tickets when performing a
 3. **Search Before Creating** - Check for existing tickets first
 4. **Severity-Based Processing** - Process issues one severity level at a time
 5. **Link Everything** - Connect Jira → Branch → Commits → PR
+
+## Skill Contents
+
+### Sections
+
+- [Core Principles](#core-principles) (L24-L31)
+- [Workflow Overview](#workflow-overview) (L56-L65)
+- [Quick Reference](#quick-reference) (L66-L100)
+- [References](#references) (L101-L110)
+- [Severity-Based Processing](#severity-based-processing) (L111-L127)
+- [Best Practices](#best-practices) (L128-L135)
+- [Skill Dependencies](#skill-dependencies) (L136-L141)
+- [Related](#related) (L142-L145)
+
+### Available Resources
+
+**📚 references/** - Detailed documentation
+- [branch naming](references/branch-naming.md)
+- [project discovery](references/project-discovery.md)
+- [severity processing](references/severity-processing.md)
+- [ticket creation](references/ticket-creation.md)
+- [ticket search](references/ticket-search.md)
+
+---
 
 ## Workflow Overview
 
@@ -123,3 +143,7 @@ Examples:
 
 - `.agent-skills/pr-lifecycle` - PR creation and management
 - `.agent-skills/stacked-prs` - Stacked PR workflows
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/jira-workflow/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

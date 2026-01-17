@@ -1,11 +1,17 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/mcp-configuration/references/github-mcp-setup.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # GitHub MCP Server Setup
 
 The GitHub MCP server runs via Docker and requires a GitHub Personal Access Token and Cloudflare CA certificates (for Bitso network).
 
+## Contents
+
+- [Prerequisites](#prerequisites) (L15-L20)
+- [Cloudflare Certificate Setup](#cloudflare-certificate-setup) (L21-L79)
+- [Readiness Check](#readiness-check) (L80-L87)
+- [Manual Docker Setup (if needed)](#manual-docker-setup-if-needed) (L88-L99)
+- [Server Configuration](#server-configuration) (L100-L110)
+- [How Certificate Mounting Works](#how-certificate-mounting-works) (L111-L130)
+
+---
 ## Prerequisites
 
 1. **Docker** - Must be installed and running
@@ -122,3 +128,7 @@ The MCP configuration mounts the Cloudflare certificate into the Docker containe
 
 - `-v`: Mounts the local certificate file into the container (read-only)
 - `-e SSL_CERT_FILE`: Tells the container to use this certificate for TLS verification
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/mcp-configuration/references/github-mcp-setup.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

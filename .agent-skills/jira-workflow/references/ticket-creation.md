@@ -1,11 +1,17 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/jira-workflow/references/ticket-creation.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Ticket Creation
 
 Create a Jira ticket **only if no existing ticket was found** during search.
 
+## Contents
+
+- [Create Using Atlassian MCP](#create-using-atlassian-mcp) (L15-L24)
+- [Ticket Summary Formats](#ticket-summary-formats) (L25-L33)
+- [Ticket Description Template](#ticket-description-template) (L34-L50)
+- [Example: Security Vulnerability Ticket](#example-security-vulnerability-ticket) (L51-L73)
+- [Example: SonarQube Issue Ticket](#example-sonarqube-issue-ticket) (L74-L96)
+- [After Ticket Creation](#after-ticket-creation) (L97-L101)
+
+---
 ## Create Using Atlassian MCP
 
 Use `mcp_atlassian_createJiraIssue` with:
@@ -93,3 +99,7 @@ AI Agent (Cursor)
 1. Note the ticket key (e.g., `PROJ-123`)
 2. Use this key for branch naming
 3. Reference in all commits and PR
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/jira-workflow/references/ticket-creation.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

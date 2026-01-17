@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → java/skills/sonarqube-integration/SKILL.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 ---
 name: sonarqube-integration
 description: >
@@ -31,6 +27,29 @@ SonarQube integration via MCP (Model Context Protocol) for Java code quality ana
 - Analyzing code for quality issues
 - Understanding SonarQube rules
 - Prioritizing issue remediation
+
+## Skill Contents
+
+### Sections
+
+- [When to use this skill](#when-to-use-this-skill) (L23-L30)
+- [Quick Start](#quick-start) (L54-L66)
+- [MCP Tools Available](#mcp-tools-available) (L67-L77)
+- [Common Workflows](#common-workflows) (L78-L101)
+- [Supported IDEs](#supported-ides) (L102-L115)
+- [References](#references) (L116-L122)
+- [Related Rules](#related-rules) (L123-L128)
+- [Related Skills](#related-skills) (L129-L134)
+
+### Available Resources
+
+**📚 references/** - Detailed documentation
+- [common rules](references/common-rules.md)
+- [copilot cli setup](references/copilot-cli-setup.md)
+- [intellij setup](references/intellij-setup.md)
+- [mcp tools](references/mcp-tools.md)
+
+---
 
 ## Quick Start
 
@@ -103,9 +122,9 @@ For IntelliJ and Copilot CLI, see: `java/commands/add-sonarqube-mcp-to-intellij-
 
 ## Related Rules
 
-- `java/rules/java-sonarqube-setup.md` - Setup guide
-- `java/rules/java-sonarqube-mcp.md` - MCP tool reference
-- `java/commands/fix-sonarqube-issues.md` - Fix command
+- `.cursor/rules/java-sonarqube-setup.mdc` - Setup guide
+- `.cursor/rules/java-sonarqube-mcp.mdc` - MCP tool reference
+- `.cursor/commands/fix-sonarqube-issues.md` - Fix command
 
 ## Related Skills
 
@@ -113,3 +132,7 @@ For IntelliJ and Copilot CLI, see: `java/commands/add-sonarqube-mcp-to-intellij-
 |-------|---------|
 | [java-coverage](../java-coverage/SKILL.md) | JaCoCo coverage for SonarQube |
 | [gradle-standards](../gradle-standards/SKILL.md) | SonarQube Gradle plugin |
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/skills/sonarqube-integration/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

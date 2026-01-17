@@ -1,9 +1,19 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/stacked-prs/references/automation-patterns.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Automation Patterns for Stacked PRs
 
+## Contents
+
+- [Overview](#overview) (L17-L25)
+- [Core Polling Pattern](#core-polling-pattern) (L26-L67)
+- [PR Status Checker](#pr-status-checker) (L68-L224)
+- [Wait for PR Ready](#wait-for-pr-ready) (L225-L258)
+- [Process Entire Stack](#process-entire-stack) (L259-L312)
+- [Callback Pattern for Fixes](#callback-pattern-for-fixes) (L313-L343)
+- [Timeout and Retry Strategies](#timeout-and-retry-strategies) (L344-L382)
+- [Event-Driven Alternative](#event-driven-alternative) (L383-L410)
+- [Complete Example: Autonomous Stack Manager](#complete-example-autonomous-stack-manager) (L411-L443)
+- [Best Practices](#best-practices) (L444-L452)
+
+---
 ## Overview
 
 For autonomous AI agents managing stacked PRs, use programmatic polling loops instead of manual status checks. This enables:
@@ -32,7 +42,7 @@ async function pollUntil(checkFn, options = {}) {
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     const result = await checkFn();
-    
+
     if (result.done) {
       return { success: true, result: result.data, attempts: attempt };
     }
@@ -80,11 +90,11 @@ async function checkPRStatus(prNumber, repo) {
       `gh pr checks ${prNumber} --repo ${repo}`,
       { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] }
     );
-    
+
     const lines = checks.trim().split('\n');
     const hasFailed = lines.some(l => l.includes('fail'));
     const hasPending = lines.some(l => l.includes('pending'));
-    
+
     status.ciPassed = !hasFailed && !hasPending;
     status.ciPending = hasPending;
 
@@ -93,7 +103,7 @@ async function checkPRStatus(prNumber, repo) {
       `gh pr view ${prNumber} --repo ${repo} --json state,isDraft,reviews`,
       { encoding: 'utf-8' }
     ));
-    
+
     status.state = prInfo.state;
     status.isDraft = prInfo.isDraft;
 
@@ -120,7 +130,7 @@ async function checkPRStatus(prNumber, repo) {
  */
 async function countOpenCodeRabbitComments(prNumber, repo) {
   const [owner, repoName] = repo.split('/');
-  
+
   const query = `
     query($owner: String!, $repo: String!, $pr: Int!) {
       repository(owner: $owner, name: $repo) {
@@ -150,9 +160,9 @@ async function countOpenCodeRabbitComments(prNumber, repo) {
 
   const data = JSON.parse(result.stdout);
   const threads = data.data.repository.pullRequest.reviewThreads.nodes;
-  
-  return threads.filter(t => 
-    !t.isResolved && 
+
+  return threads.filter(t =>
+    !t.isResolved &&
     t.comments.nodes[0]?.author?.login === 'coderabbitai'
   ).length;
 }
@@ -162,7 +172,7 @@ async function countOpenCodeRabbitComments(prNumber, repo) {
  */
 async function getOpenComments(prNumber, repo) {
   const [owner, repoName] = repo.split('/');
-  
+
   const query = `
     query($owner: String!, $repo: String!, $pr: Int!) {
       repository(owner: $owner, name: $repo) {
@@ -173,8 +183,8 @@ async function getOpenComments(prNumber, repo) {
               isResolved
               path
               line
-              comments(first: 1) { 
-                nodes { 
+              comments(first: 1) {
+                nodes {
                   author { login }
                   body
                 }
@@ -200,7 +210,7 @@ async function getOpenComments(prNumber, repo) {
 
   const data = JSON.parse(result.stdout);
   const threads = data.data.repository.pullRequest.reviewThreads.nodes;
-  
+
   return threads
     .filter(t => !t.isResolved && t.comments.nodes[0]?.author?.login === 'coderabbitai')
     .map(t => ({
@@ -228,9 +238,9 @@ async function waitForPRReady(prNumber, repo, options = {}) {
   return pollUntil(
     async () => {
       const status = await checkPRStatus(prNumber, repo);
-      
-      const ready = status.ciPassed && 
-                    status.coderabbitApproved && 
+
+      const ready = status.ciPassed &&
+                    status.coderabbitApproved &&
                     status.openComments === 0;
 
       return {
@@ -274,7 +284,7 @@ async function processStack(prNumbers, repo, options = {}) {
     if (status.openComments > 0 && fixCallback) {
       const comments = await getOpenComments(prNumber, repo);
       await fixCallback(prNumber, comments);
-      
+
       // Re-check after fixes
       status = await checkPRStatus(prNumber, repo);
     }
@@ -312,15 +322,15 @@ async function autoFixCallback(prNumber, comments) {
   for (const comment of comments) {
     // Analyze comment and determine fix
     const fix = analyzeAndFix(comment);
-    
+
     if (fix.applied) {
       // Reply to thread
-      await replyToThread(comment.threadId, 
+      await replyToThread(comment.threadId,
         `🤖 Fixed in commit ${fix.commitSha}. ${fix.description}. Thanks!`
       );
     } else {
       // Reply explaining why not fixed
-      await replyToThread(comment.threadId, 
+      await replyToThread(comment.threadId,
         `🤖 ${fix.reason}`
       );
     }
@@ -359,7 +369,7 @@ function intervalWithJitter(baseMs, jitterPercent = 0.1) {
 // Poll more frequently when CI is close to completing
 async function adaptivePolling(prNumber, repo) {
   const status = await checkPRStatus(prNumber, repo);
-  
+
   if (status.ciPending) {
     return 30000;  // 30s while CI running
   } else if (status.coderabbitPending) {
@@ -391,7 +401,7 @@ onPREvent('check_run.completed', async (event) => {
 });
 
 onPREvent('pull_request_review.submitted', async (event) => {
-  if (event.review.user.login === 'coderabbitai' && 
+  if (event.review.user.login === 'coderabbitai' &&
       event.review.state === 'approved') {
     await markPRReady(event.pull_request.number);
   }
@@ -440,3 +450,7 @@ main().catch(console.error);
 5. **Respect rate limits** - GitHub API has limits
 6. **Parallelize when possible** - Check multiple PRs simultaneously
 7. **Use callbacks for fixes** - Separate checking from fixing logic
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/stacked-prs/references/automation-patterns.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

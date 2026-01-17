@@ -1,8 +1,4 @@
 #!/bin/bash
-# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
-# Source: bitsoex/ai-code-instructions → global/scripts/check-github-mcp-readiness.sh
-# To modify, edit the source file and run the distribution workflow
-
 # Check GitHub MCP server readiness
 # Verifies Docker, image availability, authentication, and Cloudflare certificates
 
@@ -219,4 +215,8 @@ echo "   Toolsets: dependabot, code_security, secret_protection, security_adviso
 echo ""
 echo "The MCP server will be available in your IDE after configuration is applied."
 echo ""
+
+# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+# Source: bitsoex/ai-code-instructions → global/scripts/check-github-mcp-readiness.sh
+# To modify, edit the source file and run the distribution workflow
 

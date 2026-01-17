@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → java/skills/java-testing/SKILL.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 ---
 name: java-testing
 description: >
@@ -32,6 +28,31 @@ Guidelines for writing tests in Java projects using the Spock Framework and Groo
 - Setting up test infrastructure
 - Configuring Testcontainers
 - Mocking dependencies in Spring Boot tests
+
+## Skill Contents
+
+### Sections
+
+- [When to use this skill](#when-to-use-this-skill) (L24-L31)
+- [Quick Start](#quick-start) (L57-L77)
+- [Key Patterns](#key-patterns) (L78-L87)
+- [Mocking Patterns](#mocking-patterns) (L88-L123)
+- [Persistence Testing](#persistence-testing) (L124-L139)
+- [References](#references) (L140-L147)
+- [Related Rules](#related-rules) (L148-L152)
+- [Related Skills](#related-skills) (L153-L158)
+
+### Available Resources
+
+**📚 references/** - Detailed documentation
+- [grpc testing](references/grpc-testing.md)
+- [junit5 migration](references/junit5-migration.md)
+- [spock patterns](references/spock-patterns.md)
+- [test setup workflow](references/test-setup-workflow.md)
+- [test utilities](references/test-utilities.md)
+- [testcontainers setup](references/testcontainers-setup.md)
+
+---
 
 ## Quick Start
 
@@ -126,8 +147,8 @@ class IntegrationTestConfiguration {
 
 ## Related Rules
 
-- `java/rules/java-testing-guidelines.md` - Full testing reference
-- `java/rules/java-flyway-migrations.md` - Flyway for test schema
+- `.cursor/rules/java-testing-guidelines.mdc` - Full testing reference
+- `.cursor/rules/java-flyway-migrations.mdc` - Flyway for test schema
 
 ## Related Skills
 
@@ -135,3 +156,7 @@ class IntegrationTestConfiguration {
 |-------|---------|
 | [java-coverage](../java-coverage/SKILL.md) | JaCoCo test coverage |
 | [gradle-standards](../gradle-standards/SKILL.md) | Test dependency bundles |
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/skills/java-testing/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

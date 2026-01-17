@@ -1,11 +1,19 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → java/skills/aws-v2/references/migration-patterns.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # AWS SDK v2 Migration Patterns
 
 Detailed code migration patterns for common AWS services.
 
+## Contents
+
+- [S3 Client Migration](#s3-client-migration) (L17-L51)
+- [SQS Client Migration](#sqs-client-migration) (L52-L77)
+- [SNS Client Migration](#sns-client-migration) (L78-L103)
+- [Lambda Client Migration](#lambda-client-migration) (L104-L132)
+- [Credential Provider Migration](#credential-provider-migration) (L133-L148)
+- [Dependency Substitution Examples](#dependency-substitution-examples) (L149-L189)
+- [Version Catalog Setup](#version-catalog-setup) (L190-L208)
+- [Troubleshooting](#troubleshooting) (L209-L246)
+
+---
 ## S3 Client Migration
 
 ### v1 (OLD)
@@ -37,7 +45,7 @@ S3Client s3Client = S3Client.builder()
 s3Client.putObject(PutObjectRequest.builder()
     .bucket(bucket)
     .key(key)
-    .build(), 
+    .build(),
     RequestBody.fromFile(file));
 ```
 
@@ -154,22 +162,22 @@ allprojects {
             substitute module("com.amazonaws:aws-java-sdk-s3")
                 using module("software.amazon.awssdk:s3:${libs.versions.aws.sdk.v2.get()}")
                 because "Migrate to AWS SDK v2"
-            
+
             // SQS
             substitute module("com.amazonaws:aws-java-sdk-sqs")
                 using module("software.amazon.awssdk:sqs:${libs.versions.aws.sdk.v2.get()}")
                 because "Migrate to AWS SDK v2"
-            
+
             // SNS
             substitute module("com.amazonaws:aws-java-sdk-sns")
                 using module("software.amazon.awssdk:sns:${libs.versions.aws.sdk.v2.get()}")
                 because "Migrate to AWS SDK v2"
-            
+
             // Lambda
             substitute module("com.amazonaws:aws-java-sdk-lambda")
                 using module("software.amazon.awssdk:lambda:${libs.versions.aws.sdk.v2.get()}")
                 because "Migrate to AWS SDK v2"
-            
+
             // Core
             substitute module("com.amazonaws:aws-java-sdk-core")
                 using module("software.amazon.awssdk:aws-core:${libs.versions.aws.sdk.v2.get()}")
@@ -236,3 +244,7 @@ StaticCredentialsProvider.create(
     AwsBasicCredentials.create(accessKey, secretKey)
 )
 ```
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/skills/aws-v2/references/migration-patterns.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

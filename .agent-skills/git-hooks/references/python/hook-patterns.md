@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/git-hooks/references/python/hook-patterns.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Python Hook Patterns
 
 Pre-commit and pre-push hook patterns for Python projects.
@@ -126,3 +122,7 @@ fail_under = 80
 | `mypy` | Type checker |
 | `pytest` | Test runner |
 | `bandit` | Security scanner |
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/git-hooks/references/python/hook-patterns.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

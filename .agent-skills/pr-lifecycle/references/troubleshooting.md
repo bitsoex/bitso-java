@@ -1,11 +1,17 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/pr-lifecycle/references/troubleshooting.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Troubleshooting
 
 Common issues and solutions when working with GitHub CLI and PRs.
 
+## Contents
+
+- [Common Problems](#common-problems) (L15-L24)
+- [Terminal Buffering Issues](#terminal-buffering-issues) (L25-L44)
+- [Authentication Issues](#authentication-issues) (L45-L65)
+- [PR Creation Failures](#pr-creation-failures) (L66-L92)
+- [CodeRabbit Issues](#coderabbit-issues) (L93-L109)
+- [Parallel Work During CI/Review](#parallel-work-during-cireview) (L110-L129)
+
+---
 ## Common Problems
 
 | Problem | Solution |
@@ -121,3 +127,7 @@ When working on multiple PRs or orchestrating work across repositories:
 ```
 
 This maximizes productivity and reduces total time to complete multiple tasks.
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/pr-lifecycle/references/troubleshooting.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

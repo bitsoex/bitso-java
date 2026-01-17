@@ -1,11 +1,17 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/pr-lifecycle/references/coderabbit-integration.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # CodeRabbit Integration
 
 Monitor CodeRabbit reviews and respond to comments in PRs.
 
+## Contents
+
+- [Check CodeRabbit Status](#check-coderabbit-status) (L15-L22)
+- [Get All Unresolved CodeRabbit Comments](#get-all-unresolved-coderabbit-comments) (L23-L64)
+- [Responding to CodeRabbit Comments](#responding-to-coderabbit-comments) (L65-L129)
+- [Reply Format Best Practices](#reply-format-best-practices) (L130-L154)
+- [Resolve Threads After Addressing](#resolve-threads-after-addressing) (L155-L173)
+- [Complete CodeRabbit Workflow](#complete-coderabbit-workflow) (L174-L205)
+
+---
 ## Check CodeRabbit Status
 
 ```bash
@@ -197,3 +203,7 @@ git push
 echo "Waiting for CodeRabbit..." ; sleep 60
 gh pr checks $PR_NUMBER --repo $OWNER/$REPO 2>&1 | grep -i "coderabbit"
 ```
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/pr-lifecycle/references/coderabbit-integration.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/mcp-configuration/references/ide-configurations.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # IDE Configurations
 
 MCP server configurations for each IDE and tool.
@@ -71,3 +67,7 @@ All MCP configurations use the same JSON format:
 | `github` | GitHub API access for PRs, security, etc. |
 | `sonarqube` | SonarQube code quality analysis |
 | `atlassian` | Jira and Confluence integration |
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/mcp-configuration/references/ide-configurations.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

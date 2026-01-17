@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/git-hooks/references/java/hook-patterns.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Java Hook Patterns
 
 Pre-commit and pre-push hook patterns for Java projects using Gradle or Maven.
@@ -32,7 +28,7 @@ echo -e "${YELLOW}   • Checking code style...${NC}"
 if ! ./gradlew spotlessCheck --quiet 2>/dev/null; then
   echo -e "${YELLOW}   ⚠ Running spotlessApply...${NC}"
   ./gradlew spotlessApply --quiet
-  
+
   # Stage only formatted Java files that were already staged
   git diff --name-only --cached --diff-filter=M | grep '\.java$' | xargs -r git add
   echo -e "${GREEN}   ✓ Code formatted and staged${NC}"
@@ -126,3 +122,7 @@ spotless {
     }
 }
 ```
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/git-hooks/references/java/hook-patterns.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

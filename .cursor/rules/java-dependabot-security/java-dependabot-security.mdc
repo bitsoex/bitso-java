@@ -1,219 +1,41 @@
 ---
-description: Java Dependabot Security Vulnerability Management
+description: Fix strategy hierarchy for Dependabot vulnerabilities in Java projects
 alwaysApply: false
-globs: gradle/libs.versions.toml,build.gradle,gradle/dependency-graph-init.gradle
+globs:
+  - "gradle/libs.versions.toml"
+  - "build.gradle"
 tags:
   - java
   - security
   - auth
 ---
 
-# Java Dependabot Security
+# Fix strategy hierarchy for Dependabot vulnerabilities in Java projects
 
-Standards for managing security vulnerabilities detected by Dependabot in Java/Gradle projects.
+Fix strategies for Dependabot vulnerabilities in Java/Gradle projects.
 
-## Related Rules
+## Skill Location
 
-This rule works with:
+| Skill | Coverage |
+|-------|----------|
+| `.claude/skills/dependabot-security/` | Fix strategies, severity processing, verification |
 
-- **Vulnerability Golden Paths**: `java/rules/java-vulnerability-golden-paths.md` - **Check first** - Proven fix patterns for common vulnerabilities
-- **Version Management**: `java/rules/java-versions-and-dependencies.md` - BOMs, version catalog, constraints
-- **Gradle Best Practices**: `java/rules/java-gradle-best-practices.md` - Build configuration standards
-- **Gradle Commands**: `java/rules/java-gradle-commands.md` - Debugging and verification
+## 📚 Full Documentation
 
-## Dependency Graph Plugin
+For complete guidelines, scripts, and references, see the skill:
 
-The [GitHub Dependency Graph Gradle Plugin](https://github.com/gradle/github-dependency-graph-gradle-plugin) enables local vulnerability analysis matching GitHub's dependency-review action.
-
-### Setup
-
-Create `gradle/dependency-graph-init.gradle`:
-
-```groovy
-/**
- * Init script for GitHub Dependency Graph Gradle Plugin
- * @see https://github.com/gradle/github-dependency-graph-gradle-plugin
- */
-initscript {
-    repositories {
-        gradlePluginPortal()
-    }
-    dependencies {
-        classpath "org.gradle:github-dependency-graph-gradle-plugin:1.4.0"
-    }
-}
-
-apply plugin: org.gradle.dependencygraph.simple.SimpleDependencyGraphPlugin
+```
+.agent-skills/dependabot-security/SKILL.md
 ```
 
-### Generate Reports
+The skill includes:
+- **SKILL.md** - Complete instructions and quick start
+- **scripts/** - Executable automation scripts
+- **references/** - Detailed documentation
+- **assets/** - Templates and resources
 
-```bash
-./gradlew -I gradle/dependency-graph-init.gradle \
-    --dependency-verification=off \
-    --no-configuration-cache \
-    --no-configure-on-demand \
-    :ForceDependencyResolutionPlugin_resolveAllDependencies
-```
+> **Note**: This is a shallow reference. The full content is maintained in the skill to avoid duplication.
 
-**Output** (`build/reports/dependency-graph-snapshots/`):
-
-| File | Purpose |
-|------|---------|
-| `dependency-list.txt` | All resolved dependencies |
-| `dependency-resolution.json` | Where each dependency is used |
-| `dependency-graph.json` | Full graph in GitHub format |
-
-## Vulnerability Priority
-
-Fix vulnerabilities in this order: **CRITICAL → HIGH → MODERATE → LOW**
-
-## Fix Strategy Hierarchy
-
-**Always prefer higher-level solutions.** Use this order:
-
-### 1. Update BOM/Platform Version (PREFERRED)
-
-If the vulnerable dependency is managed by a BOM (Spring Boot, gRPC, Protobuf), update the BOM:
-
-```toml
-[versions]
-spring-boot = "3.5.8"  # Includes patched tomcat, jackson, logback
-grpc = "1.77.0"        # Includes patched netty, protobuf
-```
-
-See `java/rules/java-versions-and-dependencies.md` for BOM management details.
-
-### 2. Update Direct Dependency in Version Catalog
-
-For direct dependencies not managed by a BOM:
-
-```toml
-[versions]
-# Security fix for CVE-XXXX-XXXXX
-commons-lang3 = "3.18.0"    # Updated from 3.14.0
-commons-compress = "1.27.1" # Updated from 1.26.0
-```
-
-### 3. Dependency Substitution
-
-For transitive dependencies not covered by any BOM:
-
-```groovy
-// Version should be in gradle/libs.versions.toml:
-// [versions]
-// commons-compress = "1.27.1"
-
-allprojects {
-    configurations.configureEach {
-        resolutionStrategy.dependencySubstitution {
-            substitute module("org.apache.commons:commons-compress")
-                using module("org.apache.commons:commons-compress:${libs.versions.commons.compress.get()}")
-                because "Security fix for CVE-2024-25710"
-        }
-    }
-}
-```
-
-### 4. Dependency Constraints
-
-For enforcing minimum versions:
-
-```groovy
-// Version should be in gradle/libs.versions.toml
-allprojects {
-    dependencies {
-        constraints {
-            implementation(libs.commons.compress) {
-                because "Security fix for CVE-2024-25710"
-            }
-        }
-    }
-}
-```
-
-### 5. Force Rules (Use With Caution)
-
-Force rules affect runtime but may not remove old versions from dependency graph:
-
-```groovy
-configurations.configureEach {
-    resolutionStrategy {
-        force libs.commons.lang3
-    }
-}
-```
-
-**⚠️ Warning**: Force alone may not fix dependency-review failures. Combine with substitution if needed.
-
-### 6. Exclude + Add (Last Resort)
-
-```groovy
-configurations.configureEach {
-    exclude group: "org.apache.commons", module: "commons-compress"
-}
-dependencies {
-    implementation "org.apache.commons:commons-compress:1.27.1"
-}
-```
-
-## Verification Commands
-
-```bash
-# Generate dependency graph (what GitHub will see)
-./gradlew -I gradle/dependency-graph-init.gradle \
-    --dependency-verification=off \
-    --no-configuration-cache \
-    --no-configure-on-demand \
-    :ForceDependencyResolutionPlugin_resolveAllDependencies
-
-# Verify only patched version appears
-grep -i "package-name" build/reports/dependency-graph-snapshots/dependency-list.txt | sort -u
-
-# Check dependency resolution path
-./gradlew :module:dependencies 2>&1 | grep -A 5 "package-name"
-```
-
-**Critical**: If multiple versions appear in `dependency-list.txt`, ALL will be reported to GitHub and may fail dependency-review.
-
-## CI Integration
-
-### Dependency Review Check
-
-The `dependency-review` GitHub Action validates PRs:
-
-- ✅ **Pass** - No new vulnerabilities introduced
-- ❌ **Fail** - New or unresolved vulnerabilities
-
-### Signadot Preview
-
-Validates the fix deploys successfully in sandboxed environment.
-
-## Common Vulnerable Packages
-
-| Package | Common CVEs | Fix Strategy |
-|---------|-------------|--------------|
-| `org.lz4:lz4-java` | CVE-2025-66566, CVE-2025-12183 | **GAV substitution** to `at.yawk.lz4:lz4-java:1.10.1` |
-| `commons-lang3` | CVE-2025-48924 | Update version catalog + substitution |
-| `logback-core` | Arbitrary code execution | Update Spring Boot BOM |
-| `tomcat-embed-core` | Resource leak | Update Spring Boot BOM |
-| `jackson-databind` | Deserialization | Update Spring Boot BOM |
-| `protobuf-java` | DoS attacks | Update Protobuf BOM |
-| `netty-*` | Various | Update gRPC BOM |
-| `commons-compress` | DoS, path traversal | Version catalog or substitution |
-| `okhttp3` | CVE-2023-0833 | Version catalog + substitution |
-| `ion-java` | CVE-2024-21634 | Version catalog + force |
-| `spring-core` | CVE-2025-41249 | Update Spring Boot BOM |
-
-**Note**: For discontinued packages like `org.lz4:lz4-java`, see `java/rules/java-vulnerability-golden-paths.md` for GAV substitution patterns.
-
-## Related
-
-- **Vulnerability Golden Paths**: `java/rules/java-vulnerability-golden-paths.md` - Proven fix patterns
-- **Command**: `java/commands/fix-dependabot-vulnerabilities.md`
-- **Version Management**: `java/rules/java-versions-and-dependencies.md`
-- **Gradle Best Practices**: `java/rules/java-gradle-best-practices.md`
-- **Gradle Commands**: `java/rules/java-gradle-commands.md`
 
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/rules/java-dependabot-security.md -->

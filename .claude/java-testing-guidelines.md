@@ -1,22 +1,16 @@
-# Java Testing Guidelines
+# Testing patterns with JUnit, Spock, and Testcontainers
 
-**Applies to:** All files
+**Applies to:** **/*Test.java, **/*Spec.groovy, **/test/**
 
-# Java Testing Guidelines
+# Testing patterns with JUnit, Spock, and Testcontainers
 
-This document outlines the guidelines for writing tests in this project.
+Testing patterns for Java projects using JUnit, Spock, and Testcontainers.
 
-## Framework and Naming
+## Skill Location
 
-- Tests are written using the **Spock Framework** and **Groovy**.
-- Test files must follow the naming pattern: `<ClassName>Spec.groovy`.
-- Tests should follow this structure:
-
-```groovy
-   def "should do Y when X"() {
-        given:
-          // create test data
-        when:
+| Skill | Coverage |
+|-------|----------|
+| `.claude/skills/java-testing/` | Spock patterns, Testcontainers, gRPC testing |
 
 ## 📚 Full Documentation
 

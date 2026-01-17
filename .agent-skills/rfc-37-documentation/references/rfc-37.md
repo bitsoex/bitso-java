@@ -1,11 +1,20 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/rfc-37-documentation/references/rfc-37.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # RFC-37: Service Documentation Standardization
 
 Summary of [RFC-37](https://bitsomx.atlassian.net/wiki/spaces/BAB/pages/4485840987/RFC-37+Service+documentation+standardization) - Bitso's service documentation standardization.
 
+## Contents
+
+- [Problem Statement](#problem-statement) (L18-L28)
+- [Solution](#solution) (L29-L39)
+- [Standard Directory Structure](#standard-directory-structure) (L40-L57)
+- [Required Documentation](#required-documentation) (L58-L84)
+- [Confluence Configuration](#confluence-configuration) (L85-L130)
+- [Validation with bitso-documentation-linter](#validation-with-bitso-documentation-linter) (L131-L157)
+- [Writing Guidelines](#writing-guidelines) (L158-L178)
+- [CI/CD Integration](#cicd-integration) (L179-L202)
+- [References](#references) (L203-L208)
+
+---
 ## Problem Statement
 
 Common documentation problems at Bitso:
@@ -197,3 +206,7 @@ For Confluence API validation:
 - [Software Application Documentation At Bitso](https://bitsomx.atlassian.net/wiki/spaces/BAB/pages/4938596720/Software+Application+Documentation+At+Bitso)
 - [bitso-documentation-linter GitHub](https://github.com/bitsoex/bitso-documentation-linter)
 - [Linter Local Execution Guide](https://github.com/bitsoex/bitso-documentation-linter/blob/main/docs/how-tos/local-execution.md)
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/rfc-37-documentation/references/rfc-37.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

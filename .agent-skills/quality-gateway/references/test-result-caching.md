@@ -1,11 +1,22 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/quality-gateway/references/test-result-caching.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Test Result Caching
 
 This reference explains how to save and reuse test results to avoid running tests multiple times.
 
+## Contents
+
+- [Overview](#overview) (L20-L23)
+- [Naming Convention](#naming-convention) (L24-L42)
+- [Helper Functions](#helper-functions) (L43-L75)
+- [Usage by Tool](#usage-by-tool) (L76-L141)
+- [In CI (GitHub Actions)](#in-ci-github-actions) (L142-L164)
+- [Environment Variable](#environment-variable) (L165-L172)
+- [In JavaScript Scripts](#in-javascript-scripts) (L173-L217)
+- [Directory Structure Example](#directory-structure-example) (L218-L241)
+- [Best Practices](#best-practices) (L242-L250)
+- [Cleaning Up Old Files](#cleaning-up-old-files) (L251-L260)
+- [Related](#related) (L261-L264)
+
+---
 ## Overview
 
 Running tests can be expensive (time, resources). Instead of running tests multiple times just to grep different parts of the output, save results to `.tmp/` and grep from the file.
@@ -138,9 +149,9 @@ grep "FAIL" "$OUTPUT"
     CONTEXT="pr${PR_NUMBER:-main}"
     TIMESTAMP=$(date +%Y%m%d-%H%M%S)
     OUTPUT=".tmp/pnpm-test-${CONTEXT}-${TIMESTAMP}.txt"
-    
+
     pnpm test 2>&1 | tee "$OUTPUT"
-    
+
     # Upload as artifact for later analysis
     echo "TEST_OUTPUT=$OUTPUT" >> $GITHUB_OUTPUT
 
@@ -187,7 +198,7 @@ function runTests(tool = 'pnpm', testCmd = 'pnpm test') {
   const timestamp = `${yyyymmdd}-${hhmmss}`;
   const outputPath = `.tmp/${tool}-test-${context}-${timestamp}.txt`;
   const latestPath = `.tmp/${tool}-test-latest.txt`;
-  
+
   try {
     const output = execSync(testCmd, { encoding: 'utf-8' });
     fs.writeFileSync(outputPath, output);
@@ -251,3 +262,7 @@ ls -t .tmp/pnpm-test-*.txt | tail -n +11 | xargs rm -f
 
 - [Quality Gateway SKILL.md](../SKILL.md)
 - [Test Augmentation](../../test-augmentation/SKILL.md)
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/quality-gateway/references/test-result-caching.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

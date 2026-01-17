@@ -1,11 +1,16 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/jira-workflow/references/branch-naming.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Branch Naming
 
 Create branches with Jira key after ticket creation or discovery.
 
+## Contents
+
+- [Branch Format](#branch-format) (L14-L25)
+- [Branch Types](#branch-types) (L26-L36)
+- [Examples by Work Type](#examples-by-work-type) (L37-L66)
+- [Multiple Iterations](#multiple-iterations) (L67-L75)
+- [Before Creating Branch](#before-creating-branch) (L76-L89)
+
+---
 ## Branch Format
 
 ```text
@@ -82,3 +87,7 @@ git checkout main
 git pull origin main
 git checkout -b fix/${JIRA_KEY}-description
 ```
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/jira-workflow/references/branch-naming.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

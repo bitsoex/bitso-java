@@ -1,7 +1,8 @@
 ---
 description: Markdown Documentation Review Guidelines
 alwaysApply: false
-globs: **/*.md
+globs:
+  - "**/*.md"
 tags:
   - java
 ---

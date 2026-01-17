@@ -1,7 +1,14 @@
 ---
 description: Quality checks for code changes
 alwaysApply: false
-globs: **/*.ts,**/*.tsx,**/*.js,**/*.jsx,**/*.java,**/*.py,**/*.go
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
+  - "**/*.java"
+  - "**/*.py"
+  - "**/*.go"
 tags:
   - java
 ---

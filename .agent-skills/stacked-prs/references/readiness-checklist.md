@@ -1,9 +1,18 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/stacked-prs/references/readiness-checklist.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Readiness Checklist for Stacked PRs
 
+## Contents
+
+- [The Golden Rule](#the-golden-rule) (L16-L26)
+- [Readiness Checklist](#readiness-checklist) (L27-L52)
+- [Checking Readiness](#checking-readiness) (L53-L94)
+- [Marking Ready for Review](#marking-ready-for-review) (L95-L102)
+- [DO NOT Request CodeRabbit Approval](#do-not-request-coderabbit-approval) (L103-L116)
+- [Stack Readiness Order](#stack-readiness-order) (L117-L130)
+- [Common Mistakes](#common-mistakes) (L131-L159)
+- [Verification Script](#verification-script) (L160-L188)
+- [After Marking Ready](#after-marking-ready) (L189-L196)
+
+---
 ## The Golden Rule
 
 > **A PR should only be marked "Ready for Review" when ALL conditions are met.**
@@ -76,8 +85,8 @@ query($owner: String!, $repo: String!, $pr: Int!) {
     }
   }
 }' -f owner="owner" -f repo="repo" -F pr=<PR-NUMBER> | \
-jq '[.data.repository.pullRequest.reviewThreads.nodes[] | 
-    select(.isResolved == false) | 
+jq '[.data.repository.pullRequest.reviewThreads.nodes[] |
+    select(.isResolved == false) |
     select(.comments.nodes[0].author.login == "coderabbitai")] | length'
 ```
 
@@ -185,3 +194,7 @@ Once marked ready:
 2. **Monitor for feedback** from human reviewers
 3. **Respond promptly** to any questions
 4. **Merge when approved** by required reviewers
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/stacked-prs/references/readiness-checklist.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

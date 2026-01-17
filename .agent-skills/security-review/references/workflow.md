@@ -1,11 +1,15 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/security-review/references/workflow.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Security Review Workflow
 
 Step-by-step security review process for any codebase.
 
+## Contents
+
+- [Review Steps](#review-steps) (L13-L79)
+- [Output Format](#output-format) (L80-L88)
+- [Example Finding](#example-finding) (L89-L100)
+- [Severity Levels](#severity-levels) (L101-L108)
+
+---
 ## Review Steps
 
 ### 1. Credential Scanning
@@ -102,3 +106,7 @@ Provide findings in this format:
 | High | Significant security risk | Fix in same sprint |
 | Medium | Moderate security concern | Fix soon |
 | Low | Minor security improvement | Fix when convenient |
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/security-review/references/workflow.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

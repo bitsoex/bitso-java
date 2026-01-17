@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/quality-gateway/SKILL.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 ---
 name: quality-gateway
 description: >
@@ -23,6 +19,32 @@ Orchestrates quality checks at key lifecycle points in the development workflow.
 - After completing code changes (post-edit validation)
 - Before marking a task as complete (final quality gate)
 - When running the `/quality-check` command
+
+## Skill Contents
+
+### Sections
+
+- [When to Use This Skill](#when-to-use-this-skill) (L16-L22)
+- [Sub-Skills](#sub-skills) (L49-L59)
+- [Lifecycle Hooks](#lifecycle-hooks) (L60-L67)
+- [IDE Integration](#ide-integration) (L68-L78)
+- [Quality Checks](#quality-checks) (L79-L101)
+- [Commands](#commands) (L102-L109)
+- [Assets](#assets) (L110-L116)
+- [References](#references) (L117-L122)
+- [Test Result Caching](#test-result-caching) (L123-L137)
+- [Related Skills](#related-skills) (L138-L144)
+
+### Available Resources
+
+**📚 references/** - Detailed documentation
+- [test result caching](references/test-result-caching.md)
+
+**📦 assets/** - Templates and resources
+- [claude quality hooks](assets/claude-quality-hooks.md)
+- [cursor quality integration](assets/cursor-quality-integration.md)
+
+---
 
 ## Sub-Skills
 
@@ -120,3 +142,7 @@ See [references/test-result-caching.md](references/test-result-caching.md) for a
 - `doc-sync` - Documentation synchronization
 - `coding-standards` - Code style enforcement
 - `security-review` - Security vulnerability checks
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/quality-gateway/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

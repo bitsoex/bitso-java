@@ -1,11 +1,26 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/rfc-37-documentation/references/validation-rules.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Validation Rules Reference
 
 Complete reference for all rules implemented by the bitso-documentation-linter. For the most current documentation, see the [official validation rules](https://github.com/bitsoex/bitso-documentation-linter/blob/main/docs/bitso-documentation-linter/concepts/validation-rules.md).
 
+## Contents
+
+- [Rule Summary](#rule-summary) (L24-L38)
+- [Severity Levels](#severity-levels) (L39-L48)
+- [FORMAT_CODE_LANG_MISSING](#format_code_lang_missing) (L49-L102)
+- [META_PAGE_TITLE_MISSING](#meta_page_title_missing) (L103-L161)
+- [DIR_STRUCTURE_MISMATCH](#dir_structure_mismatch) (L162-L194)
+- [API_DOC_NAMING_MULTI_SERVICE_INVALID](#api_doc_naming_multi_service_invalid) (L195-L221)
+- [DIR_API_SUBDIR_MISSING](#dir_api_subdir_missing) (L222-L241)
+- [DIR_SERVICE_SETUP_INCOMPLETE](#dir_service_setup_incomplete) (L242-L264)
+- [MIN_DOC_LOCAL_EXEC_MISSING](#min_doc_local_exec_missing) (L265-L293)
+- [META_CONFLUENCE_CONFIG_INCOMPLETE](#meta_confluence_config_incomplete) (L294-L343)
+- [PAGE_NAME_DUPLICATE](#page_name_duplicate) (L344-L378)
+- [PAGE_ALREADY_EXISTS_IN_CONFLUENCE](#page_already_exists_in_confluence) (L379-L437)
+- [Configuration](#configuration) (L438-L472)
+- [Architecture: One Checker Per Rule](#architecture-one-checker-per-rule) (L473-L490)
+- [See Also](#see-also) (L491-L495)
+
+---
 ## Rule Summary
 
 | Rule ID | Default | Category | Description |
@@ -33,7 +48,7 @@ All severities can be customized per project through configuration.
 
 ## FORMAT_CODE_LANG_MISSING
 
-**Severity**: WARNING  
+**Severity**: WARNING
 **Category**: Format Validation
 
 Code blocks must specify a programming language for syntax highlighting.
@@ -87,7 +102,7 @@ rules:
 
 ## META_PAGE_TITLE_MISSING
 
-**Severity**: ERROR  
+**Severity**: ERROR
 **Category**: Metadata Validation
 
 Every document must have a title from an H1 heading or metadata comment.
@@ -146,7 +161,7 @@ This document describes the authentication endpoints.
 
 ## DIR_STRUCTURE_MISMATCH
 
-**Severity**: ERROR  
+**Severity**: ERROR
 **Category**: Structure Validation
 
 Repository must follow RFC-37 directory structure.
@@ -179,7 +194,7 @@ docs/
 
 ## API_DOC_NAMING_MULTI_SERVICE_INVALID
 
-**Severity**: ERROR  
+**Severity**: ERROR
 **Category**: Structure Validation
 
 In multi-service repositories, API documentation files must be named after the service.
@@ -206,7 +221,7 @@ docs/api/rest/
 
 ## DIR_API_SUBDIR_MISSING
 
-**Severity**: WARNING  
+**Severity**: WARNING
 **Category**: Structure Validation
 
 If `docs/api/` exists, it should have subdirectories for API types.
@@ -226,7 +241,7 @@ docs/api/
 
 ## DIR_SERVICE_SETUP_INCOMPLETE
 
-**Severity**: ERROR  
+**Severity**: ERROR
 **Category**: Structure Validation
 
 Each service directory must have required subdirectories.
@@ -249,7 +264,7 @@ docs/<service-name>/
 
 ## MIN_DOC_LOCAL_EXEC_MISSING
 
-**Severity**: ERROR  
+**Severity**: ERROR
 **Category**: Content Validation
 
 Repository must have local execution documentation.
@@ -278,7 +293,7 @@ Repository must have local execution documentation.
 
 ## META_CONFLUENCE_CONFIG_INCOMPLETE
 
-**Severity**: ERROR  
+**Severity**: ERROR
 **Category**: Metadata Validation
 
 Repository must have Confluence configuration for documentation mirroring.
@@ -328,7 +343,7 @@ A `mark.toml` with only `parents` (no `space`) is **architecturally invalid** be
 
 ## PAGE_NAME_DUPLICATE
 
-**Severity**: ERROR  
+**Severity**: ERROR
 **Category**: Metadata Validation
 
 Page names must be unique within each Confluence Space.
@@ -363,7 +378,7 @@ docs/
 
 ## PAGE_ALREADY_EXISTS_IN_CONFLUENCE
 
-**Severity**: ERROR  
+**Severity**: ERROR
 **Category**: Confluence Integration
 
 Page names must not conflict with existing Confluence pages in the same Space at a different location.
@@ -478,3 +493,7 @@ The linter follows a **one-to-one relationship** between checkers and rules:
 - [Official Validation Rules Documentation](https://github.com/bitsoex/bitso-documentation-linter/blob/main/docs/bitso-documentation-linter/concepts/validation-rules.md)
 - [Configuration Guide](https://github.com/bitsoex/bitso-documentation-linter/blob/main/docs/bitso-documentation-linter/concepts/configuration.md)
 - [CLI Options](https://github.com/bitsoex/bitso-documentation-linter/blob/main/docs/bitso-documentation-linter/concepts/cli-options.md)
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/rfc-37-documentation/references/validation-rules.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

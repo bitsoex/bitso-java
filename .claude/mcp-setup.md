@@ -1,6 +1,5 @@
 # MCP Setup
 
-**Applies to:** All files
 
 # MCP Setup
 

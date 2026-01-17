@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → java/skills/java-testing/references/spock-patterns.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Spock Framework Patterns
 
 ## Data-Driven Tests
@@ -69,3 +65,7 @@ def cleanupSpec() {
     db.cleanup()
 }
 ```
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/skills/java-testing/references/spock-patterns.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

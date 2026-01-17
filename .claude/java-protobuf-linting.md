@@ -1,251 +1,33 @@
-# Java Protobuf Linting
+# Buf linting setup and custom rules for protobuf contracts
 
-**Applies to:** All files
+**Applies to:** **/*.proto, **/buf.yaml, **/buf.gen.yaml
 
-# Java Protobuf Linting
+# Buf linting setup and custom rules for protobuf contracts
 
-When creating protobuf, remember to run the linting process afterwards. If any linting errors are found, try to fix them based on the output the tool gave.
+Buf CLI setup for protobuf linting and breaking change detection.
 
-Protobuf and gRPC linting in Bitso are done using two tools:
+## Skill Location
 
-## Linting
+| Skill | Coverage |
+|-------|----------|
+| `.claude/skills/grpc-standards/` | Contracts, resilience, linting |
 
-We use two linters for protobuf and gRPC.
+## 📚 Full Documentation
 
-## Buf
+For complete guidelines, scripts, and references, see the skill:
 
-These are the rules for the `buf lint`, in case the repository still don't have the file, make sure to create it still doesn't exist. There are some references to paths in the configuration, you will need to update it accordingly.
-
-```yaml
-version: v2
-lint:
-  use:
-    - DIRECTORY_SAME_PACKAGE
-    - PACKAGE_DEFINED
-    - PACKAGE_DIRECTORY_MATCH
-    - PACKAGE_SAME_DIRECTORY
-    - COMMENT_FIELD
-    - COMMENT_MESSAGE
-    - COMMENT_SERVICE
-    - RPC_PASCAL_CASE
-    - SERVICE_PASCAL_CASE
-    - MESSAGE_PASCAL_CASE
-    - IMPORT_USED
-    - FIELD_LOWER_SNAKE_CASE
-    - ENUM_VALUE_UPPER_SNAKE_CASE
-    - ENUM_PASCAL_CASE
-    - ENUM_FIRST_VALUE_ZERO
-    - ENUM_NO_ALLOW_ALIAS
-    - RPC_REQUEST_RESPONSE_UNIQUE
-    - FILE_LOWER_SNAKE_CASE
-    - ENUM_VALUE_PREFIX
-    - ENUM_ZERO_VALUE_SUFFIX
-    # Custom linting rules
-    - NO_FAILURE_USAGE_IN_RESPONSE
-    - MINIMAL_RPC_DOCUMENTATION
-    - NESTED_PAYLOAD_IN_REQUESTS_AND_RESPONSES
-  ignore:
-    # data_commons.proto and any other third party protobuf must be ignored to not have lint errors from there
-    - ./bitso-libs/shared/reconciliation-engine-core/protobuf/build/resources/main/data_commons.proto
-modules:
-    # You will need to adjust the paths to the protos of your project
-    # For cases you have third party dependencies (e.g importing protobufs from a library), 
-    # you will need to use the build path as your module, otherwise the compilation will fail for lacking the dependencies
-    # Note that, because of that you will need to rebuild your module to have the linting results updated
-    #
-    # If you don't have third party dependencies, you can use the path of your code directly and you wont need to rebuild everytime, like below:
-    # You can add multiple paths here
-    #   - path: ./bitso-libs/reconciliation-engine-core/protobuf/src/main/resources
-  - path: ./bitso-libs/shared/reconciliation-engine-core/protobuf/build/resources/main
-plugins:
-    # plugins that were installed with `make install`
-  - plugin: buf-plugin-rpc-minimal-documentation
-  - plugin: buf-plugin-no-failure-usage
-  - plugin: buf-plugin-nested-payload-request-response
+```
+.agent-skills/grpc-standards/SKILL.md
 ```
 
-Remember to take in to consideration the rules when creating protobuf files.
+The skill includes:
+- **SKILL.md** - Complete instructions and quick start
+- **scripts/** - Executable automation scripts
+- **references/** - Detailed documentation
+- **assets/** - Templates and resources
 
-### Custom rules
+> **Note**: This is a shallow reference. The full content is maintained in the skill to avoid duplication.
 
-#### RPC minimal documentation
-
-Validates the minimal documentation of a `rpc`. The expected format of the documentation of a RPC is:
-
-```java
-  /**
-    Create a withdrawal.
-    This is an idempotent API, and clients must provide an idempotency key to ensure that the operation is not executed more than once.
-    The idempotency key must be unique for each request.
-    If the idempotency key is the same as other already processed request, the response of this API will be the same as the first call with this idempotency key.
-    
-    Possible error codes for this API are:
-    | Error Code                     | gRPC Status Code    | Description                            | Retryable |
-    | ------------------------------ | ------------------- | -------------------------------------- | --------- |
-    | MY_SERVICE_USER_NOT_FOUND      | FAILED_PRECONDITION | The user_id provided does not exist    | No        |
-    | MY_SERVICE_TAXONOMY_DISABLED   | FAILED_PRECONDITION | The taxonomy of the user is disabled   | No        |
-    | MY_SERVICE_BLOCKED_FOR_ACCOUNT | FAILED_PRECONDITION | The account of the user is blocked     | No        |
-    | MY_SERVICE_INVALID_FIELD       | FAILED_PRECONDITION | Some payload field provided is invalid | No        |
-  */
-```
-
-The validation uses the following regex:
-
-```regex
-(?s)^\s*(?P<description>.*?)\s*
-\s*Possible error codes for this API are:\s*
-\|\s*Error Code\s*\|\s*gRPC Status Code\s*\|\s*Description\s*\|\s*Retryable\s*\|
-(?:\s*\|[-\s]*\|[-\s]*\|[-\s]*\|[-\s]*\|)?
-(?:\s*\|\s*[A-Z_]+\s*\|\s*[A-Z_]+\s*\|[^|]+\|\s*(?:Yes|No)\s*\|\s*)+$
- ```
-
-More information about the format of the documentation can be found @here
-
-#### No Failure Usage
-
-Rule to validate that failure is not used in responses of `rpc` to transit errors.
-
-The following situation will be invalid:
-
-```proto
-service TestService {
-  rpc ApiUsingFailure (ApiUsingFailuredRequest) returns (ApiUsingFailuredResponse);
-}
-
-message ApiUsingFailuredRequest {
-  int32 page_size = 1;
-  int32 page_num = 2;
-}
-
-message ApiUsingFailuredResponse {
-  oneof response {
-    protos.model.Failure failure = 1;
-    int64 result = 2;
-  }
-}
-```
-
-For more information about how to handle errors in gRPC, check @here
-
-##### Nested Payload in Requests and Responses
-
-This rule evaluates that all requests and responses messages have a nested `Payload` message which has the actual payload of the endpoint.
-
-## grpc-java-classpath-linter
-
-### How to use
-
-To use the plugin, add the following to your `settings.gradle` file:
-
-```groovy
-pluginManagement {
-    def propertyUserHome = System.getProperty('user.home')
-    def localGradleProperties = new File(propertyUserHome + '/.gradle/gradle.properties')
-    def localProperties = new Properties()
-
-    if (localGradleProperties.exists()) {
-        localProperties.load(localGradleProperties.newReader())
-    }
-
-    def githubUser = (localProperties.get('githubActor')
-            ?: localProperties.get('bitso.github.user')) ?: ''
-    def githubToken = (localProperties.get('githubToken')
-            ?: localProperties.get('bitso.github.token')) ?: ''
-
-    def bitsoGHRepoUser = System.getenv('GITHUB_ACTOR') ?: githubUser
-    def bitsoGHRepoPassword = System.getenv('GITHUB_TOKEN') ?: githubToken
-
-    repositories {
-        maven {
-            name 'BitsoPackages'
-            url 'https://maven.pkg.github.com/bitsoex/artifacts'
-            credentials {
-                username = bitsoGHRepoUser
-                password = bitsoGHRepoPassword
-            }
-        }
-        gradlePluginPortal()
-    }
-
-    plugins {
-        // This is the actual plugin that you want to use
-        id 'bitso.grpc-classpath-linter' version "0.0.4"
-    }
-}
-
-plugins {
-    // This applies the plugin
-    id 'bitso.grpc-classpath-linter'
-}
-```
-
-> **_NOTE:_** Most of this configurations are already done in all repositories, you should only need to add the things that are in the `plugins` block to your `settings.gradle` file.
-
-With the plugin applied, it will create two tasks:
-
-- `lintGrpcClasspath` for all services and jobs (modules that are under `bitso-services` and `bitso-jobs`)
-- `lintProtobufClasspath` for all modules that have `.proto` files
-
-### Configurations
-
-The plugin has a couple of properties that are enabled and disabled with environment variables, they are:
-
-- `IS_CI`: indicates wheter is CI environment or not, when `true` the task generates output files (`protobuf-classpath-linter-output.json` and `grpc-classpath-linter-output.json`)
-- `IS_DRY_RUN`: indicates wheter is a dry run or not, when it is a dry run, no errors will be emitted and the tasks will only log the problems found.
-
-### The rules
-
-Each of the tasks created by the plugin have a set of rules that are applied to the classpath of the Java application, and they are documented below.
-
-#### `lintGrpcClasspath`
-
-This task is applied only in services and jobs modules. It checks the classpath of the module and applies the following rules:
-
-##### `GRPC_STARTER_IN_PROJECTS_WITH_GRPC`
-
-This rule checks that all projects that have gRPC dependencies also have the `grpc-spring-boot-starter` library from `grpc-ecosystem` (or `grpc-server-spring-boot-starter` and `grpc-client-spring-boot-starter`) dependency.
-
-This enforces that the configuration of clients and servers are done using the well known and standardized way of configuring gRPC in Spring Boot applications.
-
-> **_NOTE:_** In case you are being warned about this rule and you don't use gRPC in your service, you will need to clean up your dependencies, removing everything related to gRPC.
-
-##### `ONLY_NETTY_SHADED_IN_CLASSPATH`
-
-This rule checks that the only gRPC transport present in the classpath is the `netty-shaded` transport. This is the recommended transport from the gRPC team and ensures that we don't face any compatibility issues when upgrading other dependencies.
-
-In case you are using another transport, you will need to remove it from the classpath and keep only `netty-shaded`.
-
-##### `SERVICES_WITH_GRPC_CLIENT_STARTER_MUST_HAVE_GRPC_CLIENTS_WITH_RESILIENCY`
-
-This rule checks that all services that have the `grpc-client-spring-boot-starter` dependency also have configurations under `grpc.client` property in `application.yaml` or `application.properties`. Additionally, it validates that the module also has the @`grpc-resiliency-starter` dependency and that all clients have a default deadline set. A default deadline can be set in the following way:
-
-```yaml
-grpc:
-  client:
-    test:
-      address: in-process:test
-      service-config:
-          method-config:
-            # This is the default deadline, note that this configuration is per client
-            - name: []
-              timeout: PT1S
-```
-
-> **_NOTE:_** In case you are being warned about this rule and you don't use gRPC clients in your service, you will need to clean up your dependencies, removing `grpc-client-spring-boot-starter`.
-
-##### `SERVICES_WITH_GRPC_SERVER_STARTER_MUST_HAVE_GRPC_SERVER_PORT_8201`
-
-This rule checks that all services that have the `grpc-server-spring-boot-starter` dependency also have the `grpc.server.port` property set to `8201` in `application.yaml` or `application.properties`. This is the port that Bitso is using for gRPC services.
-
-> **_NOTE:_** In case you are being warned about this rule and you don't use gRPC server in your service, you will need to clean up your dependencies, removing `grpc-server-spring-boot-starter`.
-
-#### `lintProtobufClasspath`
-
-This task is applied to all modules that have `.proto` files. It checks the classpath of the module and applies the following rules:
-
-##### `PROTOBUF_LIBRARIES_SHOULDNT_HAVE_BUILDED_CLASSES`
-
-This rule validates that there are no builded classes in the module that contains the `.proto` files. This is to ensure that the module with such files will only export the protobuf files and not the generated classes.
 
 ---
 *This rule is part of the java category.*

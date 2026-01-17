@@ -1,11 +1,18 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/rfc-37-documentation/references/installation.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Installing the Bitso Documentation Linter
 
 Three installation methods are available: Homebrew (recommended), Docker, or Dev Container.
 
+## Contents
+
+- [Homebrew (Recommended)](#homebrew-recommended) (L16-L54)
+- [Docker](#docker) (L55-L100)
+- [Dev Container (For Development)](#dev-container-for-development) (L101-L130)
+- [Verifying Installation](#verifying-installation) (L131-L146)
+- [Troubleshooting](#troubleshooting) (L147-L175)
+- [Node.js API](#nodejs-api) (L176-L195)
+- [See Also](#see-also) (L196-L199)
+
+---
 ## Homebrew (Recommended)
 
 Best for end users on macOS/Linux.
@@ -190,3 +197,7 @@ console.log(lintResult);  // { passed: true, output: '...' }
 
 - [Official Installation Guide](https://github.com/bitsoex/bitso-documentation-linter/blob/main/docs/how-tos/local-execution.md)
 - [Architecture Overview](https://github.com/bitsoex/bitso-documentation-linter/blob/main/docs/bitso-documentation-linter/concepts/architecture-overview.md)
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/rfc-37-documentation/references/installation.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

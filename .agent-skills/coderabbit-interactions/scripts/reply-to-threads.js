@@ -1,8 +1,4 @@
 #!/usr/bin/env node
-// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
-// Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/scripts/reply-to-threads.js
-// To modify, edit the source file and run the distribution workflow
-
 /**
  * Reply to CodeRabbit PR threads based on processed JSON file
  * 
@@ -185,3 +181,7 @@ function main() {
 }
 
 main();
+// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+// Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/scripts/reply-to-threads.js
+// To modify, edit the source file and run the distribution workflow
+

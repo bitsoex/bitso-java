@@ -1,11 +1,19 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/rfc-37-documentation/references/confluence-metadata.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Confluence Metadata and Integration
 
 Complete guide for configuring Confluence integration with the bitso-documentation-linter.
 
+## Contents
+
+- [Overview](#overview) (L17-L20)
+- [Configuration Options](#configuration-options) (L21-L166)
+- [Confluence API Validation](#confluence-api-validation) (L167-L219)
+- [Previewing the Tree Structure](#previewing-the-tree-structure) (L220-L251)
+- [Validation Rules](#validation-rules) (L252-L282)
+- [Best Practices](#best-practices) (L283-L324)
+- [Troubleshooting](#troubleshooting) (L325-L358)
+- [References](#references) (L359-L362)
+
+---
 ## Overview
 
 Documentation is mirrored to Confluence using [mark](https://github.com/kovetskiy/mark), which reads configuration from `mark.toml` or per-file metadata comments. The bitso-documentation-linter validates this configuration before publishing.
@@ -352,3 +360,7 @@ curl -u "email:token" \
 
 - [mark (Confluence uploader)](https://github.com/kovetskiy/mark)
 - bitso-documentation-linter (internal tool - contact Platform team for access)
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/rfc-37-documentation/references/confluence-metadata.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

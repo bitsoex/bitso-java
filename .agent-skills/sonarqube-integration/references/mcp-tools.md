@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → java/skills/sonarqube-integration/references/mcp-tools.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # SonarQube MCP Tools Reference
 
 ## Available Tools
@@ -70,3 +66,7 @@ Analyze a code snippet for issues.
 | MAJOR | 3rd | Significant code smells |
 | MINOR | 4th | Minor improvements |
 | INFO | 5th | Informational issues |
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/skills/sonarqube-integration/references/mcp-tools.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

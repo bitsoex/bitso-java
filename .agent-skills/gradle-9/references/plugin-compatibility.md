@@ -1,11 +1,19 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → java/skills/gradle-9/references/plugin-compatibility.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Gradle 9 Plugin Compatibility
 
 Complete plugin version mappings for Gradle 9.x upgrade.
 
+## Contents
+
+- [Core Build Plugins](#core-build-plugins) (L17-L26)
+- [Database Plugins](#database-plugins) (L27-L33)
+- [Code Generation Plugins](#code-generation-plugins) (L34-L39)
+- [Deprecated Gradle APIs](#deprecated-gradle-apis) (L40-L61)
+- [JUnit Platform Launcher](#junit-platform-launcher) (L62-L76)
+- [Known Issues](#known-issues) (L77-L104)
+- [Version Catalog Example](#version-catalog-example) (L105-L135)
+- [Verification Commands](#verification-commands) (L136-L150)
+
+---
 ## Core Build Plugins
 
 | Plugin | Gradle 8.x | Gradle 9.x | Notes |
@@ -140,3 +148,7 @@ protobuf = { id = "com.google.protobuf", version.ref = "protobuf-plugin" }
 # Full build validation
 ./gradlew clean build test
 ```
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/skills/gradle-9/references/plugin-compatibility.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

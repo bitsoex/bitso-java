@@ -1,6 +1,5 @@
 # CodeRabbit Setup
 
-**Applies to:** All files
 
 # CodeRabbit Setup
 

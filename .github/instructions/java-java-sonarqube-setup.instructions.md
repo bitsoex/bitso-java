@@ -1,21 +1,17 @@
 ---
-applyTo: "**/*.java"
-description: Java SonarQube Setup Guide
+applyTo: "**/build.gradle,gradle.properties"
+description: SonarQube plugin configuration for Java/Gradle projects
 ---
 
-# Java SonarQube Setup Guide
+# SonarQube plugin configuration for Java/Gradle projects
 
-SonarQube MCP integration is pre-configured and requires no local setup.
+SonarQube plugin configuration for Java projects.
 
-## How It Works
+## Skill Location
 
-The SonarQube MCP server runs remotely at `https://sonarqube-mcp.bitso.io/mcp` and is automatically configured in all supported IDEs through the repository's MCP configuration files.
-
-**No setup required:**
-
-- No tokens to generate
-- No environment variables to configure
-- No Docker containers to run
+| Skill | Coverage |
+|-------|----------|
+| `.claude/skills/sonarqube-integration/` | Gradle setup, common rules |
 
 ## 📚 Full Documentation
 

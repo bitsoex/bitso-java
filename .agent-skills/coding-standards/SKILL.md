@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/coding-standards/SKILL.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 ---
 name: coding-standards
 description: >
@@ -23,6 +19,34 @@ Enforces consistent naming conventions, code organization, and documentation acr
 - Reviewing pull requests
 - Refactoring existing code
 - Onboarding to a new codebase
+
+## Skill Contents
+
+### Sections
+
+- [When to use this skill](#when-to-use-this-skill) (L16-L22)
+- [Quick Start](#quick-start) (L51-L63)
+- [Naming Conventions](#naming-conventions) (L64-L74)
+- [Available Scripts](#available-scripts) (L75-L86)
+- [References](#references) (L87-L94)
+- [Assets](#assets) (L95-L100)
+- [Related Skills](#related-skills) (L101-L104)
+
+### Available Resources
+
+**📚 references/** - Detailed documentation
+- [code organization](references/code-organization.md)
+- [documentation standards](references/documentation-standards.md)
+- [general principles](references/general-principles.md)
+- [naming conventions](references/naming-conventions.md)
+
+**🔧 scripts/** - Automation scripts
+- [check naming conventions](scripts/check-naming-conventions.js)
+
+**📦 assets/** - Templates and resources
+- [templates](assets/templates)
+
+---
 
 ## Quick Start
 
@@ -78,3 +102,7 @@ Scripts are implemented in `.scripts/lib/skills/coding-standards.js`:
 
 - `quality-gateway` - Orchestrates coding standards with other quality checks
 - `doc-sync` - Documentation synchronization
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/coding-standards/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

@@ -1,11 +1,16 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/mcp-configuration/references/troubleshooting.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Troubleshooting
 
 Common MCP configuration issues and solutions.
 
+## Contents
+
+- [Certificate Errors](#certificate-errors) (L14-L31)
+- [Docker Issues](#docker-issues) (L32-L59)
+- [Environment Variables](#environment-variables) (L60-L75)
+- [IntelliJ/Copilot CLI Issues](#intellijcopilot-cli-issues) (L76-L86)
+- [Readiness Checks](#readiness-checks) (L87-L99)
+
+---
 ## Certificate Errors
 
 ### Error: TLS Certificate Verification Failed
@@ -68,14 +73,6 @@ export GITHUB_TOKEN="your-github-pat"
 
 Or add to your shell profile (`~/.zshrc` or `~/.bashrc`).
 
-## VS Code MCP Discovery Conflicts
-
-### Error: Multiple MCP servers with same name
-
-**Solution**: Disable MCP discovery in VS Code settings:
-
-See `references/vscode-discovery.md` for the disable script.
-
 ## IntelliJ/Copilot CLI Issues
 
 ### Error: MCP configuration not found
@@ -100,3 +97,7 @@ This validates:
 - GITHUB_TOKEN is set
 - Cloudflare certificates are in place
 - Docker image is available
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/mcp-configuration/references/troubleshooting.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

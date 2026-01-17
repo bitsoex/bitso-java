@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → java/skills/gradle-standards/references/multi-module.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Multi-Module Gradle Projects
 
 ## Directory Structure
@@ -56,7 +52,7 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
-    
+
     java {
         toolchain {
             languageVersion = JavaLanguageVersion.of(21)
@@ -74,3 +70,7 @@ dependencies {
     implementation project(':bitso-libs:api')
 }
 ```
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/skills/gradle-standards/references/multi-module.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

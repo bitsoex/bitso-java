@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → java/skills/java-25/SKILL.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 ---
 name: java-25
 description: >
@@ -28,6 +24,30 @@ Upgrade Java projects to Java 25 with all required dependency updates.
 - Project needs to upgrade from Java 21 to Java 25
 - Need features from Java 25 (records, pattern matching improvements, etc.)
 - Planning to stay on latest LTS-adjacent releases
+
+## Skill Contents
+
+### Sections
+
+- [When to Use](#when-to-use) (L22-L27)
+- [Prerequisites](#prerequisites) (L52-L57)
+- [Target Versions](#target-versions) (L58-L71)
+- [⚠️ DO NOT Upgrade](#do-not-upgrade) (L72-L77)
+- [Workflow](#workflow) (L78-L98)
+- [Version Catalog Updates](#version-catalog-updates) (L99-L114)
+- [Java Toolchain Configuration](#java-toolchain-configuration) (L115-L130)
+- [⚠️ Critical: Do NOT Use groovy-all](#critical-do-not-use-groovy-all) (L131-L143)
+- [Override Spring Boot's Groovy Version](#override-spring-boots-groovy-version) (L144-L152)
+- [References](#references) (L153-L158)
+- [Related Commands](#related-commands) (L159-L165)
+- [Related Skills](#related-skills) (L166-L169)
+
+### Available Resources
+
+**📚 references/** - Detailed documentation
+- [preparation](references/preparation.md)
+
+---
 
 ## Prerequisites
 
@@ -147,3 +167,7 @@ This skill is referenced by:
 
 - `spring-boot-3-5` - Must upgrade first
 - `gradle-9` - Gradle 9 upgrade patterns
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/skills/java-25/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → java/skills/gradle-standards/SKILL.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 ---
 name: gradle-standards
 description: >
@@ -31,6 +27,32 @@ Standards for Gradle configuration in Java projects, including version catalogs,
 - Configuring multi-module builds
 - Troubleshooting dependency conflicts
 - Migrating to version catalogs
+- Cleaning up unused dependencies
+- Optimizing build performance
+
+## Skill Contents
+
+### Sections
+
+- [When to use this skill](#when-to-use-this-skill) (L23-L32)
+- [Quick Start](#quick-start) (L57-L87)
+- [Key Principles](#key-principles) (L88-L97)
+- [Common Bundles](#common-bundles) (L98-L117)
+- [References](#references) (L118-L128)
+- [Related Rules](#related-rules) (L129-L133)
+- [Related Skills](#related-skills) (L134-L139)
+
+### Available Resources
+
+**📚 references/** - Detailed documentation
+- [cleanup workflow](references/cleanup-workflow.md)
+- [multi module](references/multi-module.md)
+- [optimization](references/optimization.md)
+- [troubleshooting](references/troubleshooting.md)
+- [unused detection](references/unused-detection.md)
+- [version catalogs](references/version-catalogs.md)
+
+---
 
 ## Quick Start
 
@@ -57,7 +79,7 @@ dependencies {
     // ✅ CORRECT: Use version catalog
     implementation libs.spring.boot.starter.web
     implementation libs.bundles.spring.boot.service
-    
+
     // ❌ NEVER: Hardcode versions
     // implementation "org.springframework.boot:spring-boot-starter-web:3.5.8"
 }
@@ -99,13 +121,15 @@ grpc-core = ["grpc-netty-shaded", "grpc-protobuf", "grpc-stub"]
 |-----------|-------------|
 | [references/version-catalogs.md](references/version-catalogs.md) | Complete version catalog guide |
 | [references/multi-module.md](references/multi-module.md) | Multi-module project setup |
+| [references/cleanup-workflow.md](references/cleanup-workflow.md) | Dependency cleanup process |
+| [references/unused-detection.md](references/unused-detection.md) | Finding unused dependencies |
+| [references/optimization.md](references/optimization.md) | Build optimization techniques |
 | [references/troubleshooting.md](references/troubleshooting.md) | Common issues and solutions |
 
 ## Related Rules
 
-- `java/rules/java-gradle-best-practices.md` - Full Gradle configuration reference
-- `java/rules/java-versions-and-dependencies.md` - Version management policies
-- `java/golden-paths/redis-jedis-compatibility.md` - Dependency conflict examples
+- `.cursor/rules/java-gradle-best-practices.mdc` - Full Gradle configuration reference
+- `.cursor/rules/java-versions-and-dependencies.mdc` - Version management policies
 
 ## Related Skills
 
@@ -113,3 +137,7 @@ grpc-core = ["grpc-netty-shaded", "grpc-protobuf", "grpc-stub"]
 |-------|---------|
 | [java-coverage](../java-coverage/SKILL.md) | JaCoCo configuration in Gradle |
 | [java-testing](../java-testing/SKILL.md) | Test configuration with Spock |
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/skills/gradle-standards/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

@@ -1,6 +1,6 @@
 ---
 description: CodeRabbit Setup
-alwaysApply: true
+alwaysApply: false
 tags:
   - java
 ---

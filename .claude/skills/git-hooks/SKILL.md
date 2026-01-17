@@ -4,7 +4,7 @@
 
 ---
 name: git-hooks
-description: Set up, validate, and maintain Git hooks (pre-commit, pre-push, etc.) following  best practices. Ensures hooks are version-controlled, automatically installed,  and follow consistent patterns across the team. Use when creating new hooks, debugging hook issues, or ensuring hook compliance.
+description: Set up, validate, and maintain Git hooks (pre-commit, pre-push, etc.) following best practices. Ensures hooks are version-controlled, automatically installed, and follow consistent patterns across the team. Use when creating new hooks, debugging hook issues, or ensuring hook compliance.
 
 ---
 

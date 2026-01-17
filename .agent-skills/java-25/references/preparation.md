@@ -1,11 +1,22 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → java/skills/java-25/references/preparation.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Java 25 Preparation Guide
 
 Detailed steps for preparing and validating Java 25 upgrade.
 
+## Contents
+
+- [Prerequisites Checklist](#prerequisites-checklist) (L20-L26)
+- [Install Java 25 via sdkman](#install-java-25-via-sdkman) (L27-L40)
+- [Configure Cloudflare Certificates](#configure-cloudflare-certificates) (L41-L58)
+- [Upgrade Gradle Wrapper](#upgrade-gradle-wrapper) (L59-L64)
+- [Analyze Dependencies](#analyze-dependencies) (L65-L74)
+- [Add JUnit Platform Launcher](#add-junit-platform-launcher) (L75-L88)
+- [Add groovy-json (If Using JsonSlurper)](#add-groovy-json-if-using-jsonslurper) (L89-L94)
+- [Remove Hardcoded Toolchain from Submodules](#remove-hardcoded-toolchain-from-submodules) (L95-L102)
+- [Validation Commands](#validation-commands) (L103-L116)
+- [Troubleshooting](#troubleshooting) (L117-L154)
+- [Version Compatibility Matrix](#version-compatibility-matrix) (L155-L164)
+
+---
 ## Prerequisites Checklist
 
 - [ ] Spring Boot 3.5.x (upgrade first if needed)
@@ -110,7 +121,7 @@ grep -r "JavaLanguageVersion.of(21)" --include="*.gradle" .
 **Error:**
 
 ```text
-java.lang.IllegalStateException: Could not invoke proxy: 
+java.lang.IllegalStateException: Could not invoke proxy:
 Type not available on current VM: net.bytebuddy.jar.asmjdkbridge.JdkClassWriter
 ```
 
@@ -151,3 +162,7 @@ Type not available on current VM: net.bytebuddy.jar.asmjdkbridge.JdkClassWriter
 | Lombok | 1.18.x | 1.18.42 |
 | Lombok Plugin | 8.14.2 | 9.1.0 |
 | ByteBuddy | 1.14.x | 1.17.5+ |
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/skills/java-25/references/preparation.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

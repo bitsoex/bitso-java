@@ -1,11 +1,16 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/references/workflow-examples.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # CodeRabbit Workflow Examples
 
 Complete examples of both local CLI and PR-based CodeRabbit workflows.
 
+## Contents
+
+- [Example 1: Local CLI Review Before Push](#example-1-local-cli-review-before-push) (L14-L81)
+- [Example 2: Processing PR Comments in Batches](#example-2-processing-pr-comments-in-batches) (L82-L168)
+- [Example 3: Mixed Resolution Types](#example-3-mixed-resolution-types) (L169-L214)
+- [Example 4: Cursor/AI Agent Workflow](#example-4-cursorai-agent-workflow) (L215-L251)
+- [Quick Command Reference](#quick-command-reference) (L252-L261)
+
+---
 ## Example 1: Local CLI Review Before Push
 
 ### Scenario
@@ -217,7 +222,7 @@ Using Cursor with CodeRabbit for autonomous development.
 
 ```text
 User prompt to Cursor:
-"Implement the payment webhook handler from the spec, then run coderabbit 
+"Implement the payment webhook handler from the spec, then run coderabbit
 --prompt-only --type uncommitted, review findings and fix any critical issues."
 ```
 
@@ -254,3 +259,7 @@ Co-authored-by: coderabbitai[bot] <136622811+coderabbitai[bot]@users.noreply.git
 | View by severity | `jq '.comments[] \| select(.severity == "critical")' .tmp/coderabbit-*.json` |
 | Reply to threads | `node global/skills/coderabbit-interactions/scripts/reply-to-threads.js --file .tmp/coderabbit-*.json` |
 | Dry run replies | `node global/skills/coderabbit-interactions/scripts/reply-to-threads.js --file .tmp/coderabbit-*.json --dry-run` |
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/references/workflow-examples.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

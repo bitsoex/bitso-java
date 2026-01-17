@@ -1,5 +1,5 @@
 ---
-applyTo: "**/*"
+applyTo: ""
 description: General AI Coding Principles
 ---
 

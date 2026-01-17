@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/git-hooks/references/typescript/hook-patterns.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # TypeScript Hook Patterns
 
 Pre-commit and pre-push hook patterns for Node.js and TypeScript projects.
@@ -111,3 +107,7 @@ echo "✅ Pre-push checks passed"
 - Use `--onlyChanged` for Jest to test only affected files
 - Enable ESLint caching with `--cache`
 - Use TypeScript incremental builds with `composite: true`
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/git-hooks/references/typescript/hook-patterns.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

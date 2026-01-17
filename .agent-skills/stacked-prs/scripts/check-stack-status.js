@@ -1,8 +1,4 @@
 #!/usr/bin/env node
-// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
-// Source: bitsoex/ai-code-instructions → global/skills/stacked-prs/scripts/check-stack-status.js
-// To modify, edit the source file and run the distribution workflow
-
 /**
  * Check Stack Status
  * 
@@ -164,3 +160,7 @@ for (const prNumber of prNumbers) {
 
 console.log(`\n${'='.repeat(70)}`);
 console.log('\n✨ Stack status check complete\n');
+// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+// Source: bitsoex/ai-code-instructions → global/skills/stacked-prs/scripts/check-stack-status.js
+// To modify, edit the source file and run the distribution workflow
+

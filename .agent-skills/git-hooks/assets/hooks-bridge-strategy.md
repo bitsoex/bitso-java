@@ -1,18 +1,37 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/git-hooks/assets/hooks-bridge-strategy.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # Git Hooks Bridge Strategy
 
 This document describes how our distributed git hooks coexist with existing hook setups in target repositories.
 
+## Contents
+
+- [The Critical Problem We Solve](#the-critical-problem-we-solve) (L28-L44)
+- [Our Solution: The Bridge Strategy](#our-solution-the-bridge-strategy) (L45-L76)
+- [Complete Flow Diagram](#complete-flow-diagram) (L77-L169)
+- [Real-World Example: react-web (Husky)](#real-world-example-react-web-husky) (L170-L202)
+- [What If Husky Fails?](#what-if-husky-fails) (L203-L236)
+- [Hook Technologies Landscape](#hook-technologies-landscape) (L237-L249)
+- [Directory Structure in Target Repos](#directory-structure-in-target-repos) (L250-L277)
+- [How core.hooksPath Works](#how-corehookspath-works) (L278-L295)
+- [How the Bridge Works (Technical Details)](#how-the-bridge-works-technical-details) (L296-L328)
+- [Coexistence Patterns (Automatic via Bridge)](#coexistence-patterns-automatic-via-bridge) (L329-L410)
+- [Integration Test Coverage](#integration-test-coverage) (L411-L422)
+- [Installation During Distribution](#installation-during-distribution) (L423-L440)
+- [Informative Mode](#informative-mode) (L441-L467)
+- [Node.js Requirement](#nodejs-requirement) (L468-L488)
+- [Enabling Our Hooks](#enabling-our-hooks) (L489-L504)
+- [Disabling Our Hooks](#disabling-our-hooks) (L505-L514)
+- [What Developers Need to Know](#what-developers-need-to-know) (L515-L546)
+- [FAQ](#faq) (L547-L581)
+- [Future Work](#future-work) (L582-L587)
+
+---
 ## The Critical Problem We Solve
 
 When you set `git config core.hooksPath .git-hooks`, Git **ONLY** looks in that directory for hooks. This means:
 
 ```
 ❌ WITHOUT BRIDGE STRATEGY:
-   
+
    git commit → Git checks core.hooksPath → runs .git-hooks/pre-commit
                                            ↓
                                     Our checks run
@@ -264,10 +283,10 @@ Git's Hook Resolution Order:
 
 1. Check if core.hooksPath is configured
    └─→ git config --get core.hooksPath
-   
+
 2. If SET: Use that directory exclusively
    └─→ .git-hooks/pre-commit
-   
+
 3. If NOT SET: Use default location
    └─→ .git/hooks/pre-commit
 ```
@@ -566,3 +585,7 @@ Add them to your existing hook system:
 2. **Phase 2 distribution**: Add hooks to `managed-paths.json` for automatic distribution
 3. **Enforcement mode**: Optional mode that blocks on critical issues (for AI agent hooks)
 4. **Tool availability check**: Warn if pre-commit/lefthook config exists but CLI is not installed
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/git-hooks/assets/hooks-bridge-strategy.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

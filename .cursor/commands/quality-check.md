@@ -6,63 +6,21 @@ Run full quality gate checks on recent changes
 
 Run comprehensive quality gate checks on recent changes.
 
-## Purpose
-
-This command invokes the **quality-gateway skill** to run all quality checks:
-- Linting and code style
-- Test execution and coverage
-- Type checking
-- Documentation validation
-
 ## Skill Location
 
-```
-.agent-skills/quality-gateway/
-```
+Full documentation: `.claude/skills/quality-gateway/`
 
-## Quick Workflow
+## Quick Start
 
-### Step 1: Run Linting
-
-```bash
-# JavaScript/TypeScript
-npm run lint
-
-# Python
-python -m flake8 .
-
-# Java
-./gradlew check
-```
-
-### Step 2: Run Tests
-
-```bash
-# JavaScript/TypeScript
-npm test
-
-# Python
-pytest
-
-# Java
-./gradlew test
-```
-
-### Step 3: Check Types
-
-```bash
-# TypeScript
-npx tsc --noEmit
-
-# Python (with mypy)
-mypy .
-```
-
-### Step 4: Verify Coverage
-
-```bash
-npm run test:coverage
-```
+1. Run quality checks for your technology:
+   - Linting: `npm run lint` / `./gradlew check` / `flake8`
+   - Tests: `npm test` / `./gradlew test` / `pytest`
+   - Types: `npx tsc --noEmit` / `mypy`
+2. Save test output to `.tmp/` (don't run tests repeatedly)
+3. Apply fixes from skill references:
+   - `.claude/skills/quality-gateway/SKILL.md` - Main instructions
+   - `.claude/skills/quality-gateway/references/test-result-caching.md` - Caching
+4. Verify coverage maintained or improved
 
 ## Expected Results
 
@@ -79,23 +37,13 @@ npm run test:coverage
 |-------|----------|
 | Linting errors | Run `npm run lint:fix` or fix manually |
 | Test failures | Fix failing tests |
-| Type errors | Fix type issues in reported files |
 | Coverage drop | Add tests with `/add-tests` |
 
-## Related Commands
+## Related
 
-| Command | Purpose |
-|---------|---------|
-| `/add-tests` | Generate missing tests |
-| `/sync-docs` | Update documentation |
-
-## Skill Contents
-
-| Resource | Description |
-|----------|-------------|
-| `SKILL.md` | Full quality gateway documentation |
-| `assets/claude-quality-hooks.md` | Claude Code hook configurations |
-| `assets/cursor-quality-integration.md` | Cursor IDE integration guide |
+- **Add Tests**: `/add-tests` command
+- **Doc Sync**: `/sync-docs` command
+- **Test Augmentation**: `.claude/skills/test-augmentation/SKILL.md`
 
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → global/commands/quality-check.md -->

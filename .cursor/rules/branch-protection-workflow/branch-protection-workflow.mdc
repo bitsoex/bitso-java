@@ -1,7 +1,8 @@
 ---
 description: Never work directly on main. Always verify your branch and create a new one if needed before making changes.
 alwaysApply: false
-globs: **/*
+globs:
+  - "**/*"
 tags:
   - java
 ---

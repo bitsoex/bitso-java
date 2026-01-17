@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/pr-lifecycle/SKILL.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 ---
 name: pr-lifecycle
 description: GitHub CLI commands and workflows for managing pull requests, CI checks, CodeRabbit reviews, and branch protection
@@ -33,6 +29,29 @@ Provides comprehensive workflows for managing pull requests using GitHub CLI (`g
 2. **AI-Assisted Work Identification** - Use 🤖 emoji in all AI-generated commits and PRs
 3. **Auto-Assignment** - Always assign PRs to the current user after creation
 4. **Prevent Terminal Buffering** - Use echo wrappers for `gh` commands
+
+## Skill Contents
+
+### Sections
+
+- [Core Principles](#core-principles) (L26-L32)
+- [Workflow Overview](#workflow-overview) (L56-L64)
+- [Quick Reference](#quick-reference) (L65-L112)
+- [References](#references) (L113-L122)
+- [Best Practices Summary](#best-practices-summary) (L123-L132)
+- [Skill Dependencies](#skill-dependencies) (L133-L139)
+- [Related](#related) (L140-L144)
+
+### Available Resources
+
+**📚 references/** - Detailed documentation
+- [branch protection](references/branch-protection.md)
+- [coderabbit integration](references/coderabbit-integration.md)
+- [commit formats](references/commit-formats.md)
+- [pr creation](references/pr-creation.md)
+- [troubleshooting](references/troubleshooting.md)
+
+---
 
 ## Workflow Overview
 
@@ -123,3 +142,7 @@ gh pr edit $PR_NUMBER --repo owner/repo --add-assignee "$CURRENT_USER"
 - `.agent-skills/coderabbit-interactions` - Detailed CodeRabbit interaction patterns
 - `.agent-skills/jira-workflow` - Jira ticket workflow
 - `.agent-skills/stacked-prs` - Stacked PR management
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/pr-lifecycle/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

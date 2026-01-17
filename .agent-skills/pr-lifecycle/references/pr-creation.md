@@ -1,11 +1,18 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/pr-lifecycle/references/pr-creation.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # PR Creation
 
 Create and manage pull requests with proper formatting and auto-assignment.
 
+## Contents
+
+- [Get Current User for Auto-Assignment](#get-current-user-for-auto-assignment) (L16-L28)
+- [Create Draft PR with Auto-Assignment](#create-draft-pr-with-auto-assignment) (L29-L59)
+- [One-Liner for Create and Assign](#one-liner-for-create-and-assign) (L60-L67)
+- [PR Title Format](#pr-title-format) (L68-L78)
+- [PR Body Template](#pr-body-template) (L79-L106)
+- [Mark Ready and Add Reviewers](#mark-ready-and-add-reviewers) (L107-L116)
+- [PR Status & CI Checks](#pr-status-ci-checks) (L117-L125)
+
+---
 ## Get Current User for Auto-Assignment
 
 **CRITICAL**: Always get the current user to assign PRs:
@@ -116,3 +123,7 @@ echo "Checking CI..." ; gh pr checks 123 --repo owner/repo ; echo "Done"
 # List workflow runs
 echo "Runs..." ; gh run list --repo owner/repo --branch feature-branch --limit 5 ; echo "Done"
 ```
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/pr-lifecycle/references/pr-creation.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

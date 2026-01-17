@@ -1,12 +1,8 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/git-hooks/SKILL.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 ---
 name: git-hooks
 description: >
-  Set up, validate, and maintain Git hooks (pre-commit, pre-push, etc.) following 
-  best practices. Ensures hooks are version-controlled, automatically installed, 
+  Set up, validate, and maintain Git hooks (pre-commit, pre-push, etc.) following
+  best practices. Ensures hooks are version-controlled, automatically installed,
   and follow consistent patterns across the team. Use when creating new hooks,
   debugging hook issues, or ensuring hook compliance.
 compatibility: Requires Node.js 20+; works with any Git repository
@@ -29,6 +25,41 @@ This skill provides guidance for implementing and maintaining Git hooks that enf
 - Ensuring hooks follow team standards
 - Migrating from manual hooks to version-controlled hooks
 - Integrating with existing hook systems (Husky, pre-commit, lefthook)
+
+## Skill Contents
+
+### Sections
+
+- [When to use this skill](#when-to-use-this-skill) (L20-L28)
+- [Distributed Hooks (Informative Mode)](#distributed-hooks-informative-mode) (L64-L125)
+- [Assets](#assets) (L126-L136)
+- [Architecture](#architecture) (L137-L161)
+- [Instructions](#instructions) (L162-L256)
+- [Hook Types](#hook-types) (L257-L267)
+- [Best Practices](#best-practices) (L268-L396)
+- [Informative vs Enforcing Mode](#informative-vs-enforcing-mode) (L397-L405)
+- [References](#references) (L406-L416)
+- [Documentation](#documentation) (L417-L424)
+- [Related Skills](#related-skills) (L425-L432)
+- [Troubleshooting](#troubleshooting) (L433-L495)
+
+### Available Resources
+
+**📚 references/** - Detailed documentation
+- [go](references/go)
+- [java](references/java)
+- [python](references/python)
+- [typescript](references/typescript)
+
+**📦 assets/** - Templates and resources
+- [ensure node](assets/ensure-node.sh)
+- [hooks bootstrap](assets/hooks-bootstrap.sh)
+- [hooks bridge strategy](assets/hooks-bridge-strategy.md)
+- [hooks checks](assets/hooks-checks.js)
+- [pre commit](assets/pre-commit)
+- [pre push](assets/pre-push)
+
+---
 
 ## Distributed Hooks (Informative Mode)
 
@@ -144,7 +175,7 @@ Create `.scripts/setup-hooks.js`:
 #!/usr/bin/env node
 /**
  * Setup Git Hooks
- * 
+ *
  * Runs on `npm install` via the "prepare" script.
  * Configures git to use .git-hooks/ for hooks.
  */
@@ -462,3 +493,7 @@ For comprehensive documentation, see:
 1. CI should skip hooks (set `CI=true`)
 2. CI runs validations directly, not via hooks
 3. Ensure setup-hooks.js checks for CI environment
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/git-hooks/SKILL.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

@@ -1,7 +1,3 @@
-<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/coding-standards/references/general-principles.md -->
-<!-- To modify, edit the source file and run the distribution workflow -->
-
 # General AI Coding Principles
 
 These principles apply to all repositories regardless of technology stack.
@@ -61,3 +57,7 @@ See `java/rules/java-versions-and-dependencies.md` for Java-specific version man
 - Keep README files up to date
 - Document public APIs and complex algorithms
 - Include setup and deployment instructions
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/coding-standards/references/general-principles.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

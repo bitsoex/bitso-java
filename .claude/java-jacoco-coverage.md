@@ -1,15 +1,16 @@
-# JaCoCo plugin setup, troubleshooting, and best practices for accurate code coverage reporting
+# JaCoCo setup, multi-module aggregation, and coverage thresholds
 
-**Applies to:** All files
+**Applies to:** **/jacoco.gradle, **/build.gradle
 
-# JaCoCo plugin setup, troubleshooting, and best practices for accurate code coverage reporting
+# JaCoCo setup, multi-module aggregation, and coverage thresholds
 
-Best practices for JaCoCo code coverage plugin setup, configuration, and troubleshooting in Java/Gradle projects.
+JaCoCo coverage setup and multi-module aggregation for Java projects.
 
-## Overview
+## Skill Location
 
-JaCoCo measures code coverage during test execution. Accurate coverage requires proper plugin
-configuration in all modules, especially service and library modules with Spring integration.
+| Skill | Coverage |
+|-------|----------|
+| `.claude/skills/java-coverage/` | Multi-module setup, thresholds, exclusions |
 
 ## 📚 Full Documentation
 

@@ -13,7 +13,7 @@ This command invokes the **security-review skill** to analyze code for security 
 ## Skill Location
 
 ```
-.skills/security-review/
+.agent-skills/security-review/
 ```
 
 ## Quick Checklist
@@ -46,8 +46,8 @@ For each finding, provide:
 
 ## Related
 
-- `.skills/dependency-security` - npm audit and vulnerability management
-- `.skills/sonarqube-remediation` - SonarQube issue fixing
+- `.agent-skills/dependency-security` - npm audit and vulnerability management
+- `.agent-skills/sonarqube-remediation` - SonarQube issue fixing
 
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → global/commands/security-review.md -->

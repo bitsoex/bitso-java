@@ -1,8 +1,4 @@
 #!/bin/bash
-# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
-# Source: bitsoex/ai-code-instructions → java/scripts/gradle-lint-analyze.sh
-# To modify, edit the source file and run the distribution workflow
-
 #
 # Gradle Lint Analysis Script
 #
@@ -301,4 +297,8 @@ echo ""
 echo "View detailed report:"
 echo "  cat build/reports/gradleLint/*.txt"
 echo ""
+
+# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+# Source: bitsoex/ai-code-instructions → java/scripts/gradle-lint-analyze.sh
+# To modify, edit the source file and run the distribution workflow
 

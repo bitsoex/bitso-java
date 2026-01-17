@@ -1,8 +1,4 @@
 #!/bin/bash
-# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
-# Source: bitsoex/ai-code-instructions → java/scripts/check-pitest-readiness.sh
-# To modify, edit the source file and run the distribution workflow
-
 # Check readiness for PIT Mutation Testing
 # This script validates the environment and project configuration for mutation testing
 #
@@ -228,3 +224,7 @@ else
     echo "Please fix the errors above before running mutation testing."
     exit 1
 fi
+# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+# Source: bitsoex/ai-code-instructions → java/scripts/check-pitest-readiness.sh
+# To modify, edit the source file and run the distribution workflow
+
