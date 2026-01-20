@@ -63,7 +63,7 @@ For comprehensive checks:
 
 ## Related
 
-Full procedure: `.agent-skills/quality-gateway/`
+Full procedure: `.claude/skills/quality-gateway/`
 
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → global/rules/quality-gate.md -->

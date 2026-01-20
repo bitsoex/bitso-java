@@ -17,7 +17,7 @@ Resilience patterns for gRPC clients: retry, bulkhead, circuit breaker.
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.agent-skills/grpc-standards/SKILL.md
+.claude/skills/grpc-standards/SKILL.md
 ```
 
 The skill includes:

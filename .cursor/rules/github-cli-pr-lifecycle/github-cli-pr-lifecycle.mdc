@@ -11,17 +11,17 @@ Best practices for AI agents using GitHub CLI (`gh`) to manage pull requests, CI
 
 ## Quick Reference
 
-- Use 🤖 emoji in all AI-assisted commits and PRs
 - Auto-assign PRs using `gh api user --jq '.login'`
 - Use echo wrapper for `gh` commands: `echo "..." ; gh command ; echo "Done"`
 - Always specify `--repo owner/repo`
+- Use conventional commit format
 
 ## 📚 Full Documentation
 
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.agent-skills/pr-lifecycle/SKILL.md
+.claude/skills/pr-lifecycle/SKILL.md
 ```
 
 The skill includes:

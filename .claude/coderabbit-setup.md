@@ -24,7 +24,7 @@ coderabbit auth login
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.agent-skills/coderabbit-interactions/SKILL.md
+.claude/skills/coderabbit-interactions/SKILL.md
 ```
 
 The skill includes:

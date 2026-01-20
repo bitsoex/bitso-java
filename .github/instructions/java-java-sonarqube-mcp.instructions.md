@@ -18,7 +18,7 @@ Using SonarQube MCP for Java code quality analysis.
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.agent-skills/sonarqube-integration/SKILL.md
+.claude/skills/sonarqube-integration/SKILL.md
 ```
 
 The skill includes:

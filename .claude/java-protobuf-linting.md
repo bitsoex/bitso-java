@@ -17,7 +17,7 @@ Buf CLI setup for protobuf linting and breaking change detection.
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.agent-skills/grpc-standards/SKILL.md
+.claude/skills/grpc-standards/SKILL.md
 ```
 
 The skill includes:

@@ -17,7 +17,7 @@ Standards for Bitso Java services.
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.agent-skills/java-standards/SKILL.md
+.claude/skills/java-standards/SKILL.md
 ```
 
 The skill includes:

@@ -17,7 +17,7 @@ Review Flyway SQL migrations considering:
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.agent-skills/database-integration/SKILL.md
+.claude/skills/database-integration/SKILL.md
 ```
 
 The skill includes:

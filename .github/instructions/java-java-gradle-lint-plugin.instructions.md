@@ -18,7 +18,7 @@ Nebula Gradle Lint plugin configuration and common violation fixes.
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.agent-skills/gradle-standards/SKILL.md
+.claude/skills/gradle-standards/SKILL.md
 ```
 
 The skill includes:

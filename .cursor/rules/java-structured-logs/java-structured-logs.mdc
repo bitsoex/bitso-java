@@ -23,7 +23,7 @@ RFC-34 compliant structured logging for Java services.
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.agent-skills/structured-logging/SKILL.md
+.claude/skills/structured-logging/SKILL.md
 ```
 
 The skill includes:

@@ -29,7 +29,7 @@ git pull origin main
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.agent-skills/pr-lifecycle/SKILL.md
+.claude/skills/pr-lifecycle/SKILL.md
 ```
 
 The skill includes:

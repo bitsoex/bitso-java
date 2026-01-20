@@ -26,7 +26,7 @@ Testing patterns for Java projects using JUnit, Spock, and Testcontainers.
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.agent-skills/java-testing/SKILL.md
+.claude/skills/java-testing/SKILL.md
 ```
 
 The skill includes:

@@ -17,7 +17,7 @@ REST API standards for Java Spring services.
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.agent-skills/rest-api/SKILL.md
+.claude/skills/rest-api/SKILL.md
 ```
 
 The skill includes:

@@ -62,7 +62,7 @@ For comprehensive checks:
 
 ## Related
 
-Full procedure: `.agent-skills/quality-gateway/`
+Full procedure: `.claude/skills/quality-gateway/`
 
 ---
 *This rule is part of the java category.*

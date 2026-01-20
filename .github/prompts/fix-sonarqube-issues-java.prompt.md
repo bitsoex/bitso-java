@@ -14,7 +14,7 @@ Fix SonarQube issues with severity-based processing for Java projects.
 ## Skill Location
 
 ```
-.agent-skills/sonarqube-integration/
+.claude/skills/sonarqube-integration/
 ```
 
 ## Quick Workflow
@@ -62,8 +62,8 @@ Fix SonarQube issues with severity-based processing for Java projects.
 
 ## Related
 
-- `.agent-skills/jira-workflow` - Jira ticket workflow
-- `.agent-skills/pr-lifecycle` - PR creation and management
+- `.claude/skills/jira-workflow` - Jira ticket workflow
+- `.claude/skills/pr-lifecycle` - PR creation and management
 - `java/rules/java-gradle-commands.md` - Gradle commands reference
 
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->

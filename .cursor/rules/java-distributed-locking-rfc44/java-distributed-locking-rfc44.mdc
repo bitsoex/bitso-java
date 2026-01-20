@@ -24,7 +24,7 @@ RFC-44 compliant distributed locking for scheduled jobs and critical sections.
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.agent-skills/distributed-locking/SKILL.md
+.claude/skills/distributed-locking/SKILL.md
 ```
 
 The skill includes:

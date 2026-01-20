@@ -17,7 +17,7 @@ JaCoCo coverage setup and multi-module aggregation for Java projects.
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.agent-skills/java-coverage/SKILL.md
+.claude/skills/java-coverage/SKILL.md
 ```
 
 The skill includes:

@@ -16,7 +16,7 @@ Full documentation: `.claude/skills/dependency-management/`
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.agent-skills/dependency-management/SKILL.md
+.claude/skills/dependency-management/SKILL.md
 ```
 
 The skill includes:

@@ -24,7 +24,7 @@ RFC-33 compliant gRPC service implementation for Java.
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.agent-skills/grpc-standards/SKILL.md
+.claude/skills/grpc-standards/SKILL.md
 ```
 
 The skill includes:

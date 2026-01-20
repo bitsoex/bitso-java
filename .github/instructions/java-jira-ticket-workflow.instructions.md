@@ -12,14 +12,14 @@ Best practices for AI agents to create and manage Jira tickets when performing a
 - Create Jira ticket BEFORE starting any work
 - Discover project key dynamically (never hardcode)
 - Search for existing tickets before creating new ones
-- Process issues by severity: CRITICAL → HIGH → MEDIUM → LOW
+- Process issues by severity: CRITICAL -> HIGH -> MEDIUM -> LOW
 
 ## 📚 Full Documentation
 
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.agent-skills/jira-workflow/SKILL.md
+.claude/skills/jira-workflow/SKILL.md
 ```
 
 The skill includes:

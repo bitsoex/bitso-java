@@ -26,7 +26,7 @@ These principles apply to all repositories regardless of technology stack.
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.agent-skills/coding-standards/SKILL.md
+.claude/skills/coding-standards/SKILL.md
 ```
 
 The skill includes:

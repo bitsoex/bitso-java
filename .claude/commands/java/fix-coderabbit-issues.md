@@ -12,7 +12,7 @@ Full documentation: `.claude/skills/coderabbit-interactions/`
 
 ## Quick Start
 
-1. Export comments: `node .agent-skills/coderabbit-interactions/scripts/export-comments.js --pr <number>`
+1. Export comments: `node .claude/skills/coderabbit-interactions/scripts/export-comments.js --pr <number>`
 2. Review by severity: critical → major → minor
 3. Apply patterns from the skill:
    - `.claude/skills/coderabbit-interactions/SKILL.md` - Main instructions

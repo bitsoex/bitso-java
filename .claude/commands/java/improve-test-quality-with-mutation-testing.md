@@ -9,7 +9,7 @@ Use PIT mutation testing to identify tests that pass but don't verify behavior.
 ## Skill Location
 
 ```
-.agent-skills/mutation-testing/
+.claude/skills/mutation-testing/
 ```
 
 ## Quick Start

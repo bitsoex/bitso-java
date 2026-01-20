@@ -17,7 +17,7 @@ Fix strategies for Dependabot vulnerabilities in Java/Gradle projects.
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.agent-skills/dependabot-security/SKILL.md
+.claude/skills/dependabot-security/SKILL.md
 ```
 
 The skill includes:
