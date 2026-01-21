@@ -1,0 +1,213 @@
+/**
+ * Dependency Analysis Plugin Configuration
+ * 
+ * Plugin: com.autonomousapps.dependency-analysis
+ * Repository: https://github.com/autonomousapps/dependency-analysis-gradle-plugin
+ * Version: 3.5.1 (latest as of Jan 2026)
+ * 
+ * Purpose: Analyze dependency usage and optimize scopes (implementation vs api vs compileOnly)
+ * 
+ * Usage:
+ *   ./gradlew buildHealth           # Full analysis with advice
+ *   ./gradlew :module:projectHealth # Module-specific analysis
+ *   ./gradlew :module:reason --id com.example:library # Why a dependency is suggested
+ *   ./gradlew fixDependencies       # Apply suggested fixes (review carefully!)
+ * 
+ * Multi-Module Note:
+ *   For projects with custom plugins (e.g., bitso.java.module), the plugin may not
+ *   automatically apply to subprojects. In that case, apply explicitly:
+ *   
+ *   subprojects {
+ *       plugins.withType(JavaPlugin) {
+ *           apply plugin: 'com.autonomousapps.dependency-analysis'
+ *       }
+ *   }
+ */
+
+plugins {
+    id 'com.autonomousapps.dependency-analysis' version '3.5.1'
+}
+
+// ============================================================================
+// CONFIGURATION
+// ============================================================================
+
+dependencyAnalysis {
+    // Issue severity configuration
+    issues {
+        all {
+            onAny {
+                // Options: 'fail', 'warn', 'ignore'
+                severity('warn')
+            }
+            
+            // Unused dependencies - dependencies declared but not used
+            onUnusedDependencies {
+                severity('warn')
+            }
+            
+            // Used transitive dependencies - should be declared explicitly
+            onUsedTransitiveDependencies {
+                severity('warn')
+            }
+            
+            // Incorrect configuration - wrong scope (e.g., implementation instead of api)
+            onIncorrectConfiguration {
+                severity('warn')
+            }
+            
+            // Redundant plugins
+            onRedundantPlugins {
+                severity('warn')
+            }
+            
+            // Unused annotation processors
+            onUnusedAnnotationProcessors {
+                severity('warn')
+            }
+        }
+        
+        // Project-specific overrides
+        def appPath = ':app'
+        if (rootProject.findProject(appPath) != null) {
+            project(appPath) {
+                onAny {
+                    severity('fail')  // Stricter for main app
+                }
+            }
+        }
+    }
+    
+    // ABI (Application Binary Interface) configuration
+    abi {
+        exclusions {
+            // Exclude specific classes from ABI analysis
+            // excludeClasses(".*\\.internal\\..*")
+        }
+    }
+    
+    // Structure configuration for multi-module projects
+    structure {
+        // Bundle related modules together
+        bundle('spring-boot') {
+            primary('org.springframework.boot:spring-boot-starter-web')
+            includeGroup('org.springframework.boot')
+            includeGroup('org.springframework')
+        }
+        
+        bundle('jackson') {
+            primary('com.fasterxml.jackson.core:jackson-databind')
+            includeGroup('com.fasterxml.jackson.core')
+            includeGroup('com.fasterxml.jackson.datatype')
+            includeGroup('com.fasterxml.jackson.module')
+        }
+        
+        bundle('grpc') {
+            primary('io.grpc:grpc-netty-shaded')
+            includeGroup('io.grpc')
+        }
+    }
+}
+
+// ============================================================================
+// SCOPE SELECTION GUIDE
+// ============================================================================
+/*
+| Scope               | When to Use                                      |
+|---------------------|--------------------------------------------------|
+| implementation      | Internal use only, not exposed to consumers      |
+| api                 | Exposed in public API (library modules only)     |
+| compileOnly         | Compile-time only (Lombok, annotations)          |
+| runtimeOnly         | Runtime only (JDBC drivers, logging impls)       |
+| testImplementation  | Test dependencies                                |
+| testRuntimeOnly     | Test runtime only (test engines)                 |
+| annotationProcessor | Annotation processing (Lombok, MapStruct)        |
+
+EXAMPLES:
+
+// ❌ BEFORE: Over-broad scopes
+implementation libs.lombok
+implementation libs.postgresql
+implementation libs.logback.classic
+
+// ✅ AFTER: Minimal scopes
+compileOnly libs.lombok
+annotationProcessor libs.lombok
+runtimeOnly libs.postgresql
+runtimeOnly libs.logback.classic
+*/
+
+// ============================================================================
+// COMMON PATTERNS
+// ============================================================================
+
+/*
+PATTERN 1: Lombok (compile-time only)
+
+dependencies {
+    compileOnly libs.lombok
+    annotationProcessor libs.lombok
+    testCompileOnly libs.lombok
+    testAnnotationProcessor libs.lombok
+}
+
+PATTERN 2: Database drivers (runtime only)
+
+dependencies {
+    runtimeOnly libs.postgresql
+    runtimeOnly libs.h2  // for tests, use testRuntimeOnly
+}
+
+PATTERN 3: Logging implementations (runtime only)
+
+dependencies {
+    implementation libs.slf4j.api  // API is compile-time
+    runtimeOnly libs.logback.classic  // Implementation is runtime
+}
+
+PATTERN 4: Library module exposing types
+
+// If your public API returns/accepts Spring types:
+dependencies {
+    api libs.spring.boot.starter.web
+}
+
+// If you only use Spring internally:
+dependencies {
+    implementation libs.spring.boot.starter.web
+}
+
+PATTERN 5: Test dependencies
+
+dependencies {
+    testImplementation libs.junit.jupiter
+    testImplementation libs.mockito.core
+    testRuntimeOnly libs.junit.platform.launcher
+}
+*/
+
+// ============================================================================
+// TROUBLESHOOTING
+// ============================================================================
+/*
+1. "Dependency declared but not used"
+   - Check if used in annotation processors
+   - Check if used only at runtime
+   - Remove if truly unused
+
+2. "Should be api, not implementation"
+   - Check if type is exposed in public API
+   - If library module, use api
+   - If application module, usually implementation is fine
+
+3. "Used transitive dependency should be declared"
+   - Add explicit declaration for visibility
+   - Helps with version management
+
+4. Temporarily disable analysis:
+   ./gradlew build -Ddependency.analysis.skip=true
+*/
+// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+// Source: bitsoex/ai-code-instructions → java/templates/dependency-analysis.gradle
+// To modify, edit the source file and run the distribution workflow
+

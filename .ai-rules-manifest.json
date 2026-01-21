@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "generatedAt": "2026-01-20T04:18:11.043Z",
+  "generatedAt": "2026-01-21T04:18:00.171Z",
   "sourceRepo": "bitsoex/ai-code-instructions",
   "category": "java",
   "parentCategories": [
@@ -168,7 +168,9 @@
     ".claude/skills/gradle-standards/SKILL.md",
     ".claude/skills/gradle-standards/references/cleanup-workflow.md",
     ".claude/skills/gradle-standards/references/multi-module.md",
+    ".claude/skills/gradle-standards/references/native-dependency-locking.md",
     ".claude/skills/gradle-standards/references/optimization.md",
+    ".claude/skills/gradle-standards/references/scope-optimization.md",
     ".claude/skills/gradle-standards/references/troubleshooting.md",
     ".claude/skills/gradle-standards/references/unused-detection.md",
     ".claude/skills/gradle-standards/references/version-catalogs.md",
@@ -187,6 +189,7 @@
     ".claude/skills/java-standards/SKILL.md",
     ".claude/skills/java-standards/references/build-verification.md",
     ".claude/skills/java-standards/references/code-review.md",
+    ".claude/skills/java-standards/references/mapstruct-spring.md",
     ".claude/skills/java-standards/references/services.md",
     ".claude/skills/java-testing/SKILL.md",
     ".claude/skills/java-testing/references/grpc-testing.md",
@@ -365,6 +368,7 @@
     ".vscode/scripts/check-pitest-readiness.sh",
     ".vscode/scripts/gradle-lint-analyze.sh",
     ".vscode/scripts/gradle-lint-setup.sh",
+    "gradle/dependency-analysis.gradle",
     "gradle/dependency-graph-init.gradle",
     "gradle/pitest.gradle",
     "gradle/unused-dependencies.gradle"

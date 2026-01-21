@@ -145,24 +145,55 @@ lombok-mapstruct-binding = { module = 'org.projectlombok:lombok-mapstruct-bindin
 
 ## MapStruct Configuration
 
-Use MapStruct for mapping objects. Mappers should:
-- Have a `INSTANCE` variable: `public static MyConverter INSTANCE = Mappers.getMapper(MyConverter.class)`
-- Be abstract classes with public abstract methods
-- No component model needed
+Use MapStruct with Spring's component model for dependency injection. Mappers should:
+- Use `componentModel = MappingConstants.ComponentModel.SPRING` for Spring DI integration
+- Be interfaces (preferred) or abstract classes
+- Be injected via constructor, not accessed via static instances
+
+**Avoid the singleton pattern** (`Mappers.getMapper()` or static `INSTANCE` fields) because:
+- Spring-managed beans are easier to mock in unit tests
+- Aligns with Spring's dependency injection patterns
+- Allows injecting other Spring beans into mappers when needed
 
 Default mapper configuration:
 
 ```java
 @Mapper(
+    componentModel = MappingConstants.ComponentModel.SPRING,
     nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_DEFAULT,
     nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
     unmappedTargetPolicy = ReportingPolicy.IGNORE,
     unmappedSourcePolicy = ReportingPolicy.IGNORE
 )
-public abstract class MyMapper {
-    public static final MyMapper INSTANCE = Mappers.getMapper(MyMapper.class);
+public interface MyMapper {
+    TargetDto toDto(SourceEntity entity);
+}
+```
+
+Usage in services:
+
+```java
+@RequiredArgsConstructor
+public class MyService {
+    private final MyMapper myMapper;
     
-    public abstract TargetDto toDto(SourceEntity entity);
+    public TargetDto convert(SourceEntity entity) {
+        return myMapper.toDto(entity);
+    }
+}
+```
+
+When a mapper references other mappers via `uses`, add `injectionStrategy = InjectionStrategy.CONSTRUCTOR`:
+
+```java
+@Mapper(
+    componentModel = MappingConstants.ComponentModel.SPRING,
+    injectionStrategy = InjectionStrategy.CONSTRUCTOR,
+    uses = {AddressMapper.class, PhoneMapper.class},
+    unmappedTargetPolicy = ReportingPolicy.IGNORE
+)
+public interface CustomerMapper {
+    CustomerDto toDto(CustomerEntity entity);
 }
 ```
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->

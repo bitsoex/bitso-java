@@ -14,7 +14,7 @@ Core principles and policies for managing dependency versions in Java/Gradle pro
 - [Anti-Patterns](#anti-patterns) (L65-L108)
 - [Never-Downgrade Policy](#never-downgrade-policy) (L109-L153)
 - [Why This Matters](#why-this-matters) (L154-L168)
-- [Related](#related) (L169-L172)
+- [Related](#related) (L169-L173)
 
 ---
 ## Critical Requirements
@@ -68,14 +68,14 @@ All versions must be defined in one of these locations:
 
 ```groovy
 // ❌ BAD: Version in build.gradle
-implementation "org.springframework.boot:spring-boot-starter-web:3.5.8"
+implementation "org.springframework.boot:spring-boot-starter-web:3.5.9"
 ```
 
 ### 2. Inline Version Variables
 
 ```groovy
 // ❌ BAD: Variable in build.gradle
-def springBootVersion = "3.5.8"
+def springBootVersion = "3.5.9"
 implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
 ```
 
@@ -92,14 +92,14 @@ implementation "com.example:library:1.2.3"  // Why not from catalog?
 ```toml
 # ❌ BAD: Same version defined multiple times
 [versions]
-spring-web = "3.5.8"
-spring-actuator = "3.5.8"  # Should use same ref!
+spring-web = "3.5.9"
+spring-actuator = "3.5.9"  # Should use same ref!
 ```
 
 ```toml
 # ✅ GOOD: Single version reference
 [versions]
-spring-boot = "3.5.8"
+spring-boot = "3.5.9"
 
 [libraries]
 spring-boot-starter-web = { module = "...", version.ref = "spring-boot" }
@@ -168,8 +168,9 @@ java.lang.NoSuchMethodError: 'redis.clients.jedis.params.SetParams SetParams.px(
 
 ## Related
 
-- [bundle-patterns.md](bundle-patterns.md) - Using bundles for dependencies
+- [resolution-strategies.md](resolution-strategies.md) - Resolution strategies with Nebula
 - [../SKILL.md](../SKILL.md) - Main skill documentation
+- [nebula-plugins](../../nebula-plugins/SKILL.md) - Align rules for version consistency
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/skills/dependency-management/references/version-centralization.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->

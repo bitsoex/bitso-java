@@ -9,9 +9,9 @@ Gradle Version Catalogs (`gradle/libs.versions.toml`) provide a centralized, typ
 ```toml
 [versions]
 # Define version variables
-spring-boot = "3.5.8"
+spring-boot = "3.5.9"
 spock = "2.4-M4-groovy-4.0"
-grpc = "1.65.1"
+grpc = "1.78.0"
 testcontainers = "1.20.0"
 
 [libraries]
@@ -25,10 +25,6 @@ spock-spring = { module = "org.spockframework:spock-spring", version.ref = "spoc
 
 # Libraries with inline versions (when not shared)
 logstash-logback-encoder = { module = "net.logstash.logback:logstash-logback-encoder", version = "8.0" }
-
-[bundles]
-# Group related dependencies
-testing-spring = ["spring-boot-starter-test", "spock-core", "spock-spring"]
 
 [plugins]
 # Plugin declarations
@@ -44,7 +40,9 @@ plugins {
 
 dependencies {
     implementation libs.spring.boot.starter.web
-    implementation libs.bundles.testing.spring
+    testImplementation libs.spring.boot.starter.test
+    testImplementation libs.spock.core
+    testImplementation libs.spock.spring
 
     // Access version for string interpolation
     implementation "com.example:lib:${libs.versions.example.get()}"
@@ -55,8 +53,9 @@ dependencies {
 
 1. **Naming Convention**: Use kebab-case for library names
 2. **Version References**: Use `version.ref` for shared versions
-3. **Bundles**: Create bundles for commonly-used combinations
-4. **Documentation**: Add comments for non-obvious dependencies
+3. **Explicit Dependencies**: Declare each dependency explicitly for visibility
+4. **Use Align Rules**: Use Nebula align rules for version consistency across module groups
+5. **Documentation**: Add comments for non-obvious dependencies
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/skills/gradle-standards/references/version-catalogs.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->

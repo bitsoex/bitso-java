@@ -9,12 +9,13 @@ Gradle build optimization techniques for faster and more reliable builds.
 
 ## Contents
 
-- [Dependency Optimization](#dependency-optimization) (L20-L66)
-- [Build Performance](#build-performance) (L67-L97)
-- [Dependency Analysis](#dependency-analysis) (L98-L127)
-- [Version Catalog Best Practices](#version-catalog-best-practices) (L128-L155)
-- [Troubleshooting](#troubleshooting) (L156-L182)
-- [Related](#related) (L183-L187)
+- [Dependency Optimization](#dependency-optimization) (L21-L67)
+- [Build Performance](#build-performance) (L68-L98)
+- [Dependency Analysis](#dependency-analysis) (L99-L128)
+- [Dependency Scope Optimization](#dependency-scope-optimization) (L129-L210)
+- [Version Catalog Best Practices](#version-catalog-best-practices) (L211-L238)
+- [Troubleshooting](#troubleshooting) (L239-L265)
+- [Related](#related) (L266-L270)
 
 ---
 ## Dependency Optimization
@@ -125,14 +126,96 @@ org.gradle.caching=true
 ./gradlew generateGradleLintReport
 ```
 
+## Dependency Scope Optimization
+
+Use the **Dependency Analysis Gradle Plugin** to identify over-broad scopes and optimize dependency declarations.
+
+### Setup
+
+```groovy
+// build.gradle
+plugins {
+    id 'com.autonomousapps.dependency-analysis' version '3.5.1'
+}
+```
+
+### Analyze Scopes
+
+```bash
+# Generate advice report
+./gradlew buildHealth
+
+# Project-specific advice
+./gradlew :my-module:projectHealth
+```
+
+### Scope Selection Guide
+
+| Scope | Use When | Exposes to Consumers |
+|-------|----------|---------------------|
+| `implementation` | Internal use only | No |
+| `api` | Exposed in public API | Yes |
+| `compileOnly` | Compile-time only (Lombok, annotations) | No |
+| `runtimeOnly` | Runtime only (JDBC drivers, logging) | No |
+| `testImplementation` | Test dependencies | N/A |
+
+### Common Migrations
+
+```groovy
+// ❌ BEFORE: Over-broad scopes
+implementation libs.lombok
+implementation libs.postgresql
+implementation libs.logback.classic
+
+// ✅ AFTER: Minimal scopes
+compileOnly libs.lombok           // Only needed at compile time
+annotationProcessor libs.lombok   // Annotation processing
+runtimeOnly libs.postgresql       // Only needed at runtime
+runtimeOnly libs.logback.classic  // Logging implementation
+```
+
+### API vs Implementation
+
+For **library modules** that expose types to consumers:
+
+```groovy
+// If your public API returns/accepts Spring types
+api libs.spring.boot.starter.web
+
+// If you only use Spring internally
+implementation libs.spring.boot.starter.web
+```
+
+### Automatic Fixes
+
+```bash
+# Apply suggested fixes (review carefully!)
+./gradlew fixDependencies
+```
+
+### Configuration
+
+```groovy
+// build.gradle
+dependencyAnalysis {
+    issues {
+        all {
+            onAny {
+                severity('fail')  // fail, warn, or ignore
+            }
+        }
+    }
+}
+```
+
 ## Version Catalog Best Practices
 
 ### Group Related Dependencies
 
 ```toml
 [versions]
-spring-boot = "3.5.8"
-grpc = "1.65.1"
+spring-boot = "3.5.9"
+grpc = "1.78.0"
 
 [libraries]
 # Group by purpose
