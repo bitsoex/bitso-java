@@ -30,11 +30,12 @@ Migrate Java projects from AWS SDK v1 (`com.amazonaws`) to v2 (`software.amazon.
 ### Sections
 
 - [When to Use](#when-to-use) (L22-L27)
-- [Migration Strategy (Priority Order)](#migration-strategy-priority-order) (L46-L54)
-- [Quick Start](#quick-start) (L55-L94)
-- [References](#references) (L95-L100)
-- [Related Command](#related-command) (L101-L104)
-- [Related Resources](#related-resources) (L105-L108)
+- [Critical: MSK IAM Authentication](#critical-msk-iam-authentication) (L47-L59)
+- [Migration Strategy (Priority Order)](#migration-strategy-priority-order) (L60-L68)
+- [Quick Start](#quick-start) (L69-L108)
+- [References](#references) (L109-L114)
+- [Related Command](#related-command) (L115-L118)
+- [Related Resources](#related-resources) (L119-L122)
 
 ### Available Resources
 
@@ -42,6 +43,19 @@ Migrate Java projects from AWS SDK v1 (`com.amazonaws`) to v2 (`software.amazon.
 - [migration patterns](references/migration-patterns.md)
 
 ---
+
+## Critical: MSK IAM Authentication
+
+When migrating to AWS SDK v2, also update `aws-msk-iam-auth` if using Kafka with MSK IAM.
+
+**Error after migration:**
+```
+NoClassDefFoundError: com/amazonaws/auth/AWSCredentialsProvider
+```
+
+**Fix:** Update `aws-msk-iam-auth` to `2.3.5` (AWS SDK v2 compatible).
+
+See [references/migration-patterns.md](references/migration-patterns.md) for details.
 
 ## Migration Strategy (Priority Order)
 

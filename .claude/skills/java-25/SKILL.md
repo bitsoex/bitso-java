@@ -64,7 +64,7 @@ Upgrade Java projects to Java 25 with all required dependency updates.
 | **Groovy** | **5.0.3** | Java 25 requires Groovy 5.x |
 | **Spock** | **2.4-groovy-5.0** | Must match Groovy version |
 | **Lombok** | **1.18.42** | Java 25 bytecode support |
-| **Lombok Plugin** | **9.1.0** | Freefair plugin for Gradle 9 |
+| **Lombok Plugin** | **9.2.0** | Freefair plugin for Gradle 9.2.1 |
 | **Spotless** | **8.1.0** | Gradle 9 compatible |
 | **SonarQube Plugin** | **7.2.2.6593** | Gradle 9 compatible |
 | **ByteBuddy** | **1.17.5+** | ASM 9.8 for Java 25 |
@@ -107,7 +107,7 @@ lombok = "1.18.42"
 bytebuddy = "1.17.5"  # If defined
 
 [plugins]
-lombok = "io.freefair.lombok:9.1.0"
+lombok = "io.freefair.lombok:9.2.0"
 spotless = "com.diffplug.spotless:8.1.0"
 sonarqube = "org.sonarqube:7.2.2.6593"
 ```

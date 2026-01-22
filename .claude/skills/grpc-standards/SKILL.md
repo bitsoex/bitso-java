@@ -58,7 +58,7 @@ RFC-33 compliant gRPC service standards for Java services.
 ```toml
 # gradle/libs.versions.toml
 [versions]
-grpc = "1.77.0"
+grpc = "1.78.0"
 protobuf = "4.33.0"
 
 [libraries]
@@ -69,7 +69,7 @@ protobuf-java = { module = "com.google.protobuf:protobuf-java", version.ref = "p
 grpc-resilience-starter = { module = "com.bitso.commons:grpc-resilience-starter", version = "LATEST" }
 
 [plugins]
-protobuf = { id = "com.google.protobuf", version = "0.9.5" }
+protobuf = { id = "com.google.protobuf", version = "0.9.6" }
 ```
 
 ### 2. Configure gRPC Server

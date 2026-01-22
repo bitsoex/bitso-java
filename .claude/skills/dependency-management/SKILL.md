@@ -64,7 +64,7 @@ Standards for managing library versions, dependency constraints, and Bill of Mat
 ```groovy
 // ❌ NEVER: Hardcode versions in build.gradle
 dependencies {
-    implementation "org.springframework.boot:spring-boot-starter-web:3.5.8"
+    implementation "org.springframework.boot:spring-boot-starter-web:3.5.9"
 }
 
 // ✅ ALWAYS: Use version catalog
@@ -93,10 +93,10 @@ The version catalog (`gradle/libs.versions.toml`) is the single source of truth:
 
 ```toml
 [versions]
-spring-boot = "3.5.8"
-grpc = "1.77.0"
+spring-boot = "3.5.9"
+grpc = "1.78.0"
 spock = "2.4-groovy-4.0"
-junit-jupiter = "5.14.1"
+junit-jupiter = "5.14.2"
 
 [libraries]
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }

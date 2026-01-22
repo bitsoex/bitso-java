@@ -2,7 +2,7 @@
 name: spring-boot-3-5
 description: >
   Upgrade Java services to Spring Boot 3.5.x with all required dependency updates.
-  Use when projects need to upgrade from older Spring Boot versions to 3.5.8+.
+  Use when projects need to upgrade from older Spring Boot versions to 3.5.9+.
 compatibility: Java projects using Gradle with Spring Boot
 metadata:
   version: "1.0.0"
@@ -16,11 +16,12 @@ metadata:
 
 # Spring Boot 3.5.x Upgrade
 
-Upgrade Java services to Spring Boot 3.5.8 with all required dependency updates.
+Upgrade Java services to Spring Boot 3.5.9 with all required dependency updates.
 
 ## When to Use
 
-- Project uses Spring Boot 3.4.x or earlier (3.4.x reached EOL)
+- Project uses Spring Boot 3.4.x or earlier
+- Preparing for Spring Boot 4 (stay on latest or latest-1 patch of 3.5.x)
 - Need features from Spring Boot 3.5.x
 - Preparing for Java 25 upgrade (requires Spring Boot 3.5.x first)
 
@@ -28,13 +29,13 @@ Upgrade Java services to Spring Boot 3.5.8 with all required dependency updates.
 
 ### Sections
 
-- [When to Use](#when-to-use) (L21-L26)
-- [Target Versions](#target-versions) (L46-L60)
-- [⚠️ DO NOT Upgrade](#do-not-upgrade) (L61-L65)
-- [Quick Start](#quick-start) (L66-L124)
-- [References](#references) (L125-L130)
-- [Related Command](#related-command) (L131-L134)
-- [Related Skills](#related-skills) (L135-L139)
+- [When to Use](#when-to-use) (L21-L27)
+- [Target Versions](#target-versions) (L47-L61)
+- [Version Unification](#version-unification) (L62-L67)
+- [Quick Start](#quick-start) (L68-L126)
+- [References](#references) (L127-L132)
+- [Related Command](#related-command) (L133-L136)
+- [Related Skills](#related-skills) (L137-L141)
 
 ### Available Resources
 
@@ -47,21 +48,22 @@ Upgrade Java services to Spring Boot 3.5.8 with all required dependency updates.
 
 | Component | Version | Notes |
 |-----------|---------|-------|
-| **Spring Boot** | **3.5.8** | CRITICAL - 3.4.x EOL |
+| **Spring Boot** | **3.5.9** | Latest (min 3.5.9) - preparing for Spring Boot 4 |
 | **Spring Cloud** | **2025.0.0** | Required for Spring Boot 3.5.x |
 | **Spring Dependency Management** | **1.1.7** | Required plugin version |
-| **Gradle** | **8.14.3** | Build tool |
-| **JUnit** | **5.14.1** | Testing (via BOM) |
-| **Spock** | **2.4-groovy-4.0** | Groovy testing |
+| **Gradle** | **9.2.1** | Recommended for all projects |
+| **JUnit** | **5.14.2** | Testing (via BOM) |
+| **Spock** | **2.4-groovy-4.0** | Groovy testing (use -groovy-5.0 for Java 25) |
 | **JaCoCo** | **0.8.14** | Code coverage |
 | **SonarQube Plugin** | **7.2.2.6593** | Code analysis |
 | **bitso-rds-iam-authn** | **2.0.0** | If using RDS IAM |
 | **bitso-commons-redis** | **4.2.1** | If using Redis |
 
-## ⚠️ DO NOT Upgrade
+## Version Unification
 
-- **protobuf**: Keep existing version (3.x → 4.x is breaking)
-- **grpc**: Keep existing version
+**CRITICAL**: Ensure Spring Boot version is defined in only ONE place.
+
+See [version-centralization.md](../dependency-management/references/version-centralization.md) for details on avoiding multiple version definitions.
 
 ## Quick Start
 
@@ -70,7 +72,7 @@ Upgrade Java services to Spring Boot 3.5.8 with all required dependency updates.
 ```toml
 # gradle/libs.versions.toml
 [versions]
-springBoot = "3.5.8"
+springBoot = "3.5.9"
 springCloud = "2025.0.0"  # CRITICAL for 3.5.x compatibility
 spock = "2.4-groovy-4.0"
 
@@ -82,12 +84,12 @@ spring-dependency-management = { id = "io.spring.dependency-management", version
 ### 2. Update Gradle Wrapper
 
 ```bash
-./gradlew wrapper --gradle-version=8.14.3
+./gradlew wrapper --gradle-version=9.2.1
 ```
 
 ### 3. Add JUnit Platform Launcher
 
-Required for Gradle 8.14.3 with JUnit 5.11+:
+Required for Gradle 9.x with JUnit 5.11+:
 
 ```groovy
 subprojects {

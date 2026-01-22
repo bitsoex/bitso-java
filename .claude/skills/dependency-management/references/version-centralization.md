@@ -9,12 +9,13 @@ Core principles and policies for managing dependency versions in Java/Gradle pro
 
 ## Contents
 
-- [Critical Requirements](#critical-requirements) (L20-L52)
-- [Approved Locations](#approved-locations) (L53-L64)
-- [Anti-Patterns](#anti-patterns) (L65-L108)
-- [Never-Downgrade Policy](#never-downgrade-policy) (L109-L153)
-- [Why This Matters](#why-this-matters) (L154-L168)
-- [Related](#related) (L169-L173)
+- [Critical Requirements](#critical-requirements) (L21-L53)
+- [Approved Locations](#approved-locations) (L54-L65)
+- [Anti-Patterns](#anti-patterns) (L66-L109)
+- [Spring Boot Version Unification](#spring-boot-version-unification) (L110-L179)
+- [Never-Downgrade Policy](#never-downgrade-policy) (L180-L224)
+- [Why This Matters](#why-this-matters) (L225-L239)
+- [Related](#related) (L240-L244)
 
 ---
 ## Critical Requirements
@@ -106,6 +107,76 @@ spring-boot-starter-web = { module = "...", version.ref = "spring-boot" }
 spring-boot-starter-actuator = { module = "...", version.ref = "spring-boot" }
 ```
 
+## Spring Boot Version Unification
+
+**CRITICAL**: Projects may inadvertently define Spring Boot versions in multiple places, causing version mismatches and build issues.
+
+### Problem: Multiple Version Definitions
+
+Spring Boot versions can be defined in:
+
+1. `gradle/libs.versions.toml` - version catalog (correct location)
+2. `settings.gradle` - plugin management block
+3. `build.gradle` - direct plugin declaration
+4. Individual module `build.gradle` files
+
+### Anti-Pattern
+
+```groovy
+// ❌ BAD: Different versions in different places
+// settings.gradle: id 'org.springframework.boot' version '3.4.10'
+// libs.versions.toml: springBoot = "3.5.7"
+// build.gradle: id 'org.springframework.boot' version '3.5.9' apply false
+```
+
+This causes multiple Spring Boot versions in Estate Catalog and inconsistent dependency resolution.
+
+### Required: Single Source of Truth
+
+```toml
+# gradle/libs.versions.toml - THE ONLY PLACE for Spring Boot version
+[versions]
+spring-boot = "3.5.9"
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version = "1.1.7" }
+```
+
+```groovy
+// build.gradle - Use alias, NOT hardcoded version
+plugins {
+    alias libs.plugins.spring.boot
+    alias libs.plugins.spring.dependency.management
+}
+```
+
+```groovy
+// settings.gradle - Do NOT declare Spring Boot version here
+pluginManagement {
+    plugins {
+        // ❌ WRONG: id 'org.springframework.boot' version '3.5.9'
+        // Let version catalog handle this
+    }
+}
+```
+
+### Verification Command
+
+Check for multiple Spring Boot version definitions:
+
+```bash
+# Find all Spring Boot version references
+grep -rn "org.springframework.boot" --include="*.gradle" --include="*.toml" . | grep -E "version|3\.[0-9]+\.[0-9]+"
+```
+
+### Migration Steps
+
+1. **Audit** - Find all Spring Boot version definitions
+2. **Unify** - Move version to `libs.versions.toml`
+3. **Replace** - Use `alias libs.plugins.spring.boot` everywhere
+4. **Verify** - Run `./gradlew dependencies | grep spring-boot`
+
 ## Never-Downgrade Policy
 
 **Policy**: Never replace a library version with an older version that was pre-existing in the repository.
@@ -127,12 +198,12 @@ spring-boot-starter-actuator = { module = "...", version.ref = "spring-boot" }
 | Pin BOM-managed to older | - | ❌ |
 | Add warning comment | ✅ | - |
 
-### Real Example (PR 643)
+### Example
 
 ```toml
 # ❌ WRONG: Pinning Jedis to older version than Spring Boot provides
 [versions]
-jedis = "4.4.8"  # DOWNGRADE - caused NoSuchMethodError
+jedis = "4.4.8"  # DOWNGRADE - causes NoSuchMethodError
 ```
 
 ```groovy

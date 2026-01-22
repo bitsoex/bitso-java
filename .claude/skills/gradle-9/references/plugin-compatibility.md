@@ -4,21 +4,22 @@ Complete plugin version mappings for Gradle 9.x upgrade.
 
 ## Contents
 
-- [Core Build Plugins](#core-build-plugins) (L17-L26)
-- [Database Plugins](#database-plugins) (L27-L33)
-- [Code Generation Plugins](#code-generation-plugins) (L34-L39)
-- [Deprecated Gradle APIs](#deprecated-gradle-apis) (L40-L61)
-- [JUnit Platform Launcher](#junit-platform-launcher) (L62-L76)
-- [Known Issues](#known-issues) (L77-L104)
-- [Version Catalog Example](#version-catalog-example) (L105-L135)
-- [Verification Commands](#verification-commands) (L136-L150)
+- [Core Build Plugins](#core-build-plugins) (L18-L27)
+- [Database Plugins](#database-plugins) (L28-L34)
+- [Code Generation Plugins](#code-generation-plugins) (L35-L40)
+- [Deprecated Gradle APIs](#deprecated-gradle-apis) (L41-L62)
+- [JUnit Platform Launcher](#junit-platform-launcher) (L63-L77)
+- [Known Issues](#known-issues) (L78-L105)
+- [CodeRabbit False Positives](#coderabbit-false-positives) (L106-L127)
+- [Version Catalog Example](#version-catalog-example) (L128-L158)
+- [Verification Commands](#verification-commands) (L159-L173)
 
 ---
 ## Core Build Plugins
 
 | Plugin | Gradle 8.x | Gradle 9.x | Notes |
 |--------|------------|------------|-------|
-| `io.freefair.lombok` | 8.14.2 | 9.1.0 | Major version aligned with Gradle |
+| `io.freefair.lombok` | 8.14.2 | **9.2.0** | Major version aligned with Gradle 9.2.1 |
 | `com.diffplug.spotless` | 6.x | 8.1.0 | Major bump required |
 | `org.sonarqube` | 6.x | 7.2.2.6593 | Major bump required |
 | `bitso.develocity` | 0.1.x | 0.2.8 | Compatibility update |
@@ -35,7 +36,7 @@ Complete plugin version mappings for Gradle 9.x upgrade.
 
 | Plugin | Gradle 8.x | Gradle 9.x | Notes |
 |--------|------------|------------|-------|
-| `com.google.protobuf` | 0.9.4 | 0.9.5 | Minor update |
+| `com.google.protobuf` | 0.9.4 | **0.9.6** | Gradle 9 compatible |
 
 ## Deprecated Gradle APIs
 
@@ -94,13 +95,35 @@ spotless {
 
 **Issue:** Older Lombok versions fail with Java 25 bytecode
 
-**Fix:** Use Lombok 1.18.42 with plugin 9.1.0
+**Fix:** Use Lombok 1.18.42 with plugin 9.2.0
 
 ### Develocity Build Scans
 
 **Issue:** Old Develocity plugin incompatible with Gradle 9
 
 **Fix:** Update to 0.2.8 in settings.gradle
+
+## CodeRabbit False Positives
+
+CodeRabbit may generate incorrect warnings about plugin compatibility. Always verify against this matrix.
+
+### Known Incorrect Warnings
+
+| Warning | Reality |
+|---------|---------|
+| "Protobuf plugin 0.9.6 not compatible with Gradle 9" | [v0.9.6](https://github.com/google/protobuf-gradle-plugin/releases/tag/v0.9.6) specifically adds Gradle 9 compatibility |
+| "Need to downgrade protobuf plugin to 0.9.5" | 0.9.6 is required for Gradle 9.1+ |
+| "Netty/Tomcat overrides break Spring Boot" | `ext['version']` overrides are valid |
+
+**Protobuf plugin 0.9.6 changes** (from [release notes](https://github.com/google/protobuf-gradle-plugin/releases/tag/v0.9.6)):
+- Removes Gradle-internal API references
+- Fixes deprecated multi-string dependency notation for Gradle 9.1+
+
+### How to Handle
+
+1. Check this matrix first - version combinations here are tested
+2. Test locally before accepting suggestions
+3. Dismiss verified false positives
 
 ## Version Catalog Example
 
@@ -112,13 +135,13 @@ Complete version catalog for Gradle 9:
 gradle = "9.2.1"
 
 # Plugins
-lombok-plugin = "9.1.0"
+lombok-plugin = "9.2.0"
 spotless = "8.1.0"
 sonarqube = "7.2.2.6593"
 develocity = "0.2.8"
 flyway-plugin = "11.19.0"
 jooq-plugin = "10.1.1"
-protobuf-plugin = "0.9.5"
+protobuf-plugin = "0.9.6"
 
 # Libraries for Java 25
 lombok = "1.18.42"

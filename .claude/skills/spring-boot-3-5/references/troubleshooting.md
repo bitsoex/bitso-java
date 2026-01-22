@@ -4,18 +4,19 @@ Common issues and solutions when upgrading to Spring Boot 3.5.x.
 
 ## Contents
 
-- [JUnit Test Discovery Fails](#junit-test-discovery-fails) (L21-L42)
-- [JUnit Version Mismatch](#junit-version-mismatch) (L43-L63)
-- [Spring Cloud Compatibility Error](#spring-cloud-compatibility-error) (L64-L80)
-- [Develocity Plugin Fails](#develocity-plugin-fails) (L81-L86)
-- [RDS IAM Authentication Fails](#rds-iam-authentication-fails) (L87-L92)
-- [Redis NoSuchMethodError](#redis-nosuchmethoderror) (L93-L118)
-- [Never Downgrade Jedis](#never-downgrade-jedis) (L119-L124)
-- [Testing Bundle Pattern](#testing-bundle-pattern) (L125-L142)
-- [Jacoco Report Generation Fails](#jacoco-report-generation-fails) (L143-L152)
-- [Spock Tests Fail to Discover](#spock-tests-fail-to-discover) (L153-L162)
-- [Redis/Jedis Compatibility Matrix](#redisjedis-compatibility-matrix) (L163-L170)
-- [Real PR Examples](#real-pr-examples) (L171-L188)
+- [JUnit Test Discovery Fails](#junit-test-discovery-fails) (L22-L43)
+- [JUnit Version Mismatch](#junit-version-mismatch) (L44-L64)
+- [Spring Cloud Compatibility Error](#spring-cloud-compatibility-error) (L65-L81)
+- [Develocity Plugin Fails](#develocity-plugin-fails) (L82-L87)
+- [RDS IAM Authentication Fails](#rds-iam-authentication-fails) (L88-L93)
+- [Redis NoSuchMethodError](#redis-nosuchmethoderror) (L94-L119)
+- [Never Downgrade Jedis](#never-downgrade-jedis) (L120-L125)
+- [Testing Bundle Pattern](#testing-bundle-pattern) (L126-L143)
+- [Jacoco Report Generation Fails](#jacoco-report-generation-fails) (L144-L153)
+- [Spock Tests Fail to Discover](#spock-tests-fail-to-discover) (L154-L163)
+- [Multiple Spring Boot Versions Detected](#multiple-spring-boot-versions-detected) (L164-L231)
+- [Redis/Jedis Compatibility Matrix](#redisjedis-compatibility-matrix) (L232-L239)
+- [Upgrade Patterns](#upgrade-patterns) (L240-L252)
 
 ---
 ## JUnit Test Discovery Fails
@@ -160,6 +161,74 @@ jacocoVersion=0.8.14
 spock = "2.4-groovy-4.0"
 ```
 
+## Multiple Spring Boot Versions Detected
+
+**Symptom:** Estate Catalog shows multiple Spring Boot versions for an entity, or version detection reports unexpected values.
+
+**Causes:**
+
+1. Plugin version differs from catalog version
+2. Build file has hardcoded version alongside catalog reference
+3. SBOM contains multiple versions from submodules
+4. Plugin references wrong version key (e.g., `grpc-client-spring-boot` instead of `spring-boot`)
+
+### Detection Logic
+
+The Estate Catalog crawler:
+
+- Detects explicit `spring-boot` key in `[versions]` section (highest priority)
+- Resolves `version.ref` from plugin declarations
+- Falls back to `springBoot` (camelCase) or `spring6-boot` patterns
+- Filters out Spring Framework versions (5.x, 6.x) as implausible Spring Boot versions
+- Reports multiple versions if found in different sources
+
+### Common Misconfigurations
+
+```toml
+# ❌ BAD: Plugin references wrong version key
+[versions]
+grpc-client-spring-boot = "3.1.0.RELEASE"  # This is a library version, not Spring Boot!
+spring-boot = "3.5.9"
+
+[plugins]
+springBoot = { id = "org.springframework.boot", version.ref = "grpc-client-spring-boot" }  # Wrong!
+```
+
+```toml
+# ✅ CORRECT: Plugin references the right version
+[versions]
+spring-boot = "3.5.9"
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+```
+
+### Fix Steps
+
+1. **Audit** - Find all Spring Boot version definitions:
+
+   ```bash
+   grep -rn "org.springframework.boot\|spring-boot\|springBoot" --include="*.gradle" --include="*.toml" .
+   ```
+
+2. **Unify** - Move version to single `spring-boot` key in `libs.versions.toml`
+
+3. **Update plugins** - Ensure plugin references correct version key
+
+4. **Verify** - Check resolved version:
+
+   ```bash
+   ./gradlew dependencies --configuration runtimeClasspath | grep spring-boot
+   ```
+
+### Version Validation
+
+The crawler validates detected versions:
+
+- Accepts versions 3.x - 4.x as plausible Spring Boot versions
+- Rejects versions 5.x+ (these are Spring Framework, not Spring Boot)
+- Rejects versions with `.RELEASE` suffix (library versions, not framework)
+
 ## Redis/Jedis Compatibility Matrix
 
 | Spring Boot | Jedis Version | bitso-commons-redis | jedis4-utils |
@@ -168,24 +237,19 @@ spock = "2.4-groovy-4.0"
 | 3.2.x-3.4.x | 5.x | 3.6.x | 2.x |
 | **3.5.x** | **6.x** | **4.2.1** | **3.0.0** |
 
-## Real PR Examples
+## Upgrade Patterns
 
-> **Note**: These examples reference internal Bitso repositories (private access required).
+### With Spring Cloud
 
-### PRs with Spring Cloud Upgrade
+Full upgrade requires Spring Cloud 2025.0.0 for Spring Boot 3.5.x compatibility.
 
-- `aum-reconciliation-v2#730` - Full Spring Boot 3.5.9 + Spring Cloud 2025.0.0 upgrade
+### Without Spring Cloud
 
-### PRs without Spring Cloud (simpler upgrades)
+Simpler upgrades only require Spring Boot version update.
 
-- `treasury-management#291` - Basic upgrade
-- `reconciliation-engine#1444` - Multi-module upgrade
-- `proof-of-solvency#560` - Simple upgrade
+### With Redis
 
-### PRs with Redis/Jedis Fix
-
-- `assets#643` - Fix Redis SetParams.px(long) issue
-- `consumer-wallet#770` - Bump redis library to 4.2.0
+Redis upgrades require `bitso-commons-redis:4.2.1` and `jedis4-utils:3.0.0`.
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/skills/spring-boot-3-5/references/troubleshooting.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->

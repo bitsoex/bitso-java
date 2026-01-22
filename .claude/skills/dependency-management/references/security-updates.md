@@ -104,7 +104,7 @@ configurations.configureEach {
 
 ## Spring Boot 3.5.x Requirements
 
-**IMPORTANT**: Spring Boot 3.4.x reaches EOL end of 2025.
+**IMPORTANT**: Stay on latest or latest-1 patch of Spring Boot 3.5.x to prepare for Spring Boot 4.
 
 For Spring Boot 3.5.x, these library upgrades are required:
 

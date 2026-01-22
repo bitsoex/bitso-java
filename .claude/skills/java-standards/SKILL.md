@@ -55,8 +55,8 @@ Java service standards for Bitso projects.
 | Component | Version | Notes |
 |-----------|---------|-------|
 | **Java** | 21 (LTS) | Current LTS version |
-| **Gradle** | 8.14.3+ | Compatible with Java 21 |
-| **Spring Boot** | 3.5.8 | CRITICAL - 3.4.x EOL end of 2025 |
+| **Gradle** | **9.2.1** | Recommended for all projects |
+| **Spring Boot** | **3.5.9** | Latest (min 3.5.9) - preparing for Spring Boot 4 |
 | **Database Access** | jOOQ | For accessing PostgreSQL |
 | **Databases** | PostgreSQL, Redis | Primary data stores |
 | **Inter-service Communication** | gRPC | Standard protocol |

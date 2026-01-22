@@ -33,9 +33,10 @@
 
 | Plugin | Minimum Version | Notes |
 |--------|----------------|-------|
-| Lombok Plugin | 9.1.0 | Major version for Gradle 9 |
+| Lombok Plugin | **9.2.0** | For Gradle 9.2.1 |
 | Spotless | 8.1.0 | Updated for Gradle 9 |
 | SonarQube | 7.2.2.6593 | Updated for Gradle 9 |
+| Protobuf Plugin | **0.9.6** | Gradle 9 compatible |
 | Spring Dependency Management | 1.1.7 | Required for Spring Boot 3.5.x |
 
 ## Related

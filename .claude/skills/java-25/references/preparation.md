@@ -160,7 +160,7 @@ Type not available on current VM: net.bytebuddy.jar.asmjdkbridge.JdkClassWriter
 | Groovy | 4.0.x | 5.0.3 |
 | Spock | 2.4-groovy-4.0 | 2.4-groovy-5.0 |
 | Lombok | 1.18.x | 1.18.42 |
-| Lombok Plugin | 8.14.2 | 9.1.0 |
+| Lombok Plugin | 8.14.2 | 9.2.0 |
 | ByteBuddy | 1.14.x | 1.17.5+ |
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/skills/java-25/references/preparation.md -->

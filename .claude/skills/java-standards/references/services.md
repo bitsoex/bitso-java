@@ -2,21 +2,22 @@
 
 ## Contents
 
-- [Tech Stack](#tech-stack) (L13-L23)
-- [Project Organization](#project-organization) (L24-L67)
-- [Package Guidelines](#package-guidelines) (L68-L75)
-- [Dependency Management](#dependency-management) (L76-L116)
-- [Lombok Configuration](#lombok-configuration) (L117-L145)
-- [MapStruct Configuration](#mapstruct-configuration) (L146-L167)
+- [Tech Stack](#tech-stack) (L14-L24)
+- [Project Organization](#project-organization) (L25-L68)
+- [Package Guidelines](#package-guidelines) (L69-L76)
+- [Dependency Management](#dependency-management) (L77-L118)
+- [Lombok Configuration](#lombok-configuration) (L119-L147)
+- [MapStruct Configuration](#mapstruct-configuration) (L148-L201)
 
 ---
+
 ## Tech Stack
 
 | Component | Version/Tool | Notes |
 |-----------|--------------|-------|
 | Java | Last LTS version (Java 21) | |
-| Gradle | 8.14.3+ | Compatible with Java 21 |
-| Spring Boot | **3.5.9** | 3.4.x EOL end of 2025 |
+| Gradle | **9.2.1** | Recommended for all projects |
+| Spring Boot | **3.5.9** | Latest (min 3.5.9) - preparing for Spring Boot 4 |
 | Database Access | jOOQ | For accessing database |
 | Databases | PostgreSQL, Redis | |
 | Inter-service Communication | gRPC | |
@@ -89,14 +90,15 @@ All libraries must be placed in `libs.versions.toml`:
 ```toml
 [versions]
 spring-boot = "3.5.9"
-gradle = "8.14.3"
+gradle = "9.2.1"
 java = "21"
-grpc = "1.77.0"
-protobuf = "4.33.0"
+grpc = "1.78.0"
+protobuf = "4.33.4"
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version = "1.1.7" }
+protobuf = { id = "com.google.protobuf", version = "0.9.6" }
 
 [libraries]
 managed-by-spring-library = { module = "org.springframework:library" } # No version needed
@@ -121,7 +123,7 @@ Add the io.freefair.lombok plugin:
 ```toml
 # libs.versions.toml
 [plugins]
-lombok = { id = "io.freefair.lombok", version = "8.14" }
+lombok = { id = "io.freefair.lombok", version = "9.2.0" }
 ```
 
 ```groovy

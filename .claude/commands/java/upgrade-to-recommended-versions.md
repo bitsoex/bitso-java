@@ -1,22 +1,22 @@
-# Upgrade Java services to recommended versions (Spring Boot 3.5.9, Gradle 8.14.3+, Java 21)
+# Upgrade Java services to recommended versions (Spring Boot 3.5.9, Gradle 9.2.1, Java 21)
 
-**Description:** Upgrade Java services to recommended versions (Spring Boot 3.5.9, Gradle 8.14.3+, Java 21)
+**Description:** Upgrade Java services to recommended versions (Spring Boot 3.5.9, Gradle 9.2.1, Java 21)
 
 # 🤖 📦 Upgrade to Recommended Versions
 
 > **📚 Full documentation**: See the [spring-boot-3-5 skill](../skills/spring-boot-3-5/SKILL.md) for complete upgrade patterns and troubleshooting.
 
-**URGENT**: Spring Boot 3.4.x reached end-of-life (EOL) in 2025. All projects should be upgraded to Spring Boot 3.5.9.
+**IMPORTANT**: Stay on latest or latest-1 patch of Spring Boot 3.5.x to prepare for Spring Boot 4.
 
 ## Target Versions
 
 | Component | Version | Notes |
 |-----------|---------|-------|
-| **Spring Boot** | **3.5.9** | CRITICAL - 3.4.x reached EOL (end of 2025) |
+| **Spring Boot** | **3.5.9** | Latest (min 3.5.9) - preparing for Spring Boot 4 |
 | **Spring Cloud** | **2025.0.0** | Required for Spring Boot 3.5.x |
-| **Gradle** | **8.14.3** | Latest 8.x patch (Gradle 9.x for Java 25) |
+| **Gradle** | **9.2.1** | Recommended for all projects |
 | **JUnit** | **5.14.2** | Testing (via BOM) |
-| **JaCoCo** | **0.8.15** | Code coverage |
+| **JaCoCo** | **0.8.14** | Code coverage |
 
 ## Quick Commands
 
@@ -25,7 +25,7 @@
 ./gradlew dependencies --configuration runtimeClasspath | grep spring-boot
 
 # Update Gradle wrapper
-./gradlew wrapper --gradle-version 8.14.3
+./gradlew wrapper --gradle-version 9.2.1
 ```
 
 ## Workflow Summary

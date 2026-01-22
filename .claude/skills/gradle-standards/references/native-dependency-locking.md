@@ -239,7 +239,7 @@ Both formats capture dependency versions, but with different information:
 | Information | Example |
 |-------------|---------|
 | **Transitive sources** | `"firstLevelTransitive": ["spring-boot-starter"]` |
-| **Requested version** | `"requested": "3.5.8"` (when explicitly declared) |
+| **Requested version** | `"requested": "3.5.9"` (when explicitly declared) |
 | **Resolution rules applied** | `"viaResolutionRule": true` |
 
 ### Information Only in Native
@@ -318,7 +318,7 @@ The native lock file is a simple text format:
 com.fasterxml.jackson.core:jackson-annotations:2.19.4=compileClasspath,runtimeClasspath
 com.fasterxml.jackson.core:jackson-core:2.19.4=compileClasspath,runtimeClasspath
 com.fasterxml.jackson.core:jackson-databind:2.19.4=compileClasspath,runtimeClasspath
-org.springframework.boot:spring-boot-dependencies:3.5.8=compileClasspath,runtimeClasspath
+org.springframework.boot:spring-boot-dependencies:3.5.9=compileClasspath,runtimeClasspath
 empty=annotationProcessor
 ```
 
@@ -1064,7 +1064,7 @@ Forces can be removed ONLY when:
 Example where force is NOT needed:
 
 ```groovy
-// logback managed by Spring Boot BOM 3.5.8 = 1.5.21
+// logback managed by Spring Boot BOM 3.5.9 = 1.5.21
 // Security requirement = 1.5.19
 // 1.5.21 > 1.5.19, so no force needed - BOM handles it
 ```

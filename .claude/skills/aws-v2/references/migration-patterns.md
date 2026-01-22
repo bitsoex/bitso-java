@@ -4,16 +4,68 @@ Detailed code migration patterns for common AWS services.
 
 ## Contents
 
-- [S3 Client Migration](#s3-client-migration) (L17-L51)
-- [SQS Client Migration](#sqs-client-migration) (L52-L77)
-- [SNS Client Migration](#sns-client-migration) (L78-L103)
-- [Lambda Client Migration](#lambda-client-migration) (L104-L132)
-- [Credential Provider Migration](#credential-provider-migration) (L133-L148)
-- [Dependency Substitution Examples](#dependency-substitution-examples) (L149-L189)
-- [Version Catalog Setup](#version-catalog-setup) (L190-L208)
-- [Troubleshooting](#troubleshooting) (L209-L246)
+- [MSK IAM Authentication](#msk-iam-authentication) (L18-L68)
+- [S3 Client Migration](#s3-client-migration) (L69-L103)
+- [SQS Client Migration](#sqs-client-migration) (L104-L129)
+- [SNS Client Migration](#sns-client-migration) (L130-L155)
+- [Lambda Client Migration](#lambda-client-migration) (L156-L184)
+- [Credential Provider Migration](#credential-provider-migration) (L185-L200)
+- [Dependency Substitution Examples](#dependency-substitution-examples) (L201-L241)
+- [Version Catalog Setup](#version-catalog-setup) (L242-L260)
+- [Troubleshooting](#troubleshooting) (L261-L298)
 
 ---
+## MSK IAM Authentication
+
+**CRITICAL**: When migrating to AWS SDK v2, you MUST also update `aws-msk-iam-auth` if your project uses Kafka with MSK IAM authentication.
+
+### Version Compatibility Matrix
+
+| AWS SDK | aws-msk-iam-auth | Notes |
+|---------|------------------|-------|
+| v1 (com.amazonaws) | 1.1.9 | Works with AWS SDK v1 |
+| v2 (software.amazon.awssdk) | **2.3.5** | REQUIRED for AWS SDK v2 |
+
+### The Problem
+
+After migrating to AWS SDK v2, Kafka producer initialization fails with:
+
+```
+NoClassDefFoundError: com/amazonaws/auth/AWSCredentialsProvider
+```
+
+### Root Cause
+
+`aws-msk-iam-auth:1.1.9` depends on AWS SDK v1 (`com.amazonaws.auth.AWSCredentialsProvider`), which is no longer on the classpath after migration to SDK v2.
+
+### Solution
+
+Update `aws-msk-iam-auth` from `1.1.9` to `2.3.5`:
+
+```toml
+# gradle/libs.versions.toml
+[versions]
+aws-msk-iam-auth = "2.3.5"  # Updated for AWS SDK v2 compatibility
+
+[libraries]
+aws-msk-iam-auth = { module = "software.amazon.msk:aws-msk-iam-auth", version.ref = "aws-msk-iam-auth" }
+```
+
+```groovy
+// build.gradle
+dependencies {
+    implementation libs.aws.msk.iam.auth
+}
+```
+
+### Verification
+
+Check that no AWS SDK v1 dependencies remain:
+
+```bash
+./gradlew dependencies --configuration runtimeClasspath | grep "com.amazonaws"
+```
+
 ## S3 Client Migration
 
 ### v1 (OLD)
