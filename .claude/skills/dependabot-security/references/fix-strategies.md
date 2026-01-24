@@ -4,15 +4,16 @@ Use this hierarchy - always prefer higher-level solutions.
 
 ## Contents
 
-- [Strategy 1: Update BOM/Platform Version (PREFERRED)](#strategy-1-update-bomplatform-version-preferred) (L18-L31)
-- [Strategy 2: Update Direct Dependency in Version Catalog](#strategy-2-update-direct-dependency-in-version-catalog) (L32-L44)
-- [Strategy 3: Dependency Substitution (For Transitive Not in BOM)](#strategy-3-dependency-substitution-for-transitive-not-in-bom) (L45-L69)
-- [Strategy 3b: GAV Substitution (For Discontinued Packages)](#strategy-3b-gav-substitution-for-discontinued-packages) (L70-L97)
-- [Strategy 4: Dependency Constraints](#strategy-4-dependency-constraints) (L98-L115)
-- [Strategy 5: Force Rules (Use With Caution)](#strategy-5-force-rules-use-with-caution) (L116-L132)
-- [Strategy 6: Exclude and Add (Last Resort)](#strategy-6-exclude-and-add-last-resort) (L133-L146)
-- [Strategy Comparison](#strategy-comparison) (L147-L157)
-- [Document Your Strategy Choice](#document-your-strategy-choice) (L158-L170)
+- [Strategy 1: Update BOM/Platform Version (PREFERRED)](#strategy-1-update-bomplatform-version-preferred)
+- [Strategy 2: Update Direct Dependency in Version Catalog](#strategy-2-update-direct-dependency-in-version-catalog)
+- [Strategy 3: Dependency Substitution (For Transitive Not in BOM)](#strategy-3-dependency-substitution-for-transitive-not-in-bom)
+- [Strategy 3b: GAV Substitution (For Discontinued Packages)](#strategy-3b-gav-substitution-for-discontinued-packages)
+- [Strategy 4: Dependency Constraints](#strategy-4-dependency-constraints)
+- [Strategy 5: Force Rules (Use With Caution)](#strategy-5-force-rules-use-with-caution)
+- [Strategy 6: Exclude and Add (Last Resort)](#strategy-6-exclude-and-add-last-resort)
+- [Strategy Comparison](#strategy-comparison)
+- [Verify Fix with Lockfiles](#verify-fix-with-lockfiles)
+- [Document Your Strategy Choice](#document-your-strategy-choice)
 
 ---
 ## Strategy 1: Update BOM/Platform Version (PREFERRED)
@@ -146,14 +147,64 @@ dependencies {
 
 ## Strategy Comparison
 
-| Strategy | Runtime | Dependency Graph | Complexity |
-|----------|---------|------------------|------------|
-| **BOM Update** | ✅ | ✅ | Low |
-| **Version Catalog** | ✅ | ✅ | Low |
-| **Substitution** | ✅ | ✅ | Medium |
-| **Constraints** | ✅ | ⚠️ May vary | Medium |
-| **Force** | ✅ | ❌ May show both | Low |
-| **Exclude and Add** | ✅ | ✅ | High |
+| Strategy | Runtime | Dependency Graph | Lockfile | Complexity |
+|----------|---------|------------------|----------|------------|
+| **BOM Update** | ✅ | ✅ | ✅ | Low |
+| **Version Catalog** | ✅ | ✅ | ✅ | Low |
+| **Substitution** | ✅ | ✅ | ✅ | Medium |
+| **Constraints** | ✅ | ⚠️ May vary | ✅ | Medium |
+| **Force** | ✅ | ❌ May show both | ✅ | Low |
+| **Exclude and Add** | ✅ | ✅ | ✅ | High |
+
+## Verify Fix with Lockfiles
+
+**Always regenerate and verify lockfiles after applying a security fix.**
+
+### Verification Workflow
+
+```bash
+# 1. Check current vulnerable version in lockfile
+grep "vulnerable-package" **/gradle.lockfile
+# Example: org.apache.commons:commons-compress:1.26.0=runtimeClasspath
+
+# 2. Apply fix (BOM update, substitution, force, etc.)
+
+# 3. Regenerate lockfiles
+./gradlew resolveAndLockAll --write-locks --refresh-dependencies --no-daemon --no-scan
+
+# 4. PRIMARY: Verify patched version in lockfile
+grep "vulnerable-package" **/gradle.lockfile
+# Should show: org.apache.commons:commons-compress:1.27.1=runtimeClasspath
+
+# 5. VERIFICATION LAYER: Run dependency graph to confirm
+./gradlew -I gradle/dependency-graph-init.gradle \
+    :ForceDependencyResolutionPlugin_resolveAllDependencies
+# Check output matches lockfile version
+
+# 6. Commit lockfiles
+git add "**/gradle.lockfile"
+git commit -m "fix: update commons-compress to 1.27.1 (CVE-2024-25710)"
+```
+
+### Two-Layer Verification
+
+| Layer | Tool | Purpose |
+|-------|------|---------|
+| **Primary** | Lockfile (`grep`) | Source of truth - shows locked version |
+| **Verification** | Dependency Graph | Confirms build resolves to locked version |
+
+### Why This Matters
+
+| Without Verification | With Two-Layer Verification |
+|---------------------|----------------------------|
+| Fix may not apply to all configurations | Lockfile shows exact configs fixed |
+| Transitive may still pull old version | Lockfile captures resolved version |
+| Build may resolve differently than locked | Dependency graph confirms resolution |
+
+### Related
+
+- [Native Dependency Locking](../../gradle-standards/references/native-dependency-locking.md) - Full locking documentation
+- [Dependency Graph](dependency-graph.md) - Verification layer setup
 
 ## Document Your Strategy Choice
 

@@ -4,10 +4,10 @@
 
 - [dependency-review CI Check Fails](#dependency-review-ci-check-fails) (L13-L32)
 - [Old Versions Still Appear After Substitution](#old-versions-still-appear-after-substitution) (L33-L68)
-- [Build Fails After Security Fix](#build-fails-after-security-fix) (L69-L86)
-- [Tests Fail After Security Fix](#tests-fail-after-security-fix) (L87-L107)
-- [Package is Discontinued](#package-is-discontinued) (L108-L125)
-- [Never Downgrade Pre-existing Versions](#never-downgrade-pre-existing-versions) (L126-L142)
+- [Build Fails After Security Fix](#build-fails-after-security-fix) (L69-L92)
+- [Tests Fail After Security Fix](#tests-fail-after-security-fix) (L93-L113)
+- [Package is Discontinued](#package-is-discontinued) (L114-L131)
+- [Never Downgrade Pre-existing Versions](#never-downgrade-pre-existing-versions) (L132-L149)
 
 ---
 ## dependency-review CI Check Fails
@@ -74,9 +74,15 @@ Check release notes for the updated dependency. May need code changes.
 
 ### Cause 2: Version conflict
 
-Another dependency may require the old version. Use `dependencyInsight`:
+Another dependency may require the old version. Use the dependency graph to verify, then `dependencyInsight` to debug:
 
 ```bash
+# PRIMARY: Check dependency graph for all versions
+./gradlew -I gradle/dependency-graph-init.gradle \
+    :ForceDependencyResolutionPlugin_resolveAllDependencies
+grep "commons-compress" build/reports/dependency-graph-snapshots/dependency-list.txt
+
+# DEBUGGING: Trace why a specific version was selected
 ./gradlew dependencyInsight --dependency commons-compress --configuration compileClasspath
 ```
 

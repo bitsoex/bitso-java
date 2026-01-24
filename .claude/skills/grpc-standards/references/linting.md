@@ -7,14 +7,14 @@ When creating protobuf, run the linting process afterwards. If any linting error
 - [Tools](#tools) (L13-L18)
 - [Buf Configuration](#buf-configuration) (L19-L61)
 - [Custom Rules](#custom-rules) (L62-L100)
-- [grpc-java-classpath-linter](#grpc-java-classpath-linter) (L101-L178)
+- [grpc-classpath-linter (Gradle Plugin)](#grpc-classpath-linter-gradle-plugin) (L101-L178)
 
 ---
 ## Tools
 
 We use two linters for protobuf and gRPC:
-1. **Buf** - Standard protobuf linting
-2. **grpc-java-classpath-linter** - Classpath validation
+1. **Buf** - Standard protobuf linting (Go executable)
+2. **grpc-classpath-linter** - Gradle plugin for classpath validation (`com.bitso:grpc-classpath-linter:1.0.3`)
 
 ## Buf Configuration
 
@@ -98,7 +98,7 @@ message ApiResponse {
 
 Validates that all request/response messages have a nested `Payload` message for the actual payload.
 
-## grpc-java-classpath-linter
+## grpc-classpath-linter (Gradle Plugin)
 
 ### Setup
 
@@ -119,7 +119,7 @@ pluginManagement {
     }
 
     plugins {
-        id 'bitso.grpc-classpath-linter' version "0.0.4"
+        id 'bitso.grpc-classpath-linter' version "1.0.3"
     }
 }
 

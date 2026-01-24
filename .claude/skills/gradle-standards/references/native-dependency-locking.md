@@ -9,22 +9,21 @@ Gradle's built-in dependency locking mechanism provides reproducible builds with
 
 ## Contents
 
-- [Overview](#overview) (L30-L57)
-- [When to Use Native vs Nebula](#when-to-use-native-vs-nebula) (L58-L96)
-- [Setup](#setup) (L97-L151)
-- [Locking All Configurations](#locking-all-configurations) (L152-L223)
-- [Information Comparison: Native vs Nebula](#information-comparison-native-vs-nebula) (L224-L309)
-- [Lock File Format](#lock-file-format) (L310-L354)
-- [Generating Lock Files](#generating-lock-files) (L355-L400)
-- [Updating Dependencies](#updating-dependencies) (L401-L446)
-- [Multi-Module Projects](#multi-module-projects) (L447-L583)
-- [Automated Validation](#automated-validation) (L584-L695)
-- [CI/CD Integration](#cicd-integration) (L696-L775)
-- [Lock Modes](#lock-modes) (L776-L825)
-- [Troubleshooting](#troubleshooting) (L826-L912)
-- [Migration from Nebula](#migration-from-nebula) (L913-L962)
-- [Forces and Version Catalog](#forces-and-version-catalog) (L963-L1071)
-- [Related](#related) (L1072-L1076)
+- [Overview](#overview)
+- [Never Edit Lockfiles Directly](#never-edit-lockfiles-directly) ⚠️ CRITICAL
+- [Security and Dependabot Integration](#security-and-dependabot-integration)
+- [When to Use Native vs Nebula](#when-to-use-native-vs-nebula)
+- [Setup](#setup)
+- [The resolveAndLockAll Task](#the-resolveandlockall-task)
+- [Generating Lock Files](#generating-lock-files)
+- [Locking All Configurations](#locking-all-configurations)
+- [Lock Modes](#lock-modes)
+- [Scope Attribution Issues](#scope-attribution-issues)
+- [Multi-Module Projects](#multi-module-projects)
+- [Forces and Version Catalog](#forces-and-version-catalog)
+- [Troubleshooting](#troubleshooting)
+- [Migration from Nebula](#migration-from-nebula)
+- [Related](#related)
 
 ---
 ## Overview
@@ -54,6 +53,133 @@ flowchart LR
     F --> G
     D --> G
 ```
+
+## Never Edit Lockfiles Directly
+
+> ⚠️ **CRITICAL RULE**: Never manually edit `gradle.lockfile` files. Always regenerate them using Gradle tasks.
+
+### Why Manual Edits Are Forbidden
+
+1. **Integrity**: Lockfiles are generated artifacts - manual edits break the source of truth
+2. **Reproducibility**: Hand-edited entries may not match actual dependency resolution
+3. **Validation**: Gradle validates lockfiles against resolved dependencies - mismatches cause build failures
+4. **Maintenance**: Manual edits are overwritten on the next `--write-locks` run
+
+### The Only Way to Update Lockfiles
+
+```bash
+# CORRECT: Always use Gradle tasks to regenerate
+./gradlew resolveAndLockAll --write-locks --refresh-dependencies --no-daemon --no-scan
+
+# CORRECT: Update specific dependencies
+./gradlew dependencies --update-locks org.springframework:*
+
+# WRONG: Never do this
+# sed, vim, or any manual edit of gradle.lockfile
+```
+
+### What If I Need to Fix a Scope Issue?
+
+For scope attribution issues (e.g., protobuf-javalite), do NOT manually edit the lockfile. Instead:
+
+1. **Use LENIENT mode** for the affected module (see [Scope Attribution Issues](#scope-attribution-issues))
+2. **Fix the root cause** in `build.gradle` (add explicit dependency, fix configuration)
+3. **Regenerate lockfiles** after fixing
+
+### Lockfile Header Warning
+
+Every lockfile contains this header - respect it:
+
+```text
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+```
+
+## Security and Dependabot Integration
+
+Lockfiles are essential for security visibility and Dependabot accuracy.
+
+### Why Locking Matters for Security
+
+| Aspect | Without Locking | With Locking |
+|--------|-----------------|--------------|
+| **Dependabot alerts** | May miss transitives | Sees exact locked versions |
+| **Security audits** | Versions vary per build | Deterministic, auditable |
+| **CVE verification** | Hard to confirm fix | `grep` lockfile for version |
+| **CI dependency-review** | Resolves at build time | Uses locked versions |
+
+### Security Update Workflow
+
+When fixing a Dependabot vulnerability:
+
+```bash
+# 1. Check current locked version
+grep "vulnerable-package" **/gradle.lockfile
+
+# 2. Update version catalog with patched version
+# Edit gradle/libs.versions.toml
+
+# 3. Add force directive if needed (for transitives)
+# Edit build.gradle - add to resolutionStrategy.force
+
+# 4. Regenerate lockfiles
+./gradlew resolveAndLockAll --write-locks --refresh-dependencies --no-daemon --no-scan
+
+# 5. Verify fix is applied in lockfile
+grep "vulnerable-package" **/gradle.lockfile
+# Should show new patched version
+
+# 6. Verify with dependency graph (second layer of verification)
+./gradlew -I gradle/dependency-graph-init.gradle \
+    :ForceDependencyResolutionPlugin_resolveAllDependencies
+# Check the output matches the lockfile
+```
+
+### Dependency Graph as Verification Layer
+
+The dependency graph plugin provides a **second layer of verification** on top of the lockfile. It shows what the build actually resolves, which should match what's locked.
+
+| Tool | Purpose | Use Case |
+|------|---------|----------|
+| **Lockfile** | Source of truth for locked versions | Primary verification - `grep` for version |
+| **Dependency Graph** | Verification layer | Confirms resolved versions match locks |
+| **dependencyInsight** | Deep debugging | Trace why a version was selected |
+
+### Verifying Security Fixes
+
+After applying a security fix, use **both** lockfile and dependency graph to verify:
+
+```bash
+# PRIMARY: Check lockfile for patched version
+grep "commons-compress" app/gradle.lockfile
+# Expected: org.apache.commons:commons-compress:1.27.1=runtimeClasspath,...
+
+# VERIFICATION: Run dependency graph to confirm resolution matches
+./gradlew -I gradle/dependency-graph-init.gradle \
+    :ForceDependencyResolutionPlugin_resolveAllDependencies
+
+# Check dependency graph output matches lockfile
+grep "commons-compress" build/reports/dependency-graph-snapshots/dependency-list.txt
+# Should show same version as lockfile
+
+# DEBUGGING: Use dependencyInsight if versions don't match
+./gradlew :app:dependencyInsight --dependency commons-compress --configuration runtimeClasspath
+```
+
+### When Lockfile and Dependency Graph Differ
+
+If the dependency graph shows a different version than the lockfile, investigate:
+
+1. **Lockfile is stale** - Regenerate with `--write-locks`
+2. **Configuration not locked** - Check if the configuration has locking enabled
+3. **Scope attribution issue** - See [Scope Attribution Issues](#scope-attribution-issues)
+
+### Related Security Documentation
+
+- [Fix Strategies](../../dependabot-security/references/fix-strategies.md) - Strategy hierarchy for vulnerability fixes
+- [Dependency Graph](../../dependabot-security/references/dependency-graph.md) - Dependency graph plugin setup
+- [Severity Processing](../../dependabot-security/references/severity-processing.md) - Process by severity order
 
 ## When to Use Native vs Nebula
 
@@ -148,6 +274,67 @@ dependencyLocking {
     lockFile = file("$projectDir/gradle/gradle.lockfile")
 }
 ```
+
+## The resolveAndLockAll Task
+
+**CRITICAL**: The standard `./gradlew dependencies --write-locks` command may not resolve ALL configurations correctly. For complete and accurate lock file generation, use a custom `resolveAndLockAll` task.
+
+### Why This Task Is Required
+
+1. **Configuration Coverage**: Standard tasks may miss some configurations (e.g., `productionRuntimeClasspath`, custom configurations)
+2. **Scope Attribution**: Without explicit resolution, dependencies may be attributed to wrong configurations
+3. **Multi-Module Consistency**: Ensures all subprojects generate lockfiles
+
+### Task Implementation
+
+Add this to your root `build.gradle`:
+
+```groovy
+// Task to resolve ALL configurations and write locks
+// Usage: ./gradlew resolveAndLockAll --write-locks --refresh-dependencies
+tasks.register('resolveAndLockAll') {
+    description = 'Resolves all resolvable configurations to generate complete lock files'
+    group = 'dependency locking'
+    notCompatibleWithConfigurationCache("Filters configurations at execution time")
+    doFirst {
+        assert gradle.startParameter.writeDependencyLocks :
+            "$path must be run from the command line with the `--write-locks` flag"
+    }
+    doLast {
+        allprojects { proj ->
+            proj.configurations.findAll { it.canBeResolved }.each { conf ->
+                logger.lifecycle("Resolving ${proj.name}:${conf.name}")
+                conf.resolve()
+            }
+        }
+    }
+}
+```
+
+### Correct Lock Generation Command
+
+**Always use this command for lock generation:**
+
+```bash
+./gradlew resolveAndLockAll --write-locks --refresh-dependencies --no-daemon --no-scan
+```
+
+| Flag | Purpose |
+|------|---------|
+| `--write-locks` | Enables lock file writing |
+| `--refresh-dependencies` | Bypasses Gradle cache for fresh resolution |
+| `--no-daemon` | Ensures fresh JVM for consistent resolution |
+| `--no-scan` | Speeds up the build (optional) |
+
+### Why `--refresh-dependencies` Is Recommended
+
+Gradle caches dependency resolution. Using `--refresh-dependencies` ensures:
+
+1. **Fresh resolution**: All dependencies are re-resolved from repositories
+2. **Consistent lockfiles**: Avoids stale cached versions affecting results
+3. **Latest versions**: Picks up any version changes in repositories
+
+**Note**: `--refresh-dependencies` helps with freshness but does NOT fix scope attribution issues (see [Scope Attribution Issues](#scope-attribution-issues)).
 
 ## Locking All Configurations
 
@@ -354,26 +541,33 @@ org.springframework:spring-core:6.2.14=compileClasspath,runtimeClasspath
 
 ## Generating Lock Files
 
-### Initial Generation
+### Initial Generation (Recommended)
 
-Generate lock files:
+**Use the `resolveAndLockAll` task with `--refresh-dependencies` for accurate lock generation:**
 
 ```bash
-# Generate for ALL subprojects (multi-module builds)
+# RECOMMENDED: Complete lock generation with correct scope attribution
+./gradlew resolveAndLockAll --write-locks --refresh-dependencies --no-daemon --no-scan
+```
+
+### Alternative Commands
+
+```bash
+# Quick generation (may have scope issues)
 ./gradlew build --write-locks -x test
 
-# Generate for root project only
+# Root project only (NOT recommended for multi-module)
 ./gradlew dependencies --write-locks
 
-# Generate for specific project
+# Specific project
 ./gradlew :my-module:dependencies --write-locks
 
-# Generate for specific configuration
+# Specific configuration
 ./gradlew dependencies --configuration compileClasspath --write-locks
 ```
 
-> **Note**: The `dependencies` task may not trigger resolution for all subprojects.
-> Use `build --write-locks -x test` for complete multi-module coverage.
+> **WARNING**: The `dependencies` task and `build --write-locks` may not capture all configurations correctly.
+> Always use `resolveAndLockAll --refresh-dependencies` for production lock generation.
 
 ### Verify Lock Files Exist
 
@@ -823,6 +1017,88 @@ dependencyLocking {
 }
 ```
 
+## Scope Attribution Issues
+
+### The Problem
+
+Even with `--refresh-dependencies`, some transitive dependencies may be attributed to only a subset of configurations. This is a known limitation of Gradle Native locking.
+
+### Symptoms
+
+Build fails with:
+
+```
+Execution failed for task ':bitso-services:my-service:bootJar'.
+> Resolved 'com.google.protobuf:protobuf-javalite:3.25.8' which is not part of the dependency lock state
+```
+
+### Root Cause
+
+1. Spring Boot creates both `runtimeClasspath` and `productionRuntimeClasspath` configurations
+2. `bootJar` task uses `runtimeClasspath`
+3. Lock generation may attribute the transitive dependency only to `productionRuntimeClasspath`
+4. When `bootJar` runs, the dependency is not found in the lock for `runtimeClasspath`
+
+### Diagnosis
+
+Check the lockfile for the problematic dependency:
+
+```bash
+# Find the dependency in the lockfile
+grep "protobuf-javalite" bitso-services/my-service/gradle.lockfile
+
+# Expected (correct):
+# com.google.protobuf:protobuf-javalite:3.25.8=productionRuntimeClasspath,runtimeClasspath
+
+# Problematic (scope issue):
+# com.google.protobuf:protobuf-javalite:3.25.8=productionRuntimeClasspath
+```
+
+### Solution: LENIENT Mode for Affected Modules
+
+When scope attribution cannot be fixed, apply LENIENT mode **only to the affected module**:
+
+```groovy
+// bitso-services/my-service/build.gradle
+
+// WORKAROUND: Native Gradle locking scope attribution issue
+// This allows the build to succeed when a transitive dependency
+// is missing from a configuration's lock entry.
+dependencyLocking {
+    lockMode = LockMode.LENIENT
+}
+```
+
+### LENIENT Mode Trade-offs
+
+| Aspect | Impact |
+|--------|--------|
+| **Build success** | ✅ Build will succeed |
+| **Locked dependencies** | ✅ Still verified against lockfile |
+| **Unlocked transitives** | ⚠️ Allowed without verification |
+| **Reproducibility** | ⚠️ Slightly reduced for missing entries |
+
+### Best Practices
+
+1. **Apply LENIENT only where needed**: Don't apply globally
+2. **Document the workaround**: Add a comment explaining why
+3. **Monitor for fixes**: Gradle may fix this in future versions
+4. **Verify with dependency graph**: Ensure versions are still correct
+
+```bash
+# PRIMARY: Run dependency graph to verify resolved versions
+./gradlew -I gradle/dependency-graph-init.gradle \
+    :ForceDependencyResolutionPlugin_resolveAllDependencies
+
+# Check the output for the dependency
+grep "protobuf-javalite" build/reports/dependency-graph-snapshots/dependency-list.txt
+
+# DEBUGGING: Use dependencyInsight to trace why a version was selected
+./gradlew :bitso-services:my-service:dependencyInsight \
+    --dependency protobuf-javalite \
+    --configuration runtimeClasspath
+```
+
 ## Troubleshooting
 
 ### Lock File Out of Sync
@@ -855,30 +1131,26 @@ git commit -m "chore: sync dependency lock files"
 Resolved 'com.google.protobuf:protobuf-javalite:3.25.8' which is not part of the dependency lock state
 ```
 
-**Cause**: Spring Boot's `bootJar` task resolves dependencies lazily at execution time. The `--write-locks` flag during `build` may not capture all transitive dependencies for all configurations (especially `runtimeClasspath` vs `productionRuntimeClasspath`).
+**Root Cause**: This is a **scope attribution issue** in Gradle Native locking. The dependency is captured for `productionRuntimeClasspath` but not `runtimeClasspath` (which `bootJar` uses). This is a known limitation that cannot be fixed by regenerating locks.
 
-**Solution**: Use `--update-locks` to explicitly add the missing dependency:
+**Solution (Recommended)**: Apply LENIENT mode to the affected service module:
 
-```bash
-# Add missing dependency to all configurations
-./gradlew dependencies --update-locks com.google.protobuf:protobuf-javalite
+```groovy
+// bitso-services/my-service/build.gradle
 
-# Verify the fix
-./gradlew bootJar
-
-# Commit the updated lockfile
-git add "**/gradle.lockfile"
-git commit -m "fix: add missing transitive dependency to lockfile"
+// WORKAROUND: Native Gradle locking scope attribution issue
+// The protobuf-javalite transitive is attributed to productionRuntimeClasspath
+// but not runtimeClasspath, causing bootJar to fail in STRICT mode.
+dependencyLocking {
+    lockMode = LockMode.LENIENT
+}
 ```
 
-**Why this happens**: The `bootJar` task uses `runtimeClasspath` but some transitives may only be captured for `productionRuntimeClasspath`. The `--update-locks` flag forces re-resolution and captures the dependency for all configurations.
+**Important**: Regenerating locks with `--refresh-dependencies` does NOT fix this issue. The scope attribution problem is a limitation of Gradle Native locking.
 
-**Prevention**: After generating lockfiles, always run `bootJar` locally to verify:
+> **WARNING**: Never manually edit lockfiles. See [Never Edit Lockfiles Directly](#never-edit-lockfiles-directly).
 
-```bash
-./gradlew build --write-locks -x test
-./gradlew bootJar  # Verify this succeeds
-```
+See [Scope Attribution Issues](#scope-attribution-issues) for detailed explanation.
 
 ### Lock File Merge Conflicts
 

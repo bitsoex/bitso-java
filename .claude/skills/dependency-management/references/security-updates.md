@@ -13,8 +13,8 @@ Managing vulnerable dependencies and applying security patches.
 - [Forcing Security Patches](#forcing-security-patches) (L44-L76)
 - [Common CVE Fixes](#common-cve-fixes) (L77-L104)
 - [Spring Boot 3.5.x Requirements](#spring-boot-35x-requirements) (L105-L130)
-- [Verification](#verification) (L131-L165)
-- [Related](#related) (L166-L170)
+- [Verification](#verification) (L131-L171)
+- [Related](#related) (L172-L177)
 
 ---
 ## Vulnerable Dependency Versions
@@ -133,20 +133,26 @@ Use the upgrade command for complete workflow:
 ### Check Security Versions Applied
 
 ```bash
-# Verify specific library version
-./gradlew dependencyInsight --dependency commons-lang3
+# PRIMARY: Check lockfile for patched version
+grep "commons-lang3" **/gradle.lockfile
 
-# Check all security-critical dependencies
-./gradlew dependencies | grep -E "commons-compress|snakeyaml|log4j"
+# VERIFICATION: Run dependency graph to confirm
+./gradlew -I gradle/dependency-graph-init.gradle \
+    :ForceDependencyResolutionPlugin_resolveAllDependencies
+grep "commons-lang3" build/reports/dependency-graph-snapshots/dependency-list.txt
+
+# DEBUGGING: Trace why a version was selected
+./gradlew dependencyInsight --dependency commons-lang3
 ```
 
 ### Verify Dependency Graph
 
-After security updates, verify the dependency graph:
+After security updates, verify the dependency graph matches lockfile:
 
 ```bash
 # Generate dependency graph
-./gradlew :dependencies --configuration runtimeClasspath > deps.txt
+./gradlew -I gradle/dependency-graph-init.gradle \
+    :ForceDependencyResolutionPlugin_resolveAllDependencies
 
 # Check for old vulnerable versions
 grep -E "commons-lang3.*3\.(0|1[0-3])\." deps.txt

@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "generatedAt": "2026-01-23T04:16:38.799Z",
+  "generatedAt": "2026-01-24T04:13:02.336Z",
   "sourceRepo": "bitsoex/ai-code-instructions",
   "category": "java",
   "parentCategories": [
@@ -42,6 +42,7 @@
     ".claude/commands/java/improve-test-coverage.md",
     ".claude/commands/java/improve-test-quality-with-mutation-testing.md",
     ".claude/commands/java/improve-test-setup.md",
+    ".claude/commands/java/lock-gradle-dependencies.md",
     ".claude/commands/java/migrate-lock-to-rfc-44-compliant.md",
     ".claude/commands/java/prepare-to-gradle-9.md",
     ".claude/commands/java/prepare-to-java-25.md",
@@ -342,6 +343,7 @@
     ".github/prompts/improve-test-coverage.prompt.md",
     ".github/prompts/improve-test-quality-with-mutation-testing.prompt.md",
     ".github/prompts/improve-test-setup.prompt.md",
+    ".github/prompts/lock-gradle-dependencies.prompt.md",
     ".github/prompts/migrate-lock-to-rfc-44-compliant.prompt.md",
     ".github/prompts/prepare-to-gradle-9.prompt.md",
     ".github/prompts/prepare-to-java-25.prompt.md",
