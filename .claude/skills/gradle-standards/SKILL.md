@@ -37,11 +37,11 @@ Standards for Gradle configuration in Java projects, including version catalogs,
 - [When to use this skill](#when-to-use-this-skill) (L23-L32)
 - [Quick Start](#quick-start) (L60-L88)
 - [Key Principles](#key-principles) (L89-L101)
-- [Version Alignment](#version-alignment) (L102-L128)
-- [References](#references) (L129-L140)
-- [Related Rules](#related-rules) (L141-L145)
-- [Dependency Resolution Stack](#dependency-resolution-stack) (L146-L184)
-- [Related Skills](#related-skills) (L185-L192)
+- [Version Alignment](#version-alignment) (L102-L129)
+- [References](#references) (L130-L141)
+- [Related Rules](#related-rules) (L142-L146)
+- [Dependency Resolution Stack](#dependency-resolution-stack) (L147-L186)
+- [Related Skills](#related-skills) (L187-L195)
 
 ### Available Resources
 
@@ -92,39 +92,40 @@ dependencies {
 |-----------|-------------|
 | **Centralize Versions** | All versions in `libs.versions.toml`, never inline |
 | **Explicit Dependencies** | Declare each dependency explicitly for clarity |
-| **Use Align Rules** | Nebula align rules ensure version consistency across module groups |
+| **Use Native Locking** | Use Gradle's native dependency locking (Gradle 9+ recommended) |
 | **Never Downgrade** | Don't replace existing versions with older ones |
 | **Trust BOMs** | Spring Boot BOM manages transitive dependencies |
 | **Platform Over Enforce** | Use `platform()`, never `enforcedPlatform()` |
-| **Use Nebula for Resolution** | Use resolution rules + lock files, not force/constraints |
+| **Use resolutionStrategy** | Use Gradle's native `resolutionStrategy` for version control |
 | **Lock Dependencies** | Generate `gradle.lockfile` for ALL submodules (use `build --write-locks`) |
 
 ## Version Alignment
 
-Use Nebula `align` rules to ensure all modules in a library group use the same version. This is preferred over bundles because:
-- Subprojects can declare exactly what they need
-- Dependencies are explicit and visible in build files
-- Version consistency is enforced at resolution time
+Use Gradle's native `resolutionStrategy` to ensure all modules in a library group use the same version:
 
-```json
-// gradle/resolution-rules.json
-{
-  "align": [
-    {
-      "name": "jackson-alignment",
-      "group": "com\\.fasterxml\\.jackson\\.core",
-      "reason": "Jackson modules must use same version"
-    },
-    {
-      "name": "grpc-alignment",
-      "group": "io\\.grpc",
-      "reason": "gRPC modules must align for binary compatibility"
+```groovy
+// build.gradle - Native Gradle version alignment
+configurations.configureEach {
+    resolutionStrategy {
+        // Force specific versions for security or compatibility
+        force libs.jackson.core
+        force libs.jackson.databind
+        
+        // Align all modules in a group
+        eachDependency { details ->
+            if (details.requested.group == 'io.grpc') {
+                details.useVersion libs.versions.grpc.get()
+            }
+        }
     }
-  ]
 }
 ```
 
-See [Nebula resolution rules documentation](https://github.com/nebula-plugins/gradle-resolution-rules-plugin) for complete align rule reference.
+This approach is preferred because:
+- Subprojects can declare exactly what they need
+- Dependencies are explicit and visible in build files
+- No external plugins required (built into Gradle)
+- First-class support in Gradle 9+
 
 ## References
 
@@ -150,13 +151,15 @@ See [Nebula resolution rules documentation](https://github.com/nebula-plugins/gr
 │  1. VERSION CATALOG (libs.versions.toml)                            │
 │     Single source of truth for declared versions                    │
 ├─────────────────────────────────────────────────────────────────────┤
-│  2. RESOLUTION RULES (optional: resolution-rules.json)              │
-│     Policies: substitute, align, deny, exclude                      │
-│     Use substitute for security fixes, align for module groups      │
+│  2. RESOLUTION STRATEGY (build.gradle)                              │
+│     Use Gradle's native resolutionStrategy for:                     │
+│     - force() for security fixes                                    │
+│     - eachDependency for group alignment                            │
+│     - dependencySubstitution for module replacement                 │
 ├─────────────────────────────────────────────────────────────────────┤
-│  3. LOCK FILE (captures EXACT resolved versions)                    │
-│     Option A: gradle.lockfile (native - Gradle 9+ recommended)      │
-│     Option B: dependencies.lock (Nebula plugin)                     │
+│  3. LOCK FILE (gradle.lockfile)                                     │
+│     Native Gradle locking (Gradle 9+ recommended)                   │
+│     Captures EXACT resolved versions                                │
 │                                                                     │
 │  ⚠️  CRITICAL: Multi-module projects need lockfiles for ALL modules │
 │     Use: ./gradlew build --write-locks -x test                      │
@@ -164,9 +167,8 @@ See [Nebula resolution rules documentation](https://github.com/nebula-plugins/gr
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-**Lock File Options:**
+**Lock File:**
 - [Native locking](references/native-dependency-locking.md) - Built-in, no plugins, recommended for Gradle 9+
-- [Nebula resolution rules](https://github.com/nebula-plugins/gradle-resolution-rules-plugin) - Declarative rules for alignment, substitution, and replacement
 
 **Multi-Module Lockfile Generation:**
 

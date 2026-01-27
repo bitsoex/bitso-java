@@ -239,9 +239,8 @@ java.lang.NoSuchMethodError: 'redis.clients.jedis.params.SetParams SetParams.px(
 
 ## Related
 
-- [resolution-strategies.md](resolution-strategies.md) - Resolution strategies with Nebula
 - [../SKILL.md](../SKILL.md) - Main skill documentation
-- [nebula-plugins](../../nebula-plugins/SKILL.md) - Align rules for version consistency
+- [../../gradle-standards/references/native-dependency-locking.md](../../gradle-standards/references/native-dependency-locking.md) - Native Gradle locking (recommended)
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/skills/dependency-management/references/version-centralization.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->
