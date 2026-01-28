@@ -1,10 +1,10 @@
 ---
-name: coderabbit-interactions
+name: coderabbit-workflow
 description: Systematic workflow for CodeRabbit reviews - local CLI, PR threads, and commit attribution
-version: 1.1.0
 compatibility: All repositories with CodeRabbit enabled
 
 metadata:
+  version: "2.0.0"
   category: code-quality
   tags:
     - code-review
@@ -15,9 +15,15 @@ metadata:
     - on-demand
 ---
 
-# CodeRabbit Interactions
+# CodeRabbit Workflow
 
-Workflows for CodeRabbit code reviews: local CLI usage, PR thread processing, and commit attribution.
+Address CodeRabbit review comments systematically. Workflows for local CLI usage, PR thread processing, and commit attribution.
+
+## When to use this skill
+
+- When addressing CodeRabbit review comments on a PR
+- Before push, to get early feedback with local CLI
+- When asked to "fix coderabbit issues" or "address coderabbit comments"
 
 ## Two Review Modes
 
@@ -25,6 +31,14 @@ Workflows for CodeRabbit code reviews: local CLI usage, PR thread processing, an
 |------|------|-----------|
 | **Local CLI** | Before push, get early feedback | `references/cli-integration.md` |
 | **PR Threads** | After CodeRabbit reviews your PR | `references/workflow-examples.md` |
+
+## Quick Start
+
+1. Export comments: `node .claude/skills/coderabbit-workflow/scripts/export-comments.ts --pr <number>`
+2. Review by severity: critical, major, minor
+3. Apply fixes following patterns in `references/workflow-examples.md`
+4. Commit with CodeRabbit co-author attribution (see below)
+5. Push and reply to threads: `node .claude/skills/coderabbit-workflow/scripts/reply-to-threads.ts --file .tmp/coderabbit-*.json`
 
 ## Skill Contents
 
@@ -77,6 +91,6 @@ See `references/commit-formats.md` for all templates.
 - [CodeRabbit CLI Docs](https://docs.coderabbit.ai/cli/overview)
 - [Cursor Integration](https://docs.coderabbit.ai/cli/cursor-integration)
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/SKILL.md -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-workflow/SKILL.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->
 

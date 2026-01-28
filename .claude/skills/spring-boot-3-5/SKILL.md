@@ -5,7 +5,7 @@ description: >
   Use when projects need to upgrade from older Spring Boot versions to 3.5.9+.
 compatibility: Java projects using Gradle with Spring Boot
 metadata:
-  version: "1.0.0"
+  version: "2.0.0"
   technology: java
   category: modernization
   tags:
@@ -24,18 +24,19 @@ Upgrade Java services to Spring Boot 3.5.9 with all required dependency updates.
 - Preparing for Spring Boot 4 (stay on latest or latest-1 patch of 3.5.x)
 - Need features from Spring Boot 3.5.x
 - Preparing for Java 25 upgrade (requires Spring Boot 3.5.x first)
+- When asked to "upgrade to recommended versions"
 
 ## Skill Contents
 
 ### Sections
 
-- [When to Use](#when-to-use) (L21-L27)
-- [Target Versions](#target-versions) (L47-L61)
-- [Version Unification](#version-unification) (L62-L67)
-- [Quick Start](#quick-start) (L68-L126)
-- [References](#references) (L127-L132)
-- [Related Command](#related-command) (L133-L136)
-- [Related Skills](#related-skills) (L137-L141)
+- [When to Use](#when-to-use)
+- [Target Versions](#target-versions)
+- [Version Unification](#version-unification)
+- [Quick Start](#quick-start)
+- [References](#references)
+- [Related Command](#related-command)
+- [Related Skills](#related-skills)
 
 ### Available Resources
 
@@ -132,7 +133,7 @@ jedis4-utils = "3.0.0"
 
 ## Related Command
 
-This skill is referenced by: [`/upgrade-to-recommended-versions`](../../commands/upgrade-to-recommended-versions.md)
+This skill is referenced by: `/upgrade-to-recommended-versions` (see `java/commands/`)
 
 ## Related Skills
 

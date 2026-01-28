@@ -6,7 +6,7 @@ description: >
   and check quality gates.
 compatibility: All Java projects with SonarQube analysis
 metadata:
-  version: "1.0.0"
+  version: "2.0.0"
   technology: java
   category: quality
   tags:
@@ -27,19 +27,20 @@ SonarQube integration via MCP (Model Context Protocol) for Java code quality ana
 - Analyzing code for quality issues
 - Understanding SonarQube rules
 - Prioritizing issue remediation
+- When asked to "fix sonarqube issues" or "add sonarqube mcp"
 
 ## Skill Contents
 
 ### Sections
 
-- [When to use this skill](#when-to-use-this-skill) (L23-L30)
-- [Quick Start](#quick-start) (L54-L66)
-- [MCP Tools Available](#mcp-tools-available) (L67-L77)
-- [Common Workflows](#common-workflows) (L78-L101)
-- [Supported IDEs](#supported-ides) (L102-L115)
-- [References](#references) (L116-L122)
-- [Related Rules](#related-rules) (L123-L128)
-- [Related Skills](#related-skills) (L129-L134)
+- [When to use this skill](#when-to-use-this-skill)
+- [Quick Start](#quick-start)
+- [MCP Tools Available](#mcp-tools-available)
+- [Common Workflows](#common-workflows)
+- [Supported IDEs](#supported-ides)
+- [References](#references)
+- [Related Rules](#related-rules)
+- [Related Skills](#related-skills)
 
 ### Available Resources
 

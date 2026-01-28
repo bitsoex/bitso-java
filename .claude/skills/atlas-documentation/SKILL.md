@@ -6,7 +6,7 @@ description: >
   Use when generating or updating service documentation.
 compatibility: Java services following Bitso patterns
 metadata:
-  version: "1.0.0"
+  version: "2.0.0"
   technology: global
   category: documentation
   tags:
@@ -18,7 +18,7 @@ metadata:
 
 # Atlas Documentation
 
-AI-friendly documentation generation for Java services following RFC-37 standards.
+Generate RFC-37 compliant documentation for services in this repository.
 
 ## When to use this skill
 
@@ -27,17 +27,18 @@ AI-friendly documentation generation for Java services following RFC-37 standard
 - Setting up documentation structure for a repository
 - Creating feature and concept documentation
 - Integrating with RAG systems
+- When asked to "generate documentation" or "create docs"
 
 ## Skill Contents
 
 ### Sections
 
-- [When to use this skill](#when-to-use-this-skill) (L23-L30)
-- [Quick Start](#quick-start) (L52-L88)
-- [Documentation Structure](#documentation-structure) (L89-L126)
-- [Change Detection](#change-detection) (L127-L150)
-- [References](#references) (L151-L159)
-- [Related Skills](#related-skills) (L160-L167)
+- [When to use this skill](#when-to-use-this-skill)
+- [Quick Start](#quick-start)
+- [Documentation Structure](#documentation-structure)
+- [Change Detection](#change-detection)
+- [References](#references)
+- [Related Skills](#related-skills)
 
 ### Available Resources
 

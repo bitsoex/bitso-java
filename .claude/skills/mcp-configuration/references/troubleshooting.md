@@ -34,13 +34,13 @@ See `references/github-mcp-setup.md` for detailed instructions.
 ### Error: Docker Image Not Found
 
 ```text
-Unable to find image 'ghcr.io/github/github-mcp-server:0.24.0' locally
+Unable to find image 'ghcr.io/github/github-mcp-server:0.30.2' locally
 ```
 
 **Solution**: Pull the image manually:
 
 ```bash
-docker pull ghcr.io/github/github-mcp-server:0.24.0
+docker pull ghcr.io/github/github-mcp-server:0.30.2
 ```
 
 If authentication is required:

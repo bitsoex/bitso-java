@@ -6,19 +6,19 @@ description: >
   consistent code quality. Use when making significant code changes or before completing a task.
 compatibility: Requires Node.js 24+; works with any codebase
 metadata:
-  version: "1.0"
+  version: "2.0.0"
 ---
 
 # Quality Gateway
 
-Orchestrates quality checks at key lifecycle points in the development workflow. This skill coordinates sub-skills to ensure consistent code quality.
+Run comprehensive quality gate checks on code changes. Orchestrates quality checks at key lifecycle points in the development workflow.
 
 ## When to Use This Skill
 
 - Before starting significant code changes (pre-edit baseline)
 - After completing code changes (post-edit validation)
 - Before marking a task as complete (final quality gate)
-- When running the `/quality-check` command
+- When asked to run "quality check" or "quality gate"
 
 ## Skill Contents
 

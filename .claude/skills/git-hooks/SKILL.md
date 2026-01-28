@@ -105,7 +105,7 @@ git config --get core.hooksPath
   Pre-commit checks found some issues:
 
   [!] Linting: ESLint errors detected
-      Run: pnpm run lint:fix
+      Run: mise run lint:fix
 
   [!] TypeScript: Type errors detected
       Run: npx tsc --noEmit
@@ -416,11 +416,11 @@ Technology-specific hook patterns are available in the `references/` folder:
 
 ## Documentation
 
-For comprehensive documentation, see:
+For comprehensive documentation in the repository's `docs/` directory, see:
 
-- [Git Hooks Architecture](../../../docs/ai-ide-management/concepts/git-hooks-architecture.md) - System design and flow diagrams
-- [How to Enable Git Hooks](../../../docs/ai-ide-management/how-tos/enable-git-hooks.md) - Setup and troubleshooting
-- [Conflict Detection](../../../docs/ai-ide-management/concepts/conflict-detection.md) - How conflicts are detected during distribution
+- `docs/ai-ide-management/concepts/git-hooks-architecture.md` - System design and flow diagrams
+- `docs/ai-ide-management/how-tos/enable-git-hooks.md` - Setup and troubleshooting
+- `docs/ai-ide-management/concepts/conflict-detection.md` - How conflicts are detected during distribution
 
 ## Related Skills
 

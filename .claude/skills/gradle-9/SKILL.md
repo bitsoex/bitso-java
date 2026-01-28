@@ -5,7 +5,7 @@ description: >
   Required for Java 25 support. Includes plugin version mappings and migration patterns.
 compatibility: Java projects using Gradle 8.x
 metadata:
-  version: "1.0.0"
+  version: "2.0.0"
   technology: java
   category: modernization
   tags:
@@ -25,18 +25,19 @@ Upgrade from Gradle 8.x to Gradle 9.x with all required plugin updates.
 - Upgrading to Java 25 (requires Gradle 9.x)
 - Need Gradle 9 features
 - Current Gradle 8.x plugins are deprecated
+- When asked to "prepare for Gradle 9"
 
 ## Skill Contents
 
 ### Sections
 
-- [When to Use](#when-to-use) (L22-L28)
-- [Target Versions](#target-versions) (L48-L60)
-- [Quick Start](#quick-start) (L61-L107)
-- [References](#references) (L108-L113)
-- [Plugin Migration Details](#plugin-migration-details) (L114-L155)
-- [Related Skills](#related-skills) (L156-L160)
-- [Related Commands](#related-commands) (L161-L167)
+- [When to Use](#when-to-use)
+- [Target Versions](#target-versions)
+- [Quick Start](#quick-start)
+- [References](#references)
+- [Plugin Migration Details](#plugin-migration-details)
+- [Related Skills](#related-skills)
+- [Available Resources](#available-resources)
 
 ### Available Resources
 
@@ -157,13 +158,6 @@ sonarqube = "org.sonarqube:7.2.2.6593"
 
 - `spring-boot-3-5` - Upgrade Spring Boot first
 - `java-25` - Java 25 requires Gradle 9
-
-## Related Commands
-
-This skill is referenced by:
-
-- [`/prepare-to-gradle-9`](../../commands/prepare-to-gradle-9.md) - Prepare for Gradle 9 upgrade
-- [`/prepare-to-java-25`](../../commands/prepare-to-java-25.md) - Java 25 preparation (requires Gradle 9)
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/skills/gradle-9/SKILL.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->

@@ -112,7 +112,7 @@ Created [JIRA-KEY] to track this.
 
 ## Batch Reply Script
 
-Use the coderabbit-interactions skill to batch reply:
+Use the coderabbit-workflow skill to batch reply:
 
 ```bash
 # Get all unresolved threads
@@ -123,7 +123,7 @@ COMMIT_SHA=$(git rev-parse --short HEAD)
 gh api graphql -f query='mutation...' -f body="Fixed in $COMMIT_SHA..."
 ```
 
-See `global/skills/coderabbit-interactions/scripts/reply-to-threads.ts` for automation.
+See `global/skills/coderabbit-workflow/scripts/reply-to-threads.ts` for automation.
 
 ## Waiting for CodeRabbit
 

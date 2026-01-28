@@ -6,7 +6,7 @@ description: >
   Use when implementing or migrating distributed locking mechanisms.
 compatibility: Java projects with PostgreSQL or Redis
 metadata:
-  version: "1.0.0"
+  version: "2.0.0"
   technology: java
   category: infrastructure
   tags:
@@ -28,18 +28,19 @@ RFC-44 compliant distributed locking patterns for Java services.
 - Choosing between PostgreSQL and Redis locking
 - Migrating from Fabric8 leader election
 - Migrating from incubated in-repo libraries
+- When asked to "migrate locks to be RFC-44 compliant"
 
 ## Skill Contents
 
 ### Sections
 
-- [When to use this skill](#when-to-use-this-skill) (L24-L31)
-- [Quick Start](#quick-start) (L54-L96)
-- [Implementation Options](#implementation-options) (L97-L107)
-- [Common Patterns](#common-patterns) (L108-L130)
-- [References](#references) (L131-L139)
-- [Related Rules](#related-rules) (L140-L143)
-- [Related Skills](#related-skills) (L144-L149)
+- [When to use this skill](#when-to-use-this-skill)
+- [Quick Start](#quick-start)
+- [Implementation Options](#implementation-options)
+- [Common Patterns](#common-patterns)
+- [References](#references)
+- [Related Rules](#related-rules)
+- [Related Skills](#related-skills)
 
 ### Available Resources
 

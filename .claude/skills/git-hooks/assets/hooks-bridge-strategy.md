@@ -214,7 +214,7 @@ Developer: git commit -m "Add feature with lint errors"
 │ ============================================================      │
 │                                                                   │
 │   [!] Linting: ESLint errors detected     ← OUR CHECK WARNS       │
-│       Run: pnpm run lint:fix                                      │
+│       Run: mise run lint:fix                                      │
 │                                                                   │
 │   These are recommendations. Your commit will proceed.            │
 │                                                                   │
@@ -454,7 +454,7 @@ All our hooks run in **informative mode**:
   Pre-commit checks found some issues:
 
   [!] Linting: ESLint errors detected
-      Run: pnpm run lint:fix
+      Run: mise run lint:fix
 
   [!] TypeScript: Type errors detected
       Run: npx tsc --noEmit

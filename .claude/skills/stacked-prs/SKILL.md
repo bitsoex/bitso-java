@@ -1,10 +1,10 @@
 ---
 name: stacked-prs
 description: Manage stacked PRs with proper visualization, merge-based updates, and iterative CodeRabbit feedback cycles
-version: 1.1.0
 compatibility: All repositories with GitHub
 
 metadata:
+  version: "1.1.0"
   category: workflow
   tags:
     - pull-requests
@@ -14,7 +14,7 @@ metadata:
   triggers:
     - on-demand
   uses:
-    - coderabbit-interactions
+    - coderabbit-workflow
     - pr-lifecycle
 ---
 
@@ -142,12 +142,12 @@ See `references/automation-patterns.md` for complete polling implementations.
 
 | Skill | Purpose |
 |-------|---------|
-| `coderabbit-interactions` | Thread replies, comment export, local CLI reviews |
+| `coderabbit-workflow` | Thread replies, comment export, local CLI reviews |
 | `pr-lifecycle` | Base PR management patterns |
 
 ## Related
 
-- `.claude/skills/coderabbit-interactions` - Detailed CodeRabbit interaction patterns
+- `.claude/skills/coderabbit-workflow` - Detailed CodeRabbit workflow patterns
 - `.claude/skills/pr-lifecycle` - GitHub CLI commands for PR management
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → global/skills/stacked-prs/SKILL.md -->

@@ -262,6 +262,6 @@ coderabbit --prompt-only --include "src/new-feature/**/*.ts"
 - [Cursor Integration](https://docs.coderabbit.ai/cli/cursor-integration)
 - [Claude Code Integration](https://docs.coderabbit.ai/cli/claude-code-integration)
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/references/setup.md -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-workflow/references/setup.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->
 

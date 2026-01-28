@@ -9,7 +9,7 @@ The GitHub MCP server runs via Docker and requires a GitHub Personal Access Toke
 - [Readiness Check](#readiness-check) (L80-L87)
 - [Manual Docker Setup (if needed)](#manual-docker-setup-if-needed) (L88-L99)
 - [Server Configuration](#server-configuration) (L100-L110)
-- [How Certificate Mounting Works](#how-certificate-mounting-works) (L111-L130)
+- [How Certificate Mounting Works](#how-certificate-mounting-works) (L112-L131)
 
 ---
 ## Prerequisites
@@ -91,7 +91,7 @@ If the image is not available locally:
 
 ```bash
 # Pull the image
-docker pull ghcr.io/github/github-mcp-server:0.24.0
+docker pull ghcr.io/github/github-mcp-server:0.30.2
 
 # If authentication is required
 echo $GITHUB_TOKEN | docker login ghcr.io -u YOUR_GITHUB_USERNAME --password-stdin
@@ -101,6 +101,7 @@ echo $GITHUB_TOKEN | docker login ghcr.io -u YOUR_GITHUB_USERNAME --password-std
 
 The GitHub MCP server is configured in read-only mode with lockdown enabled, providing access to:
 
+- Context (current user)
 - Dependabot alerts
 - Code security features
 - Secret protection

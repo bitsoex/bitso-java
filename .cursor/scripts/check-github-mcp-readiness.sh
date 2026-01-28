@@ -4,7 +4,7 @@
 
 set -e
 
-GITHUB_MCP_IMAGE="ghcr.io/github/github-mcp-server:0.24.0"
+GITHUB_MCP_IMAGE="ghcr.io/github/github-mcp-server:0.30.2"
 CLOUDFLARE_CERT_DIR="$HOME/cloudflare-certificates"
 CLOUDFLARE_CERT_PEM="$CLOUDFLARE_CERT_DIR/2025_cloudflare_ca_certificate.pem"
 CLOUDFLARE_CERT_CRT="$CLOUDFLARE_CERT_DIR/2025_cloudflare_ca_certificate.crt"
@@ -211,7 +211,7 @@ echo ""
 echo "Configuration details:"
 echo "   Image: $GITHUB_MCP_IMAGE"
 echo "   Mode: Read-only with lockdown"
-echo "   Toolsets: dependabot, code_security, secret_protection, security_advisories, labels, pull_requests"
+echo "   Toolsets: context, dependabot, code_security, secret_protection, security_advisories, labels, pull_requests"
 echo ""
 echo "The MCP server will be available in your IDE after configuration is applied."
 echo ""

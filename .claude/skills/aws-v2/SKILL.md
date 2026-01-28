@@ -5,7 +5,7 @@ description: >
   Use when projects need to move away from deprecated AWS SDK v1 to the modern v2 API.
 compatibility: Java projects using Gradle with AWS SDK dependencies
 metadata:
-  version: "1.0.0"
+  version: "2.0.0"
   technology: java
   category: modernization
   tags:
@@ -24,18 +24,19 @@ Migrate Java projects from AWS SDK v1 (`com.amazonaws`) to v2 (`software.amazon.
 - Project uses deprecated AWS SDK v1 (`com.amazonaws.*` imports)
 - Dependabot/security scans flag v1 vulnerabilities
 - Need features only available in v2 (async clients, HTTP/2, etc.)
+- When asked to "upgrade to aws sdk v2"
 
 ## Skill Contents
 
 ### Sections
 
-- [When to Use](#when-to-use) (L22-L27)
-- [Critical: MSK IAM Authentication](#critical-msk-iam-authentication) (L47-L59)
-- [Migration Strategy (Priority Order)](#migration-strategy-priority-order) (L60-L68)
-- [Quick Start](#quick-start) (L69-L108)
-- [References](#references) (L109-L114)
-- [Related Command](#related-command) (L115-L118)
-- [Related Resources](#related-resources) (L119-L122)
+- [When to Use](#when-to-use)
+- [Critical: MSK IAM Authentication](#critical-msk-iam-authentication)
+- [Migration Strategy (Priority Order)](#migration-strategy-priority-order)
+- [Quick Start](#quick-start)
+- [References](#references)
+- [Related Command](#related-command)
+- [Related Resources](#related-resources)
 
 ### Available Resources
 
@@ -114,7 +115,7 @@ grep -r "import com.amazonaws" --include="*.java" . | grep -v "/build/"
 
 ## Related Command
 
-This skill is referenced by: [`/upgrade-to-aws-sdk-v2`](../../commands/upgrade-to-aws-sdk-v2.md)
+This skill is referenced by: `/upgrade-to-aws-sdk-v2` (see `java/commands/`)
 
 ## Related Resources
 

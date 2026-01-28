@@ -6,7 +6,7 @@ description: >
   Use when Dependabot alerts need resolution with proper CI validation.
 compatibility: Java projects using Gradle with dependency-graph plugin
 metadata:
-  version: "1.0.0"
+  version: "2.0.0"
   technology: java
   category: security
   tags:
@@ -29,17 +29,18 @@ Fix Dependabot security vulnerabilities in Java/Gradle projects with proper veri
 - Verifying dependency graph for CI compliance
 - Choosing the right fix strategy for transitive dependencies
 - Understanding why `dependency-review` CI check fails
+- When asked to "fix dependabot vulnerabilities" or "fix security alerts"
 
 ## Skill Contents
 
 ### Sections
 
-- [When to use this skill](#when-to-use-this-skill) (L25-L32)
-- [Quick Start](#quick-start) (L54-L91)
-- [Key Concepts](#key-concepts) (L92-L118)
-- [References](#references) (L119-L127)
-- [Related Rules](#related-rules) (L128-L132)
-- [Related Skills](#related-skills) (L133-L138)
+- [When to use this skill](#when-to-use-this-skill)
+- [Quick Start](#quick-start)
+- [Key Concepts](#key-concepts)
+- [References](#references)
+- [Related Rules](#related-rules)
+- [Related Skills](#related-skills)
 
 ### Available Resources
 

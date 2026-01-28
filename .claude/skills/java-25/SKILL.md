@@ -5,7 +5,7 @@ description: >
   Requires Gradle 9.x, Groovy 5.x, and updated plugins for compatibility.
 compatibility: Java projects using Gradle with Java 21 or earlier
 metadata:
-  version: "1.0.0"
+  version: "2.0.0"
   technology: java
   category: modernization
   tags:
@@ -24,23 +24,23 @@ Upgrade Java projects to Java 25 with all required dependency updates.
 - Project needs to upgrade from Java 21 to Java 25
 - Need features from Java 25 (records, pattern matching improvements, etc.)
 - Planning to stay on latest LTS-adjacent releases
+- When asked to "prepare for Java 25" or "upgrade to Java 25"
 
 ## Skill Contents
 
 ### Sections
 
-- [When to Use](#when-to-use) (L22-L27)
-- [Prerequisites](#prerequisites) (L52-L57)
-- [Target Versions](#target-versions) (L58-L71)
-- [⚠️ DO NOT Upgrade](#do-not-upgrade) (L72-L77)
-- [Workflow](#workflow) (L78-L98)
-- [Version Catalog Updates](#version-catalog-updates) (L99-L114)
-- [Java Toolchain Configuration](#java-toolchain-configuration) (L115-L130)
-- [⚠️ Critical: Do NOT Use groovy-all](#critical-do-not-use-groovy-all) (L131-L143)
-- [Override Spring Boot's Groovy Version](#override-spring-boots-groovy-version) (L144-L152)
-- [References](#references) (L153-L158)
-- [Related Commands](#related-commands) (L159-L165)
-- [Related Skills](#related-skills) (L166-L169)
+- [When to Use](#when-to-use)
+- [Prerequisites](#prerequisites)
+- [Target Versions](#target-versions)
+- [DO NOT Upgrade](#-do-not-upgrade)
+- [Workflow](#workflow)
+- [Version Catalog Updates](#version-catalog-updates)
+- [Java Toolchain Configuration](#java-toolchain-configuration)
+- [Critical: Do NOT Use groovy-all](#-critical-do-not-use-groovy-all)
+- [Override Spring Boot's Groovy Version](#override-spring-boots-groovy-version)
+- [References](#references)
+- [Related Skills](#related-skills)
 
 ### Available Resources
 
@@ -155,13 +155,6 @@ allprojects {
 | Reference | Content |
 |-----------|---------|
 | [references/preparation.md](references/preparation.md) | Detailed preparation steps and prerequisites |
-
-## Related Commands
-
-This skill is referenced by:
-
-- [`/prepare-to-java-25`](../../commands/prepare-to-java-25.md) - Local validation and preparation
-- [`/upgrade-to-java-25`](../../commands/upgrade-to-java-25.md) - Commit toolchain change
 
 ## Related Skills
 

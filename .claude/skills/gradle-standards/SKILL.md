@@ -6,7 +6,7 @@ description: >
   Use when configuring Gradle builds or reviewing dependency management.
 compatibility: Java projects using Gradle 8.x or 9.x
 metadata:
-  version: "1.1.0"
+  version: "2.0.0"
   technology: java
   category: build
   tags:
@@ -29,19 +29,20 @@ Standards for Gradle configuration in Java projects, including version catalogs,
 - Migrating to version catalogs
 - Cleaning up unused dependencies
 - Optimizing build performance
+- When asked for "gradle dependencies cleanup"
 
 ## Skill Contents
 
 ### Sections
 
-- [When to use this skill](#when-to-use-this-skill) (L23-L32)
-- [Quick Start](#quick-start) (L60-L88)
-- [Key Principles](#key-principles) (L89-L101)
-- [Version Alignment](#version-alignment) (L102-L129)
-- [References](#references) (L130-L141)
-- [Related Rules](#related-rules) (L142-L146)
-- [Dependency Resolution Stack](#dependency-resolution-stack) (L147-L186)
-- [Related Skills](#related-skills) (L187-L195)
+- [When to use this skill](#when-to-use-this-skill)
+- [Quick Start](#quick-start)
+- [Key Principles](#key-principles)
+- [Version Alignment](#version-alignment)
+- [References](#references)
+- [Related Rules](#related-rules)
+- [Dependency Resolution Stack](#dependency-resolution-stack)
+- [Related Skills](#related-skills)
 
 ### Available Resources
 

@@ -6,7 +6,7 @@ description: >
   Spring Boot test configurations. Use when writing or reviewing tests.
 compatibility: Java projects using Spock Framework
 metadata:
-  version: "1.0.0"
+  version: "2.0.0"
   technology: java
   category: testing
   tags:
@@ -28,19 +28,20 @@ Guidelines for writing tests in Java projects using the Spock Framework and Groo
 - Setting up test infrastructure
 - Configuring Testcontainers
 - Mocking dependencies in Spring Boot tests
+- When asked to "improve test setup" or "run all tests and fix"
 
 ## Skill Contents
 
 ### Sections
 
-- [When to use this skill](#when-to-use-this-skill) (L24-L31)
-- [Quick Start](#quick-start) (L57-L77)
-- [Key Patterns](#key-patterns) (L78-L87)
-- [Mocking Patterns](#mocking-patterns) (L88-L123)
-- [Persistence Testing](#persistence-testing) (L124-L139)
-- [References](#references) (L140-L147)
-- [Related Rules](#related-rules) (L148-L152)
-- [Related Skills](#related-skills) (L153-L158)
+- [When to use this skill](#when-to-use-this-skill)
+- [Quick Start](#quick-start)
+- [Key Patterns](#key-patterns)
+- [Mocking Patterns](#mocking-patterns)
+- [Persistence Testing](#persistence-testing)
+- [References](#references)
+- [Related Rules](#related-rules)
+- [Related Skills](#related-skills)
 
 ### Available Resources
 

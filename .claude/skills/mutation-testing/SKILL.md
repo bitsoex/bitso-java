@@ -6,7 +6,7 @@ description: >
   Use when improving test suite quality beyond line coverage metrics.
 compatibility: Java projects using Gradle 8.x+ with JUnit 5 or Spock
 metadata:
-  version: "1.0.0"
+  version: "2.0.0"
   technology: java
   category: testing
   tags:
@@ -29,17 +29,18 @@ Use PIT mutation testing to identify tests that pass but don't verify behavior c
 - Validating critical business logic has strong tests
 - Setting up mutation testing in CI pipelines
 - Analyzing which tests need strengthening
+- When asked to "improve test quality with mutation testing"
 
 ## Skill Contents
 
 ### Sections
 
-- [When to use this skill](#when-to-use-this-skill) (L25-L32)
-- [Quick Start](#quick-start) (L54-L90)
-- [Key Concepts](#key-concepts) (L91-L116)
-- [References](#references) (L117-L125)
-- [Related Rules](#related-rules) (L126-L130)
-- [Related Skills](#related-skills) (L131-L136)
+- [When to use this skill](#when-to-use-this-skill)
+- [Quick Start](#quick-start)
+- [Key Concepts](#key-concepts)
+- [References](#references)
+- [Related Rules](#related-rules)
+- [Related Skills](#related-skills)
 
 ### Available Resources
 

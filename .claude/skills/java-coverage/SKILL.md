@@ -6,7 +6,7 @@ description: >
   integration. Use when setting up or troubleshooting code coverage.
 compatibility: Java projects using Gradle with JaCoCo plugin
 metadata:
-  version: "1.0.0"
+  version: "2.0.0"
   technology: java
   category: quality
   tags:
@@ -27,20 +27,21 @@ JaCoCo code coverage configuration for Java/Gradle projects.
 - Aggregating coverage across modules
 - Integrating with SonarQube
 - Troubleshooting coverage reports
+- When asked to "improve test coverage"
 
 ## Skill Contents
 
 ### Sections
 
-- [When to use this skill](#when-to-use-this-skill) (L23-L30)
-- [Quick Start](#quick-start) (L56-L93)
-- [Coverage Thresholds](#coverage-thresholds) (L94-L118)
-- [Exclusions](#exclusions) (L119-L138)
-- [Multi-Module Aggregation](#multi-module-aggregation) (L139-L189)
-- [SonarQube Integration](#sonarqube-integration) (L190-L200)
-- [References](#references) (L201-L207)
-- [Related Rules](#related-rules) (L208-L211)
-- [Related Skills](#related-skills) (L212-L218)
+- [When to use this skill](#when-to-use-this-skill)
+- [Quick Start](#quick-start)
+- [Coverage Thresholds](#coverage-thresholds)
+- [Exclusions](#exclusions)
+- [Multi-Module Aggregation](#multi-module-aggregation)
+- [SonarQube Integration](#sonarqube-integration)
+- [References](#references)
+- [Related Rules](#related-rules)
+- [Related Skills](#related-skills)
 
 ### Available Resources
 

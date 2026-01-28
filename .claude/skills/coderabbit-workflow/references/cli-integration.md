@@ -196,6 +196,6 @@ coderabbit auth status
 - [Cursor Integration](https://docs.coderabbit.ai/cli/cursor-integration)
 - [Claude Code Integration](https://docs.coderabbit.ai/cli/claude-code-integration)
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/references/cli-integration.md -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-workflow/references/cli-integration.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->
 

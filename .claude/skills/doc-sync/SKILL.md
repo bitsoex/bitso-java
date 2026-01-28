@@ -6,12 +6,12 @@ description: >
   updates. Use after making significant code changes or when documentation gaps exist.
 compatibility: Works with any codebase; enhanced features with bitso-documentation-linter
 metadata:
-  version: "1.0"
+  version: "2.0.0"
 ---
 
 # Doc Sync
 
-This skill ensures documentation stays synchronized with code changes. It provides validation tools, pre-push checks, and integration with RFC-37 documentation standards.
+Update documentation to reflect recent code changes. Validates and ensures documentation stays synchronized with code.
 
 ## When to use this skill
 
@@ -20,22 +20,23 @@ This skill ensures documentation stays synchronized with code changes. It provid
 - During code review to verify documentation completeness
 - To check for broken links in documentation
 - When setting up documentation validation in a repository
+- When asked to "sync docs" or "update documentation"
 
 ## Skill Contents
 
 ### Sections
 
-- [When to use this skill](#when-to-use-this-skill) (L16-L23)
-- [Quick Start](#quick-start) (L53-L73)
-- [Documentation Validation Checks](#documentation-validation-checks) (L74-L83)
-- [Integration with RFC-37](#integration-with-rfc-37) (L84-L101)
-- [Pre-Push Documentation Check](#pre-push-documentation-check) (L102-L141)
-- [Available Functions](#available-functions) (L142-L169)
-- [Documentation Tools by Project Type](#documentation-tools-by-project-type) (L170-L178)
-- [Best Practices](#best-practices) (L179-L210)
-- [References](#references) (L211-L219)
-- [Related Skills](#related-skills) (L220-L227)
-- [Documentation in This Repository](#documentation-in-this-repository) (L228-L236)
+- [When to use this skill](#when-to-use-this-skill)
+- [Quick Start](#quick-start)
+- [Documentation Validation Checks](#documentation-validation-checks)
+- [Integration with RFC-37](#integration-with-rfc-37)
+- [Pre-Push Documentation Check](#pre-push-documentation-check)
+- [Available Functions](#available-functions)
+- [Documentation Tools by Project Type](#documentation-tools-by-project-type)
+- [Best Practices](#best-practices)
+- [References](#references)
+- [Related Skills](#related-skills)
+- [Documentation in This Repository](#documentation-in-this-repository)
 
 ### Available Resources
 

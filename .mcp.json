@@ -30,10 +30,8 @@
         "-e",
         "GITHUB_LOCKDOWN_MODE=1",
         "-e",
-        "GITHUB_TOOLSETS=dependabot,code_security,secret_protection,security_advisories,labels,pull_requests",
-        "-e",
-        "GITHUB_TOOLS=get_me",
-        "ghcr.io/github/github-mcp-server:0.24.0"
+        "GITHUB_TOOLSETS=context,dependabot,code_security,secret_protection,security_advisories,labels,pull_requests",
+        "ghcr.io/github/github-mcp-server:0.30.2"
       ],
       "env": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"

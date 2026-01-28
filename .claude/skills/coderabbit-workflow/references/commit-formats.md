@@ -211,6 +211,6 @@ When CodeRabbit reviews the PR after you push:
 
 This creates a complete audit trail from issue detection to resolution.
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/references/commit-formats.md -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-workflow/references/commit-formats.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->
 

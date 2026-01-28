@@ -1,10 +1,10 @@
 ---
 name: mcp-configuration
 description: MCP (Model Context Protocol) server configurations for various IDEs including setup, troubleshooting, and discovery management
-version: 1.0.0
 compatibility: All repositories with MCP integrations
 
 metadata:
+  version: "1.0.0"
   category: tooling
   tags:
     - mcp

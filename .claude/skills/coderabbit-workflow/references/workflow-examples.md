@@ -89,7 +89,7 @@ Your PR has 15 CodeRabbit comments across multiple files.
 
 ```bash
 # 1. Export comments to local file
-node global/skills/coderabbit-interactions/scripts/export-comments.ts --pr 69
+node .claude/skills/coderabbit-workflow/scripts/export-comments.ts --pr 69
 
 # Output:
 # Total comments: 15
@@ -157,7 +157,7 @@ Co-authored-by: coderabbitai[bot] <136622811+coderabbitai[bot]@users.noreply.git
 git push
 
 # 10. Reply to threads
-node global/skills/coderabbit-interactions/scripts/reply-to-threads.ts --file .tmp/coderabbit-pr-69-*.json
+node .claude/skills/coderabbit-workflow/scripts/reply-to-threads.ts --file .tmp/coderabbit-pr-69-*.json
 
 # Output:
 # ✅ src/auth/login.js:45
@@ -176,7 +176,7 @@ PR has 10 comments: 6 to fix, 2 to acknowledge (wontfix), 2 not-applicable.
 
 ```bash
 # 1. Export and review
-node global/skills/coderabbit-interactions/scripts/export-comments.ts --pr 42
+node .claude/skills/coderabbit-workflow/scripts/export-comments.ts --pr 42
 
 # 2. Process and categorize (update JSON)
 # - 6 comments: status: "fixed"
@@ -209,7 +209,7 @@ Co-authored-by: coderabbitai[bot] <136622811+coderabbitai[bot]@users.noreply.git
 
 # 5. Push and reply
 git push
-node global/skills/coderabbit-interactions/scripts/reply-to-threads.ts --file .tmp/coderabbit-pr-42-*.json
+node .claude/skills/coderabbit-workflow/scripts/reply-to-threads.ts --file .tmp/coderabbit-pr-42-*.json
 ```
 
 ## Example 4: Cursor/AI Agent Workflow
@@ -254,12 +254,12 @@ Co-authored-by: coderabbitai[bot] <136622811+coderabbitai[bot]@users.noreply.git
 | Task | Command |
 |------|---------|
 | Run local review | `coderabbit --prompt-only --type uncommitted` |
-| Export PR comments | `node global/skills/coderabbit-interactions/scripts/export-comments.ts --pr N` |
+| Export PR comments | `node .claude/skills/coderabbit-workflow/scripts/export-comments.ts --pr N` |
 | View pending issues | `jq '.comments[] \| select(.status == "pending")' .tmp/coderabbit-*.json` |
 | View by severity | `jq '.comments[] \| select(.severity == "critical")' .tmp/coderabbit-*.json` |
-| Reply to threads | `node global/skills/coderabbit-interactions/scripts/reply-to-threads.ts --file .tmp/coderabbit-*.json` |
-| Dry run replies | `node global/skills/coderabbit-interactions/scripts/reply-to-threads.ts --file .tmp/coderabbit-*.json --dry-run` |
+| Reply to threads | `node .claude/skills/coderabbit-workflow/scripts/reply-to-threads.ts --file .tmp/coderabbit-*.json` |
+| Dry run replies | `node .claude/skills/coderabbit-workflow/scripts/reply-to-threads.ts --file .tmp/coderabbit-*.json --dry-run` |
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-interactions/references/workflow-examples.md -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/coderabbit-workflow/references/workflow-examples.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->
 

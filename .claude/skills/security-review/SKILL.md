@@ -6,12 +6,12 @@ description: >
   for security issues or before completing security-sensitive changes.
 compatibility: Works with any codebase; enhanced with SonarQube MCP for comprehensive analysis
 metadata:
-  version: "0.1"
+  version: "2.0.0"
 ---
 
 # Security Review
 
-> **Placeholder**: This skill will be fully developed during the content migration phase.
+Perform a security review of code changes.
 
 ## When to use this skill
 
@@ -19,12 +19,13 @@ metadata:
 - Before completing changes to authentication/authorization code
 - When adding new dependencies
 - During security-focused code reviews
+- When asked to perform a "security review" or "security audit"
 
 ## Skill Contents
 
 ### Available Resources
 
-**📚 references/** - Detailed documentation
+**references/** - Detailed documentation
 - [go](references/go)
 - [java](references/java)
 - [python](references/python)
@@ -32,6 +33,23 @@ metadata:
 - [workflow](references/workflow.md)
 
 ---
+
+## Quick Checklist
+
+1. **Credential Scanning** - Search for hardcoded secrets
+2. **Input Validation** - Check SQL injection, XSS, command injection
+3. **Authentication & Authorization** - Review auth mechanisms
+4. **Data Protection** - Check encryption and data handling
+5. **Dependency Security** - Scan for vulnerable packages
+
+## Output Format
+
+For each finding, provide:
+
+- **Finding**: Description of the issue
+- **Severity**: Critical/High/Medium/Low
+- **Recommendation**: How to fix
+- **File/Line**: Location
 
 ## Security Checks
 
@@ -51,12 +69,10 @@ metadata:
 | Python | `references/python/security-patterns.md` |
 | Go | `references/go/security-patterns.md` |
 
-## TODO
+## Related Skills
 
-- [ ] Define security check rules by technology
-- [ ] Integrate with SonarQube MCP
-- [ ] Add credential pattern detection
-- [ ] Define severity levels and thresholds
+- `.claude/skills/dependency-security` - npm audit and vulnerability management
+- `.claude/skills/sonarqube-remediation` - SonarQube issue fixing
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → global/skills/security-review/SKILL.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->

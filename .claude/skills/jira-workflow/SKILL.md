@@ -1,10 +1,10 @@
 ---
 name: jira-workflow
 description: Jira ticket creation and management for AI agent commands, with severity-based processing and proper integration
-version: 1.0.0
 compatibility: All repositories with Jira integration
 
 metadata:
+  version: "1.0.0"
   category: workflow
   tags:
     - jira

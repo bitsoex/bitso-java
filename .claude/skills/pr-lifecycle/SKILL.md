@@ -1,10 +1,10 @@
 ---
 name: pr-lifecycle
 description: GitHub CLI commands and workflows for managing pull requests, CI checks, CodeRabbit reviews, and branch protection
-version: 1.1.0
 compatibility: All repositories with GitHub
 
 metadata:
+  version: "1.1.0"
   category: workflow
   tags:
     - pull-requests
@@ -16,7 +16,7 @@ metadata:
   triggers:
     - on-demand
   uses:
-    - coderabbit-interactions
+    - coderabbit-workflow
     - jira-workflow
     - stacked-prs
 ---
@@ -147,7 +147,7 @@ See `.claude/skills/stacked-prs` for complete stacked PR workflows.
 Co-authored-by: coderabbitai[bot] <136622811+coderabbitai[bot]@users.noreply.github.com>
 ```
 
-See `.claude/skills/coderabbit-interactions` for detailed patterns.
+See `.claude/skills/coderabbit-workflow` for detailed patterns.
 
 ## References
 
@@ -172,13 +172,13 @@ See `.claude/skills/coderabbit-interactions` for detailed patterns.
 
 | Skill | Purpose |
 |-------|---------|
-| `coderabbit-interactions` | Thread replies, comment export, local CLI reviews |
+| `coderabbit-workflow` | Thread replies, comment export, local CLI reviews |
 | `jira-workflow` | Ticket creation and Jira key integration |
 | `stacked-prs` | Stacked PR management and merge workflows |
 
 ## Related
 
-- `.claude/skills/coderabbit-interactions` - Detailed CodeRabbit interaction patterns
+- `.claude/skills/coderabbit-workflow` - Detailed CodeRabbit workflow patterns
 - `.claude/skills/jira-workflow` - Jira ticket workflow
 - `.claude/skills/stacked-prs` - Stacked PR management
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
