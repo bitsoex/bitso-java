@@ -16,14 +16,15 @@ RFC-37 compliant documentation structure for Java services.
 
 | Skill | Coverage |
 |-------|----------|
-| `.claude/skills/rest-api/` | API docs, RFC-37 structure |
+| `global/skills/doc-validation-rfc-37/` | RFC-37 validation and linting |
+| `global/skills/doc-generation-rfc-37/` | RFC-37 documentation generation |
 
 ## 📚 Full Documentation
 
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.claude/skills/rest-api/SKILL.md
+.claude/skills/doc-validation-rfc-37/SKILL.md
 ```
 
 The skill includes:

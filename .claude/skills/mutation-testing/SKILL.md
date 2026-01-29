@@ -35,12 +35,12 @@ Use PIT mutation testing to identify tests that pass but don't verify behavior c
 
 ### Sections
 
-- [When to use this skill](#when-to-use-this-skill)
-- [Quick Start](#quick-start)
-- [Key Concepts](#key-concepts)
-- [References](#references)
-- [Related Rules](#related-rules)
-- [Related Skills](#related-skills)
+- [When to use this skill](#when-to-use-this-skill) (L25-L33)
+- [Quick Start](#quick-start) (L55-L91)
+- [Key Concepts](#key-concepts) (L92-L117)
+- [References](#references) (L118-L126)
+- [Related Rules](#related-rules) (L127-L131)
+- [Related Skills](#related-skills) (L132-L137)
 
 ### Available Resources
 
@@ -126,15 +126,15 @@ High line coverage with low mutation score = tests run code but don't verify res
 
 ## Related Rules
 
-- `.cursor/rules/java-testing-guidelines.mdc` - Spock/JUnit patterns
-- `.cursor/rules/java-jacoco-coverage.mdc` - Line coverage configuration
+- [java-testing-guidelines](.cursor/rules/java-testing-guidelines/java-testing-guidelines.mdc) - Spock/JUnit patterns
+- [java-jacoco-coverage](.cursor/rules/java-jacoco-coverage/java-jacoco-coverage.mdc) - Line coverage configuration
 
 ## Related Skills
 
 | Skill | Purpose |
 |-------|---------|
-| [java-testing](../java-testing/SKILL.md) | Test configuration |
-| [java-coverage](../java-coverage/SKILL.md) | JaCoCo coverage |
+| [java-testing](.claude/skills/java-testing/SKILL.md) | Test configuration |
+| [java-coverage](.claude/skills/java-coverage/SKILL.md) | JaCoCo coverage |
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/skills/mutation-testing/SKILL.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->

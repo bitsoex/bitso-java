@@ -15,7 +15,7 @@ metadata:
     - on-demand
   uses:
     - coderabbit-workflow
-    - pr-lifecycle
+    - pr-workflow
 ---
 
 # Stacked PRs Workflow
@@ -32,16 +32,28 @@ Workflows for managing stacked (dependent) pull requests with proper visualizati
 
 ## Skill Contents
 
+### Sections
+
+- [Core Principles](#core-principles) (L25-L32)
+- [Workflow Overview](#workflow-overview) (L61-L69)
+- [Quick Reference](#quick-reference) (L70-L100)
+- [Scripts](#scripts) (L101-L106)
+- [References](#references) (L107-L116)
+- [Key Requirement: CodeRabbit Approval](#key-requirement-coderabbit-approval) (L117-L127)
+- [Programmatic Automation](#programmatic-automation) (L128-L152)
+- [Skill Dependencies](#skill-dependencies) (L153-L159)
+- [Related](#related) (L160-L163)
+
 ### Available Resources
 
-**references/** - Detailed documentation
+**📚 references/** - Detailed documentation
 - [automation patterns](references/automation-patterns.md)
 - [merge workflow](references/merge-workflow.md)
 - [pr formatting](references/pr-formatting.md)
 - [readiness checklist](references/readiness-checklist.md)
 - [review cycles](references/review-cycles.md)
 
-**scripts/** - Automation scripts
+**🔧 scripts/** - Automation scripts
 - [check stack status](scripts/check-stack-status.ts)
 
 ---
@@ -143,12 +155,12 @@ See `references/automation-patterns.md` for complete polling implementations.
 | Skill | Purpose |
 |-------|---------|
 | `coderabbit-workflow` | Thread replies, comment export, local CLI reviews |
-| `pr-lifecycle` | Base PR management patterns |
+| `pr-workflow` | Base PR management patterns |
 
 ## Related
 
-- `.claude/skills/coderabbit-workflow` - Detailed CodeRabbit workflow patterns
-- `.claude/skills/pr-lifecycle` - GitHub CLI commands for PR management
+- [coderabbit-workflow](.claude/skills/coderabbit-workflow/SKILL.md) - Detailed CodeRabbit workflow patterns
+- [pr-workflow](.claude/skills/pr-workflow/SKILL.md) - GitHub CLI commands for PR management
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → global/skills/stacked-prs/SKILL.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->

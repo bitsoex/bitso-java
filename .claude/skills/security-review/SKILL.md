@@ -25,7 +25,7 @@ Perform a security review of code changes.
 
 ### Available Resources
 
-**references/** - Detailed documentation
+**📚 references/** - Detailed documentation
 - [go](references/go)
 - [java](references/java)
 - [python](references/python)
@@ -71,8 +71,10 @@ For each finding, provide:
 
 ## Related Skills
 
-- `.claude/skills/dependency-security` - npm audit and vulnerability management
-- `.claude/skills/sonarqube-remediation` - SonarQube issue fixing
+- [fix-vulnerabilities (Java)](.claude/skills/fix-vulnerabilities/SKILL.md) - Dependency vulnerability management
+- [fix-vulnerabilities (Node.js)](.claude/skills/fix-vulnerabilities/SKILL.md) - npm audit and vulnerability management
+- [fix-sonarqube (Java)](.claude/skills/fix-sonarqube/SKILL.md) - SonarQube issue fixing for Java
+- [fix-sonarqube (Node.js)](.claude/skills/fix-sonarqube/SKILL.md) - SonarQube issue fixing for Node.js
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → global/skills/security-review/SKILL.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->

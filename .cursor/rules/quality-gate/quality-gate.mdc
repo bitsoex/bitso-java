@@ -73,7 +73,7 @@ For comprehensive checks:
 
 ## Related
 
-Full procedure: `.claude/skills/quality-gateway/`
+Full procedure: [quality-checks](.claude/skills/quality-checks/SKILL.md)
 
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → global/rules/quality-gate.md -->

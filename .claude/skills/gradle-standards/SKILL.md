@@ -35,14 +35,14 @@ Standards for Gradle configuration in Java projects, including version catalogs,
 
 ### Sections
 
-- [When to use this skill](#when-to-use-this-skill)
-- [Quick Start](#quick-start)
-- [Key Principles](#key-principles)
-- [Version Alignment](#version-alignment)
-- [References](#references)
-- [Related Rules](#related-rules)
-- [Dependency Resolution Stack](#dependency-resolution-stack)
-- [Related Skills](#related-skills)
+- [When to use this skill](#when-to-use-this-skill) (L23-L33)
+- [Quick Start](#quick-start) (L61-L89)
+- [Key Principles](#key-principles) (L90-L102)
+- [Version Alignment](#version-alignment) (L103-L130)
+- [References](#references) (L131-L142)
+- [Related Rules](#related-rules) (L143-L147)
+- [Dependency Resolution Stack](#dependency-resolution-stack) (L148-L187)
+- [Related Skills](#related-skills) (L188-L195)
 
 ### Available Resources
 
@@ -111,7 +111,7 @@ configurations.configureEach {
         // Force specific versions for security or compatibility
         force libs.jackson.core
         force libs.jackson.databind
-        
+
         // Align all modules in a group
         eachDependency { details ->
             if (details.requested.group == 'io.grpc') {
@@ -142,8 +142,8 @@ This approach is preferred because:
 
 ## Related Rules
 
-- `.cursor/rules/java-gradle-best-practices.mdc` - Full Gradle configuration reference
-- `.cursor/rules/java-versions-and-dependencies.mdc` - Version management policies
+- [java-gradle-best-practices](.cursor/rules/java-gradle-best-practices/java-gradle-best-practices.mdc) - Full Gradle configuration reference
+- [java-versions-and-dependencies](.cursor/rules/java-versions-and-dependencies/java-versions-and-dependencies.mdc) - Version management policies
 
 ## Dependency Resolution Stack
 

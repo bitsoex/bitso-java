@@ -9,21 +9,26 @@ Gradle's built-in dependency locking mechanism provides reproducible builds with
 
 ## Contents
 
-- [Overview](#overview)
-- [Never Edit Lockfiles Directly](#never-edit-lockfiles-directly) ⚠️ CRITICAL
-- [Security and Dependabot Integration](#security-and-dependabot-integration)
-- [When to Use Native vs Nebula](#when-to-use-native-vs-nebula)
-- [Setup](#setup)
-- [The resolveAndLockAll Task](#the-resolveandlockall-task)
-- [Generating Lock Files](#generating-lock-files)
-- [Locking All Configurations](#locking-all-configurations)
-- [Lock Modes](#lock-modes)
-- [Scope Attribution Issues](#scope-attribution-issues)
-- [Multi-Module Projects](#multi-module-projects)
-- [Forces and Version Catalog](#forces-and-version-catalog)
-- [Troubleshooting](#troubleshooting)
-- [Migration from Nebula](#migration-from-nebula)
-- [Related](#related)
+- [Overview](#overview) (L34-L61)
+- [Never Edit Lockfiles Directly](#never-edit-lockfiles-directly) (L62-L103)
+- [Security and Dependabot Integration](#security-and-dependabot-integration) (L104-L188)
+- [When to Use Native vs Nebula](#when-to-use-native-vs-nebula) (L189-L227)
+- [Setup](#setup) (L228-L282)
+- [The resolveAndLockAll Task](#the-resolveandlockall-task) (L283-L343)
+- [Locking All Configurations](#locking-all-configurations) (L344-L415)
+- [Information Comparison: Native vs Nebula](#information-comparison-native-vs-nebula) (L416-L501)
+- [Lock File Format](#lock-file-format) (L502-L546)
+- [Generating Lock Files](#generating-lock-files) (L547-L599)
+- [Updating Dependencies](#updating-dependencies) (L600-L645)
+- [Multi-Module Projects](#multi-module-projects) (L646-L782)
+- [Automated Validation](#automated-validation) (L783-L894)
+- [CI/CD Integration](#cicd-integration) (L895-L974)
+- [Lock Modes](#lock-modes) (L975-L1024)
+- [Scope Attribution Issues](#scope-attribution-issues) (L1025-L1106)
+- [Troubleshooting](#troubleshooting) (L1107-L1189)
+- [Migration from Nebula](#migration-from-nebula) (L1190-L1239)
+- [Forces and Version Catalog](#forces-and-version-catalog) (L1240-L1348)
+- [Related](#related) (L1349-L1353)
 
 ---
 ## Overview
@@ -177,9 +182,9 @@ If the dependency graph shows a different version than the lockfile, investigate
 
 ### Related Security Documentation
 
-- [Fix Strategies](../../dependabot-security/references/fix-strategies.md) - Strategy hierarchy for vulnerability fixes
-- [Dependency Graph](../../dependabot-security/references/dependency-graph.md) - Dependency graph plugin setup
-- [Severity Processing](../../dependabot-security/references/severity-processing.md) - Process by severity order
+- [Fix Strategies](.claude/skills/dependabot-security/references/fix-strategies.md) - Strategy hierarchy for vulnerability fixes
+- [Dependency Graph](.claude/skills/dependabot-security/references/dependency-graph.md) - Dependency graph plugin setup
+- [Severity Processing](.claude/skills/dependabot-security/references/severity-processing.md) - Process by severity order
 
 ## When to Use Native vs Nebula
 
@@ -492,7 +497,7 @@ grep -B5 "commons-compress:1.23" build/reports/dependency-graph-snapshots/depend
 | What does CI see? | `dependency-graph-init.gradle` |
 | Which config brings old version? | `grep` in `dependency-graph.json` |
 
-See [Dependency Graph Setup](../../dependabot-security/references/dependency-graph.md) for full setup instructions.
+See [Dependency Graph Setup](.claude/skills/dependabot-security/references/dependency-graph.md) for full setup instructions.
 
 ## Lock File Format
 
@@ -1344,7 +1349,7 @@ Example where force is NOT needed:
 ## Related
 
 - [Nebula Resolution Rules](https://github.com/nebula-plugins/gradle-resolution-rules-plugin) - Resolution rules for alignment and substitution
-- [Gradle 9 Upgrade](../../gradle-9/SKILL.md) - Gradle 9 migration guide
+- [Gradle 9 Upgrade](.claude/skills/gradle-9/SKILL.md) - Gradle 9 migration guide
 - [Gradle Official Docs](https://docs.gradle.org/current/userguide/dependency_locking.html) - Gradle dependency locking documentation
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/skills/gradle-standards/references/native-dependency-locking.md -->

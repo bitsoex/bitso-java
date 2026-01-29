@@ -4,7 +4,7 @@
 
 # 🤖 📦 Prepare to Java 25
 
-> **📚 Full documentation**: See the [java-25 skill](../skills/java-25/SKILL.md) for complete preparation patterns and troubleshooting.
+> **📚 Full documentation**: See the [upgrade-java-25 skill](.claude/skills/upgrade-java-25/SKILL.md) for complete preparation patterns and troubleshooting.
 
 **IMPORTANT**: This command is for **local validation only**. The Java 25 toolchain change should **NOT** be committed.
 
@@ -45,8 +45,8 @@ sdk use java 25.0.1-tem
 
 ## Related
 
-- [Full Skill](../skills/java-25/SKILL.md)
-- [Preparation Guide](../skills/java-25/references/preparation.md)
+- [Full Skill](.claude/skills/upgrade-java-25/SKILL.md)
+- [Preparation Guide](.claude/skills/upgrade-java-25/references/preparation.md)
 - [Golden Path](../golden-paths/java-25-upgrade.md)
 
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->

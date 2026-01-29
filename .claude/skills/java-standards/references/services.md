@@ -2,15 +2,14 @@
 
 ## Contents
 
-- [Tech Stack](#tech-stack) (L14-L24)
-- [Project Organization](#project-organization) (L25-L68)
-- [Package Guidelines](#package-guidelines) (L69-L76)
-- [Dependency Management](#dependency-management) (L77-L118)
-- [Lombok Configuration](#lombok-configuration) (L119-L147)
-- [MapStruct Configuration](#mapstruct-configuration) (L148-L201)
+- [Tech Stack](#tech-stack) (L13-L23)
+- [Project Organization](#project-organization) (L24-L67)
+- [Package Guidelines](#package-guidelines) (L68-L75)
+- [Dependency Management](#dependency-management) (L76-L117)
+- [Lombok Configuration](#lombok-configuration) (L118-L146)
+- [MapStruct Configuration](#mapstruct-configuration) (L147-L199)
 
 ---
-
 ## Tech Stack
 
 | Component | Version/Tool | Notes |

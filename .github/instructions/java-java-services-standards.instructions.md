@@ -11,7 +11,7 @@ Standards for Bitso Java services.
 
 | Skill | Coverage |
 |-------|----------|
-| `.claude/skills/java-standards/` | Tech stack, code review, build verification |
+| [java-standards](.claude/skills/java-standards/SKILL.md) | Tech stack, code review, build verification |
 
 ## 📚 Full Documentation
 

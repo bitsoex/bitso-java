@@ -8,18 +8,18 @@ Align distributed locking mechanisms with RFC-44 standards.
 
 ## Skill Location
 
-Full documentation: `.claude/skills/distributed-locking/`
+Full documentation: [distributed-locking](.claude/skills/distributed-locking-rfc-44/SKILL.md)
 
 ## Quick Start
 
 1. Assess infrastructure (PostgreSQL vs Redis availability)
 2. Identify legacy patterns to migrate
 3. Apply patterns from the skill:
-   - `.claude/skills/distributed-locking/SKILL.md` - Main instructions
-   - `.claude/skills/distributed-locking/references/migration-workflow.md` - Step-by-step guide
-   - `.claude/skills/distributed-locking/references/lock-patterns.md` - RFC-44 patterns
-   - `.claude/skills/distributed-locking/references/redis-integration.md` - Redis option
-   - `.claude/skills/distributed-locking/references/troubleshooting.md` - Common issues
+   - [distributed-locking](.claude/skills/distributed-locking-rfc-44/SKILL.md) - Main instructions
+   - [migration-workflow](.claude/skills/distributed-locking-rfc-44/references/migration-workflow.md) - Step-by-step guide
+   - [lock-patterns](.claude/skills/distributed-locking-rfc-44/references/lock-patterns.md) - RFC-44 patterns
+   - [redis-integration](.claude/skills/distributed-locking-rfc-44/references/redis-integration.md) - Redis option
+   - [troubleshooting](.claude/skills/distributed-locking-rfc-44/references/troubleshooting.md) - Common issues
 4. Validate build and tests
 
 ## Migration Paths

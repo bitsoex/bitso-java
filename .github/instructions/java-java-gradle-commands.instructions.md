@@ -11,7 +11,7 @@ Common Gradle commands for Java projects.
 
 | Skill | Coverage |
 |-------|----------|
-| `.claude/skills/gradle-standards/` | Multi-module, optimization, cleanup |
+| [gradle-standards](.claude/skills/gradle-standards/SKILL.md) | Multi-module, optimization, cleanup |
 
 ## 📚 Full Documentation
 

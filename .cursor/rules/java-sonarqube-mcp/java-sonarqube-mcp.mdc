@@ -15,14 +15,14 @@ Using SonarQube MCP for Java code quality analysis.
 
 | Skill | Coverage |
 |-------|----------|
-| `.claude/skills/sonarqube-integration/` | MCP tools, common rules |
+| [fix-sonarqube](.claude/skills/fix-sonarqube/SKILL.md) | MCP tools, common rules |
 
 ## 📚 Full Documentation
 
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.claude/skills/sonarqube-integration/SKILL.md
+.claude/skills/fix-sonarqube/SKILL.md
 ```
 
 The skill includes:

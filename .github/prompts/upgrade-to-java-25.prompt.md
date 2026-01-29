@@ -4,7 +4,7 @@
 
 # 🤖 📦 Upgrade to Java 25
 
-> **📚 Full documentation**: See the [java-25 skill](../skills/java-25/SKILL.md) for complete upgrade patterns and troubleshooting.
+> **📚 Full documentation**: See the [upgrade-java-25 skill](.claude/skills/upgrade-java-25/SKILL.md) for complete upgrade patterns and troubleshooting.
 
 **IMPORTANT**: Run `/prepare-to-java-25` first to validate locally before using this command.
 
@@ -45,8 +45,8 @@ Follow the Jira ticket workflow to create a proper PR with the Java 25 upgrade.
 
 ## Related
 
-- [Full Skill](../skills/java-25/SKILL.md)
-- [Preparation Command](./prepare-to-java-25.md)
+- [Full Skill](.claude/skills/upgrade-java-25/SKILL.md)
+- [Preparation Command](.cursor/commands/prepare-to-java-25.md)
 - [Golden Path](../golden-paths/java-25-upgrade.md)
 
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->

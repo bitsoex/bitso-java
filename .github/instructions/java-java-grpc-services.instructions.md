@@ -11,14 +11,14 @@ RFC-33 compliant gRPC service implementation for Java.
 
 | Skill | Coverage |
 |-------|----------|
-| `.claude/skills/grpc-standards/` | Contracts, resilience, linting |
+| [grpc-services-rfc-33](.claude/skills/grpc-services-rfc-33/SKILL.md) | Contracts, resilience, linting |
 
 ## 📚 Full Documentation
 
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.claude/skills/grpc-standards/SKILL.md
+.claude/skills/grpc-services-rfc-33/SKILL.md
 ```
 
 The skill includes:

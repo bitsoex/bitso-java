@@ -7,7 +7,7 @@ description: >
   debugging hook issues, or ensuring hook compliance.
 compatibility: Requires Node.js 20+; works with any Git repository
 metadata:
-  version: "2.0"
+  version: "2.1"
   targeting:
     include:
       - repo: "bitsoex/ai-code-instructions"
@@ -31,17 +31,18 @@ This skill provides guidance for implementing and maintaining Git hooks that enf
 ### Sections
 
 - [When to use this skill](#when-to-use-this-skill) (L20-L28)
-- [Distributed Hooks (Informative Mode)](#distributed-hooks-informative-mode) (L64-L125)
-- [Assets](#assets) (L126-L136)
-- [Architecture](#architecture) (L137-L161)
-- [Instructions](#instructions) (L162-L256)
-- [Hook Types](#hook-types) (L257-L267)
-- [Best Practices](#best-practices) (L268-L396)
-- [Informative vs Enforcing Mode](#informative-vs-enforcing-mode) (L397-L405)
-- [References](#references) (L406-L416)
-- [Documentation](#documentation) (L417-L424)
-- [Related Skills](#related-skills) (L425-L432)
-- [Troubleshooting](#troubleshooting) (L433-L495)
+- [Distributed Hooks (Informative Mode)](#distributed-hooks-informative-mode) (L65-L126)
+- [Assets](#assets) (L127-L137)
+- [Architecture](#architecture) (L138-L162)
+- [Instructions](#instructions) (L163-L261)
+- [Hook Types](#hook-types) (L262-L272)
+- [Best Practices](#best-practices) (L273-L401)
+- [Informative vs Enforcing Mode](#informative-vs-enforcing-mode) (L402-L410)
+- [References](#references) (L411-L421)
+- [Documentation](#documentation) (L422-L429)
+- [Related Skills](#related-skills) (L430-L437)
+- [hk (ai-code-instructions only)](#hk-ai-code-instructions-only) (L438-L498)
+- [Troubleshooting](#troubleshooting) (L499-L562)
 
 ### Available Resources
 
@@ -144,7 +145,7 @@ project/
 │   ├── pre-commit           # Symlink → ../.scripts/pre-commit-hook.sh
 │   └── pre-push             # Symlink → ../.scripts/pre-push-hook.sh
 ├── .scripts/
-│   ├── setup-hooks.js       # Hook installation script (runs on npm install)
+│   ├── setup-hooks.ts       # Hook installation script (runs on npm install)
 │   ├── pre-commit-hook.sh   # Pre-commit hook implementation
 │   ├── pre-push-hook.sh     # Pre-push hook implementation
 │   └── lib/skills/          # Skill modules for hook operations
@@ -171,7 +172,7 @@ mkdir -p .git-hooks
 
 Create `.scripts/setup-hooks.ts`:
 
-```javascript
+```typescript
 #!/usr/bin/env node
 /**
  * Setup Git Hooks
@@ -180,14 +181,17 @@ Create `.scripts/setup-hooks.ts`:
  * Configures git to use .git-hooks/ for hooks.
  */
 
+import fs from 'fs';
+import path from 'path';
+import { execSync } from 'child_process';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 if (process.env.CI || process.env.SKIP_HOOKS) {
   console.log('⏭️  Skipping hook setup (CI or SKIP_HOOKS=true)');
   process.exit(0);
 }
-
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
 
 const ROOT_DIR = path.join(__dirname, '..');
 const HOOKS_DIR = '.git-hooks';
@@ -209,7 +213,8 @@ function setupHooks() {
     execSync(`git config core.hooksPath ${HOOKS_DIR}`, { cwd: ROOT_DIR });
     console.log(`✅ Git hooks configured: core.hooksPath → ${HOOKS_DIR}`);
   } catch (error) {
-    console.error('❌ Failed to set core.hooksPath:', error.message);
+    const err = error as Error;
+    console.error('❌ Failed to set core.hooksPath:', err.message);
     process.exit(1);
   }
 }
@@ -427,8 +432,69 @@ For comprehensive documentation in the repository's `docs/` directory, see:
 | Skill | Purpose |
 |-------|---------|
 | `agent-hooks` | AI IDE hooks (Claude Code, Cursor) with enforcing mode |
-| `quality-gateway` | Quality gate orchestration |
+| `quality-checks` | Quality gate orchestration |
 | `coding-standards` | Code style enforcement |
+
+## hk (ai-code-instructions only)
+
+> **Note**: This section is specific to the `ai-code-instructions` repository which uses [hk](https://hk.jdx.dev/) as its git hook manager.
+
+hk provides:
+
+- **Parallel execution**: Runs multiple linters simultaneously
+- **Smart stashing**: Safely stashes unstaged changes during hooks
+- **Progress reporting**: Clear visual feedback during hook execution
+- **Profile-based configuration**: Enable/disable checks via profiles
+
+### Configuration
+
+hk is configured via `hk.pkl` in the repository root:
+
+```pkl
+hooks {
+  ["pre-commit"] {
+    stash = "git"
+    steps {
+      ["eslint-staged"] = new Step { check = "node mise-tasks/check.ts eslint-staged" }
+      ["tests-changed"] = new Step { check = "node mise-tasks/check.ts tests-changed" }
+    }
+  }
+}
+```
+
+### Common Commands
+
+```bash
+# Run hooks manually
+hk run pre-commit     # Run pre-commit checks
+hk run pre-push       # Run pre-push checks
+hk run ci             # Run CI checks
+
+# Check and fix
+hk check              # Run all checks (read-only)
+hk fix                # Auto-fix where possible
+
+# Validate configuration
+hk validate           # Validate hk.pkl
+
+# Skip hooks
+git commit --no-verify                    # Standard git bypass
+HK_SKIP_HOOKS=pre-commit git commit       # Skip specific hook
+```
+
+### Installation
+
+```bash
+# Install via Homebrew
+brew install hk
+
+# Download pkl packages (required for SSL cert compatibility)
+pkl download-package --ca-certificates=/path/to/ca.pem \
+  package://github.com/jdx/hk/releases/download/v1.34.0/hk@1.34.0
+
+# Install hooks
+hk install
+```
 
 ## Troubleshooting
 
@@ -492,7 +558,7 @@ For comprehensive documentation in the repository's `docs/` directory, see:
 
 1. CI should skip hooks (set `CI=true`)
 2. CI runs validations directly, not via hooks
-3. Ensure setup-hooks.js checks for CI environment
+3. Ensure setup-hooks.ts checks for CI environment
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → global/skills/git-hooks/SKILL.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->

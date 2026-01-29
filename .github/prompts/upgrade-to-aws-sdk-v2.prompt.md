@@ -4,7 +4,7 @@
 
 # 🤖 ☁️ Upgrade to AWS SDK v2
 
-> **📚 Full documentation**: See the [aws-v2 skill](../skills/aws-v2/SKILL.md) for complete migration patterns, code examples, and troubleshooting.
+> **📚 Full documentation**: See the [upgrade-aws-sdk-v2 skill](.claude/skills/upgrade-aws-sdk-v2/SKILL.md) for complete migration patterns, code examples, and troubleshooting.
 
 ## Quick Reference
 
@@ -45,8 +45,8 @@ allprojects {
 
 ## Related
 
-- [Full Skill](../skills/aws-v2/SKILL.md)
-- [Migration Patterns](../skills/aws-v2/references/migration-patterns.md)
+- [Full Skill](.claude/skills/upgrade-aws-sdk-v2/SKILL.md)
+- [Migration Patterns](.claude/skills/upgrade-aws-sdk-v2/references/migration-patterns.md)
 
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/commands/upgrade-to-aws-sdk-v2.md -->

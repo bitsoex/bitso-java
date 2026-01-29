@@ -18,7 +18,7 @@ Best practices for AI agents to create and manage Jira tickets when performing a
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.claude/skills/jira-workflow/SKILL.md
+.claude/skills/jira-integration/SKILL.md
 ```
 
 The skill includes:

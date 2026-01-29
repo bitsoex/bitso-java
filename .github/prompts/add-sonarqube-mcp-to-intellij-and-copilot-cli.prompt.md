@@ -8,14 +8,14 @@ Configure the SonarQube MCP server for IntelliJ IDEA and GitHub Copilot CLI.
 
 ## Skill Location
 
-Full documentation: `.claude/skills/sonarqube-integration/`
+Full documentation: [sonarqube-integration](.claude/skills/fix-sonarqube/SKILL.md)
 
 ## Quick Start
 
 1. Choose your target IDE/tool
 2. Apply configuration from skill references:
-   - `.claude/skills/sonarqube-integration/references/intellij-setup.md` - IntelliJ IDEA
-   - `.claude/skills/sonarqube-integration/references/copilot-cli-setup.md` - Copilot CLI
+   - [intellij-setup](.claude/skills/fix-sonarqube/references/intellij-setup.md) - IntelliJ IDEA
+   - [copilot-cli-setup](.claude/skills/fix-sonarqube/references/copilot-cli-setup.md) - Copilot CLI
 3. Verify configuration
 4. Restart IDE if needed
 
@@ -28,7 +28,7 @@ Full documentation: `.claude/skills/sonarqube-integration/`
 
 ## Related
 
-- **Full Skill**: `.claude/skills/sonarqube-integration/SKILL.md`
+- **Full Skill**: [sonarqube-integration](.claude/skills/fix-sonarqube/SKILL.md)
 - **Fix Issues**: `/fix-sonarqube-issues-java` command
 - **Setup Rule**: `java/rules/java-sonarqube-setup.md`
 

@@ -2,19 +2,18 @@
 
 ## Contents
 
-- [Multi-Cycle Review Process](#multi-cycle-review-process)
-- [Cycle Structure](#cycle-structure)
-- [Processing Order: Bottom-Up](#processing-order-bottom-up)
-- [Addressing ALL Comments](#addressing-all-comments)
-- [Reply Strategy](#reply-strategy)
-- [Batch Reply Script](#batch-reply-script)
-- [Waiting for CodeRabbit](#waiting-for-coderabbit)
-- [CodeRabbit Approval](#coderabbit-approval)
-- [Example Review Cycle](#example-review-cycle)
-- [Parallel Work](#parallel-work)
+- [Multi-Cycle Review Process](#multi-cycle-review-process) (L17-L20)
+- [Cycle Structure](#cycle-structure) (L21-L34)
+- [Processing Order: Bottom-Up](#processing-order-bottom-up) (L35-L54)
+- [Addressing ALL Comments](#addressing-all-comments) (L55-L87)
+- [Reply Strategy](#reply-strategy) (L88-L111)
+- [Batch Reply Script](#batch-reply-script) (L112-L126)
+- [Waiting for CodeRabbit](#waiting-for-coderabbit) (L127-L141)
+- [CodeRabbit Approval](#coderabbit-approval) (L142-L164)
+- [Example Review Cycle](#example-review-cycle) (L165-L185)
+- [Parallel Work](#parallel-work) (L186-L201)
 
 ---
-
 ## Multi-Cycle Review Process
 
 CodeRabbit reviews are iterative. After each push, CodeRabbit may find new issues or acknowledge fixes. Plan for multiple review cycles.

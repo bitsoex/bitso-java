@@ -4,7 +4,7 @@
 
 # 🤖 🔧 Prepare to Gradle 9
 
-> **📚 Full documentation**: See the [gradle-9 skill](../skills/gradle-9/SKILL.md) for complete upgrade patterns, plugin compatibility, and troubleshooting.
+> **📚 Full documentation**: See the [upgrade-gradle-9 skill](.claude/skills/upgrade-gradle-9/SKILL.md) for complete upgrade patterns, plugin compatibility, and troubleshooting.
 
 **IMPORTANT**: This command prepares projects for Gradle 9 by addressing deprecations and updating plugins.
 
@@ -41,9 +41,9 @@
 
 ## Related
 
-- [Full Skill](../skills/gradle-9/SKILL.md)
-- [Plugin Compatibility](../skills/gradle-9/references/plugin-compatibility.md)
-- [Java 25 Skill](../skills/java-25/SKILL.md) - Often done together
+- [Full Skill](.claude/skills/upgrade-gradle-9/SKILL.md)
+- [Plugin Compatibility](.claude/skills/upgrade-gradle-9/references/plugin-compatibility.md)
+- [Java 25 Skill](.claude/skills/upgrade-java-25/SKILL.md) - Often done together
 
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/commands/prepare-to-gradle-9.md -->

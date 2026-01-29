@@ -312,7 +312,7 @@ dependencyAnalysis {
 
 - [Template: dependency-analysis.gradle](../../../templates/dependency-analysis.gradle)
 - [optimization.md](optimization.md) - Build optimization overview
-- [../SKILL.md](../SKILL.md) - Gradle standards overview
+- [../SKILL.md](.claude/skills/gradle-standards/SKILL.md) - Gradle standards overview
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/skills/gradle-standards/references/scope-optimization.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->

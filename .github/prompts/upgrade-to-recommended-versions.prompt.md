@@ -4,7 +4,7 @@
 
 # 🤖 📦 Upgrade to Recommended Versions
 
-> **📚 Full documentation**: See the [spring-boot-3-5 skill](../skills/spring-boot-3-5/SKILL.md) for complete upgrade patterns and troubleshooting.
+> **📚 Full documentation**: See the [upgrade-spring-boot-3-5 skill](.claude/skills/upgrade-spring-boot-3-5/SKILL.md) for complete upgrade patterns and troubleshooting.
 
 **IMPORTANT**: Stay on latest or latest-1 patch of Spring Boot 3.5.x to prepare for Spring Boot 4.
 
@@ -45,8 +45,8 @@
 
 ## Related
 
-- [Full Skill](../skills/spring-boot-3-5/SKILL.md)
-- [Troubleshooting](../skills/spring-boot-3-5/references/troubleshooting.md)
+- [Full Skill](.claude/skills/upgrade-spring-boot-3-5/SKILL.md)
+- [Troubleshooting](.claude/skills/upgrade-spring-boot-3-5/references/troubleshooting.md)
 
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/commands/upgrade-to-recommended-versions.md -->

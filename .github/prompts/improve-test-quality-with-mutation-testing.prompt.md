@@ -9,7 +9,7 @@ Use PIT mutation testing to identify tests that pass but don't verify behavior.
 ## Skill Location
 
 ```
-.claude/skills/mutation-testing/
+java/skills/mutation-testing/
 ```
 
 ## Quick Start

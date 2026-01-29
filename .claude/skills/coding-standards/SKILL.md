@@ -100,7 +100,7 @@ Scripts are implemented in `.scripts/lib/skills/coding-standards.ts`:
 
 ## Related Skills
 
-- `quality-gateway` - Orchestrates coding standards with other quality checks
+- `quality-checks` - Orchestrates coding standards with other quality checks
 - `doc-sync` - Documentation synchronization
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → global/skills/coding-standards/SKILL.md -->

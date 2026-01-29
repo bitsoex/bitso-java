@@ -151,15 +151,15 @@ docs/
 
 ## Related Rules
 
-- `.cursor/rules/java-rest-api-guidelines.mdc` - Full API guidelines
-- `.cursor/rules/java-service-documentation.mdc` - RFC-37 documentation
+- [java-rest-api-guidelines](.cursor/rules/java-rest-api-guidelines/java-rest-api-guidelines.mdc) - Full API guidelines
+- [java-service-documentation](.cursor/rules/java-service-documentation/java-service-documentation.mdc) - RFC-37 documentation
 
 ## Related Skills
 
 | Skill | Purpose |
 |-------|---------|
-| [grpc-standards](../grpc-standards/SKILL.md) | gRPC service standards |
-| [java-testing](../java-testing/SKILL.md) | Testing REST endpoints |
+| [grpc-services-rfc-33](.claude/skills/grpc-services-rfc-33/SKILL.md) | gRPC service standards |
+| [java-testing](.claude/skills/java-testing/SKILL.md) | Testing REST endpoints |
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/skills/rest-api/SKILL.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->

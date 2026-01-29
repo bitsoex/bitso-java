@@ -15,7 +15,7 @@ Core principles and policies for managing dependency versions in Java/Gradle pro
 - [Spring Boot Version Unification](#spring-boot-version-unification) (L110-L179)
 - [Never-Downgrade Policy](#never-downgrade-policy) (L180-L224)
 - [Why This Matters](#why-this-matters) (L225-L239)
-- [Related](#related) (L240-L244)
+- [Related](#related) (L240-L243)
 
 ---
 ## Critical Requirements
@@ -239,8 +239,8 @@ java.lang.NoSuchMethodError: 'redis.clients.jedis.params.SetParams SetParams.px(
 
 ## Related
 
-- [../SKILL.md](../SKILL.md) - Main skill documentation
-- [../../gradle-standards/references/native-dependency-locking.md](../../gradle-standards/references/native-dependency-locking.md) - Native Gradle locking (recommended)
+- [../SKILL.md](.claude/skills/dependency-management/SKILL.md) - Main skill documentation
+- [../../gradle-standards/references/native-dependency-locking.md](.claude/skills/gradle-standards/references/native-dependency-locking.md) - Native Gradle locking (recommended)
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/skills/dependency-management/references/version-centralization.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->

@@ -14,7 +14,7 @@ Managing vulnerable dependencies and applying security patches.
 - [Common CVE Fixes](#common-cve-fixes) (L77-L104)
 - [Spring Boot 3.5.x Requirements](#spring-boot-35x-requirements) (L105-L130)
 - [Verification](#verification) (L131-L171)
-- [Related](#related) (L172-L177)
+- [Related](#related) (L172-L176)
 
 ---
 ## Vulnerable Dependency Versions
@@ -173,7 +173,7 @@ Add to CI pipeline:
 
 - [resolution-strategies.md](resolution-strategies.md) - Forcing versions
 - [compatibility-matrices.md](compatibility-matrices.md) - Version tables
-- [../SKILL.md](../SKILL.md) - Main skill documentation
+- [../SKILL.md](.claude/skills/dependency-management/SKILL.md) - Main skill documentation
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/skills/dependency-management/references/security-updates.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->

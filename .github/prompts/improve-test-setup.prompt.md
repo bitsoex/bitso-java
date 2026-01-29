@@ -8,16 +8,16 @@ Modernize test infrastructure with JUnit 5 patterns and JaCoCo coverage.
 
 ## Skill Location
 
-Full documentation: `.claude/skills/java-testing/`
+Full documentation: [java-testing](.claude/skills/java-testing/SKILL.md)
 
 ## Quick Start
 
 1. Check current test framework versions in `gradle/libs.versions.toml`
 2. Apply patterns from the skill:
-   - `.claude/skills/java-testing/SKILL.md` - Main instructions
-   - `.claude/skills/java-testing/references/test-setup-workflow.md` - Complete setup guide
-   - `.claude/skills/java-testing/references/junit5-migration.md` - Version conflict resolution
-   - `.claude/skills/java-testing/references/test-utilities.md` - Testing bundles
+   - [java-testing](.claude/skills/java-testing/SKILL.md) - Main instructions
+   - [test-setup-workflow](.claude/skills/java-testing/references/test-setup-workflow.md) - Complete setup guide
+   - [junit5-migration](.claude/skills/java-testing/references/junit5-migration.md) - Version conflict resolution
+   - [test-utilities](.claude/skills/java-testing/references/test-utilities.md) - Testing bundles
 3. Update test utilities and base classes
 4. Run tests to verify migration
 

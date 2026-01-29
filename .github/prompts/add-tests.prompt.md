@@ -8,7 +8,7 @@ Generate missing tests to improve code coverage.
 
 ## Skill Location
 
-Full documentation: `.claude/skills/test-augmentation/`
+Full documentation: [testing-standards](.claude/skills/testing-standards/SKILL.md)
 
 ## Quick Start
 
@@ -19,8 +19,8 @@ Full documentation: `.claude/skills/test-augmentation/`
    - Go: `go test -cover ./...`
 2. Review uncovered files and functions
 3. Apply patterns from the skill:
-   - `.claude/skills/test-augmentation/SKILL.md` - Main instructions
-   - `.claude/skills/test-augmentation/references/test-patterns.md` - Test patterns
+   - [testing-standards](.claude/skills/testing-standards/SKILL.md) - Main instructions
+   - [test-patterns](.claude/skills/testing-standards/references/test-patterns.md) - Test patterns
 4. Write tests for uncovered code paths
 5. Re-run coverage to verify improvement
 
@@ -36,7 +36,7 @@ Full documentation: `.claude/skills/test-augmentation/`
 
 - **Quality Gate**: `/quality-check` command
 - **Doc Sync**: `/sync-docs` command
-- **Java Testing**: `.claude/skills/java-testing/SKILL.md`
+- **Java Testing**: [java-testing](.claude/skills/java-testing/SKILL.md)
 
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → global/commands/add-tests.md -->

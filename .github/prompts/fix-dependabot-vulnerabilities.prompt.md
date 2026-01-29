@@ -33,7 +33,7 @@ java/skills/dependabot-security/
 
 - `java/rules/java-vulnerability-golden-paths.md` - Proven fix patterns
 - `global/rules/jira-ticket-workflow.md` - Jira ticket creation
-- `.claude/skills/jira-workflow/` - Jira workflow skill
+- [jira-integration](.claude/skills/jira-integration/SKILL.md) - Jira workflow skill
 
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/commands/fix-dependabot-vulnerabilities.md -->

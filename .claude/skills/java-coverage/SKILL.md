@@ -33,15 +33,15 @@ JaCoCo code coverage configuration for Java/Gradle projects.
 
 ### Sections
 
-- [When to use this skill](#when-to-use-this-skill)
-- [Quick Start](#quick-start)
-- [Coverage Thresholds](#coverage-thresholds)
-- [Exclusions](#exclusions)
-- [Multi-Module Aggregation](#multi-module-aggregation)
-- [SonarQube Integration](#sonarqube-integration)
-- [References](#references)
-- [Related Rules](#related-rules)
-- [Related Skills](#related-skills)
+- [When to use this skill](#when-to-use-this-skill) (L23-L31)
+- [Quick Start](#quick-start) (L57-L94)
+- [Coverage Thresholds](#coverage-thresholds) (L95-L119)
+- [Exclusions](#exclusions) (L120-L139)
+- [Multi-Module Aggregation](#multi-module-aggregation) (L140-L190)
+- [SonarQube Integration](#sonarqube-integration) (L191-L201)
+- [References](#references) (L202-L208)
+- [Related Rules](#related-rules) (L209-L212)
+- [Related Skills](#related-skills) (L213-L219)
 
 ### Available Resources
 
@@ -208,15 +208,15 @@ sonar {
 
 ## Related Rules
 
-- `.cursor/rules/java-jacoco-coverage.mdc` - Full JaCoCo reference
+- [java-jacoco-coverage](.cursor/rules/java-jacoco-coverage/java-jacoco-coverage.mdc) - Full JaCoCo reference
 
 ## Related Skills
 
 | Skill | Purpose |
 |-------|---------|
-| [java-testing](../java-testing/SKILL.md) | Test configuration |
-| [sonarqube-integration](../sonarqube-integration/SKILL.md) | SonarQube setup |
-| [gradle-standards](../gradle-standards/SKILL.md) | Gradle configuration |
+| [java-testing](.claude/skills/java-testing/SKILL.md) | Test configuration |
+| [fix-sonarqube](.claude/skills/fix-sonarqube/SKILL.md) | SonarQube setup |
+| [gradle-standards](.claude/skills/gradle-standards/SKILL.md) | Gradle configuration |
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/skills/java-coverage/SKILL.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->

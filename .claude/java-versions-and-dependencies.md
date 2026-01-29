@@ -8,7 +8,7 @@ Standards for managing library versions, dependency constraints, and BOMs.
 
 ## Skill Location
 
-Full documentation: `.claude/skills/dependency-management/`
+Full documentation: [dependency-management](.claude/skills/dependency-management/SKILL.md)
 
 ## 📚 Full Documentation
 

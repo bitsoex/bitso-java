@@ -16,7 +16,7 @@ Nebula Gradle Lint plugin configuration and common violation fixes.
 
 | Skill | Coverage |
 |-------|----------|
-| `.claude/skills/gradle-standards/` | Multi-module, version catalogs, lint rules |
+| [gradle-standards](.claude/skills/gradle-standards/SKILL.md) | Multi-module, version catalogs, lint rules |
 
 ## 📚 Full Documentation
 

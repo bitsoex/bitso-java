@@ -196,17 +196,17 @@ See [references/bom-strategy.md](references/bom-strategy.md) for complete patter
 
 ## Related Rules
 
-- `.cursor/rules/java-versions-and-dependencies.mdc` - Original comprehensive rule
-- `.cursor/rules/java-gradle-best-practices.mdc` - Gradle configuration patterns
+- [java-versions-and-dependencies](.cursor/rules/java-versions-and-dependencies/java-versions-and-dependencies.mdc) - Original comprehensive rule
+- [java-gradle-best-practices](.cursor/rules/java-gradle-best-practices/java-gradle-best-practices.mdc) - Gradle configuration patterns
 
 ## Related Skills
 
 | Skill | Purpose |
 |-------|---------|
-| [gradle-standards](../gradle-standards/SKILL.md) | Gradle build configuration |
-| [dependabot-security](../dependabot-security/SKILL.md) | Vulnerability management |
-| [gradle-9](../gradle-9/SKILL.md) | Gradle 9 migration |
-| [java-25](../java-25/SKILL.md) | Java 25 compatibility |
+| [gradle-standards](.claude/skills/gradle-standards/SKILL.md) | Gradle build configuration |
+| [fix-vulnerabilities](.claude/skills/fix-vulnerabilities/SKILL.md) | Vulnerability management |
+| [upgrade-gradle-9](.claude/skills/upgrade-gradle-9/SKILL.md) | Gradle 9 migration |
+| [upgrade-java-25](.claude/skills/upgrade-java-25/SKILL.md) | Java 25 compatibility |
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/skills/dependency-management/SKILL.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->

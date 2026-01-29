@@ -1,0 +1,373 @@
+<!-- Parent: [Your Service Name] - How-to Guides -->
+<!-- Title: [Your Service Name] - Local Execution -->
+
+# Local Execution
+
+This document provides step-by-step instructions for running [SERVICE_NAME] locally on your development machine. Whether you're using it for local development or contributing to the project, this guide will get you up and running quickly.
+
+## Installation Options
+
+There are multiple ways to run [SERVICE_NAME] locally:
+
+1. **[Primary Method]** - Easiest for end users
+2. **Docker** - Cross-platform, containerized execution
+3. **Dev Container** - Full development environment for contributors
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+### Required Software
+
+- **[Language Runtime]** (version X+): `[version-check-command]`
+- **[Build Tool]** (version X+): `[version-check-command]`
+- **Docker** and **Docker Compose**: `docker --version`
+
+### Additional Requirements
+
+- **AWS CLI** configured (if applicable): `aws sts get-caller-identity`
+- **[Other tools]**: Description
+
+## Option 1: [Primary Method] Installation
+
+### Installation Steps
+
+1. **[Step 1 description]**:
+
+   ```bash
+   # Command for step 1
+   ```
+
+2. **[Step 2 description]**:
+
+   ```bash
+   # Command for step 2
+   ```
+
+3. **Verify installation**:
+
+   ```bash
+   # Verification command
+   ```
+
+### Usage
+
+Once installed, you can run:
+
+```bash
+# Basic usage
+[command] [options]
+
+# With verbose output
+[command] --verbose
+
+# Get help
+[command] --help
+```
+
+## Option 2: Docker
+
+Run using Docker without installing locally.
+
+### Prerequisites
+
+- **Docker** installed and running
+- **Access credentials** (if using private registry)
+
+### Pulling the Image
+
+```bash
+# Login to registry (if needed)
+echo $TOKEN | docker login [registry] -u USERNAME --password-stdin
+
+# Pull the image
+docker pull [registry]/[image]:latest
+```
+
+### Usage
+
+```bash
+# Basic usage
+docker run --rm -v $(pwd):/workspace [image]:latest [args]
+
+# With environment variables
+docker run --rm -e VAR=value -v $(pwd):/workspace [image]:latest [args]
+```
+
+## Option 3: Dev Container (For Development)
+
+For contributors who want to modify the code or contribute to the project.
+
+### Prerequisites
+
+- **Docker Desktop** - Download from [docker.com](https://www.docker.com/products/docker-desktop/)
+- **VS Code** or **Cursor** with Dev Containers extension
+
+### Getting Started
+
+1. **Clone the repository**:
+
+   ```bash
+   git clone git@github.com:bitsoex/[REPO_NAME].git
+   cd [REPO_NAME]
+   ```
+
+2. **Open in VS Code** and run the Dev Container:
+   - Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on macOS)
+   - Type and select: **"Dev Containers: Reopen in Container"**
+   - Wait for the container to build (first time may take 5-10 minutes)
+
+### What's Included
+
+The Dev Container comes pre-configured with:
+
+- [Language runtime and tools]
+- [Build tools]
+- [Linters and formatters]
+- [Testing frameworks]
+- Pre-commit hooks configured
+
+## Environment Setup
+
+### Configure Environment Variables
+
+Copy the example environment file and customize it:
+
+```bash
+cp .env.example .env
+```
+
+Required variables:
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `[VAR_1]` | [Description] | `[example-value]` |
+| `[VAR_2]` | [Description] | `[example-value]` |
+
+### Start Dependencies
+
+Start required services using Docker Compose:
+
+```bash
+docker-compose up -d
+```
+
+This starts:
+
+- [Service 1] (port XXXX)
+- [Service 2] (port XXXX)
+
+Verify services are running:
+
+```bash
+docker-compose ps
+```
+
+## Build the Application
+
+### Using [Build Tool]
+
+```bash
+# Clean build with tests
+[build-command]
+
+# Quick build (skip tests)
+[build-command-skip-tests]
+```
+
+### Using Make (if available)
+
+```bash
+make build
+```
+
+## Run the Application
+
+### Option 1: [Build Tool]
+
+```bash
+[run-command]
+```
+
+### Option 2: Direct Execution
+
+```bash
+[direct-run-command]
+```
+
+### Option 3: IDE
+
+1. Open the project in your IDE
+2. Navigate to the main entry point
+3. Run the application
+
+The service should start on port [PORT] (or configured port).
+
+## Verify the Setup
+
+### Health Check
+
+```bash
+curl http://localhost:[PORT]/health
+```
+
+Expected response:
+
+```json
+{
+  "status": "UP"
+}
+```
+
+### API Documentation (if applicable)
+
+Open in your browser:
+
+```text
+http://localhost:[PORT]/swagger-ui.html
+```
+
+## Testing the Happy Path
+
+### Feature 1: [FEATURE_NAME]
+
+1. **Step 1**: [Description]
+
+   ```bash
+   # Command or API call
+   ```
+
+2. **Step 2**: [Description]
+
+   ```bash
+   # Command or API call
+   ```
+
+3. **Verify**: [What to check to confirm success]
+
+### Feature 2: [FEATURE_NAME]
+
+[Repeat the pattern above for each major feature]
+
+## Running Tests
+
+### Unit Tests
+
+```bash
+[test-command]
+```
+
+### Integration Tests
+
+```bash
+[integration-test-command]
+```
+
+### All Tests with Coverage
+
+```bash
+[coverage-command]
+```
+
+Coverage report location: `[path-to-coverage-report]`
+
+## Development Workflow
+
+### Code Quality Checks
+
+```bash
+# Run linter
+[lint-command]
+
+# Auto-fix issues
+[lint-fix-command]
+
+# Format code
+[format-command]
+```
+
+### Pre-commit Hooks
+
+If using pre-commit hooks:
+
+```bash
+# Install hooks
+pre-commit install
+
+# Run manually
+pre-commit run --all-files
+```
+
+## Troubleshooting
+
+### Common Issues
+
+#### Port Already in Use
+
+```bash
+# Find process using port
+lsof -i :[PORT]
+
+# Kill the process
+kill -9 <PID>
+```
+
+#### [Service] Connection Failed
+
+1. Verify Docker containers are running: `docker-compose ps`
+2. Check logs: `docker-compose logs [service]`
+3. Verify environment variables in `.env`
+
+#### [Credentials] Error
+
+```bash
+# Verify credentials
+[verify-command]
+
+# Refresh if expired
+[refresh-command]
+```
+
+### Debug Mode
+
+For detailed output:
+
+```bash
+[command] --log-level debug --verbose
+```
+
+### Getting Help
+
+- **Slack**: #[TEAM_CHANNEL]
+- **On-call**: Check PagerDuty schedule
+- **Documentation**: [Link to additional docs]
+
+## Cleanup
+
+Stop all local services:
+
+```bash
+docker-compose down
+
+# Remove volumes (clears data)
+docker-compose down -v
+```
+
+## Next Steps
+
+Now that you have the application running locally:
+
+1. **Explore the codebase**: Review key directories
+2. **Run the development workflow**: `make dev` or equivalent
+3. **Create your first change**: Follow the contributing guide
+4. **Review other documentation**: Check `docs/` for more guides
+
+## Additional Resources
+
+- [Architecture Overview](../[service]/concepts/architecture-overview.md)
+- [Configuration Guide](../[service]/concepts/configuration.md)
+- [Contributing Guide](../../CONTRIBUTING.md)
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/skills/doc-validation-rfc-37/assets/local-execution.md.template -->
+<!-- To modify, edit the source file and run the distribution workflow -->
+

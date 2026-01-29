@@ -34,18 +34,19 @@ Java service standards for Bitso projects.
 ### Sections
 
 - [When to use this skill](#when-to-use-this-skill) (L24-L31)
-- [Tech Stack](#tech-stack) (L53-L66)
-- [Project Organization](#project-organization) (L67-L82)
-- [Build Verification](#build-verification) (L83-L96)
-- [References](#references) (L97-L104)
-- [Related Rules](#related-rules) (L105-L110)
-- [Related Skills](#related-skills) (L111-L117)
+- [Tech Stack](#tech-stack) (L54-L67)
+- [Project Organization](#project-organization) (L68-L83)
+- [Build Verification](#build-verification) (L84-L97)
+- [References](#references) (L98-L105)
+- [Related Rules](#related-rules) (L106-L111)
+- [Related Skills](#related-skills) (L112-L118)
 
 ### Available Resources
 
 **📚 references/** - Detailed documentation
 - [build verification](references/build-verification.md)
 - [code review](references/code-review.md)
+- [mapstruct spring](references/mapstruct-spring.md)
 - [services](references/services.md)
 
 ---
@@ -104,17 +105,17 @@ If problems are found, fix them before committing.
 
 ## Related Rules
 
-- `.cursor/rules/java-services-standards.mdc` - Full service standards
-- `.cursor/rules/java-code-review-standards.mdc` - Code review guidelines
-- `.cursor/rules/java-run-build-after-changes.mdc` - Build verification
+- [java-services-standards](.cursor/rules/java-services-standards/java-services-standards.mdc) - Full-service standards
+- [java-code-review-standards](.cursor/rules/java-code-review-standards/java-code-review-standards.mdc) - Code review guidelines
+- [java-run-build-after-changes](.cursor/rules/java-run-build-after-changes/java-run-build-after-changes.mdc) - Build verification
 
 ## Related Skills
 
 | Skill | Purpose |
 |-------|---------|
-| [gradle-standards](../gradle-standards/SKILL.md) | Gradle configuration |
-| [grpc-standards](../grpc-standards/SKILL.md) | gRPC service implementation |
-| [database-integration](../database-integration/SKILL.md) | jOOQ and Flyway |
+| [gradle-standards](.claude/skills/gradle-standards/SKILL.md) | Gradle configuration |
+| [grpc-services-rfc-33](.claude/skills/grpc-services-rfc-33/SKILL.md) | gRPC service implementation |
+| [database-integration](.claude/skills/database-integration/SKILL.md) | jOOQ and Flyway |
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/skills/java-standards/SKILL.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->

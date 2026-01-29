@@ -11,7 +11,7 @@ Testing patterns for Java projects using JUnit, Spock, and Testcontainers.
 
 | Skill | Coverage |
 |-------|----------|
-| `.claude/skills/java-testing/` | Spock patterns, Testcontainers, gRPC testing |
+| [java-testing](.claude/skills/java-testing/SKILL.md) | Spock patterns, Testcontainers, gRPC testing |
 
 ## 📚 Full Documentation
 

@@ -1,24 +1,24 @@
 ---
 applyTo: "**/*.proto,**/buf.yaml,**/buf.gen.yaml"
-description: Buf linting setup and custom rules for protobuf contracts
+description: RFC-19 breaking change detection and RFC-33 compliant Buf linting for protobuf contracts
 ---
 
-# Buf linting setup and custom rules for protobuf contracts
+# RFC-19 breaking change detection and RFC-33 compliant Buf linting for protobuf contracts
 
-Buf CLI setup for protobuf linting and breaking change detection.
+RFC-19 breaking change detection and RFC-33 compliant Buf CLI setup for protobuf linting.
 
 ## Skill Location
 
 | Skill | Coverage |
 |-------|----------|
-| `.claude/skills/grpc-standards/` | Contracts, resilience, linting |
+| [grpc-services-rfc-33](.claude/skills/grpc-services-rfc-33/SKILL.md) | Contracts, resilience, linting |
 
 ## 📚 Full Documentation
 
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.claude/skills/grpc-standards/SKILL.md
+.claude/skills/grpc-services-rfc-33/SKILL.md
 ```
 
 The skill includes:

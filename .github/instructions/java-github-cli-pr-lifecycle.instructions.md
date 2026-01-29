@@ -19,7 +19,7 @@ Best practices for AI agents using GitHub CLI (`gh`) to manage pull requests, CI
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.claude/skills/pr-lifecycle/SKILL.md
+.claude/skills/pr-workflow/SKILL.md
 ```
 
 The skill includes:

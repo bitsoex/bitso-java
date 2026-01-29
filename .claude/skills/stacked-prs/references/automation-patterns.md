@@ -410,14 +410,14 @@ onPREvent('pull_request_review.submitted', async (event) => {
 
 ## Complete Example: Autonomous Stack Manager
 
-```javascript
-#!/usr/bin/env node
+```typescript
+#!/usr/bin/env -S npx tsx
 /**
  * Autonomous stack manager
- * Usage: node manage-stack.js --prs 79,80,81 --repo owner/repo
+ * Usage: npx tsx manage-stack.ts --prs 79,80,81 --repo owner/repo
  */
 
-import { processStack, waitForPRReady } from './stack-utils.js';
+import { processStack, waitForPRReady } from './stack-utils';
 
 const prNumbers = [79, 80, 81];
 const repo = 'bitsoex/ai-code-instructions';
@@ -426,9 +426,9 @@ async function main() {
   console.log('🚀 Starting autonomous stack management...\n');
 
   const results = await processStack(prNumbers, repo, {
-    onPRStart: (pr) => console.log(`\n📋 Processing PR #${pr}...`),
-    onPRComplete: (pr, status) => console.log(`✅ PR #${pr} ready!`),
-    onPRTimeout: (pr, reason) => console.log(`⏰ PR #${pr} timed out: ${reason}`),
+    onPRStart: (pr: number) => console.log(`\n📋 Processing PR #${pr}...`),
+    onPRComplete: (pr: number, status: object) => console.log(`✅ PR #${pr} ready!`),
+    onPRTimeout: (pr: number, reason: string) => console.log(`⏰ PR #${pr} timed out: ${reason}`),
     fixCallback: autoFixCallback
   });
 

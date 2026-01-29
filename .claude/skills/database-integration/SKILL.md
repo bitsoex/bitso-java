@@ -124,15 +124,15 @@ dependencies {
 
 ## Related Rules
 
-- `.cursor/rules/java-jooq.mdc` - Full jOOQ reference
-- `.cursor/rules/java-flyway-migrations.mdc` - Flyway guidelines
+- [java-jooq](.cursor/rules/java-jooq/java-jooq.mdc) - Full jOOQ reference
+- [java-flyway-migrations](.cursor/rules/java-flyway-migrations/java-flyway-migrations.mdc) - Flyway guidelines
 
 ## Related Skills
 
 | Skill | Purpose |
 |-------|---------|
-| [gradle-standards](../gradle-standards/SKILL.md) | Gradle configuration |
-| [java-testing](../java-testing/SKILL.md) | Testing database code |
+| [gradle-standards](.claude/skills/gradle-standards/SKILL.md) | Gradle configuration |
+| [java-testing](.claude/skills/java-testing/SKILL.md) | Testing database code |
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/skills/database-integration/SKILL.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->

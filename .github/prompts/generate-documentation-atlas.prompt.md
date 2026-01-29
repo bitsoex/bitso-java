@@ -8,7 +8,7 @@ Generate RFC-37 compliant documentation for services in this repository.
 
 ## Skill Location
 
-Full documentation: `.claude/skills/atlas-documentation/`
+Full documentation: [doc-generation-rfc-37](.claude/skills/doc-generation-rfc-37/SKILL.md)
 
 ## Quick Start
 

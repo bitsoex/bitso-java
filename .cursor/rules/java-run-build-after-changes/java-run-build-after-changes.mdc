@@ -19,7 +19,7 @@ After updating Java or Groovy code, verify your changes:
 
 If problems are found, fix them before committing.
 
-**For comprehensive build commands and troubleshooting**, see: [java-gradle-commands](./java-gradle-commands.md)
+**For comprehensive build commands and troubleshooting**, see: [java-gradle-commands](.cursor/rules/java-gradle-commands/java-gradle-commands.mdc)
 
 ## 📚 Full Documentation
 

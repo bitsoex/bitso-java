@@ -25,6 +25,24 @@ Address CodeRabbit review comments systematically. Workflows for local CLI usage
 - Before push, to get early feedback with local CLI
 - When asked to "fix coderabbit issues" or "address coderabbit comments"
 
+## Skill Contents
+
+### Available Resources
+
+**📚 references/** - Detailed documentation
+- [cli integration](references/cli-integration.md)
+- [commit formats](references/commit-formats.md)
+- [setup](references/setup.md)
+- [workflow examples](references/workflow-examples.md)
+
+**🔧 scripts/** - Automation scripts
+- [batch reply](scripts/batch-reply.ts)
+- [export comments](scripts/export-comments.ts)
+- [reply to threads](scripts/reply-to-threads.ts)
+- [run local review](scripts/run-local-review.ts)
+
+---
+
 ## Two Review Modes
 
 | Mode | When | Reference |
@@ -38,25 +56,10 @@ Address CodeRabbit review comments systematically. Workflows for local CLI usage
 2. Review by severity: critical, major, minor
 3. Apply fixes following patterns in `references/workflow-examples.md`
 4. Commit with CodeRabbit co-author attribution (see below)
-5. Push and reply to threads: `node .claude/skills/coderabbit-workflow/scripts/reply-to-threads.ts --file .tmp/coderabbit-*.json`
+5. Update exported JSON to mark comments as fixed (set `status: 'fixed'`)
+6. Push and reply to threads: `node .claude/skills/coderabbit-workflow/scripts/reply-to-threads.ts --file .tmp/coderabbit-*.json`
 
-## Skill Contents
-
-### Available Resources
-
-**references/** - Detailed documentation
-- [cli integration](references/cli-integration.md)
-- [commit formats](references/commit-formats.md)
-- [setup](references/setup.md)
-- [workflow examples](references/workflow-examples.md)
-
-**scripts/** - Automation scripts
-- [batch reply](scripts/batch-reply.ts)
-- [export comments](scripts/export-comments.ts)
-- [reply to threads](scripts/reply-to-threads.ts)
-- [run local review](scripts/run-local-review.ts)
-
----
+**Note:** The reply script only processes comments with `status !== 'pending'`. After applying fixes, update the JSON file to change status from `'pending'` to `'fixed'` before running the reply script.
 
 ## Scripts
 
@@ -87,7 +90,7 @@ See `references/commit-formats.md` for all templates.
 
 ## Related
 
-- `.claude/skills/pr-lifecycle` - PR lifecycle including CodeRabbit integration
+- [pr-workflow](.claude/skills/pr-workflow/SKILL.md) - PR lifecycle including CodeRabbit integration
 - [CodeRabbit CLI Docs](https://docs.coderabbit.ai/cli/overview)
 - [Cursor Integration](https://docs.coderabbit.ai/cli/cursor-integration)
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->

@@ -2,15 +2,14 @@
 
 ## Contents
 
-- [PR Title Format](#pr-title-format)
-- [PR Description Template](#pr-description-template)
-- [Stack Visualization Status Icons](#stack-visualization-status-icons)
-- [dpulls Compatibility](#dpulls-compatibility)
-- [Examples](#examples)
-- [Updating Stack Status](#updating-stack-status)
+- [PR Title Format](#pr-title-format) (L13-L40)
+- [PR Description Template](#pr-description-template) (L41-L75)
+- [Stack Visualization Status Icons](#stack-visualization-status-icons) (L76-L85)
+- [dpulls Compatibility](#dpulls-compatibility) (L86-L101)
+- [Examples](#examples) (L102-L124)
+- [Updating Stack Status](#updating-stack-status) (L125-L133)
 
 ---
-
 ## PR Title Format
 
 All stacked PRs must include position indicators:

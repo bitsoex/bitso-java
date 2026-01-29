@@ -8,16 +8,16 @@ Address CodeRabbit review comments systematically.
 
 ## Skill Location
 
-Full documentation: `.claude/skills/coderabbit-workflow/`
+Full documentation: [coderabbit-workflow](.claude/skills/coderabbit-workflow/SKILL.md)
 
 ## Quick Start
 
-1. Export comments: `node .claude/skills/coderabbit-workflow/scripts/export-comments.js --pr <number>`
+1. Export comments: `node global/skills/coderabbit-workflow/scripts/export-comments.ts --pr <number>`
 2. Review by severity: critical → major → minor
 3. Apply patterns from the skill:
-   - `.claude/skills/coderabbit-workflow/SKILL.md` - Main instructions
-   - `.claude/skills/coderabbit-workflow/references/workflow-examples.md` - Workflows
-   - `.claude/skills/coderabbit-workflow/references/commit-formats.md` - Commit templates
+   - [coderabbit-workflow](.claude/skills/coderabbit-workflow/SKILL.md) - Main instructions
+   - [workflow-examples](.claude/skills/coderabbit-workflow/references/workflow-examples.md) - Workflows
+   - [commit-formats](.claude/skills/coderabbit-workflow/references/commit-formats.md) - Commit templates
 4. Commit with CodeRabbit co-author attribution
 5. Push and reply to threads
 
@@ -42,7 +42,7 @@ Co-authored-by: coderabbitai[bot] <136622811+coderabbitai[bot]@users.noreply.git
 ## Related
 
 - **CLI Docs**: [CodeRabbit Cursor Integration](https://docs.coderabbit.ai/cli/cursor-integration)
-- **Skill**: `.claude/skills/coderabbit-workflow/SKILL.md`
+- **Skill**: [coderabbit-workflow](.claude/skills/coderabbit-workflow/SKILL.md)
 
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → global/commands/fix-coderabbit-issues.md -->

@@ -10,14 +10,14 @@ RFC-34 compliant structured logging for Java services.
 
 | Skill | Coverage |
 |-------|----------|
-| `.claude/skills/structured-logging/` | Logging standards, Logback config |
+| [structured-logs-rfc-34](.claude/skills/structured-logs-rfc-34/SKILL.md) | Logging standards, Logback config |
 
 ## 📚 Full Documentation
 
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.claude/skills/structured-logging/SKILL.md
+.claude/skills/structured-logs-rfc-34/SKILL.md
 ```
 
 The skill includes:

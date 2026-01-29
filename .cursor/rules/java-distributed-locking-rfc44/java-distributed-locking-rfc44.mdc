@@ -17,14 +17,14 @@ RFC-44 compliant distributed locking for scheduled jobs and critical sections.
 
 | Skill | Coverage |
 |-------|----------|
-| `.claude/skills/distributed-locking/` | Migration workflow, lock patterns, Redis integration |
+| [distributed-locking-rfc-44](.claude/skills/distributed-locking-rfc-44/SKILL.md) | Migration workflow, lock patterns, Redis integration |
 
 ## 📚 Full Documentation
 
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.claude/skills/distributed-locking/SKILL.md
+.claude/skills/distributed-locking-rfc-44/SKILL.md
 ```
 
 The skill includes:

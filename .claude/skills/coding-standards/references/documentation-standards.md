@@ -25,10 +25,10 @@
 
 | Language | Documentation Style | Reference |
 |----------|---------------------|-----------|
-| Java | Javadoc | `global/skills/doc-sync/references/java/javadoc-patterns.md` |
-| TypeScript | JSDoc/TSDoc | `global/skills/doc-sync/references/typescript/jsdoc-patterns.md` |
-| Python | Docstrings | `global/skills/doc-sync/references/python/docstring-patterns.md` |
-| Go | Godoc | `global/skills/doc-sync/references/go/godoc-patterns.md` |
+| Java | Javadoc | `global/skills/doc-validation-rfc-37/references/java/javadoc-patterns.md` |
+| TypeScript | JSDoc/TSDoc | `global/skills/doc-validation-rfc-37/references/typescript/jsdoc-patterns.md` |
+| Python | Docstrings | `global/skills/doc-validation-rfc-37/references/python/docstring-patterns.md` |
+| Go | Godoc | `global/skills/doc-validation-rfc-37/references/go/godoc-patterns.md` |
 
 ### README Checklist
 

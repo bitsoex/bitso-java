@@ -1,16 +1,16 @@
-# Bitso REST API standards, authentication, and OpenAPI documentation
+# RFC-30 naming/versioning and RFC-39 API best practices for Java REST services
 
 **Applies to:** **/*Controller.java, **/openapi.yaml
 
-# Bitso REST API standards, authentication, and OpenAPI documentation
+# RFC-30 naming/versioning and RFC-39 API best practices for Java REST services
 
-REST API standards for Java Spring services.
+RFC-30 naming/versioning and RFC-39 API best practices for Java Spring services.
 
 ## Skill Location
 
 | Skill | Coverage |
 |-------|----------|
-| `.claude/skills/rest-api/` | Guidelines, authentication, documentation |
+| [rest-api](.claude/skills/rest-api/SKILL.md) | Guidelines, authentication, documentation |
 
 ## 📚 Full Documentation
 

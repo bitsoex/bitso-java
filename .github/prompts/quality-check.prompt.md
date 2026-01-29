@@ -8,7 +8,7 @@ Run comprehensive quality gate checks on recent changes.
 
 ## Skill Location
 
-Full documentation: `.claude/skills/quality-gateway/`
+Full documentation: [quality-checks](.claude/skills/quality-checks/SKILL.md)
 
 ## Quick Start
 
@@ -18,8 +18,8 @@ Full documentation: `.claude/skills/quality-gateway/`
    - Types: `npx tsc --noEmit` / `mypy`
 2. Save test output to `.tmp/` (don't run tests repeatedly)
 3. Apply fixes from skill references:
-   - `.claude/skills/quality-gateway/SKILL.md` - Main instructions
-   - `.claude/skills/quality-gateway/references/test-result-caching.md` - Caching
+   - [quality-checks](.claude/skills/quality-checks/SKILL.md) - Main instructions
+   - [quality-checks/references/](.claude/skills/quality-checks/references) - Caching and other references
 4. Verify coverage maintained or improved
 
 ## Expected Results
@@ -43,7 +43,7 @@ Full documentation: `.claude/skills/quality-gateway/`
 
 - **Add Tests**: `/add-tests` command
 - **Doc Sync**: `/sync-docs` command
-- **Test Augmentation**: `.claude/skills/test-augmentation/SKILL.md`
+- **Test Augmentation**: [testing-standards](.claude/skills/testing-standards/SKILL.md)
 
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → global/commands/quality-check.md -->

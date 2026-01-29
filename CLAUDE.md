@@ -79,9 +79,9 @@ This repository uses AI-assisted development with specific coding guidelines and
 **Description:** Nebula Gradle Lint plugin rules and violation fixes
 **Scope:** **/build.gradle, **/settings.gradle
 
-### Retry, bulkhead, circuit breaker, and deadline propagation for gRPC clients
+### RFC-33 retry, bulkhead, circuit breaker, and deadline propagation for gRPC clients
 **File:** [`.claude/java-grpc-resilience.md`](.claude/java-grpc-resilience.md)
-**Description:** Retry, bulkhead, circuit breaker, and deadline propagation for gRPC clients
+**Description:** RFC-33 retry, bulkhead, circuit breaker, and deadline propagation for gRPC clients
 **Scope:** **/application*.yml, **/*GrpcClient*.java
 
 ### RFC-33 compliant gRPC service implementation patterns
@@ -99,14 +99,14 @@ This repository uses AI-assisted development with specific coding guidelines and
 **Description:** jOOQ code generation, Spring configuration, and read/write splitting patterns
 **Scope:** **/jooq/**, **/build.gradle, **/JooqConfiguration.java
 
-### Buf linting setup and custom rules for protobuf contracts
+### RFC-19 breaking change detection and RFC-33 compliant Buf linting for protobuf contracts
 **File:** [`.claude/java-protobuf-linting.md`](.claude/java-protobuf-linting.md)
-**Description:** Buf linting setup and custom rules for protobuf contracts
+**Description:** RFC-19 breaking change detection and RFC-33 compliant Buf linting for protobuf contracts
 **Scope:** **/*.proto, **/buf.yaml, **/buf.gen.yaml
 
-### Bitso REST API standards, authentication, and OpenAPI documentation
+### RFC-30 naming/versioning and RFC-39 API best practices for Java REST services
 **File:** [`.claude/java-rest-api-guidelines.md`](.claude/java-rest-api-guidelines.md)
-**Description:** Bitso REST API standards, authentication, and OpenAPI documentation
+**Description:** RFC-30 naming/versioning and RFC-39 API best practices for Java REST services
 **Scope:** **/*Controller.java, **/openapi.yaml
 
 ### Java Run Build After Changes

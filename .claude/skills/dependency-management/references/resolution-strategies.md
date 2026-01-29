@@ -210,7 +210,7 @@ Verify the output shows your forced version, not the original transitive.
 
 - [version-centralization.md](version-centralization.md) - Version policies
 - [security-updates.md](security-updates.md) - Security-related forcing
-- [../SKILL.md](../SKILL.md) - Main skill documentation
+- [../SKILL.md](.claude/skills/dependency-management/SKILL.md) - Main skill documentation
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/skills/dependency-management/references/resolution-strategies.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->

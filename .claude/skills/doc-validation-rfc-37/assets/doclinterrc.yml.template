@@ -1,0 +1,166 @@
+# .doclinterrc.yml - Bitso Documentation Linter configuration
+#
+# This file configures the bitso-documentation-linter for your repository.
+# Place this file at the repository root: .doclinterrc.yml
+#
+# Documentation: https://github.com/bitsoex/bitso-documentation-linter
+
+# ============================================================================
+# Repository Configuration
+# ============================================================================
+
+# Repository name (optional - auto-detected from directory name if not set)
+# This is used for service identification and reporting.
+repositoryName: "your-service-name"
+
+# ============================================================================
+# Service Definitions (for multi-service repositories)
+# ============================================================================
+
+# Define services if your repository contains multiple services.
+# Single-service repositories can omit this section.
+#
+# services:
+#   - name: "user-api"
+#     path: "services/user-api"        # Path to service code
+#     docsPath: "user-api"             # Path under docs/ (defaults to name)
+#   - name: "payment-job"
+#     path: "jobs/payment"
+#     docsPath: "jobs/payment"
+#   - name: "shared-utils"
+#     path: "libs/utils"
+
+# ============================================================================
+# Rule Configuration
+# ============================================================================
+
+# Customize validation rules: enable/disable and change severity.
+# Available severities: error, warning, info
+
+rules:
+  # Format validation
+  FORMAT_CODE_LANG_MISSING:
+    enabled: true
+    severity: "warning"
+
+  # Metadata validation
+  META_PAGE_TITLE_MISSING:
+    enabled: true
+    severity: "error"
+
+  META_CONFLUENCE_CONFIG_INCOMPLETE:
+    enabled: true
+    severity: "error"
+
+  # Structure validation
+  DIR_STRUCTURE_MISMATCH:
+    enabled: true
+    severity: "error"
+
+  API_DOC_NAMING_MULTI_SERVICE_INVALID:
+    enabled: true
+    severity: "error"
+
+  DIR_API_SUBDIR_MISSING:
+    enabled: true
+    severity: "warning"  # Warning because not all services have APIs
+
+  DIR_SERVICE_SETUP_INCOMPLETE:
+    enabled: true
+    severity: "error"
+
+  # Content validation
+  MIN_DOC_LOCAL_EXEC_MISSING:
+    enabled: true
+    severity: "error"
+
+  # Duplicate detection
+  PAGE_NAME_DUPLICATE:
+    enabled: true
+    severity: "error"
+
+  # Confluence integration (requires API configuration)
+  PAGE_ALREADY_EXISTS_IN_CONFLUENCE:
+    enabled: true
+    severity: "error"
+
+# ============================================================================
+# Confluence API Configuration (optional)
+# ============================================================================
+
+# Enable Confluence API validation to check for page conflicts before publishing.
+# This is optional but recommended for production workflows.
+#
+# IMPORTANT: Use environment variables for credentials in CI/CD:
+#   CONFLUENCE_BASE_URL, ATLASSIAN_USERNAME, ATLASSIAN_API_TOKEN, CONFLUENCE_ENABLED
+
+# confluenceApi:
+#   # Base URL is loaded from mark.toml by default, can be overridden here
+#   baseUrl: "https://bitsomx.atlassian.net/wiki"
+#   
+#   # Email for authentication (use env var ATLASSIAN_USERNAME)
+#   email: "your-email@bitso.com"
+#   
+#   # API token (NEVER commit this - use env var ATLASSIAN_API_TOKEN)
+#   # apiToken: "your-token"
+#   
+#   # Enable/disable Confluence validation
+#   enabled: false
+#   
+#   # Timeout settings (seconds)
+#   timeoutSeconds: 30           # Per-request timeout
+#   checkTimeoutSeconds: 60      # Overall check timeout
+
+# ============================================================================
+# Violation Filtering
+# ============================================================================
+
+# Ignore specific violations for certain files.
+# Useful for legacy documentation or special cases.
+
+# ignoreViolations:
+#   # Example: Ignore code block language in legacy docs
+#   # - ruleId: "FORMAT_CODE_LANG_MISSING"
+#   #   files:
+#   #     - "docs/legacy/*.md"
+#   #     - "docs/archived/*.md"
+#
+#   # Example: Ignore title requirement in template files
+#   # - ruleId: "META_PAGE_TITLE_MISSING"
+#   #   files:
+#   #     - "docs/templates/*.md"
+
+  # Example: Ignore duplicate detection in intentionally duplicated content
+  # - ruleId: "PAGE_NAME_DUPLICATE"
+  #   files:
+  #     - "docs/shared-content/*.md"
+
+# ============================================================================
+# Logging Configuration
+# ============================================================================
+
+logging:
+  # Logging level: debug, info, warn, error
+  level: "info"
+
+  # Sanitize file paths in logs for security (recommended: true)
+  sanitizePaths: true
+
+  # Output format: text, json
+  format: "text"
+
+# ============================================================================
+# Directory Aliases (optional)
+# ============================================================================
+
+# Map custom directory names to standard RFC-37 directory names.
+# Use this if your docs structure doesn't match the standard.
+
+# directoryAliases:
+#   documentation: "docs"      # Use 'documentation' instead of 'docs'
+#   guides: "how-tos"          # Use 'guides' instead of 'how-tos'
+#   adrs: "decisions"          # Use 'adrs' instead of 'decisions'
+# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+# Source: bitsoex/ai-code-instructions → global/skills/doc-validation-rfc-37/assets/doclinterrc.yml.template
+# To modify, edit the source file and run the distribution workflow
+

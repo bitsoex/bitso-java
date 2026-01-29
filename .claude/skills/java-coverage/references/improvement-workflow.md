@@ -76,7 +76,7 @@ Focus on these areas (in priority order):
 
 ### 4. Write Tests
 
-See [Spock Patterns](../../java-testing/references/spock-patterns.md) for test templates.
+See [Spock Patterns](.claude/skills/java-testing/references/spock-patterns.md) for test templates.
 
 #### Basic Spock Test Template
 

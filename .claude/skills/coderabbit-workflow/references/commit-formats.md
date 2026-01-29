@@ -4,17 +4,16 @@ All commits that address CodeRabbit feedback must include proper attribution to 
 
 ## Contents
 
-- [The Co-Author Trailer (Required)](#the-co-author-trailer-required)
-- [Format 1: Local CLI Review (No Thread)](#format-1-local-cli-review-no-thread)
-- [Format 2: Single PR Thread Fix](#format-2-single-pr-thread-fix)
-- [Format 3: Multiple Threads (Batch)](#format-3-multiple-threads-batch)
-- [Format 4: Severity-Based Batch](#format-4-severity-based-batch)
-- [Status-Specific Messages](#status-specific-messages)
-- [Quick Reference](#quick-reference)
-- [Why This Matters](#why-this-matters)
+- [The Co-Author Trailer (Required)](#the-co-author-trailer-required) (L17-L31)
+- [Format 1: Local CLI Review (No Thread)](#format-1-local-cli-review-no-thread) (L32-L64)
+- [Format 2: Single PR Thread Fix](#format-2-single-pr-thread-fix) (L65-L94)
+- [Format 3: Multiple Threads (Batch)](#format-3-multiple-threads-batch) (L95-L128)
+- [Format 4: Severity-Based Batch](#format-4-severity-based-batch) (L129-L160)
+- [Status-Specific Messages](#status-specific-messages) (L161-L190)
+- [Quick Reference](#quick-reference) (L191-L201)
+- [Why This Matters](#why-this-matters) (L202-L211)
 
 ---
-
 ## The Co-Author Trailer (Required)
 
 Every commit addressing CodeRabbit feedback MUST include:

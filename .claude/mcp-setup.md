@@ -23,7 +23,7 @@ Configuration and setup for MCP (Model Context Protocol) servers across differen
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.claude/skills/mcp-configuration/SKILL.md
+.claude/skills/mcp-setup/SKILL.md
 ```
 
 The skill includes:

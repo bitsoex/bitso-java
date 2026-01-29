@@ -10,14 +10,14 @@ Fix strategies for Dependabot vulnerabilities in Java/Gradle projects.
 
 | Skill | Coverage |
 |-------|----------|
-| `.claude/skills/dependabot-security/` | Fix strategies, severity processing, verification |
+| [fix-vulnerabilities](.claude/skills/fix-vulnerabilities/SKILL.md) | Fix strategies, severity processing, verification |
 
 ## 📚 Full Documentation
 
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.claude/skills/dependabot-security/SKILL.md
+.claude/skills/fix-vulnerabilities/SKILL.md
 ```
 
 The skill includes:

@@ -20,7 +20,7 @@ jOOQ code generation and Spring configuration patterns for PostgreSQL.
 
 | Skill | Coverage |
 |-------|----------|
-| `.claude/skills/database-integration/` | jOOQ setup, Flyway, read/write splitting |
+| [database-integration](.claude/skills/database-integration/SKILL.md) | jOOQ setup, Flyway, read/write splitting |
 
 ## 📚 Full Documentation
 

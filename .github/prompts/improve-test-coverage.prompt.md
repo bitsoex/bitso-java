@@ -8,7 +8,7 @@ Write tests to improve code coverage to meet the 82% threshold.
 
 ## Skill Location
 
-Full documentation: `.claude/skills/java-coverage/`
+Full documentation: [java-coverage](.claude/skills/java-coverage/SKILL.md)
 
 ## Prerequisites
 
@@ -19,10 +19,10 @@ Run `/improve-test-setup` first to configure test infrastructure.
 1. Generate coverage reports: `./gradlew test jacocoTestReport`
 2. Analyze HTML report at `build/reports/jacoco/test/html/`
 3. Apply patterns from the skill:
-   - `.claude/skills/java-coverage/SKILL.md` - Main instructions
-   - `.claude/skills/java-coverage/references/improvement-workflow.md` - Step-by-step guide
-   - `.claude/skills/java-coverage/references/prioritization.md` - What to test first
-   - `.claude/skills/java-coverage/references/coverage-targets.md` - Target percentages
+   - [java-coverage](.claude/skills/java-coverage/SKILL.md) - Main instructions
+   - [improvement-workflow](.claude/skills/java-coverage/references/improvement-workflow.md) - Step-by-step guide
+   - [prioritization](.claude/skills/java-coverage/references/prioritization.md) - What to test first
+   - [coverage-targets](.claude/skills/java-coverage/references/coverage-targets.md) - Target percentages
 4. Iterate until 82% threshold met
 
 ## Key Actions

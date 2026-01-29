@@ -34,14 +34,14 @@ Guidelines for writing tests in Java projects using the Spock Framework and Groo
 
 ### Sections
 
-- [When to use this skill](#when-to-use-this-skill)
-- [Quick Start](#quick-start)
-- [Key Patterns](#key-patterns)
-- [Mocking Patterns](#mocking-patterns)
-- [Persistence Testing](#persistence-testing)
-- [References](#references)
-- [Related Rules](#related-rules)
-- [Related Skills](#related-skills)
+- [When to use this skill](#when-to-use-this-skill) (L24-L32)
+- [Quick Start](#quick-start) (L58-L78)
+- [Key Patterns](#key-patterns) (L79-L88)
+- [Mocking Patterns](#mocking-patterns) (L89-L124)
+- [Persistence Testing](#persistence-testing) (L125-L140)
+- [References](#references) (L141-L148)
+- [Related Rules](#related-rules) (L149-L153)
+- [Related Skills](#related-skills) (L154-L159)
 
 ### Available Resources
 
@@ -148,15 +148,15 @@ class IntegrationTestConfiguration {
 
 ## Related Rules
 
-- `.cursor/rules/java-testing-guidelines.mdc` - Full testing reference
-- `.cursor/rules/java-flyway-migrations.mdc` - Flyway for test schema
+- [java-testing-guidelines](.cursor/rules/java-testing-guidelines/java-testing-guidelines.mdc) - Full testing reference
+- [java-flyway-migrations](.cursor/rules/java-flyway-migrations/java-flyway-migrations.mdc) - Flyway for test schema
 
 ## Related Skills
 
 | Skill | Purpose |
 |-------|---------|
-| [java-coverage](../java-coverage/SKILL.md) | JaCoCo test coverage |
-| [gradle-standards](../gradle-standards/SKILL.md) | Test dependency bundles |
+| [java-coverage](.claude/skills/java-coverage/SKILL.md) | JaCoCo test coverage |
+| [gradle-standards](.claude/skills/gradle-standards/SKILL.md) | Test dependency bundles |
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/skills/java-testing/SKILL.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->

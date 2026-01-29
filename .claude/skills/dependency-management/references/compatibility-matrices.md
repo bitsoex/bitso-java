@@ -7,6 +7,21 @@ description: Version compatibility tables for Java ecosystems
 
 Version compatibility tables for Java projects.
 
+## Contents
+
+- [For Code Reviewers](#for-code-reviewers) (L25-L46)
+- [Core Components](#core-components) (L47-L59)
+- [Testing Libraries (Java 21)](#testing-libraries-java-21) (L60-L78)
+- [Testing Libraries (Java 25)](#testing-libraries-java-25) (L79-L101)
+- [Build Plugins (Java 25)](#build-plugins-java-25) (L102-L118)
+- [Redis/Jedis Compatibility](#redisjedis-compatibility) (L119-L136)
+- [Jackson Compatibility](#jackson-compatibility) (L137-L164)
+- [Java 25 Migration](#java-25-migration) (L165-L194)
+- [Protobuf Java Version Support](#protobuf-java-version-support) (L195-L239)
+- [CodeRabbit Compatibility Warnings](#coderabbit-compatibility-warnings) (L240-L291)
+- [Related](#related) (L292-L295)
+
+---
 ## For Code Reviewers
 
 **CRITICAL**: Java is backward compatible by design. When reviewing dependency versions:
@@ -26,22 +41,6 @@ Version compatibility tables for Java projects.
 | "Testing: JUnit 5.14.2" | Use JUnit **5.14.2 or newer** |
 
 **Key insight**: A project on Java 21 can use Groovy 5.x, Lombok plugin 9.2.0, Spock 2.4-groovy-5.0, etc. Libraries that support Java 25 have a baseline version (e.g., Java 8+, Java 11+) that also covers Java 21, so they work on both.
-
----
-
-## Contents
-
-- [For Code Reviewers](#for-code-reviewers)
-- [Core Components](#core-components)
-- [Testing Libraries (Java 21)](#testing-libraries-java-21)
-- [Testing Libraries (Java 25)](#testing-libraries-java-25)
-- [Build Plugins (Java 25)](#build-plugins-java-25)
-- [Redis/Jedis Compatibility](#redisjedis-compatibility)
-- [Jackson Compatibility](#jackson-compatibility)
-- [Java 25 Migration](#java-25-migration)
-- [Protobuf Java Version Support](#protobuf-java-version-support)
-- [CodeRabbit Compatibility Warnings](#coderabbit-compatibility-warnings)
-- [Related](#related)
 
 ---
 
@@ -293,7 +292,7 @@ The correct interpretation: These are **minimum versions needed**, not exclusive
 ## Related
 
 - [version-centralization.md](version-centralization.md) - Version policies
-- [../SKILL.md](../SKILL.md) - Main skill documentation
+- [../SKILL.md](.claude/skills/dependency-management/SKILL.md) - Main skill documentation
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: bitsoex/ai-code-instructions → java/skills/dependency-management/references/compatibility-matrices.md -->
 <!-- To modify, edit the source file and run the distribution workflow -->

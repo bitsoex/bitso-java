@@ -10,14 +10,14 @@ SonarQube plugin configuration for Java projects.
 
 | Skill | Coverage |
 |-------|----------|
-| `.claude/skills/sonarqube-integration/` | Gradle setup, common rules |
+| [fix-sonarqube](.claude/skills/fix-sonarqube/SKILL.md) | Gradle setup, common rules |
 
 ## 📚 Full Documentation
 
 For complete guidelines, scripts, and references, see the skill:
 
 ```
-.claude/skills/sonarqube-integration/SKILL.md
+.claude/skills/fix-sonarqube/SKILL.md
 ```
 
 The skill includes:

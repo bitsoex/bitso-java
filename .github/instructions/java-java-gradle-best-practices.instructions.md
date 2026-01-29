@@ -11,8 +11,8 @@ Standards for Gradle configuration in Java projects.
 
 | Skill | Coverage |
 |-------|----------|
-| `.claude/skills/gradle-standards/` | Multi-module, optimization, cleanup |
-| `.claude/skills/dependency-management/` | Versions, BOMs, bundles |
+| [gradle-standards](.claude/skills/gradle-standards/SKILL.md) | Multi-module, optimization, cleanup |
+| [dependency-management](.claude/skills/dependency-management/SKILL.md) | Versions, BOMs, bundles |
 
 ## 📚 Full Documentation
 

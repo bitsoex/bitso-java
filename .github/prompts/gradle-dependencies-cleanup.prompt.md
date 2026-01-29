@@ -8,7 +8,7 @@ Identify and remove unused dependencies in Gradle projects.
 
 ## Skill Location
 
-Full documentation: `.claude/skills/gradle-standards/`
+Full documentation: [gradle-standards](.claude/skills/gradle-standards/SKILL.md)
 
 ## Quick Start
 

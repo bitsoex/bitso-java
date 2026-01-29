@@ -16,7 +16,7 @@ JaCoCo coverage setup and multi-module aggregation for Java projects.
 
 | Skill | Coverage |
 |-------|----------|
-| `.claude/skills/java-coverage/` | Multi-module setup, thresholds, exclusions |
+| [java-coverage](.claude/skills/java-coverage/SKILL.md) | Multi-module setup, thresholds, exclusions |
 
 ## 📚 Full Documentation
 
