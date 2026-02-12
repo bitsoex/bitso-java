@@ -7,23 +7,24 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.AbstractHttpEntity;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-
 import com.bitso.exceptions.BitsoAPIException;
 
 import com.bitso.helpers.Helpers;
+import org.apache.hc.client5.http.ClientProtocolException;
+import org.apache.hc.client5.http.classic.methods.HttpDelete;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.io.entity.AbstractHttpEntity;
+import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
+import org.apache.hc.core5.http.io.entity.StringEntity;
 
 public class BlockingHttpClient {
     private boolean log = false;
@@ -102,12 +103,12 @@ public class BlockingHttpClient {
     }
 
     public String sendPost(String url, byte[] body, HashMap<String, String> headers)
-            throws ClientProtocolException, IOException {
-        return sendPost(url, new ByteArrayEntity(body), headers);
+            throws IOException {
+        return sendPost(url, new ByteArrayEntity(body, 0, body.length, ContentType.APPLICATION_JSON), headers);
     }
 
     private String sendPost(String url, AbstractHttpEntity body, HashMap<String, String> headers)
-            throws ClientProtocolException, IOException {
+            throws IOException {
         throttle();
 
         HttpPost postRequest = new HttpPost(url);
@@ -119,13 +120,13 @@ public class BlockingHttpClient {
 
         postRequest.setEntity(body);
 
-        CloseableHttpResponse closeableHttpResponse = HttpClients.createDefault().execute(postRequest);
-        String response = Helpers.convertInputStreamToString(closeableHttpResponse.getEntity().getContent());
-
-        return response;
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            CloseableHttpResponse response = client.execute(postRequest);
+            return Helpers.convertInputStreamToString(response.getEntity().getContent());
+        }
     }
 
-    public String sendDelete(String url, HashMap<String, String> headers) throws BitsoAPIException {
+    public String sendDelete(String url, Map<String, String> headers) throws BitsoAPIException {
         throttle();
         HttpDelete deleteURL = new HttpDelete(url);
 
@@ -135,10 +136,8 @@ public class BlockingHttpClient {
             }
         }
 
-        CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
-        CloseableHttpResponse response = null;
-        try {
-            response = closeableHttpClient.execute(deleteURL);
+        try (CloseableHttpClient closeableHttpClient = HttpClients.createDefault()) {
+            CloseableHttpResponse response = closeableHttpClient.execute(deleteURL);
             return Helpers.convertInputStreamToString(response.getEntity().getContent());
         } catch (ClientProtocolException e) {
             e.printStackTrace();
