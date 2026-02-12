@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.github.bitsoex'
-version = '4.1.0'
+version = '4.2.0'
 
 description = "bitso-java"
 
@@ -23,13 +23,13 @@ repositories {
 }
 
 dependencies {
-    api 'org.apache.httpcomponents:httpclient:4.5.13'
-    api 'org.json:json:20250517'
-    api 'io.netty:netty-all:4.2.2.Final'
+    api 'org.apache.httpcomponents.client5:httpclient5:5.6'
+    api 'org.json:json:20251224'
+    api 'io.netty:netty-all:4.2.10.Final'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.13.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.14.2'
     testImplementation 'org.junit.platform:junit-platform-launcher'
-    testImplementation 'org.mockito:mockito-junit-jupiter:5.18.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.21.0'
 }
 
 test.useJUnitPlatform()
