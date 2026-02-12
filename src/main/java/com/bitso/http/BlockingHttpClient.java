@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -98,13 +99,23 @@ public class BlockingHttpClient {
     }
 
     public String sendPost(String url, String body, HashMap<String, String> headers, Charset charset)
-            throws ClientProtocolException, IOException {
+            throws IOException {
         return sendPost(url, new StringEntity(body, charset), headers);
     }
 
     public String sendPost(String url, byte[] body, HashMap<String, String> headers)
             throws IOException {
-        return sendPost(url, new ByteArrayEntity(body, 0, body.length, ContentType.APPLICATION_JSON), headers);
+        ContentType contentType = ContentType.APPLICATION_JSON;
+        if (headers != null && headers.containsKey("Content-Type")) {
+            try {
+                contentType = ContentType.parse(headers.get("Content-Type"));
+                headers = new HashMap<>(headers);
+                headers.remove("Content-Type");
+            } catch (UnsupportedCharsetException ex) {
+                //Revert to default
+            }
+        }
+        return sendPost(url, new ByteArrayEntity(body, 0, body.length, contentType), headers);
     }
 
     private String sendPost(String url, AbstractHttpEntity body, HashMap<String, String> headers)
