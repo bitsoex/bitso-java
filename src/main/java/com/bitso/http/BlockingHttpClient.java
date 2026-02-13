@@ -28,6 +28,7 @@ import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 
 public class BlockingHttpClient {
+    public static final String CONTENT_TYPE = "Content-Type";
     private boolean log = false;
     private long throttleMs = -1;
     private long lastCallTime = 0;
@@ -58,6 +59,7 @@ public class BlockingHttpClient {
             lastCallTime = System.currentTimeMillis();
         } catch (InterruptedException e) {
             log("Error executing throttle");
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -87,13 +89,11 @@ public class BlockingHttpClient {
 
             return Helpers.convertInputStreamToString(connection.getInputStream());
         } catch (MalformedURLException e) {
-            e.printStackTrace();
             throw new BitsoAPIException(322, "Not a Valid URL", e);
         } catch (ProtocolException e) {
-            e.printStackTrace();
             throw new BitsoAPIException(901, "Unsupported HTTP method", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.err);
             return Helpers.convertInputStreamToString(connection.getErrorStream());
         }
     }
@@ -106,11 +106,11 @@ public class BlockingHttpClient {
     public String sendPost(String url, byte[] body, HashMap<String, String> headers)
             throws IOException {
         ContentType contentType = ContentType.APPLICATION_JSON;
-        if (headers != null && headers.containsKey("Content-Type")) {
+        if (headers != null && headers.containsKey(CONTENT_TYPE)) {
             try {
-                contentType = ContentType.parse(headers.get("Content-Type"));
+                contentType = ContentType.parse(headers.get(CONTENT_TYPE));
                 headers = new HashMap<>(headers);
-                headers.remove("Content-Type");
+                headers.remove(CONTENT_TYPE);
             } catch (UnsupportedCharsetException ex) {
                 //Revert to default
             }
@@ -131,8 +131,8 @@ public class BlockingHttpClient {
 
         postRequest.setEntity(body);
 
-        try (CloseableHttpClient client = HttpClients.createDefault()) {
-            CloseableHttpResponse response = client.execute(postRequest);
+        try (CloseableHttpClient client = HttpClients.createDefault();
+            CloseableHttpResponse response = client.execute(postRequest)) {
             return Helpers.convertInputStreamToString(response.getEntity().getContent());
         }
     }
@@ -147,14 +147,12 @@ public class BlockingHttpClient {
             }
         }
 
-        try (CloseableHttpClient closeableHttpClient = HttpClients.createDefault()) {
-            CloseableHttpResponse response = closeableHttpClient.execute(deleteURL);
+        try (CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
+            CloseableHttpResponse response = closeableHttpClient.execute(deleteURL)) {
             return Helpers.convertInputStreamToString(response.getEntity().getContent());
         } catch (ClientProtocolException e) {
-            e.printStackTrace();
             throw new BitsoAPIException(901, "Usupported HTTP method", e);
         } catch (IOException e) {
-            e.printStackTrace();
             throw new BitsoAPIException(101, "Connection Aborted", e);
         }
     }
