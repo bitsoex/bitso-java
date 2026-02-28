@@ -1,0 +1,73 @@
+# mark.toml - Confluence publishing configuration
+#
+# This file configures how documentation is mirrored to Confluence.
+# Place this file at: docs/mark.toml
+#
+# Documentation:
+# - bitso-documentation-linter: https://github.com/bitsoex/bitso-documentation-linter
+# - mark (uploader): https://github.com/kovetskiy/mark
+
+# Bitso Confluence base URL (required)
+base-url = "https://bitsomx.atlassian.net/wiki"
+
+# Use H1 heading as page title (recommended)
+title-from-h1 = true
+
+# Remove H1 from body since it becomes the title (recommended)
+drop-h1 = true
+
+# Confluence space key (required)
+# Common spaces: MM (Money Movement), BAB (Architecture), etc.
+space = "YOUR_SPACE"
+
+# Parent page hierarchy (required)
+# This is the path from the space root to where your docs will be published.
+# Format: "Level 1/Level 2/.../Your Service Home"
+#
+# Examples:
+# - Backend service: "Fleet Money Movement/Gearbox Squad/Engineering docs/reconciliation-engine"
+# - Frontend app: "Fleet Money Movement/Frontend Squad/Engineering docs/trading-app"
+# - Shared library: "Fleet Money Movement/Shared/Libraries/common-utils"
+parents = "YOUR_FLEET/YOUR_SQUAD/Engineering docs/YOUR_SERVICE"
+
+# Mermaid diagram rendering (recommended)
+mermaid-provider = "mermaid-go"
+mermaid-scale = 1.0
+
+# Don't lock pages for editing (recommended for docs-as-code workflow)
+edit-lock = false
+
+# Logging level for debugging (debug, info, warn, error)
+log-level = "info"
+
+# Only publish files that have changed (recommended)
+changes-only = true
+
+# File pattern to include (all markdown files in docs/)
+files = "**/*.md"
+
+# ============================================================================
+# Optional: Ignore specific files
+# ============================================================================
+# If you need to exclude certain files from publishing, add them here:
+# 
+# exclude-files = [
+#     "README.md",           # Don't publish root README
+#     "CONTRIBUTING.md",     # Don't publish contribution guide
+#     "**/templates/*.md",   # Don't publish templates
+# ]
+
+# ============================================================================
+# Optional: Custom macros
+# ============================================================================
+# For advanced Confluence integration, you can define custom macros:
+#
+# [[macro]]
+# name = "anchor"
+# pattern = "<!--:anchor::(\\w+)::-->"
+# template = "ac:anchor"
+# anchor = "${1}"
+# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+# Source: bitsoex/ai-code-instructions → global/skills/doc-validation-rfc-37/assets/mark.toml.template
+# To modify, edit the source file and run the distribution workflow
+

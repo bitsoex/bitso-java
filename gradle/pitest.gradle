@@ -1,0 +1,201 @@
+// =============================================================================
+// PIT Mutation Testing Configuration Template
+// =============================================================================
+// This template provides a reusable configuration for PIT (Pitest) mutation testing.
+//
+// SETUP INSTRUCTIONS:
+// ===================
+//
+// 1. Add the plugin to your root build.gradle or settings.gradle:
+//
+//    In settings.gradle (recommended for Gradle 8+):
+//    pluginManagement {
+//        plugins {
+//            id 'info.solidsoft.pitest' version '1.19.0-rc.2'
+//        }
+//    }
+//
+//    OR in root build.gradle:
+//    plugins {
+//        id 'info.solidsoft.pitest' version '1.19.0-rc.2' apply false
+//    }
+//
+// 2. Copy this file to your project's gradle/ directory
+//
+// 3. Apply in modules with tests:
+//
+//    In specific module's build.gradle:
+//    plugins {
+//        id 'info.solidsoft.pitest'
+//    }
+//    apply from: "${rootDir}/gradle/pitest.gradle"
+//
+//    OR apply to all subprojects with tests from root build.gradle:
+//    subprojects {
+//        afterEvaluate {
+//            if (plugins.hasPlugin('info.solidsoft.pitest')) {
+//                apply from: "${rootDir}/gradle/pitest.gradle"
+//            }
+//        }
+//    }
+//
+// RUN COMMANDS:
+// =============
+//   ./gradlew pitest -Ppitest.mutators=DEFAULTS    (QUICK level, ~11 mutators)
+//   ./gradlew pitest -Ppitest.mutators=STRONGER    (STANDARD level, ~14 mutators)
+//   ./gradlew pitest -Ppitest.mutators=ALL         (COMPREHENSIVE level, ~30+ mutators)
+//
+// TARGET SPECIFIC CODE:
+// =====================
+//   ./gradlew pitest -Ppitest.targetClasses='com.bitso.myservice.Star'
+//   ./gradlew pitest -Ppitest.targetTests='StarMyServiceSpec'
+//   (Replace 'Star' with asterisk * in actual usage)
+//
+// EXCLUDE CLASSES (optional):
+// ===========================
+//   ./gradlew pitest -Ppitest.excludedClasses='StarStar/mapper/StarStar,StarStar/config/StarStar'
+//   (Replace 'StarStar' with ** in actual usage)
+//
+// Versions:
+// - PIT: 1.22.0
+// - gradle-pitest-plugin: 1.19.0-rc.2
+// - pitest-junit5-plugin: 1.2.3
+// =============================================================================
+
+// Default mutator group - can be overridden via -Ppitest.mutators=STRONGER
+def mutatorGroup = project.findProperty('pitest.mutators') ?: 'DEFAULTS'
+
+// Thread count for parallel execution
+def threadCount = (project.findProperty('pitest.threads') ?: '4') as Integer
+
+// Target classes - override via -Ppitest.targetClasses='com.bitso.mypackage.*'
+// Default: 'com.bitso.*' - matches all Bitso code
+def targetClassesProperty = project.findProperty('pitest.targetClasses')
+def targetClassesList = targetClassesProperty ? [targetClassesProperty] : ['com.bitso.*']
+
+// Target tests - override via -Ppitest.targetTests='*MySpec,*MyTest'
+def targetTestsProperty = project.findProperty('pitest.targetTests')
+
+// Excluded classes - override via command line (see header for examples)
+def excludedClassesProperty = project.findProperty('pitest.excludedClasses')
+
+// Verbose output
+def verboseOutput = (project.findProperty('pitest.verbose') ?: 'false').toBoolean()
+
+// JVM arguments - increase memory for integration tests with Spring/Testcontainers
+def jvmArgsProperty = project.findProperty('pitest.jvmArgs') ?: '-Xmx4g'
+
+pitest {
+    // PIT version
+    pitestVersion = '1.22.0'
+    
+    // JUnit 5 support - adds dependency to org.pitest:pitest-junit5-plugin
+    junit5PluginVersion = '1.2.3'
+    
+    // Target classes to mutate
+    targetClasses = targetClassesList
+    
+    // Target tests to run (if specified)
+    if (targetTestsProperty) {
+        targetTests = targetTestsProperty.split(',').collect { it.trim() }
+    }
+    
+    // Mutator group selection
+    // DEFAULTS (~11 mutators): Fast, good for CI and initial analysis
+    // STRONGER (~14 mutators): Recommended for regular use
+    // ALL (~30+ mutators): Comprehensive, for deep analysis
+    mutators = [mutatorGroup]
+    
+    // Parallel execution
+    threads = threadCount
+    
+    // Output formats
+    outputFormats = ['HTML', 'XML']
+    
+    // Don't use timestamped reports (easier to find)
+    timestampedReports = false
+    
+    // Timeout configuration - high values to support integration tests with Testcontainers/Spring
+    // PIT multiplies test time by timeoutFactor and adds timeoutConstInMillis
+    // Default: 2 minutes base + 1.5x multiplier = supports slow integration tests
+    timeoutFactor = 1.5
+    timeoutConstInMillis = 120000  // 2 minutes base timeout
+    
+    // JVM arguments for test execution
+    jvmArgs = [jvmArgsProperty]
+    
+    // Verbose logging
+    verbose = verboseOutput
+    
+    // Don't fail when no mutations (useful for modules with no business logic)
+    failWhenNoMutations = false
+    
+    // User-defined exclusions - no defaults, configure as needed
+    // Override via -Ppitest.excludedClasses (see header for pattern examples)
+    if (excludedClassesProperty) {
+        excludedClasses = excludedClassesProperty.split(',').collect { it.trim() }
+    }
+    
+    // Avoid mutating logging calls (these rarely affect behavior)
+    avoidCallsTo = [
+        'java.util.logging',
+        'org.apache.log4j',
+        'org.slf4j',
+        'org.apache.commons.logging',
+        'ch.qos.logback'
+    ]
+    
+    // History file for incremental analysis (faster re-runs)
+    // Uncomment to enable:
+    // historyInputLocation = file("${buildDir}/pitest-history.bin")
+    // historyOutputLocation = file("${buildDir}/pitest-history.bin")
+    
+    // Mutation threshold (0 = no threshold, set to e.g. 80 for CI gates)
+    // mutationThreshold = 0
+    
+    // Export line coverage for aggregate reports
+    exportLineCoverage = true
+}
+
+// ============================================================================
+// COMMON EXCLUSION PATTERNS (copy to your command line as needed):
+// ============================================================================
+//
+// Generated code:
+//   -Ppitest.excludedClasses='.../generated/...,.../gensrc/...'
+//
+// Protobuf:
+//   -Ppitest.excludedClasses='.../proto/...,../*Proto,../*Proto$*,com.google..'
+//
+// MapStruct mappers:
+//   -Ppitest.excludedClasses='.../mapper/...,../*MapperImpl'
+//
+// Configuration classes:
+//   -Ppitest.excludedClasses='../*Config,../*Configuration,.../config/...'
+//
+// Spring application:
+//   -Ppitest.excludedClasses='../*Application,../*Application$*'
+//
+// DTOs:
+//   -Ppitest.excludedClasses='.../dto/...'
+//
+// JOOQ tables:
+//   -Ppitest.excludedClasses='.../tables/...'
+//
+// gRPC:
+//   -Ppitest.excludedClasses='.../grpc/...'
+//
+// Combined (common set):
+//   -Ppitest.excludedClasses='.../generated/...,.../proto/...,../*MapperImpl,../*Config,../*Application'
+//
+// NOTE: Replace '...' with '**' (double asterisk) in actual usage
+// ============================================================================
+
+// Ensure pitest runs after compilation
+tasks.named('pitest').configure {
+    dependsOn 'classes', 'testClasses'
+}
+// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+// Source: bitsoex/ai-code-instructions → java/templates/pitest.gradle
+// To modify, edit the source file and run the distribution workflow
+

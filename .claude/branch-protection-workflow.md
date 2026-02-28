@@ -1,0 +1,45 @@
+# Never work directly on main. Always verify your branch and create a new one if needed before making changes.
+
+**Applies to:** **/*
+
+# Never work directly on main. Always verify your branch and create a new one if needed before making changes.
+
+**Rule**: Never commit directly to `main`. All work must happen on a feature/fix/chore branch.
+
+## Quick Reference
+
+```bash
+# Fetch latest
+git fetch --all
+
+# Check current branch
+git branch --show-current
+
+# If on main, create feature branch
+git checkout main
+git pull origin main
+
+## 📚 Full Documentation
+
+For complete guidelines, scripts, and references, see the skill:
+
+```
+.claude/skills/pr-lifecycle/SKILL.md
+```
+
+The skill includes:
+- **SKILL.md** - Complete instructions and quick start
+- **scripts/** - Executable automation scripts
+- **references/** - Detailed documentation
+- **assets/** - Templates and resources
+
+> **Note**: This is a shallow reference. The full content is maintained in the skill to avoid duplication.
+
+
+---
+*This rule is part of the java category.*
+*Source: global/rules/branch-protection-workflow.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/rules/branch-protection-workflow.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

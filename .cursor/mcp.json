@@ -1,0 +1,103 @@
+{
+  "mcpServers": {
+    "api-guidelines": {
+      "type": "http",
+      "url": "https://api-mcp.bitso.io/mcp"
+    },
+    "atlas": {
+      "type": "http",
+      "url": "https://atlas-mcp.bitso.io/mcp"
+    },
+    "atlassian": {
+      "type": "http",
+      "url": "https://mcp.atlassian.com/v1/mcp"
+    },
+    "awslabs-core": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--python",
+        "3.13",
+        "awslabs.core-mcp-server@1.0.23"
+      ],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR",
+        "AWS_PROFILE": "${env:AWS_PROFILE}",
+        "AWS_REGION": "${env:AWS_REGION}",
+        "SSL_CERT_FILE": "${env:SSL_CERT_FILE}",
+        "REQUESTS_CA_BUNDLE": "${env:REQUESTS_CA_BUNDLE}",
+        "AWS_CA_BUNDLE": "${env:AWS_CA_BUNDLE}",
+        "UV_NATIVE_TLS": "true"
+      }
+    },
+    "awslabs-aws-diagram": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "awslabs.aws-diagram-mcp-server@1.0.20"
+      ],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR",
+        "SSL_CERT_FILE": "${env:SSL_CERT_FILE}",
+        "REQUESTS_CA_BUNDLE": "${env:REQUESTS_CA_BUNDLE}",
+        "AWS_CA_BUNDLE": "${env:AWS_CA_BUNDLE}",
+        "UV_NATIVE_TLS": "true"
+      }
+    },
+    "awslabs-aws-documentation": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "awslabs.aws-documentation-mcp-server@1.1.18"
+      ],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR",
+        "SSL_CERT_FILE": "${env:SSL_CERT_FILE}",
+        "REQUESTS_CA_BUNDLE": "${env:REQUESTS_CA_BUNDLE}",
+        "AWS_CA_BUNDLE": "${env:AWS_CA_BUNDLE}",
+        "UV_NATIVE_TLS": "true"
+      }
+    },
+    "datadog": {
+      "type": "http",
+      "url": "https://mcp.datadoghq.com/api/unstable/mcp-server/mcp"
+    },
+    "eks-mcp-server": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "awslabs.eks-mcp-server@0.1.23",
+        "--allow-sensitive-data-access"
+      ],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "INFO",
+        "AWS_PROFILE": "eks-mcp",
+        "AWS_REGION": "${env:AWS_REGION}",
+        "AWS_CA_BUNDLE": "${env:CLOUDFLARE_CA_CERT}",
+        "SSL_CERT_FILE": "${env:CLOUDFLARE_CA_CERT}"
+      }
+    },
+    "github": {
+      "type": "stdio",
+      "command": "sh",
+      "args": [
+        "-c",
+        "docker run -i --rm -v \"$HOME/cloudflare-certificates/cloudflare_ca_certificate.pem:/etc/ssl/custom/cf-custom-ca.pem:ro\" -e SSL_CERT_FILE=/etc/ssl/custom/cf-custom-ca.pem -e GITHUB_PERSONAL_ACCESS_TOKEN -e GITHUB_READ_ONLY=1 -e GITHUB_LOCKDOWN_MODE=1 -e \"GITHUB_TOOLSETS=context,dependabot,code_security,secret_protection,security_advisories,labels,pull_requests\" ghcr.io/github/github-mcp-server:0.30.2"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_TOKEN}"
+      }
+    },
+    "signadot": {
+      "type": "stdio",
+      "command": "signadot",
+      "args": [
+        "mcp"
+      ]
+    },
+    "sonarqube": {
+      "type": "http",
+      "url": "https://sonarqube-mcp.bitso.io/mcp"
+    }
+  }
+}

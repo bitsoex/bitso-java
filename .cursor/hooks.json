@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [
+      {
+        "command": "bash .cursor/scripts/secret-guard.sh",
+        "timeout": 5
+      }
+    ]
+  }
+}

@@ -1,0 +1,53 @@
+// For JavaScript/TypeScript files, use this format:
+/**
+ * [Brief description of the file's purpose]
+ *
+ * [Optional: More detailed description if needed]
+ *
+ * @module [module-name]
+ */
+
+// For shell scripts, use this format:
+#!/bin/bash
+# =============================================================================
+# [Script Name]
+# 
+# [Brief description of what the script does]
+#
+# Usage:
+#   ./script-name.sh [arguments]
+#
+# Arguments:
+#   arg1    Description of first argument
+#   arg2    Description of second argument (optional)
+#
+# Environment Variables:
+#   VAR_NAME    Description of required environment variable
+#
+# Exit Codes:
+#   0    Success
+#   1    General error
+#   2    Invalid arguments
+# =============================================================================
+
+# For Python, use this format:
+"""
+[Module name]
+
+[Brief description of the module's purpose]
+
+[Optional: More detailed description if needed]
+
+Example:
+    >>> from module import function
+    >>> function(arg)
+    'result'
+"""
+
+# For Java, use this format:
+/*
+ * [Brief description of the file's purpose]
+ *
+ * [Optional: More detailed description if needed]
+ */
+package com.example.package;

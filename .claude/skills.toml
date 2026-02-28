@@ -1,0 +1,122 @@
+# AUTO-GENERATED FILE - Do not edit directly
+# Source: bitsoex/ai-code-instructions
+# To modify, edit the source files and run the distribution workflow
+#
+# This file is discovered by mise via task_config.includes = [".claude/*.toml"]
+# Requires mise 2026.2.5+ for glob pattern support
+
+
+# changelog-rfc-29
+["changelog-rfc-29:check-updated"]
+description = "Check updated"
+run = "npx tsx .claude/skills/changelog-rfc-29/scripts/check-updated.ts"
+
+["changelog-rfc-29:constants"]
+description = "Constants"
+run = "npx tsx .claude/skills/changelog-rfc-29/scripts/constants.ts"
+
+["changelog-rfc-29:coverage"]
+description = "Coverage"
+run = "npx tsx .claude/skills/changelog-rfc-29/scripts/coverage.ts"
+
+["changelog-rfc-29:import-releases"]
+description = "Import releases"
+run = "npx tsx .claude/skills/changelog-rfc-29/scripts/import-releases.ts"
+
+["changelog-rfc-29:migrate"]
+description = "Migrate"
+run = "npx tsx .claude/skills/changelog-rfc-29/scripts/migrate.ts"
+
+["changelog-rfc-29:parse"]
+description = "Parse"
+run = "npx tsx .claude/skills/changelog-rfc-29/scripts/parse.ts"
+
+["changelog-rfc-29:retrofit"]
+description = "Retrofit"
+run = "npx tsx .claude/skills/changelog-rfc-29/scripts/retrofit.ts"
+
+["changelog-rfc-29:semver"]
+description = "Semver"
+run = "npx tsx .claude/skills/changelog-rfc-29/scripts/semver.ts"
+
+["changelog-rfc-29:validate"]
+description = "Validate"
+run = "npx tsx .claude/skills/changelog-rfc-29/scripts/validate.ts"
+
+# coderabbit-workflow
+["coderabbit-workflow:batch-reply"]
+description = "Batch reply"
+run = "npx tsx .claude/skills/coderabbit-workflow/scripts/batch-reply.ts"
+
+["coderabbit-workflow:export-comments"]
+description = "Export comments"
+run = "npx tsx .claude/skills/coderabbit-workflow/scripts/export-comments.ts"
+
+["coderabbit-workflow:monitor-approval"]
+description = "Monitor approval"
+run = "npx tsx .claude/skills/coderabbit-workflow/scripts/monitor-approval.ts"
+
+["coderabbit-workflow:parse-review-body"]
+description = "Parse review body"
+run = "npx tsx .claude/skills/coderabbit-workflow/scripts/parse-review-body.ts"
+
+["coderabbit-workflow:reply-to-threads"]
+description = "Reply to threads"
+run = "npx tsx .claude/skills/coderabbit-workflow/scripts/reply-to-threads.ts"
+
+["coderabbit-workflow:run-local-review"]
+description = "Run local review"
+run = "npx tsx .claude/skills/coderabbit-workflow/scripts/run-local-review.ts"
+
+# coding-standards
+["coding-standards:check-naming-conventions"]
+description = "Check naming conventions"
+run = "npx tsx .claude/skills/coding-standards/scripts/check-naming-conventions.ts"
+
+# doc-validation-rfc-37
+["doc-validation-rfc-37:check-docs-updated"]
+description = "Check docs updated"
+run = "npx tsx .claude/skills/doc-validation-rfc-37/scripts/check-docs-updated.ts"
+
+# greenflag-dependabot
+["greenflag-dependabot:detect-context"]
+description = "Detect context"
+run = "npx tsx .claude/skills/greenflag-dependabot/scripts/detect-context.ts"
+
+["greenflag-dependabot:generate-changelog"]
+description = "Generate changelog"
+run = "npx tsx .claude/skills/greenflag-dependabot/scripts/generate-changelog.ts"
+
+["greenflag-dependabot:list-dependabot-prs"]
+description = "List dependabot prs"
+run = "npx tsx .claude/skills/greenflag-dependabot/scripts/list-dependabot-prs.ts"
+
+# stacked-prs
+["stacked-prs:check-stack-status"]
+description = "Check stack status"
+run = "npx tsx .claude/skills/stacked-prs/scripts/check-stack-status.ts"
+
+# ai-agent-hooks
+["ai-agent-hooks:file-size-check"]
+description = "File size check"
+run = "npx tsx .claude/skills/ai-agent-hooks/scripts/file-size-check.ts"
+
+["ai-agent-hooks:format-after-edit"]
+description = "Format after edit"
+run = "npx tsx .claude/skills/ai-agent-hooks/scripts/format-after-edit.ts"
+
+["ai-agent-hooks:mcp-audit"]
+description = "Mcp audit"
+run = "npx tsx .claude/skills/ai-agent-hooks/scripts/mcp-audit.ts"
+
+["ai-agent-hooks:session-start"]
+description = "Session start"
+run = "npx tsx .claude/skills/ai-agent-hooks/scripts/session-start.ts"
+
+["ai-agent-hooks:shell-validator"]
+description = "Shell validator"
+run = "npx tsx .claude/skills/ai-agent-hooks/scripts/shell-validator.ts"
+
+["ai-agent-hooks:stop-check"]
+description = "Stop check"
+run = "npx tsx .claude/skills/ai-agent-hooks/scripts/stop-check.ts"

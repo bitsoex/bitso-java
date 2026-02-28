@@ -1,0 +1,259 @@
+/**
+ * Unused Dependencies Analysis Script
+ *
+ * This script provides tasks to analyze unused dependencies in the project.
+ * It checks for:
+ * 1. Unused entries in libs.versions.toml
+ * 2. Unused entries in versions.gradle (if exists)
+ *
+ * Usage:
+ *   ./gradlew analyzeUnusedVersionCatalog  - Check libs.versions.toml
+ *   ./gradlew analyzeUnusedVersions        - Check versions.gradle
+ *   ./gradlew analyzeUnusedDependencies    - Run both analyses
+ *
+ * Setup:
+ *   1. Copy this file to your project's gradle/ directory
+ *   2. Add to root build.gradle: apply from: "${rootDir}/gradle/unused-dependencies.gradle"
+ */
+
+// Task to analyze unused entries in libs.versions.toml
+tasks.register('analyzeUnusedVersionCatalog') {
+    group = 'verification'
+    description = 'Analyzes unused entries in gradle/libs.versions.toml'
+
+    doLast {
+        def catalogFile = file("${rootDir}/gradle/libs.versions.toml")
+        if (!catalogFile.exists()) {
+            println "Version catalog not found at ${catalogFile}"
+            return
+        }
+
+        def catalogContent = catalogFile.text
+
+        // Parse libraries and versions sections
+        def librariesSection = false
+        def versionsSection = false
+        def declaredLibraries = []
+        def declaredVersions = []
+
+        catalogContent.eachLine { line ->
+            line = line.trim()
+            if (line == '[libraries]') {
+                librariesSection = true
+                versionsSection = false
+            } else if (line == '[versions]') {
+                versionsSection = true
+                librariesSection = false
+            } else if (line.startsWith('[')) {
+                librariesSection = false
+                versionsSection = false
+            } else if (librariesSection && line && !line.startsWith('#')) {
+                def key = line.split('=')[0]?.trim()
+                if (key) declaredLibraries << key
+            } else if (versionsSection && line && !line.startsWith('#')) {
+                def key = line.split('=')[0]?.trim()
+                if (key) declaredVersions << key
+            }
+        }
+
+        // Find all gradle files (build.gradle, *.gradle in gradle/)
+        def gradleFiles = []
+        rootDir.eachFileRecurse { file ->
+            if (file.isFile() &&
+                (file.name == 'build.gradle' || file.name.endsWith('.gradle')) &&
+                !file.path.contains('/.gradle/') &&
+                !file.path.contains('/build/')) {
+                gradleFiles << file
+            }
+        }
+
+        // Read all build file content
+        def allBuildContent = gradleFiles.collect { it.text }.join('\n')
+        // Also include the version catalog itself for version.ref references
+        allBuildContent += catalogContent
+
+        println "\n${'=' * 70}"
+        println "UNUSED VERSION CATALOG ANALYSIS"
+        println "${'=' * 70}"
+
+        println "\n--- Potentially Unused Libraries (libs.*) ---"
+        def unusedLibs = []
+        declaredLibraries.each { lib ->
+            def accessor = lib.replace('-', '.')
+            // Check for libs.$accessor pattern
+            if (!allBuildContent.contains("libs.${accessor}") &&
+                !allBuildContent.contains("libs.${lib}")) {
+                unusedLibs << lib
+                println "  ❌ ${lib} (libs.${accessor})"
+            }
+        }
+        if (unusedLibs.isEmpty()) {
+            println "  ✅ All libraries are referenced"
+        } else {
+            println "\n  Found ${unusedLibs.size()} potentially unused libraries"
+        }
+
+        println "\n--- Potentially Unused Versions ---"
+        def unusedVersions = []
+        declaredVersions.each { ver ->
+            // Check if version is referenced via version.ref or libs.versions
+            if (!allBuildContent.contains("version.ref = '${ver}'") &&
+                !allBuildContent.contains("version.ref = \"${ver}\"") &&
+                !allBuildContent.contains("version.ref: '${ver}'") &&
+                !allBuildContent.contains("libs.versions.${ver}") &&
+                !allBuildContent.contains(".ref = '${ver}'")) {
+                unusedVersions << ver
+                println "  ❌ ${ver}"
+            }
+        }
+        if (unusedVersions.isEmpty()) {
+            println "  ✅ All versions are referenced"
+        } else {
+            println "\n  Found ${unusedVersions.size()} potentially unused versions"
+        }
+
+        println "\n${'=' * 70}"
+        println "NOTE: This is static analysis. Review each finding before removal."
+        println "${'=' * 70}\n"
+    }
+}
+
+// Task to analyze versions.gradle usage (if exists)
+tasks.register('analyzeUnusedVersions') {
+    group = 'verification'
+    description = 'Analyzes unused entries in versions.gradle'
+
+    doLast {
+        def versionsFile = file("${rootDir}/versions.gradle")
+        if (!versionsFile.exists()) {
+            println "\n${'=' * 70}"
+            println "versions.gradle not found"
+            println "This is expected for modern projects using libs.versions.toml"
+            println "${'=' * 70}\n"
+            return
+        }
+
+        // Find all gradle files
+        def gradleFiles = []
+        rootDir.eachFileRecurse { file ->
+            if (file.isFile() &&
+                (file.name == 'build.gradle' || file.name.endsWith('.gradle')) &&
+                !file.path.contains('/.gradle/') &&
+                !file.path.contains('/build/') &&
+                file.name != 'versions.gradle') {
+                gradleFiles << file
+            }
+        }
+
+        def allGradleContent = gradleFiles.collect { it.text }.join('\n')
+
+        // Extract all possible version accessor patterns used in build files
+        def usedPatterns = [] as Set
+        def versionPattern = ~/versions\.([a-zA-Z0-9_\[\]'"\.\-]+)/
+        allGradleContent.eachLine { line ->
+            def matcher = line =~ versionPattern
+            matcher.each { match ->
+                usedPatterns << match[1].replaceAll(/[\[\]'"]+/, '.').replaceAll(/\.+/, '.')
+            }
+        }
+
+        println "\n${'=' * 70}"
+        println "VERSIONS.GRADLE ANALYSIS"
+        println "${'=' * 70}"
+
+        println "\n--- Used Version Patterns (${usedPatterns.size()}) ---"
+        usedPatterns.sort().take(30).each { pattern ->
+            println "  ✓ versions.${pattern}"
+        }
+        if (usedPatterns.size() > 30) {
+            println "  ... and ${usedPatterns.size() - 30} more"
+        }
+
+        println "\n${'=' * 70}"
+        println "NOTE: versions.gradle has complex nested structures."
+        println "Manual review is recommended for safe cleanup."
+        println "${'=' * 70}\n"
+    }
+}
+
+// Combined analysis task
+tasks.register('analyzeUnusedDependencies') {
+    group = 'verification'
+    description = 'Runs all unused dependency analysis tasks'
+    dependsOn 'analyzeUnusedVersionCatalog', 'analyzeUnusedVersions'
+}
+
+// Generate a report file for CI/automation
+tasks.register('generateUnusedDependenciesReport') {
+    group = 'verification'
+    description = 'Generates a JSON report of unused dependencies'
+
+    doLast {
+        def report = [
+            timestamp: new Date().format("yyyy-MM-dd'T'HH:mm:ss"),
+            project: rootProject.name,
+            unusedLibraries: [],
+            unusedVersions: []
+        ]
+
+        def catalogFile = file("${rootDir}/gradle/libs.versions.toml")
+        if (catalogFile.exists()) {
+            def catalogContent = catalogFile.text
+            def librariesSection = false
+            def versionsSection = false
+            def declaredLibraries = []
+            def declaredVersions = []
+
+            catalogContent.eachLine { line ->
+                line = line.trim()
+                if (line == '[libraries]') librariesSection = true; versionsSection = false
+                else if (line == '[versions]') versionsSection = true; librariesSection = false
+                else if (line.startsWith('[')) librariesSection = false; versionsSection = false
+                else if (librariesSection && line && !line.startsWith('#')) {
+                    def key = line.split('=')[0]?.trim()
+                    if (key) declaredLibraries << key
+                } else if (versionsSection && line && !line.startsWith('#')) {
+                    def key = line.split('=')[0]?.trim()
+                    if (key) declaredVersions << key
+                }
+            }
+
+            def gradleFiles = []
+            rootDir.eachFileRecurse { file ->
+                if (file.isFile() &&
+                    (file.name == 'build.gradle' || file.name.endsWith('.gradle')) &&
+                    !file.path.contains('/.gradle/') &&
+                    !file.path.contains('/build/')) {
+                    gradleFiles << file
+                }
+            }
+            def allBuildContent = gradleFiles.collect { it.text }.join('\n') + catalogContent
+
+            declaredLibraries.each { lib ->
+                def accessor = lib.replace('-', '.')
+                if (!allBuildContent.contains("libs.${accessor}") && !allBuildContent.contains("libs.${lib}")) {
+                    report.unusedLibraries << [name: lib, accessor: "libs.${accessor}"]
+                }
+            }
+
+            declaredVersions.each { ver ->
+                if (!allBuildContent.contains("version.ref = '${ver}'") &&
+                    !allBuildContent.contains("version.ref = \"${ver}\"") &&
+                    !allBuildContent.contains("libs.versions.${ver}") &&
+                    !allBuildContent.contains(".ref = '${ver}'")) {
+                    report.unusedVersions << ver
+                }
+            }
+        }
+
+        def reportFile = file("${buildDir}/reports/unused-dependencies.json")
+        reportFile.parentFile.mkdirs()
+        reportFile.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(report))
+        println "Report generated: ${reportFile}"
+    }
+}
+
+// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+// Source: bitsoex/ai-code-instructions → java/templates/unused-dependencies.gradle
+// To modify, edit the source file and run the distribution workflow
+

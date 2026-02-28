@@ -1,0 +1,8 @@
+@NullMarked
+package [PACKAGE_NAME];
+
+import org.jspecify.annotations.NullMarked;
+// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+// Source: bitsoex/ai-code-instructions → java/skills/nullability-control/assets/templates/package-info.java.template
+// To modify, edit the source file and run the distribution workflow
+

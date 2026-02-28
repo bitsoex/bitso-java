@@ -1,0 +1,36 @@
+---
+applyTo: ""
+description: GitHub CLI PR Lifecycle
+---
+
+# GitHub CLI PR Lifecycle
+
+Best practices for AI agents using GitHub CLI (`gh`) to manage pull requests, CI checks, CodeRabbit reviews, and reviewer interactions.
+
+## Quick Reference
+
+- Auto-assign PRs using `gh api user --jq '.login'`
+- Use echo wrapper for `gh` commands: `echo "..." ; gh command ; echo "Done"`
+- Always specify `--repo owner/repo`
+- Use conventional commit format
+
+## 📚 Full Documentation
+
+For complete guidelines, scripts, and references, see the skill:
+
+```
+.claude/skills/pr-workflow/SKILL.md
+```
+
+The skill includes:
+- **SKILL.md** - Complete instructions and quick start
+- **scripts/** - Executable automation scripts
+- **references/** - Detailed documentation
+- **assets/** - Templates and resources
+
+> **Note**: This is a shallow reference. The full content is maintained in the skill to avoid duplication.
+
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → global/rules/github-cli-pr-lifecycle.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

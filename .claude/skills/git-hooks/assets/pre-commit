@@ -1,0 +1,10 @@
+#!/bin/bash
+# Git pre-commit hook
+# Delegates to hooks-bootstrap.sh for Node setup and check execution
+# Always runs in informative mode (never blocks commits)
+
+exec "$(dirname "$0")/hooks-bootstrap.sh" pre-commit
+# AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+# Source: bitsoex/ai-code-instructions → global/skills/git-hooks/assets/pre-commit
+# To modify, edit the source file and run the distribution workflow
+

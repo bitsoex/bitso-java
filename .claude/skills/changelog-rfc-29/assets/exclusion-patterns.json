@@ -1,0 +1,46 @@
+{
+  "description": "Paths that do not require changelog updates. Commits that only modify these paths will NOT require a CHANGELOG.md update.",
+  "patterns": {
+    "infrastructure": [
+      ".github/",
+      ".gitignore",
+      ".nvmrc",
+      ".markdownlint.json",
+      ".markdown-link-check.json",
+      "pnpm-lock.yaml",
+      "package-lock.json",
+      "yarn.lock"
+    ],
+    "tests": [
+      "tests/"
+    ],
+    "generated": [
+      ".tmp/",
+      ".stryker-tmp/",
+      "coverage/",
+      "reports/",
+      "output/",
+      "node_modules/",
+      ".claude/skills/",
+      ".claude/commands/",
+      ".cursor/rules/",
+      ".vscode/"
+    ],
+    "config": [
+      ".c8rc.json",
+      ".coderabbit.yaml",
+      ".coderabbit/",
+      ".doclinterrc.yml",
+      "vitest.config.js",
+      "vitest.integration.config.js",
+      "eslint.config.js",
+      "stryker.config.json",
+      ".idea/"
+    ],
+    "documentation": [
+      "docs/",
+      "LINTING.md",
+      "CONTRIBUTING.md"
+    ]
+  }
+}

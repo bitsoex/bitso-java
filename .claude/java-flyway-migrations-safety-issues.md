@@ -1,0 +1,32 @@
+# Flyway SQL Migration Review Safety Issues Guidelines
+
+**Applies to:** **/*.sql
+
+# Flyway SQL Migration Review Safety Issues Guidelines
+
+This document lists the database migration safety issues that code owners MUST look out for when reviewing PRs. A number of these issues were taken from the Strong Migrations (see Resources). Wherever possible, checks should be automated into our pgsqlcheck static analysis tool.
+
+## 📚 Full Documentation
+
+For complete guidelines, scripts, and references, see the skill:
+
+```
+.claude/skills/database-integration/SKILL.md
+```
+
+The skill includes:
+- **SKILL.md** - Complete instructions and quick start
+- **scripts/** - Executable automation scripts
+- **references/** - Detailed documentation
+- **assets/** - Templates and resources
+
+> **Note**: This is a shallow reference. The full content is maintained in the skill to avoid duplication.
+
+
+---
+*This rule is part of the java category.*
+*Source: java/rules/java-flyway-migrations-safety-issues.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-flyway-migrations-safety-issues.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

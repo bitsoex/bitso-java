@@ -1,0 +1,14 @@
+# AUTO-GENERATED FILE - Do not edit directly
+# Source: bitsoex/ai-code-instructions
+# To modify, edit the source files and run the distribution workflow
+#
+# This file is discovered by mise via task_config.includes = [".claude/*.toml"]
+# Requires mise 2026.2.5+ for glob pattern support
+
+
+# Hook tasks - run hook scripts directly via mise
+# Usage: mise run hook:<name>
+
+["hook:secret-guard"]
+description = "Block shell commands that could expose secrets in cloud agent environments. Pure bash, no Node.js dependency."
+run = "mise exec -- node --experimental-strip-types .cursor/scripts/secret-guard.sh"

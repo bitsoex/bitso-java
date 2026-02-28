@@ -1,0 +1,38 @@
+# RFC-33 retry, bulkhead, circuit breaker, and deadline propagation for gRPC clients
+
+**Applies to:** **/application*.yml, **/*GrpcClient*.java
+
+# RFC-33 retry, bulkhead, circuit breaker, and deadline propagation for gRPC clients
+
+RFC-33 resilience patterns for gRPC clients: retry, bulkhead, circuit breaker.
+
+## Skill Location
+
+| Skill | Coverage |
+|-------|----------|
+| [grpc-services-rfc-33](.claude/skills/grpc-services-rfc-33/SKILL.md) | Contracts, resilience, linting |
+
+## 📚 Full Documentation
+
+For complete guidelines, scripts, and references, see the skill:
+
+```
+.claude/skills/grpc-services-rfc-33/SKILL.md
+```
+
+The skill includes:
+- **SKILL.md** - Complete instructions and quick start
+- **scripts/** - Executable automation scripts
+- **references/** - Detailed documentation
+- **assets/** - Templates and resources
+
+> **Note**: This is a shallow reference. The full content is maintained in the skill to avoid duplication.
+
+
+---
+*This rule is part of the java category.*
+*Source: java/rules/java-grpc-resilience.md*
+
+<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
+<!-- Source: bitsoex/ai-code-instructions → java/rules/java-grpc-resilience.md -->
+<!-- To modify, edit the source file and run the distribution workflow -->

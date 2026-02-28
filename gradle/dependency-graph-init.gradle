@@ -1,0 +1,35 @@
+/**
+ * Init script for GitHub Dependency Graph Gradle Plugin
+ * 
+ * This script applies the SimpleDependencyGraphPlugin to generate dependency-graph
+ * outputs in simple text format for local analysis.
+ * 
+ * Usage:
+ *   ./gradlew -I gradle/dependency-graph-init.gradle \
+ *       --dependency-verification=off \
+ *       --no-configuration-cache \
+ *       --no-configure-on-demand \
+ *       :ForceDependencyResolutionPlugin_resolveAllDependencies
+ * 
+ * Reports will be generated in: build/reports/dependency-graph-snapshots/
+ *   - dependency-list.txt         All resolved dependencies
+ *   - dependency-resolution.json  Where each dependency is used
+ *   - dependency-graph.json       Full graph in GitHub format
+ * 
+ * @see https://github.com/gradle/github-dependency-graph-gradle-plugin
+ */
+initscript {
+    repositories {
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "org.gradle:github-dependency-graph-gradle-plugin:1.4.0"
+    }
+}
+
+apply plugin: org.gradle.dependencygraph.simple.SimpleDependencyGraphPlugin
+
+// AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY
+// Source: bitsoex/ai-code-instructions → java/templates/dependency-graph-init.gradle
+// To modify, edit the source file and run the distribution workflow
+
