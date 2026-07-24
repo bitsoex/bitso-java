@@ -5,37 +5,27 @@
 			"currency": "btc",
 			"available": "0.00000000",
 			"locked": "0.00000000",
-			"total": "0.00000000",
-			"pending_deposit": "0.00000000",
-			"pending_withdrawal": "0.00000000"
+			"total": "0.00000000"
 		}, {
 			"currency": "etc",
 			"available": "0.00000000",
 			"locked": "0.00000000",
-			"total": "0.00000000",
-			"pending_deposit": "0.00000000",
-			"pending_withdrawal": "0.00000000"
+			"total": "0.00000000"
 		}, {
 			"currency": "eth",
 			"available": "6.34429758",
 			"locked": "0.00000000",
-			"total": "6.34429758",
-			"pending_deposit": "0.00000000",
-			"pending_withdrawal": "0.00000000"
+			"total": "6.34429758"
 		}, {
 			"currency": "xrp",
 			"available": "24.08387719",
 			"locked": "0.00000000",
-			"total": "24.08387719",
-			"pending_deposit": "0.000000",
-			"pending_withdrawal": "0.000000"
+			"total": "24.08387719"
 		}, {
 			"currency": "mxn",
 			"available": "15000.00100210",
 			"locked": "0.00000000",
-			"total": "15000.00100210",
-			"pending_deposit": "0.00",
-			"pending_withdrawal": "0.00"
+			"total": "15000.00100210"
 		}]
 	}
 }
