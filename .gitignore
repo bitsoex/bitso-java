@@ -2,6 +2,7 @@
 *.iml
 *.ipr
 *.iws
+out
 /local.properties
 .settings/*
 bin/*
