@@ -23,7 +23,7 @@ Add the dependency
 <dependency>
     <groupId>com.github.bitsoex</groupId>
     <artifactId>bitso-java</artifactId>
-    <version>4.1.0</version>
+    <version>4.3.0</version>
 </dependency>
 ```
 
@@ -45,7 +45,7 @@ On Android Studio find build.gradle file Gradle Scripts -> build.gradle(Module: 
 dependencies {
     implementation 'com.android.support:appcompat-v7:24.2.1'
     ...
-    implementation 'com.github.bitsoex:bitso-java:4.1.0'
+    implementation 'com.github.bitsoex:bitso-java:4.3.0'
 }
 ```
 
@@ -61,6 +61,15 @@ Next, build an instance of the client by passing your API Key, and Secret to a B
 import com.bitso.Bitso;
 
 Bitso bitso = new Bitso(System.getenv("BITSO_API_KEY"), System.getenv("BITSO_API_SECRET"));
+```
+
+If you want to run against a testing environment:
+
+```java
+
+import com.bitso.Target;
+
+Bitso bitso = new Bitso(System.getenv("BITSO_API_KEY"), System.getenv("BITSO_API_SECRET"), true, Target.stage);
 ```
 
 Notice here that we did not hard code the API keys into our codebase, but set them in environment variables instead. This is just one example, but keeping your credentials separate from your code base is a good security practice.
@@ -220,5 +229,10 @@ Keep in mind that a couple of environment variables are required to run the test
 - BITSO_DEV_PUBLIC_KEY
 - BITSO_DEV_PRIVATE
 
-# APIv2
-Although we highly recommend you stick to our APIv3 Wrapper, you can access our APIv2 Wrapper [here](https://github.com/bitsoex/bitso-java/tree/apiv2).
+## Building
+
+You need to have a Java 11 SDK installed in your system in order to build this library. If you want to build it using some other
+version, edit the target Java version in the build file.
+
+We use Gradle to build the library. If you don't have Gradle installed, you can use the provided wrapper, simply run `./gradlew`
+from the command line. The build file is tailored for Gradle 9, but may work with version 8.
