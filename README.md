@@ -234,6 +234,6 @@ Keep in mind that a couple of environment variables are required to run the test
 You need to have a Java 11 SDK installed in your system in order to build this library. If you want to build it using some other
 version, edit the target Java version in the build file.
 
-We use Gradle to build the library. Gradle 9 itself requires JDK 17+ to run — point `JAVA_HOME` at 17+ when invoking Gradle,
-separate from the Java 11 target above. If you don't have Gradle installed, you can use the provided wrapper, simply run
+We use Gradle to build the library. Gradle 9 itself requires JDK 17+ to run, separate from the Java 11 target above, so point
+`JAVA_HOME` at 17+ when invoking Gradle. If you don't have Gradle installed, you can use the provided wrapper, simply run
 `./gradlew` from the command line.
