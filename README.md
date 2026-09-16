@@ -231,8 +231,15 @@ Keep in mind that a couple of environment variables are required to run the test
 
 ## Building
 
-You need to have a Java 11 SDK installed in your system in order to build this library. If you want to build it using some other
-version, edit the target Java version in the build file.
+This library targets Java 11 (the `languageVersion` in `build.gradle`'s toolchain block) — that's what gets compiled and
+published for consumers. If you want to target some other version, edit that block.
+
+Building it locally needs a **separate, newer JDK to run Gradle itself**: Gradle 9 requires JVM 17 or later just to launch,
+regardless of what Java version the project targets. A JDK 11-only environment fails immediately with `Gradle requires JVM 17
+or later to run` before any build task even starts. Make sure `JAVA_HOME` (or `java` on your `PATH`) points at a JDK 17+ when
+invoking Gradle — the toolchain block still resolves a Java 11 JDK separately for actually compiling the code, so you'll want
+both JDKs available (Gradle auto-detects installed JDKs via `org.gradle.java.installations.paths` in `~/.gradle/gradle.properties`
+if the toolchain version doesn't match your `JAVA_HOME`).
 
 We use Gradle to build the library. If you don't have Gradle installed, you can use the provided wrapper, simply run `./gradlew`
-from the command line. The build file is tailored for Gradle 9, but may work with version 8.
+from the command line.
