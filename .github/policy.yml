@@ -1,0 +1,19 @@
+# Hand-written: bootstrap could not snapshot live required checks (master is
+# protected, GitHub returned none). Safe to edit.
+# Org defaults are always inherited (see bitsoex/.github-private); no `extends` needed.
+
+version: 1
+rules:
+  # Delete-only override: java-source / grpc-lint each require a check this
+  # public wrapper never produces (Build, Signadot, Validate Snapshot Dependencies,
+  # CD Gate, gRPC Linter — there is no .github/workflows/). Without this, any
+  # matching PR blocks forever on a check stuck at "not run". `require` can't be
+  # left empty (schema needs ≥1 of reviews/checks/mergeWindow), so this restates
+  # the catalog review floor (3) that defaultBranchProtection used to carry.
+  - name: unproducible-checks-override
+    overrides: [java-source, grpc-lint]
+    if:
+      targetBranch: ^master$
+    require:
+      reviews:
+        ai: 3
