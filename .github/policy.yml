@@ -1,0 +1,11 @@
+# Hand-written: bootstrap could not snapshot live required checks (master is
+# protected, GitHub returned none). Safe to hand-edit.
+# Org defaults are always inherited (see bitsoex/.github-private); no `extends` needed.
+#
+# No repo rules: the org `baseline` (ai: 2 on main|master) already matches the
+# live review floor, and there is no .github/workflows here, so no check can be
+# required. Org `java-source` / `grpc-lint` both condition on the `technology`
+# custom property, which this repo does not set, so neither can ever match.
+# The file exists so Bitso CI Gate can be enabled at all.
+
+version: 1
