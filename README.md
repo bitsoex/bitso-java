@@ -196,7 +196,7 @@ An order book is always referred to in the API as "Major_Minor". For example: "b
 
 ### Decimal precision
 
-This artifact relies on the [JDK BigDecimal](http://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html) class for arithmetic to maintain decimal precision for all values returned.
+This artifact relies on the [JDK BigDecimal](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/math/BigDecimal.html) class for arithmetic to maintain decimal precision for all values returned.
 
 When working with currency values in your application, it's important to remember that floating point arithmetic is prone to [rounding errors](http://en.wikipedia.org/wiki/Round-off_error). We recommend you always use BigDecimal.
 
@@ -211,7 +211,7 @@ Server responses are mocked using the [mockito](http://site.mockito.org/) framew
 To run mocked tests, use the following command:
 
 ```shell
-mvn -Dtest=**/BitsoMockTest.java test
+./gradlew test --tests BitsoMockTest
 ```
 
 
@@ -222,12 +222,12 @@ To run many of these tests against the server, you will need to identify using a
 To run tests against the server, use the following command:
 
 ```shell
-mvn -Dtest=**/BitsoServerTest.java test
+./gradlew test --tests BitsoServerTest
 ```
 
 Keep in mind that a couple of environment variables are required to run the tests against the server:
-- BITSO_DEV_PUBLIC_KEY
-- BITSO_DEV_PRIVATE
+- `BITSO_DEV_PUBLIC_KEY`
+- `BITSO_DEV_PRIVATE`
 
 ## Building
 

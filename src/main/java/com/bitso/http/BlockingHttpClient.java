@@ -63,7 +63,7 @@ public class BlockingHttpClient {
         }
     }
 
-    public String sendPost(String url, String body, HashMap<String, String> headers)
+    public String sendPost(String url, String body, Map<String, String> headers)
             throws BitsoAPIException {
         throttle();
         HttpsURLConnection connection = null;

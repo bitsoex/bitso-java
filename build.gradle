@@ -2,10 +2,11 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'idea'
+    alias libs.plugins.lombok
 }
 
 group = 'com.github.bitsoex'
-version = '4.3.0'
+version = '4.4.0'
 
 description = "bitso-java"
 
@@ -26,13 +27,15 @@ repositories {
 }
 
 dependencies {
-    api 'org.apache.httpcomponents.client5:httpclient5:5.6.4'
-    api 'org.json:json:20260814'
-    api 'io.netty:netty-all:4.2.18.Final'
+    api libs.httpclient5
+    api libs.json
+    api libs.netty
+    api libs.slf4j.api
 
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.14.4'
+    testImplementation libs.junit
     testImplementation 'org.junit.platform:junit-platform-launcher'
-    testImplementation 'org.mockito:mockito-junit-jupiter:5.23.0'
+    testImplementation libs.mockito.jupiter
+    testRuntimeOnly libs.slf4j.simple
 }
 
 test.useJUnitPlatform()

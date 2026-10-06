@@ -1,27 +1,22 @@
 package com.bitso.examples;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Observable;
 
 import javax.net.ssl.SSLException;
 
 import com.bitso.Target;
-import org.json.JSONException;
 import org.json.JSONObject;
 import com.bitso.Bitso;
 import com.bitso.BitsoOrder;
 import com.bitso.BitsoOrderBook;
 import com.bitso.BitsoOrderBook.PublicOrder;
 import com.bitso.exceptions.BitsoAPIException;
-import com.bitso.exceptions.BitsoPayloadException;
-import com.bitso.exceptions.BitsoServerException;
 import com.bitso.helpers.Helpers;
 import com.bitso.websockets.BitsoChannels;
 import com.bitso.websockets.BitsoStreamDiffOrders;
@@ -131,7 +126,7 @@ public class BitsoWebSocketExample extends BitsoWebSocketObserver {
     public void getInitialOrderBook() {
         // Public functions in API, no key or secret needed
         if (mBitso == null) {
-            mBitso = new Bitso("", "", true, Target.production);
+            mBitso = new Bitso("", "", Target.production);
         }
 
         try {
@@ -155,7 +150,7 @@ public class BitsoWebSocketExample extends BitsoWebSocketObserver {
 
             System.out.println("Best ask: " + mAsks.getMinPrice());
             System.out.println("Best bid: " + mBids.getMaxPrice());
-        } catch (BitsoAPIException | BitsoPayloadException | BitsoServerException e) {
+        } catch (BitsoAPIException e) {
             e.printStackTrace();
         }
     }

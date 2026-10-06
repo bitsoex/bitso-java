@@ -1,9 +1,11 @@
 package com.bitso;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 
+@Slf4j
 public class BitsoServerTest extends BitsoTest {
     @BeforeEach
     public void setUp() throws Exception {
@@ -15,16 +17,12 @@ public class BitsoServerTest extends BitsoTest {
         // normally, otherwise, they will be ignored.
         Assumptions.assumeTrue((secret != null && key != null));
 
-        mBitso = new Bitso(key, secret, true, Target.production);
+        mBitso = new Bitso(key, secret, Target.production);
     }
 
     @AfterEach
     public void tearDown() {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        BitsoTest.throttlePublic();
     }
 
     @Override
