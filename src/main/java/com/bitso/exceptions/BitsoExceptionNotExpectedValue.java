@@ -1,7 +1,6 @@
 package com.bitso.exceptions;
 
-@SuppressWarnings("serial")
-public class BitsoExceptionNotExpectedValue extends RuntimeException {
+public class BitsoExceptionNotExpectedValue extends BitsoAPIException {
     public BitsoExceptionNotExpectedValue(String message){
         super(message);
     }

@@ -1,6 +1,6 @@
 package com.bitso.exceptions;
 
-public class BitsoPayloadException extends Exception {
+public class BitsoPayloadException extends BitsoAPIException {
     private static final long serialVersionUID = 1L;
 
     public BitsoPayloadException() {

@@ -1,6 +1,6 @@
 package com.bitso.exceptions;
 
-public class BitsoValidationException extends Exception {
+public class BitsoValidationException extends BitsoAPIException {
     private static final long serialVersionUID = 1L;
 
     public BitsoValidationException() {

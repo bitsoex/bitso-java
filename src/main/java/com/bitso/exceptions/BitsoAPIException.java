@@ -1,7 +1,7 @@
 package com.bitso.exceptions;
 
-@SuppressWarnings("serial")
-public class BitsoAPIException extends Exception {
+/** The root exception class for the Bitso API. */
+public class BitsoAPIException extends RuntimeException {
     private int mErrorCode = 101;
 
     public BitsoAPIException() {
