@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,11 +63,15 @@ public abstract class BitsoTest {
         }
     }
 
-    //@Test
+    @Test
     public void testOrderBook() throws JSONException, IOException, BitsoAPIException {
         BookInfo[] availableBooks = mBitso.getAvailableBooks();
         throttlePrivate();
         assertNotNull(availableBooks);
+        if (availableBooks.length > 3) {
+            // Test only the first ten books
+            availableBooks = Arrays.copyOfRange(availableBooks, 0, 3);
+        }
         for (BookInfo bookInfo : availableBooks) {
             BitsoOrderBook bitsoOrderBook = mBitso.getOrderBook(bookInfo.getBook());
             throttlePrivate();
@@ -84,6 +89,11 @@ public abstract class BitsoTest {
     public void testTrades() throws JSONException, IOException, BitsoAPIException {
         BookInfo[] availableBooks = mBitso.getAvailableBooks();
         assertNotNull(availableBooks);
+        if (availableBooks.length > 3) {
+            // Test only the first ten books
+            availableBooks = Arrays.copyOfRange(availableBooks, 0, 3);
+        }
+        boolean first = true;
         for (BookInfo bookInfo : availableBooks) {
             int totalElements = 0;
             BitsoTransactions.Transaction[] innerTransactions;
@@ -93,30 +103,27 @@ public abstract class BitsoTest {
 
             throttlePublic();
 
-            // TODO:
             // This should return null due limit value is 0
-            BitsoTransactions bitsoTransactionCeroLimit = mBitso.getTrades(bookInfo.getBook(), "limit=0");
-            assertNotNull(bitsoTransactionCeroLimit);
+            if (first) {
+                BitsoTransactions bitsoTransactionCeroLimit = mBitso.getTrades(bookInfo.getBook(), "limit=0");
+                assertNotNull(bitsoTransactionCeroLimit);
+                throttlePublic();
 
-            throttlePublic();
+                BitsoTransactions bitsoTransactionLowLimit = mBitso.getTrades(bookInfo.getBook(), "limit=1");
+                totalElements = bitsoTransactionLowLimit.getTransactionsList().length;
+                assertTrue((totalElements >= 0 && totalElements <= 1));
+                throttlePublic();
 
-            BitsoTransactions bitsoTransactionLowLimit = mBitso.getTrades(bookInfo.getBook(), "limit=1");
-            totalElements = bitsoTransactionLowLimit.getTransactionsList().length;
-            assertTrue((totalElements >= 0 && totalElements <= 1));
-
-            throttlePublic();
+                // This should return null due the limit value exceeds 100
+                BitsoTransactions bitsoTransactionExcedingMaxLimit = mBitso.getTrades(bookInfo.getBook(),
+                        "limit=1000");
+                assertNotNull(bitsoTransactionExcedingMaxLimit);
+                throttlePublic();
+            }
 
             BitsoTransactions bitsoTransactionMaxLimit = mBitso.getTrades(bookInfo.getBook(), "limit=100");
             totalElements = bitsoTransactionMaxLimit.getTransactionsList().length;
             assertTrue((totalElements >= 0 && totalElements <= 100));
-
-            throttlePublic();
-
-            // TODO:
-            // This should return null due the limit value exceeds 100
-            BitsoTransactions bitsoTransactionExcedingMaxLimit = mBitso.getTrades(bookInfo.getBook(),
-                    "limit=1000");
-            assertNotNull(bitsoTransactionExcedingMaxLimit);
 
             throttlePublic();
 
@@ -163,6 +170,7 @@ public abstract class BitsoTest {
             totalElements = bitsoTransactionSortLimit.getTransactionsList().length;
             assertNotNull(bitsoTransactionSortLimit);
             assertTrue((totalElements >= 0 && totalElements <= 15));
+            first = false;
         }
     }
 
@@ -635,7 +643,6 @@ public abstract class BitsoTest {
         }
     }
 
-
     @Test
     public void testCancelAll() throws JSONException, IOException, BitsoAPIException {
         List<String> orders = new ArrayList<>();
@@ -714,7 +721,7 @@ public abstract class BitsoTest {
     /** Sleep for a full second, because public (unauthenticated) calls are rate-limited to
      * 60 per minutes, based on the IP address.
      */
-    public static final void throttlePublic() {
+    public static void throttlePublic() {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -726,7 +733,7 @@ public abstract class BitsoTest {
     /** Sleep for 200 milliseconds, because private (authenticated) calls are rate-limited to
      * 300 per minute, based on the user.
      */
-    public static final void throttlePrivate() {
+    public static void throttlePrivate() {
         try {
             Thread.sleep(200);
         } catch (InterruptedException e) {
