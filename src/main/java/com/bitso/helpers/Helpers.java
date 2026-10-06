@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -91,23 +90,11 @@ public class Helpers {
         return sb.toString();
     }
 
-    public static void printStackTrace() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Printing Stack Trace\n");
-        for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
-            sb.append('\t');
-            sb.append(ste);
-            sb.append('\n');
-        }
-        System.err.print(sb);
-    }
-
     public static int getInt(JSONObject o, String key) {
         if (o.has(key)) {
             return o.getInt(key);
         } else {
             log.warn("No int key '{}' in JSON object", key);
-            Helpers.printStackTrace();
         }
         return -1;
     }
@@ -117,7 +104,6 @@ public class Helpers {
             return o.getString(key);
         } else {
             log.warn("No string key '{}' in JSON object", key);
-            Helpers.printStackTrace();
         }
         return null;
     }
@@ -129,7 +115,6 @@ public class Helpers {
             return new BigDecimal(value);
         } else {
             log.warn("No BigDecimal key '{}' in JSON object", key);
-            Helpers.printStackTrace();
         }
         return null;
     }
@@ -139,7 +124,6 @@ public class Helpers {
             return o.getInt(key);
         } else {
             log.warn("No Integer key '{}' in JSON object", key);
-            Helpers.printStackTrace();
         }
         return null;
     }
@@ -162,7 +146,6 @@ public class Helpers {
             }
         } else {
             log.warn("No Date key '{}' in JSON object", key);
-            Helpers.printStackTrace();
         }
         return null;
     }
