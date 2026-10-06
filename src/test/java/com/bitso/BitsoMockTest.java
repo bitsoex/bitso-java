@@ -117,7 +117,7 @@ public class BitsoMockTest extends BitsoTest {
         Mockito.when((mBitso.fundingDestination("fund_currency=eth"))).thenReturn(mockFundingDestination);
         Mockito.when((mBitso.fundingDestination("fund_currency=mxn"))).thenReturn(mockFundingDestination);
         Mockito.when(mBitso.getBanks()).thenReturn(mockBitsoBanks);
-        Mockito.when(mBitso.placeOrder(anyString(), any(), any(), any(), any(), any(), any()))
+        Mockito.when(mBitso.placeOrder(any()))
                 .thenReturn("genericOrder", generateOrderIds(10));
         Mockito.when(mBitso.placeLimitOrder(anyString(), any(), any(), any(), any(), any()))
                 .thenReturn("limitOrder", generateOrderIds(15));
