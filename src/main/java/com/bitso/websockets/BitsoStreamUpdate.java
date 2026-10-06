@@ -2,7 +2,6 @@ package com.bitso.websockets;
 
 import org.json.JSONObject;
 
-import com.bitso.exceptions.BitsoExceptionNotExpectedValue;
 import com.bitso.helpers.Helpers;
 
 public class BitsoStreamUpdate {
