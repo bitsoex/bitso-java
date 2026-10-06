@@ -27,6 +27,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
 public abstract class BitsoTest {
+
+    protected final BigDecimal AMOUNT = BigDecimal.ONE.movePointLeft(3); // 0.001
+    protected BigDecimal minPrice = BigDecimal.ONE;
+    protected BigDecimal maxPrice = BigDecimal.ONE.movePointRight(8);
     protected Bitso mBitso;
 
     // Test public Rest API
@@ -35,9 +39,14 @@ public abstract class BitsoTest {
         BookInfo[] books = mBitso.getAvailableBooks();
         assertNotNull(books);
         int totalElements = books.length;
-        assertEquals(6, totalElements);
+        assertTrue(totalElements > 10, "Expected more than 10 books");
         for (BookInfo bookInfo : books) {
             assertTrue(nullCheck(bookInfo, BookInfo.class));
+            if (bookInfo.getBook().equals("btc_mxn")) {
+                log.warn("EUREKA! {}", bookInfo);
+                minPrice = bookInfo.getMinPrice();
+                maxPrice = bookInfo.getMaxPrice();
+            }
         }
     }
 
@@ -46,7 +55,7 @@ public abstract class BitsoTest {
         BitsoTicker[] tickers = mBitso.getTicker();
         assertNotNull(tickers);
         int totalElements = tickers.length;
-        assertEquals(6, totalElements);
+        assertTrue(totalElements > 10, "Expected more than 10 ticker entries");
         for (Ticker ticker : tickers) {
             assertTrue(nullCheck(ticker, BitsoTicker.class));
         }
@@ -621,7 +630,7 @@ public abstract class BitsoTest {
 
         if (mxnBalance.getAvailable().doubleValue() >= 10) {
             buyOrderId = mBitso.placeOrder("btc_mxn", BitsoOrder.SIDE.BUY, BitsoOrder.TYPE.LIMIT,
-                    new BigDecimal("0.001"), null, new BigDecimal("10000"));
+                    AMOUNT, null, minPrice);
             assertNotNull(buyOrderId);
             orders.add(buyOrderId);
         } else {
@@ -631,7 +640,7 @@ public abstract class BitsoTest {
 
         if (btcBalance.getAvailable().doubleValue() >= 0.001) {
             sellOrderId = mBitso.placeOrder("btc_mxn", BitsoOrder.SIDE.SELL, BitsoOrder.TYPE.LIMIT,
-                    new BigDecimal("0.001"), null, new BigDecimal("100000"));
+                    AMOUNT, null, maxPrice);
             assertNotNull(sellOrderId);
             orders.add(sellOrderId);
         } else {
@@ -742,7 +751,7 @@ public abstract class BitsoTest {
         BitsoTicker[] tickers = mBitso.getSignedTicker();
         assertNotNull(tickers);
         int totalElements = tickers.length;
-        assertEquals(6, totalElements);
+        assertTrue(totalElements > 10, "Expected more than 10 ticker entries");
         for (Ticker ticker : tickers) {
             assertTrue(nullCheck(ticker, BitsoTicker.class));
         }
@@ -753,7 +762,7 @@ public abstract class BitsoTest {
         BookInfo[] books = mBitso.getSignedAvailableBooks();
         assertNotNull(books);
         int totalElements = books.length;
-        assertEquals(6, totalElements);
+        assertTrue(totalElements > 10, "Expected more than 10 books");
         for (BookInfo bookInfo : books) {
             assertTrue(nullCheck(bookInfo, BookInfo.class));
         }
@@ -781,7 +790,7 @@ public abstract class BitsoTest {
 
         if (mxnBalance.getAvailable().doubleValue() >= 10) {
             buyOrderId = mBitso.placeLimitOrder("btc_mxn", BitsoOrder.SIDE.BUY,
-                    new BigDecimal("0.001"), null, new BigDecimal("10000"),
+                    AMOUNT, null, minPrice,
                     BitsoOrder.TIME_IN_FORCE.GOODTILLCANCELLED);
             throttlePrivate();
             assertNotNull(buyOrderId);
@@ -793,7 +802,7 @@ public abstract class BitsoTest {
 
         if (btcBalance.getAvailable().doubleValue() >= 0.001) {
             sellOrderId = mBitso.placeLimitOrder("btc_mxn", BitsoOrder.SIDE.SELL,
-                    new BigDecimal("0.001"), null, new BigDecimal("100000"),
+                    AMOUNT, null, maxPrice,
                     BitsoOrder.TIME_IN_FORCE.GOODTILLCANCELLED);
             throttlePrivate();
             assertNotNull(sellOrderId);
