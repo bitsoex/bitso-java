@@ -15,23 +15,23 @@ public class BitsoServerTest extends BitsoTest {
         // If BITSO_DEV_PRIVATE and BITSO_DEV_PUBLIC_KEY
         // environment variables are set, tests will be executed
         // normally, otherwise, they will be ignored.
-        Assumptions.assumeTrue((secret != null && key != null));
+        Assumptions.assumeTrue(secret != null && key != null, "API key and secret not present");
 
-        mBitso = new Bitso(key, secret, Target.production);
+        mBitso = new Bitso(key, secret, Target.development);
     }
 
     @AfterEach
     public void tearDown() {
-        BitsoTest.throttlePublic();
+        BitsoTest.throttlePrivate();
     }
 
     @Override
     public void testTrading() {
-        System.out.println("This test is overriden in BitsoServerTest");
+        System.out.println("This test is overridden in BitsoServerTest");
     }
 
     @Override
     public void testOrderTrades() {
-        System.out.println("This test is overriden in BitsoServerTest");
+        System.out.println("This test is overridden in BitsoServerTest");
     }
 }
