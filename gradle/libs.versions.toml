@@ -1,0 +1,14 @@
+[versions]
+slf4j = "2.0.20"
+
+[libraries]
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
+json = "org.json:json:20260814"
+netty = "io.netty:netty-all:4.2.18.Final"
+httpclient5 = "org.apache.httpcomponents.client5:httpclient5:5.6.4"
+junit = "org.junit.jupiter:junit-jupiter:5.14.4"
+mockito-jupiter = "org.mockito:mockito-junit-jupiter:5.24.0"
+
+[plugins]
+lombok = "io.freefair.lombok:9.7.0"
