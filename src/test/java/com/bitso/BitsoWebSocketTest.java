@@ -47,7 +47,7 @@ public class BitsoWebSocketTest {
             bitsoWebSocket.subscribeBitsoChannel(bitsoChannel.toString());
         }
 
-        Thread.sleep(20_000);
+        Thread.sleep(5_000);
 
         bitsoWebSocket.closeConnection();
 
