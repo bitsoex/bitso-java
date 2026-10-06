@@ -106,7 +106,7 @@ public class Helpers {
         if (o.has(key)) {
             return o.getInt(key);
         } else {
-            log.warn("No int key '{}' in JSON object {}", key, o);
+            log.warn("No int key '{}' in JSON object", key);
             Helpers.printStackTrace();
         }
         return -1;
@@ -116,7 +116,7 @@ public class Helpers {
         if (o.has(key)) {
             return o.getString(key);
         } else {
-            log.warn("No string key '{}' in JSON object {}", key, o);
+            log.warn("No string key '{}' in JSON object", key);
             Helpers.printStackTrace();
         }
         return null;
@@ -128,7 +128,7 @@ public class Helpers {
             value = (value.equals("null") || value.isBlank()) ? "0" : value.trim();
             return new BigDecimal(value);
         } else {
-            log.warn("No BigDecimal key '{}' in JSON object {}", key, o);
+            log.warn("No BigDecimal key '{}' in JSON object", key);
             Helpers.printStackTrace();
         }
         return null;
@@ -138,7 +138,7 @@ public class Helpers {
         if (o.has(key)) {
             return o.getInt(key);
         } else {
-            log.warn("No Integer key '{}' in JSON object {}", key, o);
+            log.warn("No Integer key '{}' in JSON object", key);
             Helpers.printStackTrace();
         }
         return null;
@@ -156,12 +156,12 @@ public class Helpers {
                     try {
                         return dtf.newXMLGregorianCalendar(date).toGregorianCalendar().getTime();
                     } catch (IllegalArgumentException e3) {
-                        log.error("Can't parse datetime '{}' from {}", date, o, e3);
+                        log.error("Can't parse datetime '{}'", date, e3);
                     }
                 }
             }
         } else {
-            log.warn("No Date key '{}' in JSON object {}", key, o);
+            log.warn("No Date key '{}' in JSON object", key);
             Helpers.printStackTrace();
         }
         return null;

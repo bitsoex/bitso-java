@@ -70,6 +70,9 @@ public class BitsoFunding {
     }
 
     public void setDetails(Map<String, String> value) {
+        if (details == value) {
+            return;
+        }
         details.clear();
         details.putAll(value);
     }

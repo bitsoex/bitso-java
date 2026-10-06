@@ -35,7 +35,7 @@ import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import io.netty.util.CharsetUtil;
 
-public class BitsoWebSocket extends Observable{
+public class BitsoWebSocket extends Observable {
     private final String URL = "wss://ws.bitso.com";
     private final int PORT = 443;
 

@@ -15,6 +15,7 @@ import com.bitso.websockets.BitsoStreamTrades;
 import com.bitso.websockets.BitsoWebSocket;
 import com.bitso.websockets.BitsoWebSocketObserver;
 import com.bitso.websockets.BitsoChannels;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -47,7 +48,13 @@ public class BitsoWebSocketTest {
             bitsoWebSocket.subscribeBitsoChannel(bitsoChannel.toString());
         }
 
-        Thread.sleep(5_000);
+        var start = System.currentTimeMillis();
+        while (bitsoWebSocketObserver.getMessagesReceived().size() < 3) {
+            if (System.currentTimeMillis() - start > 30_000) {
+                Assertions.fail("Did not receive 3 subscription responses");
+            }
+            BitsoTest.throttlePrivate();
+        }
 
         bitsoWebSocket.closeConnection();
 

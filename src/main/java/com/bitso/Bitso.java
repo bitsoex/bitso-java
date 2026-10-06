@@ -8,7 +8,6 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -749,7 +748,7 @@ public class Bitso {
         }
         int length = input.length();
         if (input.charAt(0) != '"' || input.charAt(length - 1) != '"') {
-            log.error("invalid input to quoteEliminator: {}", input);
+            log.error("invalid input to quoteEliminator");
             return null;
         }
         return input.substring(1, length - 1);
@@ -902,9 +901,9 @@ public class Bitso {
         String lastParameter = parameters[totalParameters - 1].trim();
         // Meaning that the last parameter is not empty
         if (!lastParameter.isEmpty()) {
-            queryString.append(parameters[totalParameters - 1]);
+            queryString.append(lastParameter);
             // Remove the separator symbol at the end if query string has it
-        } else if (queryString.substring(queryString.length() - separator.length(), queryString.length()).equals(separator)) {
+        } else if (queryString.length() >= separator.length() && queryString.length() > separator.length() && queryString.substring(queryString.length() - separator.length(), queryString.length()).equals(separator)) {
             queryString.delete(queryString.length() - separator.length(), queryString.length());
         }
 
@@ -933,7 +932,7 @@ public class Bitso {
                 throw new BitsoPayloadException("Server response does not contain payload");
             }
         } catch (JSONException e) {
-            log.error("Invalid JSON in response '{}'", jsonResponse, e);
+            log.error("Invalid JSON in response", e);
             throw new BitsoServerException("Server response is not a valid JSON", e);
         }
     }
