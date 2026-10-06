@@ -70,10 +70,6 @@ public class Bitso {
         this.baseUrl = env.uri();
     }
 
-    public String getKey() {
-        return key;
-    }
-
     // Public Functions
     public BookInfo[] getAvailableBooks()
             throws BitsoAPIException {
@@ -337,8 +333,12 @@ public class Bitso {
             return new BitsoOrder[0];
         }
 
-        String ordersIdsParameters = processQueryParameters("-", ordersId);
-        request += "/" + ordersIdsParameters;
+        if (ordersId.length == 1) {
+            request += "/" + ordersId[0];
+        } else {
+            String ordersIdsParameters = processQueryParameters(",", ordersId);
+            request += "?oids=" + ordersIdsParameters;
+        }
 
         String getResponse = sendBitsoGet(request);
         JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
