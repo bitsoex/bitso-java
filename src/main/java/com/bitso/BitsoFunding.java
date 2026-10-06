@@ -2,6 +2,7 @@ package com.bitso;
 
 import com.bitso.helpers.Helpers;
 
+import lombok.Data;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -9,7 +10,9 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
+@Data
 public class BitsoFunding {
     private String fundingId;
     private String status;
@@ -17,7 +20,7 @@ public class BitsoFunding {
     private String currency;
     private String method;
     private BigDecimal amount;
-    private HashMap<String, String> details;
+    private final Map<String, String> details;
 
     public BitsoFunding(JSONObject o) {
         fundingId = Helpers.getString(o, "fid");
@@ -34,74 +37,20 @@ public class BitsoFunding {
         return Helpers.fieldPrinter(this, BitsoFunding.class);
     }
 
-    public String getFundingId() {
-        return fundingId;
+    public void addDetails(String key, String value) {
+        details.put(key, value);
     }
 
-    public void setFundingId(String fundingId) {
-        this.fundingId = fundingId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Date getFundingDate() {
-        return fundingDate;
-    }
-
-    public void setFundingDate(Date fundingDate) {
-        this.fundingDate = fundingDate;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public HashMap<String, String> getDetails() {
-        return details;
-    }
-
-    public void addDetails(String key, String value){
-        if(details != null){
-            details.put(key, value);
-        }
-    }
-
-    public void addDetails(HashMap<String, String> newDetails){
+    public void addDetails(Map<String, String> newDetails){
         details.putAll(newDetails);
     }
 
     private HashMap<String, String> retrieveOperationDetails(JSONObject o) {
-        if (o == null) {
-            return null;
-        }
+        var m = new HashMap<String, String>();
 
-        HashMap<String, String> details = new HashMap<String, String>();
+        if (o == null) {
+            return m;
+        }
 
         String currentKey;
         String currentValue;
@@ -114,13 +63,14 @@ public class BitsoFunding {
             } catch (JSONException exception) {
                 currentValue = String.valueOf(Helpers.getInt(o, currentKey));
             }
-            details.put(currentKey, currentValue);
+            m.put(currentKey, currentValue);
         }
 
-        return details;
+        return m;
     }
 
-    public void setDetails(HashMap<String, String> details) {
-        this.details = details;
+    public void setDetails(Map<String, String> value) {
+        details.clear();
+        details.putAll(value);
     }
 }
