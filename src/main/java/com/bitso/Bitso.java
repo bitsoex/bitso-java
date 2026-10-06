@@ -16,6 +16,8 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.net.ssl.HttpsURLConnection;
 
 import com.bitso.trading.OrderRequest;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,11 +40,20 @@ public class Bitso {
     private final String BITCOIN = "bitcoin";
     public static long THROTTLE_MS = 1000;
 
+    /** The API key. */
+    @Getter
     private final String key;
     private final String secret;
+    /** The base URL that this client is connecting to. */
+    @Getter
     private String baseUrl;
 
     private final BlockingHttpClient client = new BlockingHttpClient(false, THROTTLE_MS);
+    /** Set the timeout to read a response, in milliseconds.
+     * Default is 30 seconds.
+     */
+    @Setter
+    private int readTimeout;
 
     public Bitso(String key, String secret) {
         this(key, secret, Target.production);
@@ -59,17 +70,8 @@ public class Bitso {
         this.baseUrl = env.uri();
     }
 
-    /** Changes the base URL to use. */
-    public void setBaseURL(String url) {
-        baseUrl = url;
-    }
-
     public String getKey() {
         return key;
-    }
-
-    public String getSecret() {
-        return secret;
     }
 
     // Public Functions
@@ -115,9 +117,9 @@ public class Bitso {
 
     public BitsoTransactions getTrades(String book, String... queryParameters)
             throws BitsoAPIException {
-        String parsedQueryParametes = processQueryParameters("&", queryParameters);
-        String request = "/trades?book=" + book
-                + ((parsedQueryParametes != null) ? "&" + parsedQueryParametes : "");
+        String parsedQueryParameters = processQueryParameters("&", queryParameters);
+        String request = "/v3/trades?book=" + book
+                + ((parsedQueryParameters != null) ? "&" + parsedQueryParameters : "");
 
         String getResponse = sendGet(request);
         JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
@@ -175,27 +177,6 @@ public class Bitso {
         String getResponse = sendBitsoGet(request);
         JSONObject payloadJSON = (JSONObject) getJSONPayload(getResponse);
         return new BitsoFee(payloadJSON);
-    }
-
-    public BitsoOperation[] getLedger(String specificOperation, String... queryParameters)
-            throws BitsoAPIException {
-        String request = "/v3/ledger";
-
-        if (specificOperation != null && specificOperation.length() > 0) {
-            request += "/" + specificOperation;
-        }
-
-        String parsedQueryParametes = processQueryParameters("&", queryParameters);
-        request += ((parsedQueryParametes != null) ? "?" + parsedQueryParametes : "");
-
-        String getResponse = sendBitsoGet(request);
-        JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
-        int totalElements = payloadJSON.length();
-        BitsoOperation[] operations = new BitsoOperation[totalElements];
-        for (int i = 0; i < totalElements; i++) {
-            operations[i] = new BitsoOperation(payloadJSON.getJSONObject(i));
-        }
-        return operations;
     }
 
     /**
@@ -353,7 +334,7 @@ public class Bitso {
         String request = "/v3/orders";
 
         if (ordersId == null || ordersId.length == 0) {
-            return null;
+            return new BitsoOrder[0];
         }
 
         String ordersIdsParameters = processQueryParameters("-", ordersId);
@@ -496,25 +477,6 @@ public class Bitso {
         String deleteResponse = sendBitsoDelete(request);
         JSONArray payloadJSON = (JSONArray) getJSONPayload(deleteResponse);
         return Helpers.getJSONArrayElements(payloadJSON);
-    }
-
-    public Map<String, String> fundingDestination(String currencyParameter)
-            throws BitsoAPIException {
-        String request = "/v3/funding_destination";
-
-        if (currencyParameter == null || currencyParameter.trim().length() == 0) {
-            return null;
-        }
-
-        request += "?" + currencyParameter;
-
-        String getResponse = sendBitsoGet(request);
-        JSONObject payloadJSON = (JSONObject) getJSONPayload(getResponse);
-        Map<String, String> fundingDestination = new HashMap<String, String>();
-        fundingDestination.put("account_identifier_name",
-                Helpers.getString(payloadJSON, "account_identifier_name"));
-        fundingDestination.put("account_identifier", Helpers.getString(payloadJSON, "account_identifier"));
-        return fundingDestination;
     }
 
     public BitsoWithdrawal bitcoinWithdrawal(BigDecimal amount, String address, boolean saveAccount,
@@ -811,6 +773,7 @@ public class Bitso {
             connection = (HttpsURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("User-Agent", "Android");
+            connection.setReadTimeout(readTimeout);
             return Helpers.convertInputStreamToString(connection.getInputStream());
         } catch (MalformedURLException e) {
             log.error("bad URL", e);
@@ -838,6 +801,7 @@ public class Bitso {
                     buildBitsoAuthHeader(requestPath, "GET", key, secret));
             connection.setRequestProperty("User-Agent", "Bitso-java-api");
             connection.setRequestMethod(method);
+            connection.setReadTimeout(readTimeout);
             return Helpers.convertInputStreamToString(connection.getInputStream());
         } catch (MalformedURLException e) {
             log.error("bad URL", e);
