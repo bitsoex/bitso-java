@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +25,7 @@ import org.json.JSONObject;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
+@Slf4j
 public class Helpers {
     private static final String PATH = "src/test/java/JSONFiles/";
 
@@ -35,11 +38,11 @@ public class Helpers {
         try {
             dtf = DatatypeFactory.newInstance();
         } catch (DatatypeConfigurationException ex) {
-            System.out.println("FATAL: Cannot instantiate DatatypeFactory");
+            log.error("FATAL: Cannot instantiate DatatypeFactory", ex);
         }
     }
 
-    private static final List<Field> getAllFields(List<Field> fields, Class<?> type) {
+    private static List<Field> getAllFields(List<Field> fields, Class<?> type) {
         fields.addAll(Arrays.asList(type.getDeclaredFields()));
         if (type.getSuperclass() != null) {
             fields = getAllFields(fields, type.getSuperclass());
@@ -47,7 +50,7 @@ public class Helpers {
         return fields;
     }
 
-    public static final String fieldPrinter(Object obj) {
+    public static String fieldPrinter(Object obj) {
         StringBuilder sb = new StringBuilder();
         sb.append("==============");
         List<Field> fields = getAllFields(new ArrayList<Field>(), obj.getClass());
@@ -59,14 +62,14 @@ public class Helpers {
                 sb.append(": ");
                 sb.append(o);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("unexpected error", e);
             }
         }
         sb.append("\n==============\n");
         return sb.toString();
     }
 
-    public static final String fieldPrinter(Object object, Class<?> genericType) {
+    public static String fieldPrinter(Object object, Class<?> genericType) {
         StringBuilder sb = new StringBuilder();
         sb.append("==============");
         Method[] methods = genericType.getDeclaredMethods();
@@ -79,12 +82,8 @@ public class Helpers {
                     sb.append(methodName);
                     sb.append(": ");
                     sb.append(methodExecutionResult);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                    log.error("unexpected error", e);
                 }
             }
         }
@@ -92,7 +91,7 @@ public class Helpers {
         return sb.toString();
     }
 
-    public static final void printStackTrace(PrintStream out) {
+    public static void printStackTrace() {
         StringBuilder sb = new StringBuilder();
         sb.append("Printing Stack Trace\n");
         for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
@@ -100,22 +99,14 @@ public class Helpers {
             sb.append(ste);
             sb.append('\n');
         }
-        out.print(sb);
-    }
-
-    public static final void printStackTrace() {
-        printStackTrace(System.err);
-    }
-
-    public static JSONObject parseJson(String json) throws JSONException {
-        return new JSONObject(json);
+        System.err.print(sb);
     }
 
     public static int getInt(JSONObject o, String key) {
         if (o.has(key)) {
             return o.getInt(key);
         } else {
-            System.err.println("No " + key + ": " + o);
+            log.warn("No int key '{}' in JSON object {}", key, o);
             Helpers.printStackTrace();
         }
         return -1;
@@ -125,7 +116,7 @@ public class Helpers {
         if (o.has(key)) {
             return o.getString(key);
         } else {
-            System.err.println("No " + key + ": " + o);
+            log.warn("No string key '{}' in JSON object {}", key, o);
             Helpers.printStackTrace();
         }
         return null;
@@ -134,10 +125,10 @@ public class Helpers {
     public static BigDecimal getBD(JSONObject o, String key) {
         if (o.has(key)) {
             String value = o.isNull(key) ? "null" : o.getString(key);
-            value = (value.equals("null") || value.length() == 0) ? "0" : value.trim();
+            value = (value.equals("null") || value.isBlank()) ? "0" : value.trim();
             return new BigDecimal(value);
         } else {
-            System.err.println("No " + key + ": " + o);
+            log.warn("No BigDecimal key '{}' in JSON object {}", key, o);
             Helpers.printStackTrace();
         }
         return null;
@@ -147,7 +138,7 @@ public class Helpers {
         if (o.has(key)) {
             return o.getInt(key);
         } else {
-            System.err.println("No " + key + ": " + o);
+            log.warn("No Integer key '{}' in JSON object {}", key, o);
             Helpers.printStackTrace();
         }
         return null;
@@ -165,12 +156,12 @@ public class Helpers {
                     try {
                         return dtf.newXMLGregorianCalendar(date).toGregorianCalendar().getTime();
                     } catch (IllegalArgumentException e3) {
-                        Helpers.printStackTrace();
+                        log.error("Can't parse datetime '{}' from {}", date, o, e3);
                     }
                 }
             }
         } else {
-            System.err.println("No " + key + ": " + o);
+            log.warn("No Date key '{}' in JSON object {}", key, o);
             Helpers.printStackTrace();
         }
         return null;
@@ -187,31 +178,21 @@ public class Helpers {
 
     public static JSONObject getJSONFromFile(String fileName) throws JSONException {
         String jsonString = getJSONString(fileName);
-        return Helpers.parseJson(jsonString);
+        return new JSONObject(jsonString);
     }
 
     private static String getJSONString(String fileName) {
-        BufferedReader br = null;
-        String line = "";
-        StringBuffer sb = new StringBuffer();
-        try {
-            FileReader fr = new FileReader(PATH + fileName);
-            br = new BufferedReader(fr);
+        String line;
+        StringBuilder sb = new StringBuilder();
+        try (FileReader fr = new FileReader(PATH + fileName)) {
+            var br = new BufferedReader(fr);
             while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
             line = sb.toString();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Can't read file '{}'", fileName, e);
             line = null;
-        } finally {
-            try {
-                if (br != null) {
-                    br.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
         return line;
     }
@@ -221,8 +202,7 @@ public class Helpers {
             return null;
         }
 
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        try (var bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
             StringBuilder stringBuilder = new StringBuilder();
             String line = null;
             while ((line = bufferedReader.readLine()) != null) {
@@ -231,7 +211,7 @@ public class Helpers {
             inputStream.close();
             return stringBuilder.toString();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Failed to convert input stream to string", e);
         }
 
         return null;
