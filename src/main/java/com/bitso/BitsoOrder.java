@@ -3,6 +3,7 @@ package com.bitso;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 
 import com.bitso.helpers.Helpers;
@@ -10,6 +11,7 @@ import com.bitso.helpers.Helpers;
 /**
  * Represents an order in the Bitso system.
  */
+@Slf4j
 public class BitsoOrder {
 
     public enum SIDE {
@@ -61,7 +63,7 @@ public class BitsoOrder {
     public BitsoOrder(JSONObject o) {
         book = Helpers.getString(o, "book");
         originalAmount = Helpers.getBD(o, "original_amount");
-        //unfilledAmount = Helpers.getBD(o, "unfilled_amount");
+        unfilledAmount = Helpers.getBD(o, "unfilled_amount");
         originalValue = Helpers.getBD(o, "original_value");
         orderDate = Helpers.getZonedDatetime(o, "created_at");
         updateDate = Helpers.getZonedDatetime(o, "updated_at");
@@ -77,13 +79,20 @@ public class BitsoOrder {
     }
 
     private BitsoOrder.STATUS retrieveStatus(String status) {
-        if (status.equals("open")) return BitsoOrder.STATUS.OPEN;
-        if (status.equals("partially filled")) return BitsoOrder.STATUS.PARTIALLY_FILLED;
-        if (status.equals("completed")) return BitsoOrder.STATUS.COMPLETED;
-        if (status.equals("cancelled")) return BitsoOrder.STATUS.CANCELLED;
-        if (status.equals("queued")) return BitsoOrder.STATUS.QUEUED;
+        switch (status) {
+            case "open":
+                return STATUS.OPEN;
+            case "partially filled":
+                return STATUS.PARTIALLY_FILLED;
+            case "completed":
+                return STATUS.COMPLETED;
+            case "cancelled":
+                return STATUS.CANCELLED;
+            case "queued":
+                return STATUS.QUEUED;
+        }
 
-        System.err.println(status + " is not a supported order status");
+        log.error("{} is not a supported order status", status);
         return BitsoOrder.STATUS.UNKNOWN;
     }
 
