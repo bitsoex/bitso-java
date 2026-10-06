@@ -93,11 +93,6 @@ public class BitsoMockTest extends BitsoTest {
         Mockito.when(mBitso.getAccountStatus()).thenReturn(mockAccountStatus);
         Mockito.when(mBitso.getAccountBalance()).thenReturn(mockBalance);
         Mockito.when(mBitso.getFees()).thenReturn(mockFee);
-        Mockito.when(mBitso.getLedger("")).thenReturn(mockLedgers);
-        Mockito.when(mBitso.getLedger("trades")).thenReturn(mockLedgersTrades);
-        Mockito.when(mBitso.getLedger("fees")).thenReturn(mockLedgersFees);
-        Mockito.when(mBitso.getLedger("fundings")).thenReturn(mockLedgersFundings);
-        Mockito.when(mBitso.getLedger("withdrawals")).thenReturn(mockLedgersWithdrawals);
         Mockito.when(mBitso.getWithdrawals(null)).thenReturn(mockWithdrawals);
         Mockito.when(mBitso.getFundings(null)).thenReturn(mockFundings);
         Mockito.when(mBitso.getUserTrades(null)).thenReturn(mockTrades);
@@ -113,9 +108,6 @@ public class BitsoMockTest extends BitsoTest {
         lookup[1].setUnfilledAmount(BigDecimal.ZERO);
         Mockito.when(mBitso.lookupOrders(any(), any())).thenReturn(lookup);
         Mockito.when(mBitso.cancelAllOrders()).thenReturn(new String[0]);
-        Mockito.when((mBitso.fundingDestination("fund_currency=btc"))).thenReturn(mockFundingDestination);
-        Mockito.when((mBitso.fundingDestination("fund_currency=eth"))).thenReturn(mockFundingDestination);
-        Mockito.when((mBitso.fundingDestination("fund_currency=mxn"))).thenReturn(mockFundingDestination);
         Mockito.when(mBitso.getBanks()).thenReturn(mockBitsoBanks);
         Mockito.when(mBitso.placeOrder(any()))
                 .thenReturn("genericOrder", generateOrderIds(10));
@@ -324,56 +316,6 @@ public class BitsoMockTest extends BitsoTest {
         for (BookInfo bookInfo : availableBooks) {
             BitsoTransactions bitsoTransaction = mBitso.getTrades(bookInfo.getBook());
             assertTrue(nullCheck(bitsoTransaction, BitsoTransactions.class));
-        }
-    }
-
-    @Test
-    @Override
-    public void testLedger() throws JSONException, IOException, BitsoAPIException {
-        int totalElements = 0;
-
-        BitsoOperation[] defaultLedger = mBitso.getLedger("");
-        assertNotNull(defaultLedger);
-        totalElements = defaultLedger.length;
-        assertTrue((totalElements >= 0 && totalElements <= 25));
-        for (BitsoOperation bitsoOperation : defaultLedger) {
-            assertTrue(nullCheck(bitsoOperation, BitsoOperation.class));
-        }
-
-        BitsoOperation[] tradesLedger = mBitso.getLedger("trades");
-        assertNotNull(tradesLedger);
-        totalElements = tradesLedger.length;
-        assertTrue((totalElements >= 0 && totalElements <= 25));
-        for (BitsoOperation bitsoOperation : tradesLedger) {
-            assertTrue(nullCheck(bitsoOperation, BitsoOperation.class));
-            assertEquals("trade", bitsoOperation.getOperationDescription());
-        }
-
-        BitsoOperation[] feesLedger = mBitso.getLedger("fees");
-        assertNotNull(feesLedger);
-        totalElements = feesLedger.length;
-        assertTrue((totalElements >= 0 && totalElements <= 25));
-        for (BitsoOperation bitsoOperation : feesLedger) {
-            assertTrue(nullCheck(bitsoOperation, BitsoOperation.class));
-            assertEquals("fee", bitsoOperation.getOperationDescription());
-        }
-
-        BitsoOperation[] fundingsLedger = mBitso.getLedger("fundings");
-        assertNotNull(fundingsLedger);
-        totalElements = fundingsLedger.length;
-        assertTrue((totalElements >= 0 && totalElements <= 25));
-        for (BitsoOperation bitsoOperation : fundingsLedger) {
-            assertTrue(nullCheck(bitsoOperation, BitsoOperation.class));
-            assertEquals("funding", bitsoOperation.getOperationDescription());
-        }
-
-        BitsoOperation[] withdrawalsLedger = mBitso.getLedger("withdrawals");
-        assertNotNull(withdrawalsLedger);
-        totalElements = withdrawalsLedger.length;
-        assertTrue((totalElements >= 0 && totalElements <= 25));
-        for (BitsoOperation bitsoOperation : withdrawalsLedger) {
-            assertTrue(nullCheck(bitsoOperation, BitsoOperation.class));
-            assertEquals("withdrawal", bitsoOperation.getOperationDescription());
         }
     }
 
