@@ -398,22 +398,22 @@ public abstract class BitsoTest {
 
         // TODO:
         // This should return a collection of 25 elements, not working limit default value
-        BitsoTrade[] fundings = mBitso.getUserTrades(null);
-        assertNotNull(fundings);
-        totalElements = fundings.length;
+        var trades = mBitso.getUserTrades(null);
+        assertNotNull(trades);
+        totalElements = trades.size();
         totalElementsFirstCall = totalElements;
         assertTrue((totalElements >= 0 && totalElements <= 25));
-        for (BitsoTrade current : fundings) {
+        for (BitsoTrade current : trades) {
             assertTrue(nullCheck(current, BitsoTrade.class));
         }
 
         throttlePrivate();
 
         if (totalElementsFirstCall > 0) {
-            BitsoTrade bitso = fundings[0];
-            BitsoTrade[] one = mBitso.getUserTrades(new String[] { String.valueOf(bitso.getTid()) });
+            BitsoTrade bitso = trades.get(0);
+            var one = mBitso.getUserTrades(new String[] { String.valueOf(bitso.getTid()) });
             assertNotNull(one);
-            totalElements = one.length;
+            totalElements = one.size();
             assertTrue((totalElements == 1));
             for (BitsoTrade current : one) {
                 assertTrue(nullCheck(current, BitsoTrade.class));
@@ -424,13 +424,13 @@ public abstract class BitsoTest {
         throttlePrivate();
 
         if (totalElementsFirstCall >= 3) {
-            BitsoTrade bitsoFirst = fundings[0];
-            BitsoTrade bitsoSecond = fundings[1];
-            BitsoTrade bitsoThird = fundings[2];
-            BitsoTrade[] three = mBitso.getUserTrades(new String[] { String.valueOf(bitsoFirst.getTid()),
+            BitsoTrade bitsoFirst = trades.get(0);
+            BitsoTrade bitsoSecond = trades.get(1);
+            BitsoTrade bitsoThird = trades.get(2);
+            var three = mBitso.getUserTrades(new String[] { String.valueOf(bitsoFirst.getTid()),
                     String.valueOf(bitsoSecond.getTid()), String.valueOf(bitsoThird.getTid()) });
             assertNotNull(three);
-            totalElements = three.length;
+            totalElements = three.size();
             assertEquals(3, totalElements);
             for (BitsoTrade current : three) {
                 assertTrue(nullCheck(current, BitsoTrade.class));
@@ -438,37 +438,37 @@ public abstract class BitsoTest {
         }
         throttlePrivate();
 
-        BitsoTrade[] bothParameters = mBitso.getUserTrades(new String[] { "" }, "");
+        var bothParameters = mBitso.getUserTrades(new String[] { "" }, "");
         assertNull(bothParameters);
 
         throttlePrivate();
 
         // TODO:
         // This should return null due it's a negative value on limit
-        BitsoTrade[] negativeLimit = mBitso.getUserTrades(null, "limit=-10");
+        var negativeLimit = mBitso.getUserTrades(null, "limit=-10");
         assertTrue((negativeLimit != null || negativeLimit == null));
 
         throttlePrivate();
 
         // TODO:
         // This should return null due limit value is 0
-        BitsoTrade[] ceroLimit = mBitso.getUserTrades(null, "limit=0");
+        var ceroLimit = mBitso.getUserTrades(null, "limit=0");
         assertTrue((ceroLimit != null || ceroLimit == null));
 
         throttlePrivate();
 
-        BitsoTrade[] lowestLimit = mBitso.getUserTrades(null, "limit=1");
+        var lowestLimit = mBitso.getUserTrades(null, "limit=1");
         assertNotNull(lowestLimit);
-        totalElements = lowestLimit.length;
+        totalElements = lowestLimit.size();
         assertTrue((totalElements >= 0 && totalElements <= 1));
         for (BitsoTrade current : lowestLimit) {
             assertTrue(nullCheck(current, BitsoTrade.class));
         }
         throttlePrivate();
 
-        BitsoTrade[] maxLimit = mBitso.getUserTrades(null, "limit=100");
+        var maxLimit = mBitso.getUserTrades(null, "limit=100");
         assertNotNull(maxLimit);
-        totalElements = maxLimit.length;
+        totalElements = maxLimit.size();
         assertTrue((totalElements >= 0 && totalElements <= 100));
         for (BitsoTrade current : maxLimit) {
             assertTrue(nullCheck(current, BitsoTrade.class));
@@ -477,7 +477,7 @@ public abstract class BitsoTest {
 
         // TODO:
         // This should return null limit exceed max
-        BitsoTrade[] excedingLimit = mBitso.getUserTrades(null, "limit=1000");
+        var excedingLimit = mBitso.getUserTrades(null, "limit=1000");
         assertTrue((excedingLimit != null || excedingLimit == null));
     }
 
@@ -487,9 +487,9 @@ public abstract class BitsoTest {
 
         // TODO:
         // This should return a collection of 25 elements, not working limit default value
-        BitsoTrade[] trades = mBitso.getUserTrades(null);
+        var trades = mBitso.getUserTrades(null);
         assertNotNull(trades);
-        totalElements = trades.length;
+        totalElements = trades.size();
         assertTrue((totalElements >= 0 && totalElements <= 25));
         for (BitsoTrade current : trades) {
             assertTrue(nullCheck(current, BitsoTrade.class));
@@ -498,7 +498,7 @@ public abstract class BitsoTest {
 
         for (BitsoTrade trade : trades) {
             String order = trade.getOid();
-            BitsoTrade[] orderTrades = mBitso.getOrderTrades(order);
+            var orderTrades = mBitso.getOrderTrades(order);
             assertNotNull(orderTrades);
             for (BitsoTrade orderTrade : orderTrades) {
                 assertTrue(nullCheck(orderTrade, BitsoTrade.class));

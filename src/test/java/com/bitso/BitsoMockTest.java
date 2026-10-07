@@ -36,7 +36,7 @@ public class BitsoMockTest extends BitsoTest {
     private BitsoFee mockFee;
     private Map<String, String> mockBitsoBanks;
     private List<BitsoFunding> mockFundings;
-    private BitsoTrade[] mockTrades;
+    private List<BitsoTrade> mockTrades;
 
     private BitsoTransactions mockTransactions;
     private List<BitsoWithdrawal> mockWithdrawals;
@@ -197,9 +197,9 @@ public class BitsoMockTest extends BitsoTest {
         if (o.has("payload")) {
             JSONArray payload = o.getJSONArray("payload");
             int totalElements = payload.length();
-            mockTrades = new BitsoTrade[totalElements];
+            mockTrades = new ArrayList<>(totalElements);
             for (int i = 0; i < totalElements; i++) {
-                mockTrades[i] = new BitsoTrade(payload.getJSONObject(i));
+                mockTrades.add(new BitsoTrade(payload.getJSONObject(i)));
             }
         }
     }
@@ -279,9 +279,9 @@ public class BitsoMockTest extends BitsoTest {
     @Test
     @Override
     public void testUserTrades() throws JSONException, IOException, BitsoAPIException {
-        BitsoTrade[] trades = mBitso.getUserTrades(null);
+        var trades = mBitso.getUserTrades(null);
         assertNotNull(trades);
-        int totalElements = trades.length;
+        int totalElements = trades.size();
         assertTrue((totalElements >= 0 && totalElements <= 25));
         for (BitsoTrade current : trades) {
             assertTrue(nullCheck(current, BitsoTrade.class));
@@ -294,9 +294,9 @@ public class BitsoMockTest extends BitsoTest {
 
         // TODO:
         // This should return a collection of 25 elements, not working limit default value
-        BitsoTrade[] trades = mBitso.getUserTrades(null);
+        var trades = mBitso.getUserTrades(null);
         assertNotNull(trades);
-        totalElements = trades.length;
+        totalElements = trades.size();
         assertTrue((totalElements >= 0 && totalElements <= 25));
         for (BitsoTrade current : trades) {
             assertTrue(nullCheck(current, BitsoTrade.class));
