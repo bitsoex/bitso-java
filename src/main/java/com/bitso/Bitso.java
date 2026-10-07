@@ -562,6 +562,9 @@ public class Bitso {
      * @return true if the order was modified successfully, false otherwise
      */
     public boolean modifyOrder(@Nonnull String orderId, @Nonnull ModifyOrderRequest mod) throws BitsoAPIException {
+        if (orderId == null || orderId.isBlank()) {
+            throw new IllegalArgumentException("orderId cannot be null or blank");
+        }
         String uri = "/v4/orders/" + orderId;
         JSONObject req = new JSONObject();
         mod.validate();
