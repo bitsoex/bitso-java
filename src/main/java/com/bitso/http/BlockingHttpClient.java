@@ -5,9 +5,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.nio.charset.UnsupportedCharsetException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -18,14 +15,9 @@ import com.bitso.exceptions.BitsoAPIException;
 import com.bitso.helpers.Helpers;
 import org.apache.hc.client5.http.ClientProtocolException;
 import org.apache.hc.client5.http.classic.methods.HttpDelete;
-import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
-import org.apache.hc.core5.http.ContentType;
-import org.apache.hc.core5.http.io.entity.AbstractHttpEntity;
-import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
-import org.apache.hc.core5.http.io.entity.StringEntity;
 
 public class BlockingHttpClient {
     public static final String CONTENT_TYPE = "Content-Type";
@@ -65,13 +57,22 @@ public class BlockingHttpClient {
 
     public String sendPost(String url, String body, Map<String, String> headers)
             throws BitsoAPIException {
+        return send(url, "POST", body, headers);
+    }
+
+    public String sendPatch(String url, String body, Map<String, String> headers)
+            throws BitsoAPIException {
+        return send(url, "PATCH", body, headers);
+    }
+
+    private String send(String url, String method, String body, Map<String, String> headers) {
         throttle();
         HttpsURLConnection connection = null;
 
         try {
             URL requestURL = new URL(url);
             connection = (HttpsURLConnection) requestURL.openConnection();
-            connection.setRequestMethod("POST");
+            connection.setRequestMethod(method);
             connection.setRequestProperty("User-Agent", "Bitso-API");
 
             if (headers != null) {
@@ -95,45 +96,6 @@ public class BlockingHttpClient {
         } catch (IOException e) {
             e.printStackTrace(System.err);
             return Helpers.convertInputStreamToString(connection.getErrorStream());
-        }
-    }
-
-    public String sendPost(String url, String body, HashMap<String, String> headers, Charset charset)
-            throws IOException {
-        return sendPost(url, new StringEntity(body, charset), headers);
-    }
-
-    public String sendPost(String url, byte[] body, HashMap<String, String> headers)
-            throws IOException {
-        ContentType contentType = ContentType.APPLICATION_JSON;
-        if (headers != null && headers.containsKey(CONTENT_TYPE)) {
-            try {
-                contentType = ContentType.parse(headers.get(CONTENT_TYPE));
-                headers = new HashMap<>(headers);
-                headers.remove(CONTENT_TYPE);
-            } catch (UnsupportedCharsetException ex) {
-                //Revert to default
-            }
-        }
-        return sendPost(url, new ByteArrayEntity(body, 0, body.length, contentType), headers);
-    }
-
-    private String sendPost(String url, AbstractHttpEntity body, HashMap<String, String> headers)
-            throws IOException {
-        throttle();
-
-        HttpPost postRequest = new HttpPost(url);
-        if (headers != null) {
-            for (Entry<String, String> e : headers.entrySet()) {
-                postRequest.addHeader(e.getKey(), e.getValue());
-            }
-        }
-
-        postRequest.setEntity(body);
-
-        try (CloseableHttpClient client = HttpClients.createDefault();
-            CloseableHttpResponse response = client.execute(postRequest)) {
-            return Helpers.convertInputStreamToString(response.getEntity().getContent());
         }
     }
 
