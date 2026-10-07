@@ -3,6 +3,8 @@ package com.bitso;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import lombok.Getter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 
@@ -12,6 +14,8 @@ import com.bitso.helpers.Helpers;
  * Represents an order in the Bitso system.
  */
 @Slf4j
+@Getter
+@ToString
 public class BitsoOrder {
 
     public enum SIDE {
@@ -46,19 +50,23 @@ public class BitsoOrder {
         POSTONLY
     }
 
-    private String book;
-    private BigDecimal originalAmount;
+    private final String book;
+    private final BigDecimal originalAmount;
     private BigDecimal unfilledAmount;
-    private BigDecimal originalValue;
-    private Date orderDate;
-    private Date updateDate;
-    private BigDecimal price;
-    private String oid;
-    private SIDE side;
+    private final BigDecimal originalValue;
+    private final Date orderDate;
+    private final Date updateDate;
+    private final BigDecimal price;
+    private final String oid;
+    private final SIDE side;
     // open || partially filled || completed || cancelled || queuedis
-    private STATUS status;
-    private TYPE type;
+    private final STATUS status;
+    private final TYPE type;
     private TIME_IN_FORCE timeInForce;
+    /** The major settlement currency, if one is used instead of the book major. */
+    private final String majorSettle;
+    /** The minor settlement currency, if one is used instead of the book minor. */
+    private final String minorSettle;
 
     public BitsoOrder(JSONObject o) {
         book = Helpers.getString(o, "book");
@@ -72,6 +80,8 @@ public class BitsoOrder {
         side = retrieveSide(Helpers.getString(o, "side"));
         status = retrieveStatus(Helpers.getString(o, "status"));
         type = retrieveType(Helpers.getString(o, "type"));
+        majorSettle = Helpers.getString(o, "settle_major");
+        minorSettle = Helpers.getString(o, "settle_minor");
     }
 
     private BitsoOrder.SIDE retrieveSide(String side) {
@@ -100,96 +110,7 @@ public class BitsoOrder {
         return BitsoOrder.TYPE.valueOf(type.toUpperCase());
     }
 
-    public String getBook() {
-        return book;
-    }
-
-    public void setBook(String book) {
-        this.book = book;
-    }
-
-    public BigDecimal getOriginalAmount() {
-        return originalAmount;
-    }
-
-    public void setOriginalAmount(BigDecimal originalAmount) {
-        this.originalAmount = originalAmount;
-    }
-
-    public BigDecimal getUnfilledAmount() {
-        return unfilledAmount;
-    }
-
     public void setUnfilledAmount(BigDecimal unfilledAmount) {
         this.unfilledAmount = unfilledAmount;
-    }
-
-    public BigDecimal getOriginalValue() {
-        return originalValue;
-    }
-
-    public void setOriginalValue(BigDecimal originalValue) {
-        this.originalValue = originalValue;
-    }
-
-    public Date getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public String getOid() {
-        return oid;
-    }
-
-    public void setOid(String oid) {
-        this.oid = oid;
-    }
-
-    public SIDE getSide() {
-        return side;
-    }
-
-    public void setSide(SIDE side) {
-        this.side = side;
-    }
-
-    public STATUS getStatus() {
-        return status;
-    }
-
-    public void setStatus(STATUS status) {
-        this.status = status;
-    }
-
-    public TYPE getType() {
-        return type;
-    }
-
-    public void setType(TYPE type) {
-        this.type = type;
-    }
-
-    @Override
-    public String toString() {
-        return Helpers.fieldPrinter(this, BitsoOrder.class);
     }
 }
