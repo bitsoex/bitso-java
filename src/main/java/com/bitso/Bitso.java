@@ -17,6 +17,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.net.ssl.HttpsURLConnection;
 
+import com.bitso.exchange.BitsoTicker;
 import com.bitso.trading.OrderRequest;
 import jakarta.annotation.Nonnull;
 import lombok.Getter;
@@ -56,7 +57,7 @@ public class Bitso {
      * Default is 30 seconds.
      */
     @Setter
-    private int readTimeout;
+    private int readTimeout = 30_000;
 
     public Bitso(@Nonnull String key, @Nonnull String secret) {
         this(key, secret, Target.production);
@@ -240,12 +241,13 @@ public class Bitso {
             throws BitsoAPIException {
         String request = "/v3/withdrawals";
 
-        if (!withdrawalsIds.isEmpty() && (queryParameters != null && queryParameters.length > 0)) {
+        List<String> ids = withdrawalsIds == null ? List.of() : withdrawalsIds;
+        if (!ids.isEmpty() && (queryParameters != null && queryParameters.length > 0)) {
             throw new IllegalArgumentException("The request needs withdrawalsIds or queryParameters, not both.");
         }
 
-        if (!withdrawalsIds.isEmpty()) {
-            String withdrawalsIdsParameters = String.join("-", withdrawalsIds);
+        if (!ids.isEmpty()) {
+            String withdrawalsIdsParameters = String.join("-", ids);
             if (!withdrawalsIdsParameters.isEmpty()) {
                 request += "/" + withdrawalsIdsParameters;
             }
@@ -278,13 +280,14 @@ public class Bitso {
     public List<BitsoFunding> getFundings(@Nonnull List<String> fundingsIds, String... queryParameters)
             throws BitsoAPIException {
         String request = "/v3/fundings";
+        List<String> ids = fundingsIds == null ? List.of() : fundingsIds;
 
-        if (!fundingsIds.isEmpty() && (queryParameters != null && queryParameters.length > 0)) {
+        if (!ids.isEmpty() && (queryParameters != null && queryParameters.length > 0)) {
             throw new IllegalArgumentException("Both fundingsIds and queryParameters cannot be provided.");
         }
 
-        if (!fundingsIds.isEmpty()) {
-            String fundingssIdsParameters = String.join("-", fundingsIds);
+        if (!ids.isEmpty()) {
+            String fundingssIdsParameters = String.join("-", ids);
             if (!fundingssIdsParameters.isEmpty()) {
                 request += "/" + fundingssIdsParameters;
             }
@@ -317,13 +320,14 @@ public class Bitso {
     public List<BitsoTrade> getUserTrades(@Nonnull List<String> tradesIds, String... queryParameters)
             throws BitsoAPIException {
         String request = "/v3/user_trades";
+        List<String> ids = tradesIds == null ? List.of() : tradesIds;
 
-        if (!tradesIds.isEmpty() && (queryParameters != null && queryParameters.length > 0)) {
+        if (!ids.isEmpty() && (queryParameters != null && queryParameters.length > 0)) {
             throw new IllegalArgumentException("Both tradesIds and queryParameters cannot be provided.");
         }
 
-        if (!tradesIds.isEmpty()) {
-            String fundingssIdsParameters = String.join("-", tradesIds);
+        if (!ids.isEmpty()) {
+            String fundingssIdsParameters = String.join("-", ids);
             if (!fundingssIdsParameters.isEmpty()) {
                 request += "/" + fundingssIdsParameters;
             }
