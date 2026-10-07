@@ -2,18 +2,22 @@ package com.bitso;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
+import lombok.ToString;
+import lombok.Value;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.bitso.helpers.Helpers;
 
+/** A container for anonymized trades. */
 public class BitsoTransactions {
-    private Transaction[] mTransactionsList;
+    private final List<Transaction> transactions;
 
     public BitsoTransactions(JSONArray jsonArray) {
         int totalElements = jsonArray.length();
-        mTransactionsList = new Transaction[totalElements];
+        var mTransactionsList = new Transaction[totalElements];
         for (int i = 0; i < totalElements; i++) {
             JSONObject o = jsonArray.getJSONObject(i);
             Transaction transaction = new Transaction(Helpers.getZonedDatetime(o, "created_at"),
@@ -22,95 +26,38 @@ public class BitsoTransactions {
                     Helpers.getString(o, "book"));
             mTransactionsList[i] = transaction;
         }
+        transactions = List.of(mTransactionsList);
     }
 
-    public Transaction[] getTransactionsList() {
-        return mTransactionsList;
-    }
-
-    public void setmTransactionsList(Transaction[] mTransactionsList) {
-        this.mTransactionsList = mTransactionsList;
+    public List<Transaction> getTransactionsList() {
+        return transactions;
     }
 
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Bitso Recent Transactions\n");
-        for (Transaction transaction : mTransactionsList) {
+        for (Transaction transaction : transactions) {
             stringBuilder.append(transaction);
         }
 
         return stringBuilder.toString();
     }
 
-    public class Transaction {
-        private Date date;
-        private String tid;
-        private BigDecimal price;
-        private BigDecimal amount;
-        private BitsoOrder.SIDE side;
-        private String book;
-
-        public Transaction(Date date, String tid, BigDecimal price, BigDecimal amount, BitsoOrder.SIDE side,
-                String book) {
-            super();
-            this.date = date;
-            this.tid = tid;
-            this.price = price;
-            this.amount = amount;
-            this.side = side;
-            this.book = book;
-        }
-
-        public Date getDate() {
-            return date;
-        }
-
-        public void setDate(Date date) {
-            this.date = date;
-        }
-
-        public String getTid() {
-            return tid;
-        }
-
-        public void setTid(String tid) {
-            this.tid = tid;
-        }
-
-        public BigDecimal getPrice() {
-            return price;
-        }
-
-        public void setPrice(BigDecimal price) {
-            this.price = price;
-        }
-
-        public BigDecimal getAmount() {
-            return amount;
-        }
-
-        public void setAmount(BigDecimal amount) {
-            this.amount = amount;
-        }
-
-        public BitsoOrder.SIDE getSide() {
-            return side;
-        }
-
-        public void setSide(BitsoOrder.SIDE side) {
-            this.side = side;
-        }
-
-        public String getBook() {
-            return book;
-        }
-
-        public void setBook(String book) {
-            this.book = book;
-        }
-
-        public String toString() {
-            return Helpers.fieldPrinter(this, BitsoTransactions.Transaction.class);
-        }
+    /** An anonymized trade inside a book. */
+    @Value
+    @ToString
+    public static class Transaction {
+        /** When the trade occurred. */
+        Date date;
+        /** The public trade ID. */
+        String tid;
+        /** The price at which the trade occurred. */
+        BigDecimal price;
+        /** The amount of the trade, in the major currency. */
+        BigDecimal amount;
+        /** The side of the trade. */
+        BitsoOrder.SIDE side;
+        /** The book in which the trade happened. */
+        String book;
     }
 }

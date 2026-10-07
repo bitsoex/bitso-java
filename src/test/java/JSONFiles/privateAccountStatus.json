@@ -18,6 +18,7 @@
 		"signed_contract": "not submitted",
 		"origin_of_funds": "not submitted",
 		"verification_level": 1,
-		"referral_code": "mocked_referral_ode"
+		"referral_code": "mocked_referral_code",
+		"cash_deposit_allowance": "1"
 	}
 }

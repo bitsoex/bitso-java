@@ -2,87 +2,39 @@ package com.bitso.exchange;
 
 import java.math.BigDecimal;
 
+import lombok.Data;
 import org.json.JSONObject;
 
 import com.bitso.helpers.Helpers;
 
+/**
+ * Information about an order book.
+ */
+@Data
 public class BookInfo {
 
-    private String mBook;
-    private BigDecimal mMinAmount;
-    private BigDecimal mMaxAmount;
-    private BigDecimal mMinPrice;
-    private BigDecimal mMaxPrice;
-    private BigDecimal mMinValue;
-    private BigDecimal mMaxValue;
+    /** The book ID, in major_minor form. */
+    private String book;
+    /** The smallest amount acceptable for an order, in major currency. */
+    private BigDecimal minAmount;
+    /** The largest amount acceptable for an order, in major currency. */
+    private BigDecimal maxAmount;
+    /** The lowest price acceptable for an order, in minor currency. */
+    private BigDecimal minPrice;
+    /** The highest price acceptable for an order, in minor currency. */
+    private BigDecimal maxPrice;
+    /** The smallest value acceptable for an order, in minor currency. */
+    private BigDecimal minValue;
+    /** The largest value acceptable for an order, in minor currency. */
+    private BigDecimal maxValue;
 
     public BookInfo(JSONObject o) {
-        mMinAmount = Helpers.getBD(o, "minimum_amount");
-        mMaxAmount = Helpers.getBD(o, "maximum_amount");
-        mMinPrice = Helpers.getBD(o, "minimum_price");
-        mMaxPrice = Helpers.getBD(o, "maximum_price");
-        mMinValue = Helpers.getBD(o, "minimum_value");
-        mMaxValue = Helpers.getBD(o, "maximum_value");
-        mBook = Helpers.getString(o, "book");
-    }
-
-    public String getBook() {
-        return mBook;
-    }
-
-    public void setBook(String mBook) {
-        this.mBook = mBook;
-    }
-
-    public BigDecimal getMinAmount() {
-        return mMinAmount;
-    }
-
-    public void setMinAmount(BigDecimal mMinAmount) {
-        this.mMinAmount = mMinAmount;
-    }
-
-    public BigDecimal gemMaxAmount() {
-        return mMaxAmount;
-    }
-
-    public void setMaxAmount(BigDecimal mMaxAmount) {
-        this.mMaxAmount = mMaxAmount;
-    }
-
-    public BigDecimal getMinPrice() {
-        return mMinPrice;
-    }
-
-    public void setMinPrice(BigDecimal mMinPrice) {
-        this.mMinPrice = mMinPrice;
-    }
-
-    public BigDecimal getMaxPrice() {
-        return mMaxPrice;
-    }
-
-    public void setMaxPrice(BigDecimal mMaxPrice) {
-        this.mMaxPrice = mMaxPrice;
-    }
-
-    public BigDecimal getMinValue() {
-        return mMinValue;
-    }
-
-    public void setMinValue(BigDecimal mMinValue) {
-        this.mMinValue = mMinValue;
-    }
-
-    public BigDecimal getMaxValue() {
-        return mMaxValue;
-    }
-
-    public void setMaxValue(BigDecimal mMaxValue) {
-        this.mMaxValue = mMaxValue;
-    }
-
-    public String toString() {
-        return Helpers.fieldPrinter(this, BookInfo.class);
+        minAmount = Helpers.getBD(o, "minimum_amount");
+        maxAmount = Helpers.getBD(o, "maximum_amount");
+        minPrice = Helpers.getBD(o, "minimum_price");
+        maxPrice = Helpers.getBD(o, "maximum_price");
+        minValue = Helpers.getBD(o, "minimum_value");
+        maxValue = Helpers.getBD(o, "maximum_value");
+        book = Helpers.getString(o, "book");
     }
 }
