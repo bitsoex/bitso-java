@@ -636,8 +636,19 @@ public abstract class BitsoTest {
 
     @Test
     void testModifyOrder() {
+        var books = mBitso.getAvailableBooks();
+        assertNotNull(books);
+        for (BookInfo bookInfo : books) {
+            if (bookInfo.getBook().equals("btc_mxn")) {
+                minPrice = bookInfo.getMinPrice();
+                maxPrice = bookInfo.getMaxPrice();
+                log.info("btc_mxn prices must be between {} and {}", minPrice, maxPrice);
+            }
+        }
         //Try to modify an order that doesn't exist
-        assertFalse(mBitso.modifyOrder("non-existent-order-id", ModifyOrderRequest.withNewPrice(BigDecimal.ONE)));
+        var req = ModifyOrderRequest.withNewPrice(BigDecimal.ONE);
+        assertThrows(BitsoAPIException.class, () -> mBitso.modifyOrder("non-existent-order-id", req));
+        throttlePrivate();
         var invalidCalls = List.of(
                 new ModifyOrderRequest(BigDecimal.ONE, BigDecimal.ONE, null, null, false),
                 new ModifyOrderRequest(null, null, null, null, false)
@@ -656,19 +667,21 @@ public abstract class BitsoTest {
 
         var btc = currencyBalances.get("btc");
         assertTrue(nullCheck(btc, Balance.class));
-        var mxnb = currencyBalances.get("mxnb");
-        log.info("mxnb balance: {}", mxnb);
+        var mxnb = currencyBalances.get("mxn");
+        log.info("mxn available balance: {}", mxnb.getAvailable());
 
         // Place an order
         var request = OrderRequest.builder().book("btc_mxn").mode(BitsoOrder.TYPE.LIMIT)
                 .amount(AMOUNT);
         final BigDecimal newPrice;
-        if (mxnb != null && mxnb.getAvailable().compareTo(minPrice.multiply(AMOUNT)) >= 0) {
+        if (mxnb.getAvailable().compareTo(minPrice.multiply(AMOUNT)) >= 0) {
             request.side(BitsoOrder.SIDE.BUY).price(minPrice);
             newPrice = minPrice.add(BigDecimal.ONE);
+            log.info("Will place buy order with price {} and amount {}", minPrice, AMOUNT);
         } else if (btc.getAvailable().compareTo(AMOUNT) >= 0) {
             request.side(BitsoOrder.SIDE.SELL).price(maxPrice);
             newPrice = maxPrice.subtract(BigDecimal.ONE);
+            log.info("Will place sell order with price {} and amount {}", maxPrice, AMOUNT);
         } else {
             log.warn("Not enough BTC or MXNB to place an order with minor settle");
             return;
@@ -679,13 +692,19 @@ public abstract class BitsoTest {
         assertNotNull(orderId, "Order ID is null");
 
         //Now modify it
-        assertTrue(mBitso.modifyOrder(orderId, ModifyOrderRequest.withNewPrice(newPrice)));
-        assertTrue(mBitso.modifyOrder(orderId, ModifyOrderRequest.withNewMajor(AMOUNT.subtract(AMOUNT.movePointLeft(1)))));
-        assertTrue(mBitso.modifyOrder(orderId, ModifyOrderRequest.withNewMajorAndPrice(AMOUNT, request.build().getPrice())));
+        var mod = ModifyOrderRequest.withNewPrice(newPrice);
+        log.info("Modifying order with ID: {} setting price {}", orderId, newPrice);
+        assertTrue(mBitso.modifyOrder(orderId, mod));
+        mod = ModifyOrderRequest.withNewMajor(AMOUNT.subtract(AMOUNT.movePointLeft(1)));
+        log.info("Modifying order with ID: {} setting amount {}", orderId, mod.getMajor());
+        assertTrue(mBitso.modifyOrder(orderId, mod));
+        mod = ModifyOrderRequest.withNewMajorAndPrice(AMOUNT, request.build().getPrice());
+        log.info("Modifying order with ID: {} setting price {} and amount {}", orderId, mod.getPrice(), mod.getMajor());
+        assertTrue(mBitso.modifyOrder(orderId, mod));
     }
 
     @Test
-    public void testGetBanks() throws JSONException, IOException, BitsoAPIException {
+    public void testGetBanks() {
         Map<String, String> bitsoBanks = mBitso.getBanks();
         assertNotNull(bitsoBanks);
         assertFalse(bitsoBanks.isEmpty());
