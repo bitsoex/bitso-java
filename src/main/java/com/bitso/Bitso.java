@@ -456,7 +456,11 @@ public class Bitso {
         return Helpers.getString(payloadJSON, "oid");
     }
 
-    public String[] cancelOrder(String... ordersIds)
+    /** Cancel one or more orders.
+     * @param ordersIds One or more order ids to cancel.
+     * @return List of canceled order ids.
+     */
+    public List<String> cancelOrder(String... ordersIds)
             throws BitsoAPIException {
         String request = "/v3/orders";
 
@@ -464,22 +468,25 @@ public class Bitso {
             throw new BitsoValidationException("No orders to cancel");
         }
 
-        String ordersIdsParameters = processQueryParameters("-", ordersIds);
+        String ordersIdsParameters = processQueryParameters(",", ordersIds);
         request += "/" + ordersIdsParameters;
         log.debug("cancel order request: {}", request);
 
         String deleteResponse = sendBitsoDelete(request);
         JSONArray payloadJSON = (JSONArray) getJSONPayload(deleteResponse);
-        return Helpers.getJSONArrayElements(payloadJSON);
+        return List.of(Helpers.getJSONArrayElements(payloadJSON));
     }
 
-    public String[] cancelAllOrders()
+    /** Cancel all the orders belonging to the user.
+     * @return The list of canceled order ids.
+     */
+    public List<String> cancelAllOrders()
             throws BitsoAPIException {
         String request = "/v3/orders/all";
         log.debug("cancel all orders request: {}", request);
         String deleteResponse = sendBitsoDelete(request);
         JSONArray payloadJSON = (JSONArray) getJSONPayload(deleteResponse);
-        return Helpers.getJSONArrayElements(payloadJSON);
+        return List.of(Helpers.getJSONArrayElements(payloadJSON));
     }
 
     public BitsoWithdrawal bitcoinWithdrawal(BigDecimal amount, String address, boolean saveAccount,

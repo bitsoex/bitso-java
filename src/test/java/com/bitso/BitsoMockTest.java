@@ -110,7 +110,7 @@ public class BitsoMockTest extends BitsoTest {
         mxnbOrder.put("settle_minor", "mxnb");
         Mockito.when(mBitso.lookupOrders(eq("mxnbOrder"))).thenReturn(List.of(new BitsoOrder(mxnbOrder)));
         Mockito.when(mBitso.lookupOrders(any(), any())).thenReturn(lookup);
-        Mockito.when(mBitso.cancelAllOrders()).thenReturn(new String[0]);
+        Mockito.when(mBitso.cancelAllOrders()).thenReturn(List.of());
         Mockito.when(mBitso.getBanks()).thenReturn(mockBitsoBanks);
         Mockito.when(mBitso.placeOrder(argThat(req -> req != null && "mxnb".equals(req.getSettleMinor()))))
                         .thenReturn("mxnbOrder");

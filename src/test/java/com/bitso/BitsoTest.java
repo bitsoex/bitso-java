@@ -510,7 +510,6 @@ public abstract class BitsoTest {
     @Test
     public void testTrading() throws JSONException, IOException, BitsoAPIException {
         List<String> orders = new ArrayList<>();
-        String canceledOrders[] = null;
         String sellOrderId = null;
         String buyOrderId = null;
 
@@ -586,10 +585,10 @@ public abstract class BitsoTest {
 
             BitsoOrder bitsoOrder = specificOrder.get(0);
             if (bitsoOrder.getUnfilledAmount().doubleValue() > 0) {
-                canceledOrders = mBitso.cancelOrder(orderId);
+                var canceledOrders = mBitso.cancelOrder(orderId);
 
                 assertTrue(canceledOrders != null);
-                assertEquals(1, canceledOrders.length);
+                assertEquals(1, canceledOrders.size());
             }
         }
     }
@@ -757,7 +756,7 @@ public abstract class BitsoTest {
 
         throttlePrivate();
 
-        String[] response = mBitso.cancelAllOrders();
+        var response = mBitso.cancelAllOrders();
         assertNotNull(response);
         throttlePrivate();
     }
