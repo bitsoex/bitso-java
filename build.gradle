@@ -31,6 +31,7 @@ dependencies {
     api libs.json
     api libs.netty
     api libs.slf4j.api
+    api libs.jakarta.annotation
 
     testImplementation libs.junit
     testImplementation 'org.junit.platform:junit-platform-launcher'
