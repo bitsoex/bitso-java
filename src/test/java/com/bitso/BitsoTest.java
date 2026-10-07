@@ -5,7 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -183,7 +182,7 @@ public abstract class BitsoTest {
     public void testAccountBalance() throws JSONException, IOException, BitsoAPIException {
         BitsoBalance bitsoBalance = mBitso.getAccountBalance();
         assertTrue(nullCheck(bitsoBalance, BitsoBalance.class));
-        HashMap<String, BitsoBalance.Balance> balances = bitsoBalance.getBalances();
+        var balances = bitsoBalance.getBalances();
         Set<String> keys = balances.keySet();
         for (String key : keys) {
             Balance currentBalance = balances.get(key);
@@ -195,14 +194,17 @@ public abstract class BitsoTest {
     public void testFees() throws JSONException, IOException, BitsoAPIException {
         BitsoFee bitsoFee = mBitso.getFees();
         assertTrue(nullCheck(bitsoFee, BitsoFee.class));
-        HashMap<String, BitsoFee.Fee> fees = bitsoFee.getTradeFees();
+        Map<String, List<BitsoFee.Fee>> fees = bitsoFee.getTradeFees();
         Set<String> keys = fees.keySet();
         for (String key : keys) {
-            BitsoFee.Fee currentFee = fees.get(key);
-            assertTrue(nullCheck(currentFee, BitsoFee.Fee.class));
+            List<BitsoFee.Fee> currentFee = fees.get(key);
+            assertFalse(currentFee.isEmpty());
+            for (var fee : currentFee) {
+                assertTrue(nullCheck(fee, BitsoFee.Fee.class));
+            }
         }
 
-        HashMap<String, String> withdrawalFees = bitsoFee.getWithdrawalFees();
+        Map<String, BigDecimal> withdrawalFees = bitsoFee.getWithdrawalFees();
         assertTrue((withdrawalFees != null));
     }
 
@@ -515,7 +517,7 @@ public abstract class BitsoTest {
         assertNotNull(bitsoBalance);
         throttlePrivate();
 
-        HashMap<String, Balance> currencyBalances = bitsoBalance.getBalances();
+        var currencyBalances = bitsoBalance.getBalances();
         assertNotNull(currencyBalances);
 
         Balance mxnBalance = currencyBalances.get("mxn");
@@ -598,7 +600,7 @@ public abstract class BitsoTest {
         assertNotNull(bitsoBalance);
         throttlePrivate();
 
-        HashMap<String, Balance> currencyBalances = bitsoBalance.getBalances();
+        var currencyBalances = bitsoBalance.getBalances();
         assertNotNull(currencyBalances);
 
         var btc = currencyBalances.get("btc");
@@ -686,7 +688,7 @@ public abstract class BitsoTest {
         assertNotNull(bitsoBalance);
         throttlePrivate();
 
-        HashMap<String, Balance> currencyBalances = bitsoBalance.getBalances();
+        var currencyBalances = bitsoBalance.getBalances();
         assertNotNull(currencyBalances);
 
         Balance mxnBalance = currencyBalances.get("mxn");
