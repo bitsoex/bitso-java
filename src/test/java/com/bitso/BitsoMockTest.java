@@ -23,6 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.eq;
 
 public class BitsoMockTest extends BitsoTest {
     private BookInfo[] mockAvailableBooks;
@@ -106,10 +108,26 @@ public class BitsoMockTest extends BitsoTest {
         lookup[0] = one[0];
         lookup[1] = new BitsoOrder(orders.getJSONObject(1));
         lookup[1].setUnfilledAmount(BigDecimal.ZERO);
+        var mxnbOrder = new JSONObject();
+        mxnbOrder.put("book", "btc_mxn");
+        mxnbOrder.put("original_amount", "0.001");
+        mxnbOrder.put("unfilled_amount", "0.001");
+        mxnbOrder.put("original_value", "1");
+        mxnbOrder.put("created_at", "1791333670083");
+        mxnbOrder.put("updated_at", "1791333676822");
+        mxnbOrder.put("side", "buy");
+        mxnbOrder.put("status", "open");
+        mxnbOrder.put("type", "limit");
+        mxnbOrder.put("settle_minor", "mxnb");
+        Mockito.when(mBitso.lookupOrders(eq("mxnbOrder"))).thenReturn(new BitsoOrder[]{
+                new BitsoOrder(mxnbOrder)
+        });
         Mockito.when(mBitso.lookupOrders(any(), any())).thenReturn(lookup);
         Mockito.when(mBitso.cancelAllOrders()).thenReturn(new String[0]);
         Mockito.when(mBitso.getBanks()).thenReturn(mockBitsoBanks);
-        Mockito.when(mBitso.placeOrder(any()))
+        Mockito.when(mBitso.placeOrder(argThat(req -> req != null && "mxnb".equals(req.getSettleMinor()))))
+                        .thenReturn("mxnbOrder");
+        Mockito.when(mBitso.placeOrder(argThat(req -> req != null && req.getSettleMinor() == null)))
                 .thenReturn("genericOrder", generateOrderIds(10));
         Mockito.when(mBitso.placeLimitOrder(anyString(), any(), any(), any(), any(), any()))
                 .thenReturn("limitOrder", generateOrderIds(15));
