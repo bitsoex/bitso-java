@@ -8,7 +8,9 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.crypto.Mac;
@@ -71,29 +73,29 @@ public class Bitso {
     }
 
     // Public Functions
-    public BookInfo[] getAvailableBooks()
+    public List<BookInfo> getAvailableBooks()
             throws BitsoAPIException {
         String request = "/v3/available_books";
 
         String getResponse = sendGet(request);
         JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
         int totalElements = payloadJSON.length();
-        BookInfo[] books = new BookInfo[totalElements];
+        var books = new ArrayList<BookInfo>(totalElements);
         for (int i = 0; i < totalElements; i++) {
-            books[i] = new BookInfo(payloadJSON.getJSONObject(i));
+            books.add(new BookInfo(payloadJSON.getJSONObject(i)));
         }
         return books;
     }
 
-    public BitsoTicker[] getTicker() throws BitsoAPIException {
+    public List<BitsoTicker> getTicker() throws BitsoAPIException {
         String request = "/v3/ticker";
 
         String getResponse = sendGet(request);
         JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
         int totalElements = payloadJSON.length();
-        BitsoTicker[] tickers = new BitsoTicker[totalElements];
+        var tickers = new ArrayList<BitsoTicker>(totalElements);
         for (int i = 0; i < totalElements; i++) {
-            tickers[i] = new BitsoTicker(payloadJSON.getJSONObject(i));
+            tickers.add(new BitsoTicker(payloadJSON.getJSONObject(i)));
         }
         return tickers;
     }
@@ -123,29 +125,29 @@ public class Bitso {
     }
 
     //Public Functions Signed
-    public BitsoTicker[] getSignedTicker() throws BitsoAPIException {
+    public List<BitsoTicker> getSignedTicker() throws BitsoAPIException {
         String request = "/v3/ticker";
 
         String getResponse = sendBitsoGet(request);
         JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
         int totalElements = payloadJSON.length();
-        BitsoTicker[] tickers = new BitsoTicker[totalElements];
+        var tickers = new ArrayList<BitsoTicker>(totalElements);
         for (int i = 0; i < totalElements; i++) {
-            tickers[i] = new BitsoTicker(payloadJSON.getJSONObject(i));
+            tickers.add(new BitsoTicker(payloadJSON.getJSONObject(i)));
         }
         return tickers;
     }
 
-    public BookInfo[] getSignedAvailableBooks()
+    public List<BookInfo> getSignedAvailableBooks()
             throws BitsoAPIException {
         String request = "/v3/available_books";
 
         String getResponse = sendBitsoGet(request);
         JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
         int totalElements = payloadJSON.length();
-        BookInfo[] books = new BookInfo[totalElements];
+        var books = new ArrayList<BookInfo>(totalElements);
         for (int i = 0; i < totalElements; i++) {
-            books[i] = new BookInfo(payloadJSON.getJSONObject(i));
+            books.add(new BookInfo(payloadJSON.getJSONObject(i)));
         }
         return books;
     }
@@ -306,7 +308,7 @@ public class Bitso {
         return trades;
     }
 
-    public BitsoOrder[] getOpenOrders(String book, String... queryParameters)
+    public List<BitsoOrder> getOpenOrders(String book, String... queryParameters)
             throws BitsoAPIException {
         String request = "/v3/open_orders";
 
@@ -318,20 +320,20 @@ public class Bitso {
         String getResponse = sendBitsoGet(request);
         JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
         int totalElements = payloadJSON.length();
-        BitsoOrder[] orders = new BitsoOrder[totalElements];
+        var orders = new ArrayList<BitsoOrder>(totalElements);
         for (int i = 0; i < totalElements; i++) {
-            orders[i] = new BitsoOrder(payloadJSON.getJSONObject(i));
+            orders.add(new BitsoOrder(payloadJSON.getJSONObject(i)));
         }
         return orders;
     }
 
     /** Lookup orders by their public OID. */
-    public BitsoOrder[] lookupOrders(String... ordersId)
+    public List<BitsoOrder> lookupOrders(String... ordersId)
             throws BitsoAPIException {
         String request = "/v3/orders";
 
         if (ordersId == null || ordersId.length == 0) {
-            return new BitsoOrder[0];
+            return List.of();
         }
 
         if (ordersId.length == 1) {
@@ -344,9 +346,9 @@ public class Bitso {
         String getResponse = sendBitsoGet(request);
         JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
         int totalElements = payloadJSON.length();
-        BitsoOrder[] orders = new BitsoOrder[totalElements];
+        var orders = new ArrayList<BitsoOrder>(totalElements);
         for (int i = 0; i < totalElements; i++) {
-            orders[i] = new BitsoOrder(payloadJSON.getJSONObject(i));
+            orders.add(new BitsoOrder(payloadJSON.getJSONObject(i)));
         }
         return orders;
     }

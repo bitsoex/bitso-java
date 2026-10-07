@@ -2,7 +2,9 @@ package com.bitso;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
@@ -27,8 +29,8 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
 
 public class BitsoMockTest extends BitsoTest {
-    private BookInfo[] mockAvailableBooks;
-    private BitsoTicker[] mockTicker;
+    private List<BookInfo> mockAvailableBooks;
+    private List<BitsoTicker> mockTicker;
     private BitsoOrderBook mockOrderBook;
     private BitsoAccountStatus mockAccountStatus;
     private BitsoBalance mockBalance;
@@ -98,16 +100,13 @@ public class BitsoMockTest extends BitsoTest {
         Mockito.when(mBitso.getWithdrawals(null)).thenReturn(mockWithdrawals);
         Mockito.when(mBitso.getFundings(null)).thenReturn(mockFundings);
         Mockito.when(mBitso.getUserTrades(null)).thenReturn(mockTrades);
-        Mockito.when(mBitso.getOpenOrders(anyString())).thenReturn(new BitsoOrder[0]);
-        BitsoOrder[] one = new BitsoOrder[1];
+        Mockito.when(mBitso.getOpenOrders(anyString())).thenReturn(List.of());
         JSONArray orders = Helpers.getJSONFromFile("privateOpenOrders.json").getJSONArray("payload");
-        one[0] = new BitsoOrder(orders.getJSONObject(0));
-        one[0].setUnfilledAmount(BigDecimal.ZERO);
+        var one = List.of(new BitsoOrder(orders.getJSONObject(0)));
+        one.get(0).setUnfilledAmount(BigDecimal.ZERO);
         Mockito.when(mBitso.getOpenOrders("btc_mxn")).thenReturn(one);
-        BitsoOrder[] lookup = new BitsoOrder[2];
-        lookup[0] = one[0];
-        lookup[1] = new BitsoOrder(orders.getJSONObject(1));
-        lookup[1].setUnfilledAmount(BigDecimal.ZERO);
+        var lookup = List.of(one.get(0), new BitsoOrder(orders.getJSONObject(1)));
+        lookup.get(1).setUnfilledAmount(BigDecimal.ZERO);
         var mxnbOrder = new JSONObject();
         mxnbOrder.put("book", "btc_mxn");
         mxnbOrder.put("original_amount", "0.001");
@@ -119,9 +118,7 @@ public class BitsoMockTest extends BitsoTest {
         mxnbOrder.put("status", "open");
         mxnbOrder.put("type", "limit");
         mxnbOrder.put("settle_minor", "mxnb");
-        Mockito.when(mBitso.lookupOrders(eq("mxnbOrder"))).thenReturn(new BitsoOrder[]{
-                new BitsoOrder(mxnbOrder)
-        });
+        Mockito.when(mBitso.lookupOrders(eq("mxnbOrder"))).thenReturn(List.of(new BitsoOrder(mxnbOrder)));
         Mockito.when(mBitso.lookupOrders(any(), any())).thenReturn(lookup);
         Mockito.when(mBitso.cancelAllOrders()).thenReturn(new String[0]);
         Mockito.when(mBitso.getBanks()).thenReturn(mockBitsoBanks);
@@ -141,19 +138,19 @@ public class BitsoMockTest extends BitsoTest {
 
     private void setUpAvailableBooks(JSONObject o) {
         JSONArray arr = o.getJSONArray("payload");
-        mockAvailableBooks = new BookInfo[arr.length()];
+        mockAvailableBooks = new ArrayList<>(arr.length());
         for (int i = 0; i < arr.length(); i++) {
-            mockAvailableBooks[i] = new BookInfo(arr.getJSONObject(i));
+            mockAvailableBooks.add(new BookInfo(arr.getJSONObject(i)));
         }
     }
 
     private void setUpTicker(JSONObject o) {
         JSONArray array = o.getJSONArray("payload");
         int totalElements = array.length();
-        mockTicker = new BitsoTicker[totalElements];
+        mockTicker = new ArrayList<>(totalElements);
 
         for (int i = 0; i < totalElements; i++) {
-            mockTicker[i] = new BitsoTicker(array.getJSONObject(i));
+            mockTicker.add(new BitsoTicker(array.getJSONObject(i)));
         }
     }
 
@@ -314,11 +311,11 @@ public class BitsoMockTest extends BitsoTest {
     @Override
     public void testOrderBook() {
         try {
-            BookInfo[] availableBooks = mBitso.getAvailableBooks();
+            var availableBooks = mBitso.getAvailableBooks();
             assertNotNull(availableBooks);
             for (BookInfo bookInfo : availableBooks) {
                 BitsoOrderBook bitsoOrderBook = mBitso.getOrderBook(bookInfo.getBook());
-                assertEquals(nullCheck(bitsoOrderBook, BitsoOrderBook.class), true);
+                assertTrue(nullCheck(bitsoOrderBook, BitsoOrderBook.class));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -328,7 +325,7 @@ public class BitsoMockTest extends BitsoTest {
     @Test
     @Override
     public void testTrades() throws JSONException, IOException, BitsoAPIException {
-        BookInfo[] availableBooks = mBitso.getAvailableBooks();
+        var availableBooks = mBitso.getAvailableBooks();
         assertNotNull(availableBooks);
 
         for (BookInfo bookInfo : availableBooks) {
