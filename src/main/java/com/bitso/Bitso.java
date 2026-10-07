@@ -886,8 +886,12 @@ public class Bitso {
 
             if (o.has("error")) {
                 JSONObject errorJson = o.getJSONObject("error");
-                int errorCode = Helpers.getInt(errorJson, "code");
                 String errorMessage = Helpers.getString(errorJson, "message");
+                if (errorJson.has("code") && errorJson.get("code") instanceof String) {
+                    // Sometimes we get string error codes
+                    throw new BitsoAPIException(-1, errorMessage == null ? errorJson.get("code").toString() : errorMessage);
+                }
+                int errorCode = Helpers.getInt(errorJson, "code");
                 throw new BitsoAPIException(errorCode, errorMessage);
             }
 
