@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
 
+import com.bitso.exchange.BitsoTicker;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -259,7 +260,7 @@ public class BitsoMockTest extends BitsoTest {
     @Test
     @Override
     public void testWithdrawals() throws JSONException, IOException, BitsoAPIException {
-        var withdrawals = mBitso.getWithdrawals(null);
+        var withdrawals = mBitso.getWithdrawals(List.of());
         assertNotNull(withdrawals);
         for (BitsoWithdrawal bitsoWithdrawal : withdrawals) {
             assertTrue(nullCheck(bitsoWithdrawal, BitsoWithdrawal.class));
@@ -269,7 +270,7 @@ public class BitsoMockTest extends BitsoTest {
     @Test
     @Override
     public void testFundings() throws JSONException, IOException, BitsoAPIException {
-        var fundings = mBitso.getFundings(null);
+        var fundings = mBitso.getFundings(List.of());
         assertNotNull(fundings);
         for (BitsoFunding bitsoFunding : fundings) {
             assertTrue(nullCheck(bitsoFunding, BitsoFunding.class));
@@ -279,7 +280,7 @@ public class BitsoMockTest extends BitsoTest {
     @Test
     @Override
     public void testUserTrades() throws JSONException, IOException, BitsoAPIException {
-        var trades = mBitso.getUserTrades(null);
+        var trades = mBitso.getUserTrades(List.of());
         assertNotNull(trades);
         int totalElements = trades.size();
         assertTrue((totalElements >= 0 && totalElements <= 25));

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.bitso.exchange.BitsoTicker;
 import com.bitso.trading.OrderRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
@@ -16,7 +17,6 @@ import org.json.JSONException;
 import com.bitso.BitsoBalance.Balance;
 import com.bitso.exceptions.BitsoAPIException;
 import com.bitso.exchange.BookInfo;
-import com.bitso.exchange.Ticker;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -55,7 +55,7 @@ public abstract class BitsoTest {
         throttlePublic();
         assertNotNull(tickers);
         assertTrue(tickers.size() > 5, "Expected more than 5 ticker entries");
-        for (Ticker ticker : tickers) {
+        for (var ticker : tickers) {
             assertTrue(nullCheck(ticker, BitsoTicker.class));
         }
     }
@@ -215,7 +215,7 @@ public abstract class BitsoTest {
 
         // TODO:
         // This should return a collection of 25 elements, not working limit default value
-        var withdrawals = mBitso.getWithdrawals(null);
+        var withdrawals = mBitso.getWithdrawals(List.of());
         assertNotNull(withdrawals);
         totalElements = withdrawals.size();
         totalElementsFirstCall = totalElements;
@@ -261,19 +261,19 @@ public abstract class BitsoTest {
 
         // TODO:
         // This should return null due it's a negative value on limit
-        var negativeLimitwithdrawals = mBitso.getWithdrawals(null, "limit=-10");
+        var negativeLimitwithdrawals = mBitso.getWithdrawals(List.of(), "limit=-10");
         assertTrue(negativeLimitwithdrawals != null || negativeLimitwithdrawals == null);
 
         throttlePrivate();
 
         // TODO:
         // This should return null due limit value is 0
-        var ceroLimitwithdrawals = mBitso.getWithdrawals(null, "limit=0");
+        var ceroLimitwithdrawals = mBitso.getWithdrawals(List.of(), "limit=0");
         assertTrue(ceroLimitwithdrawals != null || ceroLimitwithdrawals == null);
 
         throttlePrivate();
 
-        var lowestLimitwithdrawals = mBitso.getWithdrawals(null, "limit=1");
+        var lowestLimitwithdrawals = mBitso.getWithdrawals(List.of(), "limit=1");
         assertNotNull(lowestLimitwithdrawals);
         totalElements = lowestLimitwithdrawals.size();
         assertTrue((totalElements >= 0 && totalElements <= 1));
@@ -283,7 +283,7 @@ public abstract class BitsoTest {
 
         throttlePrivate();
 
-        var maxLimitwithdrawals = mBitso.getWithdrawals(null, "limit=100");
+        var maxLimitwithdrawals = mBitso.getWithdrawals(List.of(), "limit=100");
         assertNotNull(maxLimitwithdrawals);
         totalElements = maxLimitwithdrawals.size();
         assertTrue((totalElements >= 0 && totalElements <= 100));
@@ -295,7 +295,7 @@ public abstract class BitsoTest {
 
         // TODO:
         // This should return null limit exceed max
-        var excedingLimitWithdrawals = mBitso.getWithdrawals(null, "limit=1000");
+        var excedingLimitWithdrawals = mBitso.getWithdrawals(List.of(), "limit=1000");
         assertTrue((excedingLimitWithdrawals != null || excedingLimitWithdrawals == null));
     }
 
@@ -306,7 +306,7 @@ public abstract class BitsoTest {
 
         // TODO:
         // This should return a collection of 25 elements, not working limit default value
-        var fundings = mBitso.getFundings(null);
+        var fundings = mBitso.getFundings(List.of());
         assertNotNull(fundings);
         totalElements = fundings.size();
         totalElementsFirstCall = totalElements;
@@ -353,14 +353,14 @@ public abstract class BitsoTest {
 
         // TODO:
         // This should return null due it's a negative value on limit
-        var negativeLimit = mBitso.getFundings(null, "limit=-10");
+        var negativeLimit = mBitso.getFundings(List.of(), "limit=-10");
         assertTrue(negativeLimit != null || negativeLimit == null);
 
         throttlePrivate();
 
         // TODO:
         // This should return null due limit value is 0
-        var ceroLimit = mBitso.getFundings(null, "limit=0");
+        var ceroLimit = mBitso.getFundings(List.of(), "limit=0");
         assertTrue((ceroLimit != null || ceroLimit == null));
 
         throttlePrivate();
@@ -375,7 +375,7 @@ public abstract class BitsoTest {
 
         throttlePrivate();
 
-        var maxLimit = mBitso.getFundings(null, "limit=100");
+        var maxLimit = mBitso.getFundings(List.of(), "limit=100");
         assertNotNull(maxLimit);
         totalElements = maxLimit.size();
         assertTrue((totalElements >= 0 && totalElements <= 100));
@@ -387,7 +387,7 @@ public abstract class BitsoTest {
 
         // TODO:
         // This should return null limit exceed max
-        var excedingLimit = mBitso.getFundings(null, "limit=1000");
+        var excedingLimit = mBitso.getFundings(List.of(), "limit=1000");
         assertTrue((excedingLimit != null || excedingLimit == null));
     }
 
@@ -398,7 +398,7 @@ public abstract class BitsoTest {
 
         // TODO:
         // This should return a collection of 25 elements, not working limit default value
-        var trades = mBitso.getUserTrades(null);
+        var trades = mBitso.getUserTrades(List.of());
         assertNotNull(trades);
         totalElements = trades.size();
         totalElementsFirstCall = totalElements;
@@ -445,14 +445,14 @@ public abstract class BitsoTest {
 
         // TODO:
         // This should return null due it's a negative value on limit
-        var negativeLimit = mBitso.getUserTrades(null, "limit=-10");
+        var negativeLimit = mBitso.getUserTrades(List.of(), "limit=-10");
         assertTrue((negativeLimit != null || negativeLimit == null));
 
         throttlePrivate();
 
         // TODO:
         // This should return null due limit value is 0
-        var ceroLimit = mBitso.getUserTrades(null, "limit=0");
+        var ceroLimit = mBitso.getUserTrades(List.of(), "limit=0");
         assertTrue((ceroLimit != null || ceroLimit == null));
 
         throttlePrivate();
@@ -466,7 +466,7 @@ public abstract class BitsoTest {
         }
         throttlePrivate();
 
-        var maxLimit = mBitso.getUserTrades(null, "limit=100");
+        var maxLimit = mBitso.getUserTrades(List.of(), "limit=100");
         assertNotNull(maxLimit);
         totalElements = maxLimit.size();
         assertTrue((totalElements >= 0 && totalElements <= 100));
@@ -477,7 +477,7 @@ public abstract class BitsoTest {
 
         // TODO:
         // This should return null limit exceed max
-        var excedingLimit = mBitso.getUserTrades(null, "limit=1000");
+        var excedingLimit = mBitso.getUserTrades(List.of(), "limit=1000");
         assertTrue((excedingLimit != null || excedingLimit == null));
     }
 
@@ -487,7 +487,7 @@ public abstract class BitsoTest {
 
         // TODO:
         // This should return a collection of 25 elements, not working limit default value
-        var trades = mBitso.getUserTrades(null);
+        var trades = mBitso.getUserTrades(List.of());
         assertNotNull(trades);
         totalElements = trades.size();
         assertTrue((totalElements >= 0 && totalElements <= 25));
@@ -663,7 +663,7 @@ public abstract class BitsoTest {
         var tickers = mBitso.getSignedTicker();
         assertNotNull(tickers);
         assertTrue(tickers.size() > 5, "Expected more than 5 ticker entries");
-        for (Ticker ticker : tickers) {
+        for (var ticker : tickers) {
             assertTrue(nullCheck(ticker, BitsoTicker.class));
         }
     }
