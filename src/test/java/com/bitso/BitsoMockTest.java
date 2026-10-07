@@ -121,7 +121,7 @@ public class BitsoMockTest extends BitsoTest {
         Mockito.when(mBitso.placeLimitOrder(anyString(), any(), any(), any(), any(), any()))
                 .thenReturn("limitOrder", generateOrderIds(15));
         Mockito.when(mBitso.modifyOrder(anyString(), any())).thenReturn(true);
-        Mockito.when(mBitso.modifyOrder(eq("non-existent-order-id"), any())).thenReturn(false);
+        Mockito.when(mBitso.modifyOrder(eq("non-existent-order-id"), any())).thenThrow(new BitsoAPIException("boom!"));
     }
 
     private final AtomicLong oidgen = new AtomicLong(12345);
