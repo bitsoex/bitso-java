@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.net.ssl.HttpsURLConnection;
 
 import com.bitso.exchange.BitsoTicker;
+import com.bitso.trading.ModifyOrderRequest;
 import com.bitso.trading.OrderRequest;
 import jakarta.annotation.Nonnull;
 import lombok.Getter;
@@ -48,6 +48,7 @@ public class Bitso {
     @Getter
     private final String key;
     private final String secret;
+    private final Mac mac;
     /** The base URL that this client is connecting to. */
     @Getter
     private String baseUrl;
@@ -72,6 +73,11 @@ public class Bitso {
         this.key = key;
         this.secret = secret;
         this.baseUrl = env.uri();
+        try {
+            mac = Mac.getInstance("HmacSHA256");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Failed to initialize HMAC-SHA256", e);
+        }
     }
 
     /** Return the order books available for trading.
@@ -550,6 +556,41 @@ public class Bitso {
         return Helpers.getString(payloadJSON, "oid");
     }
 
+    /** Modify an existing order. You can change the price of an open order, or the amount/value,
+     * or a combination of both. For stop orders that haven't been triggered, you can modify the stop rate.
+     * A modification may require locking more balance, or may result in some locked balance being released.
+     * The modification may fail if the order is canceled or completed before the change can be performed.
+     * To see the result of the modification, you can query the order or listen to the public websockets.
+     * @param orderId The id of the order to modify.
+     * @return true if the order was modified successfully, false otherwise
+     */
+    public boolean modifyOrder(@Nonnull String orderId, @Nonnull ModifyOrderRequest mod) {
+        String uri = "/v4/orders/" + orderId;
+        JSONObject req = new JSONObject();
+        mod.validate();
+        if (mod.getMajor() != null) {
+            req.put("major", mod.getMajor().toPlainString());
+        } else if (mod.getMinor() != null) {
+            req.put("minor", mod.getMinor().toPlainString());
+        }
+        if (mod.getPrice() != null) {
+            req.put("price", mod.getPrice().toPlainString());
+        }
+        if (mod.getStopRate() != null) {
+            req.put("stop", mod.getStopRate().toPlainString());
+        }
+        if (mod.isCancelOnFail()) {
+            req.put("cancel", "1");
+        }
+        long nonce = System.currentTimeMillis() + System.currentTimeMillis();
+        String jsonString = req.toString();
+        var headers = buildBitsoAuthHeader(secret, key, nonce, "PATCH", uri, jsonString);
+
+        var response = client.sendPatch(baseUrl + uri, jsonString, headers);
+        JSONObject payload = (JSONObject) getJSONPayload(response);
+        return payload.has("success") && payload.getBoolean("success");
+    }
+
     /** Cancel one or more orders.
      * @param ordersIds One or more order ids to cancel.
      * @return List of canceled order ids.
@@ -773,7 +814,7 @@ public class Bitso {
         }
     }
 
-    private static Entry<String, String> buildBitsoAuthHeader(String secretKey, String publicKey, long nonce,
+    private Map<String, String> buildBitsoAuthHeader(String secretKey, String publicKey, long nonce,
             String httpMethod, String requestPath, String jsonPayload) {
         if (jsonPayload == null) jsonPayload = "";
         String message = String.valueOf(nonce) + httpMethod + requestPath + jsonPayload;
@@ -781,18 +822,16 @@ public class Bitso {
         byte[] secretBytes = secretKey.getBytes();
         SecretKeySpec localMac = new SecretKeySpec(secretBytes, "HmacSHA256");
         try {
-            Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(localMac);
-
             // Compute the hmac on input data bytes
             byte[] arrayOfByte = mac.doFinal(message.getBytes());
             BigInteger localBigInteger = new BigInteger(1, arrayOfByte);
             signature = String.format("%0" + (arrayOfByte.length << 1) + "x", localBigInteger);
-        } catch (InvalidKeyException | NoSuchAlgorithmException | IllegalStateException e) {
+        } catch (InvalidKeyException | IllegalStateException e) {
             log.error("Failed to build auth header", e);
         }
         String authHeader = String.format("Bitso %s:%s:%s", publicKey, nonce, signature);
-        return Map.entry("Authorization", authHeader);
+        return Map.of("Authorization", authHeader, "Content-Type", "application/json");
     }
 
     public String sendGet(String requestedURL) throws BitsoAPIException {
@@ -846,9 +885,7 @@ public class Bitso {
 
     private String sendBitsoDelete(String requestPath) throws BitsoAPIException {
         long nonce = System.currentTimeMillis() + System.currentTimeMillis();
-        Entry<String, String> authHeader = buildBitsoAuthHeader(secret, key, nonce, "DELETE", requestPath,
-                null);
-        var headers = Map.of("Content-Type", "application/json", authHeader.getKey(), authHeader.getValue());
+        var headers = buildBitsoAuthHeader(secret, key, nonce, "DELETE", requestPath, null);
         return client.sendDelete(baseUrl + requestPath, headers);
     }
 
@@ -862,10 +899,7 @@ public class Bitso {
         if (jsonPayload != null) {
             jsonString = jsonPayload.toString();
         }
-        Entry<String, String> header = buildBitsoAuthHeader(secret, key, nonce, "POST", requestPath,
-                jsonString);
-        var headers = Map.of("Content-Type", "application/json", header.getKey(), header.getValue());
-
+        var headers = buildBitsoAuthHeader(secret, key, nonce, "POST", requestPath, jsonString);
         return client.sendPost(baseUrl + requestPath, jsonString, headers);
     }
 
