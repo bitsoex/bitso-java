@@ -213,9 +213,9 @@ public abstract class BitsoTest {
 
         // TODO:
         // This should return a collection of 25 elements, not working limit default value
-        BitsoWithdrawal[] withdrawals = mBitso.getWithdrawals(null);
+        var withdrawals = mBitso.getWithdrawals(null);
         assertNotNull(withdrawals);
-        totalElements = withdrawals.length;
+        totalElements = withdrawals.size();
         totalElementsFirstCall = totalElements;
         // assertEquals((totalElements >= 0 && totalElements <= 25), true);
         for (BitsoWithdrawal bitsoWithdrawal : withdrawals) {
@@ -224,11 +224,11 @@ public abstract class BitsoTest {
         throttlePrivate();
 
         if (totalElementsFirstCall > 0) {
-            BitsoWithdrawal bitsoWithdrawal = withdrawals[0];
-            BitsoWithdrawal[] oneWithdrawal = mBitso
+            BitsoWithdrawal bitsoWithdrawal = withdrawals.get(0);
+            var oneWithdrawal = mBitso
                     .getWithdrawals(new String[] { bitsoWithdrawal.getWithdrawalId() });
             assertNotNull(oneWithdrawal);
-            totalElements = oneWithdrawal.length;
+            totalElements = oneWithdrawal.size();
             assertEquals(1, totalElements);
             for (BitsoWithdrawal currentWithdrawal : oneWithdrawal) {
                 assertTrue(nullCheck(currentWithdrawal, BitsoWithdrawal.class));
@@ -238,14 +238,14 @@ public abstract class BitsoTest {
         throttlePrivate();
 
         if (totalElementsFirstCall >= 3) {
-            BitsoWithdrawal bitsoWithdrawalFirst = withdrawals[0];
-            BitsoWithdrawal bitsoWithdrawalSecond = withdrawals[1];
-            BitsoWithdrawal bitsoWithdrawalThird = withdrawals[2];
-            BitsoWithdrawal[] threeWithdrawals = mBitso.getWithdrawals(new String[] {
+            BitsoWithdrawal bitsoWithdrawalFirst = withdrawals.get(0);
+            BitsoWithdrawal bitsoWithdrawalSecond = withdrawals.get(1);
+            BitsoWithdrawal bitsoWithdrawalThird = withdrawals.get(2);
+            var threeWithdrawals = mBitso.getWithdrawals(new String[] {
                     bitsoWithdrawalFirst.getWithdrawalId(), bitsoWithdrawalSecond.getWithdrawalId(),
                     bitsoWithdrawalThird.getWithdrawalId() });
             assertNotNull(threeWithdrawals);
-            totalElements = threeWithdrawals.length;
+            totalElements = threeWithdrawals.size();
             assertEquals(3, totalElements);
             for (BitsoWithdrawal currentWithdrawal : threeWithdrawals) {
                 assertTrue(nullCheck(currentWithdrawal, BitsoWithdrawal.class));
@@ -253,28 +253,28 @@ public abstract class BitsoTest {
         }
         throttlePrivate();
 
-        BitsoWithdrawal[] withdrawalsBothParameters = mBitso.getWithdrawals(new String[] { "" }, "");
+        var withdrawalsBothParameters = mBitso.getWithdrawals(new String[] { "" }, "");
         assertNull(withdrawalsBothParameters);
 
         throttlePrivate();
 
         // TODO:
         // This should return null due it's a negative value on limit
-        BitsoWithdrawal[] negativeLimitwithdrawals = mBitso.getWithdrawals(null, "limit=-10");
+        var negativeLimitwithdrawals = mBitso.getWithdrawals(null, "limit=-10");
         assertTrue(negativeLimitwithdrawals != null || negativeLimitwithdrawals == null);
 
         throttlePrivate();
 
         // TODO:
         // This should return null due limit value is 0
-        BitsoWithdrawal[] ceroLimitwithdrawals = mBitso.getWithdrawals(null, "limit=0");
+        var ceroLimitwithdrawals = mBitso.getWithdrawals(null, "limit=0");
         assertTrue(ceroLimitwithdrawals != null || ceroLimitwithdrawals == null);
 
         throttlePrivate();
 
-        BitsoWithdrawal[] lowestLimitwithdrawals = mBitso.getWithdrawals(null, "limit=1");
+        var lowestLimitwithdrawals = mBitso.getWithdrawals(null, "limit=1");
         assertNotNull(lowestLimitwithdrawals);
-        totalElements = lowestLimitwithdrawals.length;
+        totalElements = lowestLimitwithdrawals.size();
         assertTrue((totalElements >= 0 && totalElements <= 1));
         for (BitsoWithdrawal bitsoWithdrawal : lowestLimitwithdrawals) {
             assertTrue(nullCheck(bitsoWithdrawal, BitsoWithdrawal.class));
@@ -282,9 +282,9 @@ public abstract class BitsoTest {
 
         throttlePrivate();
 
-        BitsoWithdrawal[] maxLimitwithdrawals = mBitso.getWithdrawals(null, "limit=100");
+        var maxLimitwithdrawals = mBitso.getWithdrawals(null, "limit=100");
         assertNotNull(maxLimitwithdrawals);
-        totalElements = maxLimitwithdrawals.length;
+        totalElements = maxLimitwithdrawals.size();
         assertTrue((totalElements >= 0 && totalElements <= 100));
         for (BitsoWithdrawal bitsoWithdrawal : maxLimitwithdrawals) {
             assertTrue(nullCheck(bitsoWithdrawal, BitsoWithdrawal.class));
@@ -294,7 +294,7 @@ public abstract class BitsoTest {
 
         // TODO:
         // This should return null limit exceed max
-        BitsoWithdrawal[] excedingLimitWithdrawals = mBitso.getWithdrawals(null, "limit=1000");
+        var excedingLimitWithdrawals = mBitso.getWithdrawals(null, "limit=1000");
         assertTrue((excedingLimitWithdrawals != null || excedingLimitWithdrawals == null));
     }
 
@@ -305,9 +305,9 @@ public abstract class BitsoTest {
 
         // TODO:
         // This should return a collection of 25 elements, not working limit default value
-        BitsoFunding[] fundings = mBitso.getFundings(null);
+        var fundings = mBitso.getFundings(null);
         assertNotNull(fundings);
-        totalElements = fundings.length;
+        totalElements = fundings.size();
         totalElementsFirstCall = totalElements;
         // assertEquals((totalElements >= 0 && totalElements <= 25), true);
         for (BitsoFunding bitsoFunding : fundings) {
@@ -317,10 +317,10 @@ public abstract class BitsoTest {
         throttlePrivate();
 
         if (totalElementsFirstCall > 0) {
-            BitsoFunding bitsoFunding = fundings[0];
-            BitsoFunding[] oneFunding = mBitso.getFundings(new String[] { bitsoFunding.getFundingId() });
+            BitsoFunding bitsoFunding = fundings.get(0);
+            var oneFunding = mBitso.getFundings(new String[] { bitsoFunding.getFundingId() });
             assertNotNull(oneFunding);
-            totalElements = oneFunding.length;
+            totalElements = oneFunding.size();
             assertEquals(1, totalElements);
             for (BitsoFunding currentFunding : oneFunding) {
                 assertTrue(nullCheck(currentFunding, BitsoFunding.class));
@@ -331,13 +331,13 @@ public abstract class BitsoTest {
         throttlePrivate();
 
         if (totalElementsFirstCall >= 3) {
-            BitsoFunding bitsoFundingFirst = fundings[0];
-            BitsoFunding bitsoFundingSecond = fundings[1];
-            BitsoFunding bitsoFundingThird = fundings[2];
-            BitsoFunding[] threeFundings = mBitso.getFundings(new String[] { bitsoFundingFirst.getFundingId(),
+            BitsoFunding bitsoFundingFirst = fundings.get(0);
+            BitsoFunding bitsoFundingSecond = fundings.get(1);
+            BitsoFunding bitsoFundingThird = fundings.get(2);
+            var threeFundings = mBitso.getFundings(new String[] { bitsoFundingFirst.getFundingId(),
                     bitsoFundingSecond.getFundingId(), bitsoFundingThird.getFundingId() });
             assertNotNull(threeFundings);
-            totalElements = threeFundings.length;
+            totalElements = threeFundings.size();
             assertEquals(3, totalElements);
             for (BitsoFunding bitsoFunding : threeFundings) {
                 assertTrue(nullCheck(bitsoFunding, BitsoFunding.class));
@@ -346,28 +346,28 @@ public abstract class BitsoTest {
 
         throttlePrivate();
 
-        BitsoFunding[] fundingsBothParameters = mBitso.getFundings(new String[] { "" }, "");
+        var fundingsBothParameters = mBitso.getFundings(new String[] { "" }, "");
         assertNull(fundingsBothParameters);
 
         throttlePrivate();
 
         // TODO:
         // This should return null due it's a negative value on limit
-        BitsoFunding[] negativeLimit = mBitso.getFundings(null, "limit=-10");
+        var negativeLimit = mBitso.getFundings(null, "limit=-10");
         assertTrue(negativeLimit != null || negativeLimit == null);
 
         throttlePrivate();
 
         // TODO:
         // This should return null due limit value is 0
-        BitsoFunding[] ceroLimit = mBitso.getFundings(null, "limit=0");
+        var ceroLimit = mBitso.getFundings(null, "limit=0");
         assertTrue((ceroLimit != null || ceroLimit == null));
 
         throttlePrivate();
 
-        BitsoFunding[] lowestLimit = mBitso.getFundings(null, "limit=1");
+        var lowestLimit = mBitso.getFundings(null, "limit=1");
         assertNotNull(lowestLimit);
-        totalElements = lowestLimit.length;
+        totalElements = lowestLimit.size();
         assertTrue((totalElements >= 0 && totalElements <= 1));
         for (BitsoFunding bitsoFunding : lowestLimit) {
             assertTrue(nullCheck(bitsoFunding, BitsoFunding.class));
@@ -375,9 +375,9 @@ public abstract class BitsoTest {
 
         throttlePrivate();
 
-        BitsoFunding[] maxLimit = mBitso.getFundings(null, "limit=100");
+        var maxLimit = mBitso.getFundings(null, "limit=100");
         assertNotNull(maxLimit);
-        totalElements = maxLimit.length;
+        totalElements = maxLimit.size();
         assertTrue((totalElements >= 0 && totalElements <= 100));
         for (BitsoFunding bitsoFunding : maxLimit) {
             assertTrue(nullCheck(bitsoFunding, BitsoFunding.class));
@@ -387,7 +387,7 @@ public abstract class BitsoTest {
 
         // TODO:
         // This should return null limit exceed max
-        BitsoFunding[] excedingLimit = mBitso.getFundings(null, "limit=1000");
+        var excedingLimit = mBitso.getFundings(null, "limit=1000");
         assertTrue((excedingLimit != null || excedingLimit == null));
     }
 

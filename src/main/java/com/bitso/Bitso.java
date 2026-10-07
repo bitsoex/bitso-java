@@ -180,13 +180,13 @@ public class Bitso {
     /**
      * The request needs withdrawalsIds or queryParameters, not both. In case both parameters are provided
      * null will be returned
-     * 
+     *
      * @param withdrawalsIds
      * @param queryParameters
      * @return BitsoWithdrawal[]
      * @throws BitsoAPIException
      */
-    public BitsoWithdrawal[] getWithdrawals(String[] withdrawalsIds, String... queryParameters)
+    public List<BitsoWithdrawal> getWithdrawals(String[] withdrawalsIds, String... queryParameters)
             throws BitsoAPIException {
         String request = "/v3/withdrawals";
 
@@ -207,9 +207,9 @@ public class Bitso {
         String getResponse = sendBitsoGet(request);
         JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
         int totalElements = payloadJSON.length();
-        BitsoWithdrawal[] withdrawals = new BitsoWithdrawal[totalElements];
+        var withdrawals = new ArrayList<BitsoWithdrawal>(totalElements);
         for (int i = 0; i < totalElements; i++) {
-            withdrawals[i] = new BitsoWithdrawal(payloadJSON.getJSONObject(i));
+            withdrawals.add(new BitsoWithdrawal(payloadJSON.getJSONObject(i)));
         }
         return withdrawals;
     }
@@ -223,7 +223,7 @@ public class Bitso {
      * @return
      * @throws BitsoAPIException
      */
-    public BitsoFunding[] getFundings(String[] fundingssIds, String... queryParameters)
+    public List<BitsoFunding> getFundings(String[] fundingssIds, String... queryParameters)
             throws BitsoAPIException {
         String request = "/v3/fundings";
 
@@ -244,9 +244,9 @@ public class Bitso {
         String getResponse = sendBitsoGet(request);
         JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
         int totalElements = payloadJSON.length();
-        BitsoFunding[] fundings = new BitsoFunding[totalElements];
+        var fundings = new ArrayList<BitsoFunding>(totalElements);
         for (int i = 0; i < totalElements; i++) {
-            fundings[i] = new BitsoFunding(payloadJSON.getJSONObject(i));
+            fundings.add(new BitsoFunding(payloadJSON.getJSONObject(i)));
         }
         return fundings;
     }

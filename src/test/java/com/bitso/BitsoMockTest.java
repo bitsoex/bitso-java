@@ -20,7 +20,6 @@ import com.bitso.exceptions.BitsoAPIException;
 import com.bitso.exchange.BookInfo;
 import com.bitso.helpers.Helpers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,17 +35,11 @@ public class BitsoMockTest extends BitsoTest {
     private BitsoBalance mockBalance;
     private BitsoFee mockFee;
     private Map<String, String> mockBitsoBanks;
-    private BitsoOperation[] mockLedgers;
-    private BitsoOperation[] mockLedgersTrades;
-    private BitsoOperation[] mockLedgersFees;
-    private BitsoOperation[] mockLedgersFundings;
-    private BitsoOperation[] mockLedgersWithdrawals;
-    private BitsoFunding[] mockFundings;
+    private List<BitsoFunding> mockFundings;
     private BitsoTrade[] mockTrades;
-    private Map<String, String> mockFundingDestination;
 
     private BitsoTransactions mockTransactions;
-    BitsoWithdrawal[] mockWithdrawals;
+    private List<BitsoWithdrawal> mockWithdrawals;
 
     @BeforeEach
     public void setUp() throws JSONException, IOException, BitsoAPIException {
@@ -64,12 +57,9 @@ public class BitsoMockTest extends BitsoTest {
             setUpAccountStatus(Helpers.getJSONFromFile("privateAccountStatus.json"));
             setUpAccountBalance(Helpers.getJSONFromFile("privateAccountBalance.json"));
             setUpFees(Helpers.getJSONFromFile("privateFees.json"));
-            setUpLedgers();
             setUpWithdrawals(Helpers.getJSONFromFile("privateWithdrawals.json"));
             setUpFundings(Helpers.getJSONFromFile("privateFundings.json"));
             setUpTrades(Helpers.getJSONFromFile("privateUserTrades.json"));
-            setUpFundingDestionation(
-                    Helpers.getJSONFromFile("privateFundingDestination.json"));
             setUpBitsoBanks(Helpers.getJSONFromFile("privateBankCodes.json"));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -181,70 +171,13 @@ public class BitsoMockTest extends BitsoTest {
         }
     }
 
-    private void setUpLedgers() {
-        String[] files = { "privateLedger.json", "privateLedgerTrades.json", "privateLedgerFees.json",
-                "privateLedgerFundings.json", "privateLedgerWithdrawals.json" };
-
-        JSONObject ledger = null;
-        JSONObject ledgerTrades = null;
-        JSONObject ledgerFees = null;
-        JSONObject ledgerFunds = null;
-        JSONObject ledgerWithdraws = null;
-
-        try {
-            ledger = Helpers.getJSONFromFile(files[0]);
-            ledgerTrades = Helpers.getJSONFromFile(files[1]);
-            ledgerFees = Helpers.getJSONFromFile(files[2]);
-            ledgerFunds = Helpers.getJSONFromFile(files[3]);
-            ledgerWithdraws = Helpers.getJSONFromFile(files[4]);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        JSONArray payload = ledger.getJSONArray("payload");
-        int totalElements = payload.length();
-
-        mockLedgers = new BitsoOperation[totalElements];
-        for (int i = 0; i < totalElements; i++) {
-            mockLedgers[i] = new BitsoOperation(payload.getJSONObject(i));
-        }
-
-        payload = ledgerTrades.getJSONArray("payload");
-        totalElements = payload.length();
-        mockLedgersTrades = new BitsoOperation[totalElements];
-        for (int i = 0; i < totalElements; i++) {
-            mockLedgersTrades[i] = new BitsoOperation(payload.getJSONObject(i));
-        }
-
-        payload = ledgerFees.getJSONArray("payload");
-        totalElements = payload.length();
-        mockLedgersFees = new BitsoOperation[totalElements];
-        for (int i = 0; i < totalElements; i++) {
-            mockLedgersFees[i] = new BitsoOperation(payload.getJSONObject(i));
-        }
-
-        payload = ledgerFunds.getJSONArray("payload");
-        totalElements = payload.length();
-        mockLedgersFundings = new BitsoOperation[totalElements];
-        for (int i = 0; i < totalElements; i++) {
-            mockLedgersFundings[i] = new BitsoOperation(payload.getJSONObject(i));
-        }
-
-        payload = ledgerWithdraws.getJSONArray("payload");
-        totalElements = payload.length();
-        mockLedgersWithdrawals = new BitsoOperation[totalElements];
-        for (int i = 0; i < totalElements; i++) {
-            mockLedgersWithdrawals[i] = new BitsoOperation(payload.getJSONObject(i));
-        }
-    }
-
     private void setUpWithdrawals(JSONObject o) {
         if (o.has("payload")) {
             JSONArray payload = o.getJSONArray("payload");
             int totalElements = payload.length();
-            mockWithdrawals = new BitsoWithdrawal[totalElements];
+            mockWithdrawals = new ArrayList<>(totalElements);
             for (int i = 0; i < totalElements; i++) {
-                mockWithdrawals[i] = new BitsoWithdrawal(payload.getJSONObject(i));
+                mockWithdrawals.add(new BitsoWithdrawal(payload.getJSONObject(i)));
             }
         }
     }
@@ -253,9 +186,9 @@ public class BitsoMockTest extends BitsoTest {
         if (o.has("payload")) {
             JSONArray payload = o.getJSONArray("payload");
             int totalElements = payload.length();
-            mockFundings = new BitsoFunding[totalElements];
+            mockFundings = new ArrayList<>(totalElements);
             for (int i = 0; i < totalElements; i++) {
-                mockFundings[i] = new BitsoFunding(payload.getJSONObject(i));
+                mockFundings.add(new BitsoFunding(payload.getJSONObject(i)));
             }
         }
     }
@@ -268,17 +201,6 @@ public class BitsoMockTest extends BitsoTest {
             for (int i = 0; i < totalElements; i++) {
                 mockTrades[i] = new BitsoTrade(payload.getJSONObject(i));
             }
-        }
-    }
-
-    public void setUpFundingDestionation(JSONObject o) {
-        if (o.has("payload")) {
-            JSONObject payload = o.getJSONObject("payload");
-            mockFundingDestination = new HashMap<String, String>();
-            mockFundingDestination.put("account_identifier_name",
-                    Helpers.getString(payload, "account_identifier_name"));
-            mockFundingDestination.put("account_identifier",
-                    Helpers.getString(payload, "account_identifier"));
         }
     }
 
@@ -337,7 +259,7 @@ public class BitsoMockTest extends BitsoTest {
     @Test
     @Override
     public void testWithdrawals() throws JSONException, IOException, BitsoAPIException {
-        BitsoWithdrawal[] withdrawals = mBitso.getWithdrawals(null);
+        var withdrawals = mBitso.getWithdrawals(null);
         assertNotNull(withdrawals);
         for (BitsoWithdrawal bitsoWithdrawal : withdrawals) {
             assertTrue(nullCheck(bitsoWithdrawal, BitsoWithdrawal.class));
@@ -347,7 +269,7 @@ public class BitsoMockTest extends BitsoTest {
     @Test
     @Override
     public void testFundings() throws JSONException, IOException, BitsoAPIException {
-        BitsoFunding[] fundings = mBitso.getFundings(null);
+        var fundings = mBitso.getFundings(null);
         assertNotNull(fundings);
         for (BitsoFunding bitsoFunding : fundings) {
             assertTrue(nullCheck(bitsoFunding, BitsoFunding.class));
