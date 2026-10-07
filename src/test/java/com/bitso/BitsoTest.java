@@ -94,7 +94,7 @@ public abstract class BitsoTest {
         boolean first = true;
         for (BookInfo bookInfo : availableBooks) {
             int totalElements = 0;
-            BitsoTransactions.Transaction[] innerTransactions;
+            List<BitsoTransactions.Transaction> innerTransactions;
 
             BitsoTransactions bitsoTransaction = mBitso.getTrades(bookInfo.getBook());
             assertTrue(nullCheck(bitsoTransaction, BitsoTransactions.class));
@@ -108,7 +108,7 @@ public abstract class BitsoTest {
                 throttlePublic();
 
                 BitsoTransactions bitsoTransactionLowLimit = mBitso.getTrades(bookInfo.getBook(), "limit=1");
-                totalElements = bitsoTransactionLowLimit.getTransactionsList().length;
+                totalElements = bitsoTransactionLowLimit.getTransactionsList().size();
                 assertTrue((totalElements >= 0 && totalElements <= 1));
                 throttlePublic();
 
@@ -120,21 +120,21 @@ public abstract class BitsoTest {
             }
 
             BitsoTransactions bitsoTransactionMaxLimit = mBitso.getTrades(bookInfo.getBook(), "limit=100");
-            totalElements = bitsoTransactionMaxLimit.getTransactionsList().length;
+            totalElements = bitsoTransactionMaxLimit.getTransactionsList().size();
             assertTrue((totalElements >= 0 && totalElements <= 100));
 
             throttlePublic();
 
             BitsoTransactions bitsoTransactionSortAsc = mBitso.getTrades(bookInfo.getBook(), "sort=asc");
             innerTransactions = bitsoTransaction.getTransactionsList();
-            totalElements = innerTransactions.length;
+            totalElements = innerTransactions.size();
             assertNotNull(bitsoTransactionSortAsc);
             assertTrue(totalElements >= 0, "Expected to see some trades");
             if (totalElements >= 5) {
                 boolean orderAsc = true;
-                int initialId = Integer.parseInt(innerTransactions[0].getTid());
+                int initialId = Integer.parseInt(innerTransactions.get(0).getTid());
                 for (int i = 1; i < 5; i++) {
-                    int current = Integer.parseInt(innerTransactions[i].getTid());
+                    int current = Integer.parseInt(innerTransactions.get(i).getTid());
                     orderAsc = (current < initialId);
                     initialId = current;
                 }
@@ -147,14 +147,14 @@ public abstract class BitsoTest {
             // This should return a correct DESC order and is not doing it
             BitsoTransactions bitsoTransactionSortDesc = mBitso.getTrades(bookInfo.getBook(), "sort=desc");
             innerTransactions = bitsoTransaction.getTransactionsList();
-            totalElements = innerTransactions.length;
+            totalElements = innerTransactions.size();
             assertNotNull(bitsoTransactionSortDesc);
             assertTrue(totalElements >= 0, "Expected to see some trades");
             if (totalElements >= 5) {
                 boolean orderDesc = true;
-                int initialId = Integer.parseInt(innerTransactions[0].getTid());
+                int initialId = Integer.parseInt(innerTransactions.get(0).getTid());
                 for (int i = 1; i < 5; i++) {
-                    int current = Integer.parseInt(innerTransactions[i].getTid());
+                    int current = Integer.parseInt(innerTransactions.get(i).getTid());
                     orderDesc = (current < initialId);
                     initialId = current;
                 }
@@ -165,7 +165,7 @@ public abstract class BitsoTest {
 
             BitsoTransactions bitsoTransactionSortLimit = mBitso.getTrades(bookInfo.getBook(), "sort=asc",
                     "limit=15");
-            totalElements = bitsoTransactionSortLimit.getTransactionsList().length;
+            totalElements = bitsoTransactionSortLimit.getTransactionsList().size();
             assertNotNull(bitsoTransactionSortLimit);
             assertTrue((totalElements >= 0 && totalElements <= 15));
             first = false;
