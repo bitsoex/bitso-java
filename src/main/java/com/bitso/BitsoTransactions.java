@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 import com.bitso.helpers.Helpers;
 
-/** A container for anonimized trades. */
+/** A container for anonymized trades. */
 public class BitsoTransactions {
     private final List<Transaction> transactions;
 
@@ -43,7 +43,7 @@ public class BitsoTransactions {
         return stringBuilder.toString();
     }
 
-    /** An anonimized trade inside a book. */
+    /** An anonymized trade inside a book. */
     @Value
     @ToString
     public static class Transaction {
