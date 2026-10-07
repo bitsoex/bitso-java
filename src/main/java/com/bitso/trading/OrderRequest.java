@@ -28,7 +28,7 @@ public class OrderRequest {
     @Builder.Default
     BitsoOrder.TIME_IN_FORCE timeInForce = BitsoOrder.TIME_IN_FORCE.GOODTILLCANCELLED;
     /** The major settlement currency to use instead of the book major. */
-    String majorSettle;
+    String settleMajor;
     /** The minor settlement currency to use instead of the book minor. */
-    String minorSettle;
+    String settleMinor;
 }
