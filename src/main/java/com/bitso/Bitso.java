@@ -48,7 +48,6 @@ public class Bitso {
     @Getter
     private final String key;
     private final String secret;
-    private final Mac mac;
     /** The base URL that this client is connecting to. */
     @Getter
     private String baseUrl;
@@ -73,11 +72,6 @@ public class Bitso {
         this.key = key;
         this.secret = secret;
         this.baseUrl = env.uri();
-        try {
-            mac = Mac.getInstance("HmacSHA256");
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Failed to initialize HMAC-SHA256", e);
-        }
     }
 
     /** Return the order books available for trading.
@@ -822,12 +816,13 @@ public class Bitso {
         byte[] secretBytes = secretKey.getBytes();
         SecretKeySpec localMac = new SecretKeySpec(secretBytes, "HmacSHA256");
         try {
+            Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(localMac);
             // Compute the hmac on input data bytes
             byte[] arrayOfByte = mac.doFinal(message.getBytes());
             BigInteger localBigInteger = new BigInteger(1, arrayOfByte);
             signature = String.format("%0" + (arrayOfByte.length << 1) + "x", localBigInteger);
-        } catch (InvalidKeyException | IllegalStateException e) {
+        } catch (InvalidKeyException | NoSuchAlgorithmException | IllegalStateException e) {
             log.error("Failed to build auth header", e);
         }
         String authHeader = String.format("Bitso %s:%s:%s", publicKey, nonce, signature);
