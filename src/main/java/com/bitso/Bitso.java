@@ -18,6 +18,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.net.ssl.HttpsURLConnection;
 
 import com.bitso.trading.OrderRequest;
+import jakarta.annotation.Nonnull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +58,7 @@ public class Bitso {
     @Setter
     private int readTimeout;
 
-    public Bitso(String key, String secret) {
+    public Bitso(@Nonnull String key, @Nonnull String secret) {
         this(key, secret, Target.production);
     }
 
@@ -66,13 +67,17 @@ public class Bitso {
      * @param secret The corresponding secret for the specified API key.
      * @param env The target environment to connect to.
      */
-    public Bitso(String key, String secret, Target env) {
+    public Bitso(@Nonnull String key, @Nonnull String secret, @Nonnull Target env) {
         this.key = key;
         this.secret = secret;
         this.baseUrl = env.uri();
     }
 
-    // Public Functions
+    /** Return the order books available for trading.
+     * This is a public (unauthenticated) endpoint.
+     * @return A list of BookInfo objects representing the available order books.
+     */
+    @Nonnull
     public List<BookInfo> getAvailableBooks()
             throws BitsoAPIException {
         String request = "/v3/available_books";
@@ -87,6 +92,12 @@ public class Bitso {
         return books;
     }
 
+    /**
+     * Return the ticker for all available books.
+     * This is a public (unauthenticated) endpoint.
+     * @return A list of BitsoTicker objects representing the available tickers.
+     */
+    @Nonnull
     public List<BitsoTicker> getTicker() throws BitsoAPIException {
         String request = "/v3/ticker";
 
@@ -100,12 +111,26 @@ public class Bitso {
         return tickers;
     }
 
-    public BitsoOrderBook getOrderBook(String book)
-            throws BitsoAPIException {
+    /** Returns the specified order book, if it exists.
+     * This is a public (unauthenticated) endpoint.
+     * @param book The book ID.
+     * @return The BitsoOrderBook object, if it exists, with aggregated prices.
+     * @throws BitsoAPIException If the request fails or the book does not exist.
+     */
+    @Nonnull
+    public BitsoOrderBook getOrderBook(@Nonnull String book) throws BitsoAPIException {
         return getOrderBook(book, true);
     }
 
-        public BitsoOrderBook getOrderBook(String book, boolean aggregate)
+    /** Returns the specified order book, if it exists.
+     * This is a public (unauthenticated) endpoint.
+     * @param book The book ID.
+     * @param aggregate Whether to aggregate prices.
+     * @return The BitsoOrderBook object, if it exists.
+     * @throws BitsoAPIException If the request fails or the book does not exist.
+     */
+    @Nonnull
+    public BitsoOrderBook getOrderBook(@Nonnull String book, boolean aggregate)
             throws BitsoAPIException {
         String request = "/v3/order_book?book=" + book + "&aggregate=" + aggregate;
         String getResponse = sendGet(request);
@@ -113,7 +138,14 @@ public class Bitso {
         return new BitsoOrderBook(payloadJSON);
     }
 
-    public BitsoTransactions getTrades(String book, String... queryParameters)
+    /** Returns the latest trades for the specified book.
+     * This is a public (unauthenticated) endpoint.
+     * @param book The book ID.
+     * @param queryParameters Optional query parameters.
+     * @return The list of trades, contained in a BitsoTransactions object.
+     */
+    @Nonnull
+    public BitsoTransactions getTrades(@Nonnull String book, String... queryParameters)
             throws BitsoAPIException {
         String parsedQueryParameters = processQueryParameters("&", queryParameters);
         String request = "/v3/trades?book=" + book
@@ -124,7 +156,11 @@ public class Bitso {
         return new BitsoTransactions(payloadJSON);
     }
 
-    //Public Functions Signed
+    /** Returns the ticker information, but through an authenticated request.
+     * Authenticated users may get information about books that are not publicly available.
+     * @return The list of BitsoTicker objects for books available to the user.
+     */
+    @Nonnull
     public List<BitsoTicker> getSignedTicker() throws BitsoAPIException {
         String request = "/v3/ticker";
 
@@ -138,8 +174,11 @@ public class Bitso {
         return tickers;
     }
 
-    public List<BookInfo> getSignedAvailableBooks()
-            throws BitsoAPIException {
+    /** Returns the list of books that are available to the user. This is an authenticated call.
+     * @return The list of BookInfo objects for books available to the user.
+     */
+    @Nonnull
+    public List<BookInfo> getSignedAvailableBooks() throws BitsoAPIException {
         String request = "/v3/available_books";
 
         String getResponse = sendBitsoGet(request);
@@ -152,7 +191,10 @@ public class Bitso {
         return books;
     }
 
-    // Private Functions
+    /** Returns the account status.
+     * @return The account status.
+     */
+    @Nonnull
     public BitsoAccountStatus getAccountStatus()
             throws BitsoAPIException {
         String request = "/v3/account_status";
@@ -162,6 +204,10 @@ public class Bitso {
         return new BitsoAccountStatus(payloadJSON);
     }
 
+    /** Returns the user's balances.
+     * @return The user's balances.
+     */
+    @Nonnull
     public BitsoBalance getAccountBalance()
             throws BitsoAPIException {
         String request = "/v3/balance";
@@ -170,6 +216,10 @@ public class Bitso {
         return new BitsoBalance(payloadJSON);
     }
 
+    /** Returns the user's fees.
+     * @return The user's fees.
+     */
+    @Nonnull
     public BitsoFee getFees() throws BitsoAPIException {
         String request = "/v3/fees";
         String getResponse = sendBitsoGet(request);
@@ -177,24 +227,24 @@ public class Bitso {
         return new BitsoFee(payloadJSON);
     }
 
-    /**
-     * The request needs withdrawalsIds or queryParameters, not both. In case both parameters are provided
-     * null will be returned
+    /** Fetch the user's withdrawals with the specified IDs. This is an authenticated request.
      *
-     * @param withdrawalsIds
-     * @param queryParameters
-     * @return BitsoWithdrawal[]
+     * @param withdrawalsIds The IDs of the withdrawals to retrieve.
+     * @param queryParameters Additional query parameters for the request.
+     * @return The withdrawals that were found.
      * @throws BitsoAPIException
+     * @throws IllegalArgumentException If both withdrawalsIds and queryParameters are provided.
      */
-    public List<BitsoWithdrawal> getWithdrawals(List<String> withdrawalsIds, String... queryParameters)
+    @Nonnull
+    public List<BitsoWithdrawal> getWithdrawals(@Nonnull List<String> withdrawalsIds, String... queryParameters)
             throws BitsoAPIException {
         String request = "/v3/withdrawals";
 
-        if ((withdrawalsIds != null) && (queryParameters != null && queryParameters.length > 0)) {
-            return null;
+        if (!withdrawalsIds.isEmpty() && (queryParameters != null && queryParameters.length > 0)) {
+            throw new IllegalArgumentException("The request needs withdrawalsIds or queryParameters, not both.");
         }
 
-        if (withdrawalsIds != null) {
+        if (!withdrawalsIds.isEmpty()) {
             String withdrawalsIdsParameters = String.join("-", withdrawalsIds);
             if (!withdrawalsIdsParameters.isEmpty()) {
                 request += "/" + withdrawalsIdsParameters;
@@ -202,8 +252,8 @@ public class Bitso {
         }
 
         if (queryParameters != null && queryParameters.length > 0) {
-            String parsedQueryParametes = processQueryParameters("&", queryParameters);
-            request += ((parsedQueryParametes != null) ? "?" + parsedQueryParametes : "");
+            String parsedQueryParameters = processQueryParameters("&", queryParameters);
+            request += ((parsedQueryParameters != null) ? "?" + parsedQueryParameters : "");
         }
 
         String getResponse = sendBitsoGet(request);
@@ -216,24 +266,24 @@ public class Bitso {
         return withdrawals;
     }
 
-    /**
-     * The request needs fundingssIds or queryParameters, not both. In case both parameters are provided null
-     * will be returned
-     * 
-     * @param fundingsIds
-     * @param queryParameters
-     * @return
+    /** Retrieve the user's fundings with the specified IDs. This is an authenticated request.
+     *
+     * @param fundingsIds The IDs of the fundings to retrieve.
+     * @param queryParameters Additional query parameters to filter the fundings.
+     * @return The fundings that were found.
      * @throws BitsoAPIException
+     * @throws IllegalArgumentException If both fundingsIds and queryParameters are provided.
      */
-    public List<BitsoFunding> getFundings(List<String> fundingsIds, String... queryParameters)
+    @Nonnull
+    public List<BitsoFunding> getFundings(@Nonnull List<String> fundingsIds, String... queryParameters)
             throws BitsoAPIException {
         String request = "/v3/fundings";
 
-        if ((fundingsIds != null && (queryParameters != null && queryParameters.length > 0))) {
-            return null;
+        if (!fundingsIds.isEmpty() && (queryParameters != null && queryParameters.length > 0)) {
+            throw new IllegalArgumentException("Both fundingsIds and queryParameters cannot be provided.");
         }
 
-        if (fundingsIds != null) {
+        if (!fundingsIds.isEmpty()) {
             String fundingssIdsParameters = String.join("-", fundingsIds);
             if (!fundingssIdsParameters.isEmpty()) {
                 request += "/" + fundingssIdsParameters;
@@ -255,24 +305,24 @@ public class Bitso {
         return fundings;
     }
 
-    /**
-     * The request needs tradesIds or queryParameters, not both. In case both parameters are provided null
-     * will be returned
-     * 
+    /** Retrieve the user's trades with the specified IDs. This is an authenticated request.
+     *
      * @param tradesIds
      * @param queryParameters
      * @return
      * @throws BitsoAPIException
+     * @throws IllegalArgumentException If both tradesIds and queryParameters are provided.
      */
-    public List<BitsoTrade> getUserTrades(List<String> tradesIds, String... queryParameters)
+    @Nonnull
+    public List<BitsoTrade> getUserTrades(@Nonnull List<String> tradesIds, String... queryParameters)
             throws BitsoAPIException {
         String request = "/v3/user_trades";
 
-        if ((tradesIds != null && (queryParameters != null && queryParameters.length > 0))) {
-            return null;
+        if (!tradesIds.isEmpty() && (queryParameters != null && queryParameters.length > 0)) {
+            throw new IllegalArgumentException("Both tradesIds and queryParameters cannot be provided.");
         }
 
-        if (tradesIds != null) {
+        if (!tradesIds.isEmpty()) {
             String fundingssIdsParameters = String.join("-", tradesIds);
             if (!fundingssIdsParameters.isEmpty()) {
                 request += "/" + fundingssIdsParameters;
@@ -294,12 +344,18 @@ public class Bitso {
         return trades;
     }
 
-    public List<BitsoTrade> getOrderTrades(String orderId)
+    /** Fetch the trades related to a user's order. This is an authenticated request.
+     * @param orderId The ID of the order for which trades are to be retrieved.
+     * @return The list of trades that have taken place for this order. This list may change overtime if the order is still active.
+     * @throws IllegalArgumentException If the orderId is null or empty.
+     */
+    @Nonnull
+    public List<BitsoTrade> getOrderTrades(@Nonnull String orderId)
             throws BitsoAPIException {
         String request = "/v3/order_trades";
 
-        if (orderId == null || orderId.trim().length() == 0) {
-            return null;
+        if (orderId == null || orderId.isBlank()) {
+            throw new IllegalArgumentException("orderId cannot be null or empty.");
         }
 
         request += "/" + orderId;
@@ -314,8 +370,18 @@ public class Bitso {
         return trades;
     }
 
-    public List<BitsoOrder> getOpenOrders(String book, String... queryParameters)
+    /** Retrieve the user's open orders in the specified book. This is an authenticated request.
+     * @param book The order book from which to fetch orders.
+     * @param queryParameters Optional query parameters to filter the results.
+     * @return The list of open orders in the specified book that belong to the caller.
+     * @throws IllegalArgumentException If the book is null or empty.
+     */
+    @Nonnull
+    public List<BitsoOrder> getOpenOrders(@Nonnull String book, String... queryParameters)
             throws BitsoAPIException {
+        if (book == null || book.isBlank()) {
+            throw new IllegalArgumentException("book cannot be null or empty.");
+        }
         String request = "/v3/open_orders";
 
         request += "?" + "book=" + book;
@@ -333,13 +399,24 @@ public class Bitso {
         return orders;
     }
 
-    /** Lookup orders by their public OID. */
+    /** Lookup orders by their public OID.
+     * @param ordersId The list of order IDs to lookup.
+     * @return The list of orders that match the provided IDs.
+     * @throws IllegalArgumentException If any of the orderIDs is null or empty.
+     */
+    @Nonnull
     public List<BitsoOrder> lookupOrders(String... ordersId)
             throws BitsoAPIException {
         String request = "/v3/orders";
 
         if (ordersId == null || ordersId.length == 0) {
             return List.of();
+        }
+
+        for (String orderId : ordersId) {
+            if (orderId == null || orderId.isBlank()) {
+                throw new IllegalArgumentException("orderIDs cannot contain null or empty values.");
+            }
         }
 
         if (ordersId.length == 1) {
@@ -364,7 +441,8 @@ public class Bitso {
      * @param amount The amount to sell, in major currency.
      * @return The generated order ID.
      */
-    public String placeMarketSellOrder(String book, BigDecimal amount)
+    @Nonnull
+    public String placeMarketSellOrder(@Nonnull String book, @Nonnull BigDecimal amount)
             throws BitsoAPIException {
         var req = OrderRequest.builder().book(book).side(BitsoOrder.SIDE.SELL).mode(BitsoOrder.TYPE.MARKET).amount(amount);
         return placeOrder(req.build());
@@ -374,7 +452,8 @@ public class Bitso {
      * @param book The trading pair for this order.
      * @param value The value to buy, in minor currency.
      */
-    public String placeMarketBuyOrder(String book, BigDecimal value)
+    @Nonnull
+    public String placeMarketBuyOrder(@Nonnull String book, @Nonnull BigDecimal value)
             throws BitsoAPIException {
         var req = OrderRequest.builder().book(book).side(BitsoOrder.SIDE.BUY).mode(BitsoOrder.TYPE.MARKET).value(value);
         return placeOrder(req.build());
@@ -389,8 +468,10 @@ public class Bitso {
      *              expressed in minor currency.
      * @param tif The time-in-force attribute.
      */
-    public String placeLimitOrder(String book, BitsoOrder.SIDE side, BigDecimal major, BigDecimal minor,
-                                  BigDecimal price, BitsoOrder.TIME_IN_FORCE tif)
+    @Nonnull
+    public String placeLimitOrder(@Nonnull String book, @Nonnull BitsoOrder.SIDE side,
+                                  @Nonnull BigDecimal major, @Nonnull BigDecimal minor,
+                                  @Nonnull BigDecimal price, @Nonnull BitsoOrder.TIME_IN_FORCE tif)
             throws BitsoAPIException {
         var req = OrderRequest.builder().book(book).side(side).mode(BitsoOrder.TYPE.LIMIT).amount(major).value(minor)
                 .price(price).timeInForce(tif);
@@ -405,8 +486,10 @@ public class Bitso {
      * @param minor The value of the order, in minor currency.
      * @param price The price of the order, in minor currency. Use null for market orders.
      */
-    public String placeOrder(String book, BitsoOrder.SIDE side, BitsoOrder.TYPE type, BigDecimal major,
-            BigDecimal minor, BigDecimal price)
+    @Nonnull
+    public String placeOrder(@Nonnull String book, @Nonnull BitsoOrder.SIDE side,
+                             @Nonnull BitsoOrder.TYPE type, @Nonnull BigDecimal major,
+                             @Nonnull BigDecimal minor, @Nonnull BigDecimal price)
             throws BitsoAPIException {
         var req = OrderRequest.builder().book(book).side(side).mode(type).amount(major).value(minor).price(price);
         return placeOrder(req.build());
@@ -417,7 +500,8 @@ public class Bitso {
      * @param request The order placement request.
      * @return The order ID generated by the system.
      */
-    public String placeOrder(OrderRequest request) throws BitsoAPIException {
+    @Nonnull
+    public String placeOrder(@Nonnull OrderRequest request) throws BitsoAPIException {
 
         JSONObject parameters = new JSONObject();
 
@@ -466,6 +550,7 @@ public class Bitso {
      * @param ordersIds One or more order ids to cancel.
      * @return List of canceled order ids.
      */
+    @Nonnull
     public List<String> cancelOrder(String... ordersIds)
             throws BitsoAPIException {
         String request = "/v3/orders";
@@ -486,6 +571,7 @@ public class Bitso {
     /** Cancel all the orders belonging to the user.
      * @return The list of canceled order ids.
      */
+    @Nonnull
     public List<String> cancelAllOrders()
             throws BitsoAPIException {
         String request = "/v3/orders/all";
@@ -546,83 +632,6 @@ public class Bitso {
             banks.put(currentBankCode, currentBankName);
         }
         return banks;
-    }
-
-    public BitsoWithdrawal debitCardWithdrawal(BigDecimal amount, String recipientGivenNames,
-            String recipientFamilyNames, String cardNumber, String bankCode, boolean saveAccount,
-            String... savedName) throws BitsoAPIException {
-        String request = "/v3/debit_card_withdrawal";
-        JSONObject parameters = new JSONObject();
-        parameters.put("amount", amount.toString());
-        parameters.put("recipient_given_names", recipientGivenNames);
-        parameters.put("recipient_family_names", recipientFamilyNames);
-        parameters.put("card_number", cardNumber);
-        parameters.put("bank_code", bankCode);
-
-        if (saveAccount && savedName.length == 1) {
-            parameters.put("save", saveAccount);
-            parameters.put("saved_name", savedName[0]);
-        }
-
-        String postResponse = sendBitsoPost(request, parameters);
-        JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
-        return new BitsoWithdrawal(payloadJSON);
-    }
-
-    public String numberRegistration(String phoneNumber)
-            throws BitsoAPIException {
-        if (phoneNumber == null) {
-
-        }
-
-        phoneNumber = phoneNumber.trim();
-        if (phoneNumber.length() == 0) {
-
-        }
-
-        String request = "/v3/phone_number";
-        JSONObject parameters = new JSONObject();
-        parameters.put("phone_number", phoneNumber);
-
-        String postResponse = sendBitsoPost(request, parameters);
-        JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
-        return payloadJSON.getString("phone");
-    }
-
-    public String phoneVerification(String verificationCode)
-            throws BitsoAPIException {
-        if (verificationCode == null) {
-
-        }
-
-        verificationCode = verificationCode.trim();
-        if (verificationCode.length() == 0) {
-
-        }
-
-        String request = "/v3/phone_verification";
-        JSONObject parameters = new JSONObject();
-        parameters.put("verification_code", verificationCode);
-
-        String postResponse = sendBitsoPost(request, parameters);
-        JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
-        return payloadJSON.getString("phone");
-    }
-
-    public BitsoWithdrawal phoneWithdrawal(BigDecimal amount, String recipientGivenNames,
-            String recipientFamilyNames, String phoneNumber, String bankCode)
-            throws BitsoAPIException {
-        String request = "/v3/phone_withdrawal";
-        JSONObject parameters = new JSONObject();
-        parameters.put("amount", amount.toString());
-        parameters.put("recipient_given_names", recipientGivenNames);
-        parameters.put("recipient_family_names", recipientFamilyNames);
-        parameters.put("phone_number", phoneNumber);
-        parameters.put("bank_code", bankCode);
-
-        String postResponse = sendBitsoPost(request, parameters);
-        JSONObject payloadJSON = (JSONObject) getJSONPayload(postResponse);
-        return new BitsoWithdrawal(payloadJSON);
     }
 
     private BitsoWithdrawal currencyWithdrawal(String currency, BigDecimal amount, String address,
