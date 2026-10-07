@@ -4,41 +4,44 @@
 		"fees": [
 			{
 			"book":"btc_mxn",
-			"fee_percent":"0.0000",
-			"fee_decimal":"0.0000",
-			"taker_fee_percent":"0.0000",
-			"taker_fee_decimal":"0.0000",
-			"maker_fee_percent":"0.0000",
-			"maker_fee_decimal":"0.0000"
+			"current_volume": "0.001",
+			"taker_fee_percent":"0.2000",
+			"taker_fee_decimal":"0.0020",
+			"maker_fee_percent":"0.1000",
+			"maker_fee_decimal":"0.0010"
+			},
+			{
+				"book":"btc_mxn",
+				"current_volume": "0.01",
+				"taker_fee_percent":"0.0020",
+				"taker_fee_decimal":"0.00002",
+				"maker_fee_percent":"0.0010",
+				"maker_fee_decimal":"0.00001"
 			},
 			{
 			"book": "eth_mxn",
-			"fee_percent": "0.0000",
-			"fee_decimal": "0.0000",
+			"current_volume": "0.1",
 			"taker_fee_percent":"0.0000",
 			"taker_fee_decimal":"0.0000",
 			"maker_fee_percent":"0.0000",
 			"maker_fee_decimal":"0.0000"
 		}, {
 			"book": "xrp_btc",
-			"fee_percent": "0.8000",
-			"fee_decimal": "0.0080",
+			"current_volume": "0.1",
 			"taker_fee_percent":"0.0000",
 			"taker_fee_decimal":"0.0000",
 			"maker_fee_percent":"0.0000",
 			"maker_fee_decimal":"0.0000"
 		}, {
 			"book": "xrp_mxn",
-			"fee_percent": "0.8000",
-			"fee_decimal": "0.0080",
+			"current_volume": "0.1",
 			"taker_fee_percent":"0.0000",
 			"taker_fee_decimal":"0.0000",
 			"maker_fee_percent":"0.0000",
 			"maker_fee_decimal":"0.0000"
 		}, {
 			"book": "eth_btc",
-			"fee_percent": "1.0000",
-			"fee_decimal": "0.0100",
+			"current_volume": "0.1",
 			"taker_fee_percent":"0.0000",
 			"taker_fee_decimal":"0.0000",
 			"maker_fee_percent":"0.0000",
