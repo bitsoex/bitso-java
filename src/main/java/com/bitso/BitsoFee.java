@@ -2,141 +2,76 @@ package com.bitso;
 
 import com.bitso.helpers.Helpers;
 
+import lombok.Value;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
+/** A container for trading and withdrawal fees. */
+@Value
 public class BitsoFee {
-    private HashMap<String, Fee> mTradeFees;
-    private HashMap<String, String> mWithdrawalFees;
+    /** A map from books to the trading fees for that book.
+     * A book can have several fee entries, for different volume levels
+     */
+    Map<String, List<Fee>> tradeFees;
+    /** A map of currencies with their withdrawal fees. */
+    Map<String, BigDecimal> withdrawalFees;
 
     public BitsoFee(JSONObject o) {
-        processTradeFees(o);
-        processWithdrawalFees(o);
+        tradeFees = processTradeFees(o);
+        withdrawalFees = processWithdrawalFees(o);
     }
 
-    private void processTradeFees(JSONObject o) {
-        mTradeFees = new HashMap<String, Fee>();
+    private Map<String, List<Fee>> processTradeFees(JSONObject o) {
+        var mTradeFees = new HashMap<String, List<Fee>>();
         JSONArray jsonFees = o.getJSONArray("fees");
         int totalElements = jsonFees.length();
         for (int i = 0; i < totalElements; i++) {
             JSONObject fee = jsonFees.getJSONObject(i);
             String book = Helpers.getString(fee, "book");
-            Fee currentFee = new Fee(book, Helpers.getBD(fee, "fee_decimal"),
-                    Helpers.getBD(fee, "fee_percent"),
+            Fee currentFee = new Fee(book,
+                    Helpers.getBD(fee, "current_volume"),
                     Helpers.getBD(fee, "taker_fee_decimal"),
                     Helpers.getBD(fee, "taker_fee_percent"),
                     Helpers.getBD(fee, "maker_fee_decimal"),
                     Helpers.getBD(fee, "maker_fee_percent")
             );
-            mTradeFees.put(book, currentFee);
+            mTradeFees.computeIfAbsent(book, k -> new ArrayList<>(2)).add(currentFee);
         }
+        return Map.copyOf(mTradeFees);
     }
 
-    private void processWithdrawalFees(JSONObject o) {
-        mWithdrawalFees = new HashMap<String, String>();
+    private Map<String, BigDecimal> processWithdrawalFees(JSONObject o) {
+        var mWithdrawalFees = new HashMap<String, BigDecimal>();
         JSONObject withdrawalFees = o.getJSONObject("withdrawal_fees");
         Iterator<String> it = withdrawalFees.keys();
         while (it.hasNext()) {
             String key = it.next();
-            mWithdrawalFees.put(key, withdrawalFees.getString(key));
+            mWithdrawalFees.put(key, withdrawalFees.getBigDecimal(key));
         }
+        return Map.copyOf(mWithdrawalFees);
     }
 
-    public HashMap<String, Fee> getTradeFees() {
-        return mTradeFees;
-    }
-
-    public void setTradeFees(HashMap<String, Fee> mTradeFees) {
-        this.mTradeFees = mTradeFees;
-    }
-
-    public HashMap<String, String> getWithdrawalFees() {
-        return mWithdrawalFees;
-    }
-
-    public void setWithdrawalFees(HashMap<String, String> mWithdrawalFees) {
-        this.mWithdrawalFees = mWithdrawalFees;
-    }
-
-    public String toString() {
-        return Helpers.fieldPrinter(this, BitsoFee.class);
-    }
-
-    public class Fee {
-
-        private String mBook;
-        @Deprecated
-        private BigDecimal mFeeDecimal;
-        @Deprecated
-        private BigDecimal mFeePercent;
-        private BigDecimal mTakerFeeDecimal;
-        private BigDecimal mTakerFeePercent;
-        private BigDecimal mMakerFeeDecimal;
-        private BigDecimal mMakerFeePercent;
-
-        public Fee(String mBook, BigDecimal mFeeDecimal, BigDecimal mFeePercent, BigDecimal mTakerFeeDecimal,
-                   BigDecimal mTakerFeePercent, BigDecimal mMakerFeeDecimal, BigDecimal mMakerFeePercent) {
-            super();
-            this.mBook = mBook;
-            this.mFeeDecimal = mFeeDecimal;
-            this.mFeePercent = mFeePercent;
-            this.mTakerFeeDecimal = mTakerFeeDecimal;
-            this.mTakerFeePercent = mTakerFeePercent;
-            this.mMakerFeeDecimal = mMakerFeeDecimal;
-            this.mMakerFeePercent = mMakerFeePercent;
-        }
-
-        public String getBook() {
-            return mBook;
-        }
-
-        public void setBook(String mBook) {
-            this.mBook = mBook;
-        }
-
-        @Deprecated
-        public BigDecimal getFeeDecimal() {
-            return mFeeDecimal;
-        }
-
-        @Deprecated
-        public void setFeeDecimal(BigDecimal mFeeDecimal) {
-            this.mFeeDecimal = mFeeDecimal;
-        }
-
-        @Deprecated
-        public BigDecimal getFeePercent() {
-            return mFeePercent;
-        }
-
-        @Deprecated
-        public void setFeePercent(BigDecimal mFeePercent) {
-            this.mFeePercent = mFeePercent;
-        }
-
-        public String toString() {
-            return Helpers.fieldPrinter(this, BitsoFee.Fee.class);
-        }
-
-        public BigDecimal getTakerFeePercent() {
-            return mTakerFeePercent;
-        }
-
-        public BigDecimal getTakerFeeDecimal() {
-            return mTakerFeeDecimal;
-        }
-
-        public BigDecimal getMakerFeePercent() {
-            return mMakerFeePercent;
-        }
-
-        public BigDecimal getMakerFeeDecimal() {
-            return mMakerFeeDecimal;
-        }
-
+    /** An entry for trading fees. */
+    @Value
+    public static class Fee {
+        /** The order book for which these fees apply. */
+        String mBook;
+        /** The trading volume that must be achieved to get these fees. */
+        BigDecimal currentVolume;
+        /** The taker fee, applied when an order trades during matching. */
+        BigDecimal takerFeeDecimal;
+        /** The taker fee as a percentage. */
+        BigDecimal takerFeePercent;
+        /** The maker fee, applied when an order trades after it's been added to the book. */
+        BigDecimal makerFeeDecimal;
+        /** The maker fee as a percentage. */
+        BigDecimal makerFeePercent;
     }
 }
