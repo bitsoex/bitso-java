@@ -27,7 +27,6 @@ repositories {
 }
 
 dependencies {
-    api libs.httpclient5
     api libs.json
     api libs.netty
     api libs.slf4j.api
