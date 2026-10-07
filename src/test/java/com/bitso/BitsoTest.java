@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.bitso.trading.OrderRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
 
@@ -518,6 +519,7 @@ public abstract class BitsoTest {
 
         BitsoBalance bitsoBalance = mBitso.getAccountBalance();
         assertNotNull(bitsoBalance);
+        throttlePrivate();
 
         HashMap<String, Balance> currencyBalances = bitsoBalance.getBalances();
         assertNotNull(currencyBalances);
@@ -593,6 +595,45 @@ public abstract class BitsoTest {
                 assertEquals(1, canceledOrders.length);
             }
         }
+    }
+
+    @Test
+    public void testSettlementCurrencies() {
+        // Check balances
+        BitsoBalance bitsoBalance = mBitso.getAccountBalance();
+        assertNotNull(bitsoBalance);
+        throttlePrivate();
+
+        HashMap<String, Balance> currencyBalances = bitsoBalance.getBalances();
+        assertNotNull(currencyBalances);
+
+        var btc = currencyBalances.get("btc");
+        assertTrue(nullCheck(btc, Balance.class));
+        var mxnb = currencyBalances.get("mxnb");
+        log.info("mxnb balance: {}", mxnb);
+
+        // Place an order
+        var request = OrderRequest.builder().book("btc_mxn").settleMinor("mxnb").mode(BitsoOrder.TYPE.LIMIT)
+                .amount(AMOUNT);
+        if (mxnb != null && mxnb.getAvailable().doubleValue() >= 100) {
+            request.side(BitsoOrder.SIDE.BUY).price(minPrice);
+        } else if (btc.getAvailable().compareTo(AMOUNT) >= 0) {
+            request.side(BitsoOrder.SIDE.SELL).price(maxPrice);
+        } else {
+            log.warn("Not enough BTC or MXNB to place an order with minor settle");
+            return;
+        }
+        var orderId = mBitso.placeOrder(request.build());
+        log.info("Placed order with ID: {}", orderId);
+        throttlePrivate();
+        assertNotNull(orderId, "Order ID is null");
+        // Look it up, check it has the settlement currency
+        var orders = mBitso.lookupOrders(orderId);
+        assertNotNull(orders, "Orders are null");
+        assertEquals(1, orders.length);
+        assertEquals("mxnb", orders[0].getMinorSettle(), "Expected MXNB as minor settlement currency");
+        // Cancel it
+        mBitso.cancelOrder(orderId);
     }
 
     @Test
@@ -696,7 +737,11 @@ public abstract class BitsoTest {
             if (book.getBook().equals("btc_mxn")) {
                 BitsoOrder[] openOrders = mBitso.getOpenOrders(book.getBook());
                 for (BitsoOrder bitsoOrder : openOrders) {
-                    assertTrue(nullCheck(bitsoOrder, BitsoOrder.class));
+                    assertNotNull(bitsoOrder.getBook());
+                    assertNotNull(bitsoOrder.getOid());
+                    assertNotNull(bitsoOrder.getSide());
+                    assertNotNull(bitsoOrder.getStatus());
+                    assertNotNull(bitsoOrder.getPrice());
                 }
                 throttlePrivate();
                 assertTrue(openOrders.length >= 1, "wrong number of open orders for " + book.getBook());
@@ -708,7 +753,11 @@ public abstract class BitsoTest {
         assertNotNull(multiple, "null lookup for orders " + buyOrderId + " and " + sellOrderId);
         assertEquals(2, multiple.length);
         for (BitsoOrder bitsoOrder : multiple) {
-            assertTrue(nullCheck(bitsoOrder, BitsoOrder.class));
+            assertNotNull(bitsoOrder.getBook());
+            assertNotNull(bitsoOrder.getOid());
+            assertNotNull(bitsoOrder.getSide());
+            assertNotNull(bitsoOrder.getStatus());
+            assertNotNull(bitsoOrder.getPrice());
         }
 
         throttlePrivate();
