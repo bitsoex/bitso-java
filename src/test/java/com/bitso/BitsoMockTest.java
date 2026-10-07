@@ -88,9 +88,10 @@ public class BitsoMockTest extends BitsoTest {
         Mockito.when(mBitso.getAccountStatus()).thenReturn(mockAccountStatus);
         Mockito.when(mBitso.getAccountBalance()).thenReturn(mockBalance);
         Mockito.when(mBitso.getFees()).thenReturn(mockFee);
-        Mockito.when(mBitso.getWithdrawals(null)).thenReturn(mockWithdrawals);
-        Mockito.when(mBitso.getFundings(null)).thenReturn(mockFundings);
-        Mockito.when(mBitso.getUserTrades(null)).thenReturn(mockTrades);
+        Mockito.when(mBitso.getWithdrawals(eq(List.of()))).thenReturn(mockWithdrawals);
+        Mockito.when(mBitso.getFundings(eq(List.of()))).thenReturn(mockFundings);
+        Mockito.when(mBitso.getUserTrades(eq(List.of("")), eq(""))).thenThrow(new IllegalArgumentException("wrong params"));
+        Mockito.when(mBitso.getUserTrades(eq(List.of()))).thenReturn(mockTrades);
         Mockito.when(mBitso.getOpenOrders(anyString())).thenReturn(List.of());
         JSONArray orders = Helpers.getJSONFromFile("privateOpenOrders.json").getJSONArray("payload");
         var one = List.of(new BitsoOrder(orders.getJSONObject(0)));
@@ -283,7 +284,7 @@ public class BitsoMockTest extends BitsoTest {
         var trades = mBitso.getUserTrades(List.of());
         assertNotNull(trades);
         int totalElements = trades.size();
-        assertTrue((totalElements >= 0 && totalElements <= 25));
+        assertTrue(totalElements <= 25);
         for (BitsoTrade current : trades) {
             assertTrue(nullCheck(current, BitsoTrade.class));
         }
@@ -291,14 +292,9 @@ public class BitsoMockTest extends BitsoTest {
 
     @Test
     public void testOrderTrades() throws JSONException, IOException, BitsoAPIException {
-        int totalElements = 0;
 
-        // TODO:
-        // This should return a collection of 25 elements, not working limit default value
-        var trades = mBitso.getUserTrades(null);
+        var trades = mBitso.getOrderTrades("vtielslDxSHDnRIu");
         assertNotNull(trades);
-        totalElements = trades.size();
-        assertTrue((totalElements >= 0 && totalElements <= 25));
         for (BitsoTrade current : trades) {
             assertTrue(nullCheck(current, BitsoTrade.class));
         }
