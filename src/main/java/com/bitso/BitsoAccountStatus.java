@@ -37,8 +37,8 @@ public class BitsoAccountStatus {
         this.dailyLimit = Helpers.getBD(o, "daily_limit");
         this.dailyRemaining = Helpers.getBD(o, "daily_remaining");
         this.monthlyRemaining = Helpers.getBD(o, "monthly_remaining");
-        this.isCellphoneNumberVerified = Helpers.getString(o, "cellphone_number").equals("verified");
-        this.isMailVerified = Helpers.getString(o, "email").equals("verified");
+        this.isCellphoneNumberVerified = "verified".equals(Helpers.getString(o, "cellphone_number"));
+        this.isMailVerified = "verified".equals(Helpers.getString(o, "email"));
         this.officialId = Helpers.getString(o, "official_id");
         this.proofOfResidency = Helpers.getString(o, "proof_of_residency");
         this.signedContract = Helpers.getString(o, "signed_contract");
