@@ -94,7 +94,7 @@ public class Helpers {
         if (o.has(key)) {
             return o.getInt(key);
         } else {
-            log.warn("No int key '{}' in JSON object", key);
+            log.debug("No int key '{}' in JSON object", key);
         }
         return -1;
     }
@@ -103,7 +103,7 @@ public class Helpers {
         if (o.has(key)) {
             return o.getString(key);
         } else {
-            log.warn("No string key '{}' in JSON object", key);
+            log.debug("No string key '{}' in JSON object", key);
         }
         return null;
     }
@@ -114,7 +114,7 @@ public class Helpers {
             value = (value.equals("null") || value.isBlank()) ? "0" : value.trim();
             return new BigDecimal(value);
         } else {
-            log.warn("No BigDecimal key '{}' in JSON object", key);
+            log.debug("No BigDecimal key '{}' in JSON object", key);
         }
         return null;
     }
@@ -123,7 +123,7 @@ public class Helpers {
         if (o.has(key)) {
             return o.getInt(key);
         } else {
-            log.warn("No Integer key '{}' in JSON object", key);
+            log.debug("No Integer key '{}' in JSON object", key);
         }
         return null;
     }
