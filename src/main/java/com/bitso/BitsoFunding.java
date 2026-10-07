@@ -2,7 +2,7 @@ package com.bitso;
 
 import com.bitso.helpers.Helpers;
 
-import lombok.Data;
+import lombok.Value;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,15 +12,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-@Data
+@Value
 public class BitsoFunding {
-    private String fundingId;
-    private String status;
-    private Date fundingDate;
-    private String currency;
-    private String method;
-    private BigDecimal amount;
-    private final Map<String, String> details;
+    String fundingId;
+    String status;
+    Date fundingDate;
+    String currency;
+    String method;
+    BigDecimal amount;
+    Map<String, String> details;
 
     public BitsoFunding(JSONObject o) {
         fundingId = Helpers.getString(o, "fid");
