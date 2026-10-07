@@ -2,19 +2,22 @@ package com.bitso;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Map;
 
-import lombok.Data;
 import lombok.Value;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.bitso.helpers.Helpers;
 
+/** A container for a user's balances. */
+@Value
 public class BitsoBalance {
-    private HashMap<String, Balance> mBalances;
+    /** A map from currencies to balances. */
+    Map<String, Balance> balances;
 
     public BitsoBalance(JSONObject o) {
-        mBalances = new HashMap<String, Balance>();
+        var mBalances = new HashMap<String, Balance>();
         JSONArray jsonBalances = o.getJSONArray("balances");
         int totalElements = jsonBalances.length();
         for (int i = 0; i < totalElements; i++) {
@@ -24,25 +27,19 @@ public class BitsoBalance {
                     Helpers.getBD(balance, "locked"), Helpers.getBD(balance, "available"));
             mBalances.put(currency, currentBalance);
         }
+        this.balances = Map.copyOf(mBalances);
     }
 
-    public HashMap<String, Balance> getBalances() {
-        return mBalances;
-    }
-
-    public void setBalances(HashMap<String, Balance> mBalances) {
-        this.mBalances = mBalances;
-    }
-
-    public String toString() {
-        return Helpers.fieldPrinter(this, BitsoBalance.class);
-    }
-
+    /** The balance of a single currency. */
     @Value
     public class Balance {
+        /** The currency code. */
         String currency;
+        /** The total balance. */
         BigDecimal total;
+        /** The balance that's locked in open orders. */
         BigDecimal locked;
+        /** The available balance, that is, total minus available. */
         BigDecimal available;
     }
 }
