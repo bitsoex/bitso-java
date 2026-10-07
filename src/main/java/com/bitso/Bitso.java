@@ -808,7 +808,7 @@ public class Bitso {
         }
     }
 
-    private Map<String, String> buildBitsoAuthHeader(String secretKey, String publicKey, long nonce,
+    private static Map<String, String> buildBitsoAuthHeader(String secretKey, String publicKey, long nonce,
             String httpMethod, String requestPath, String jsonPayload) {
         if (jsonPayload == null) jsonPayload = "";
         String message = String.valueOf(nonce) + httpMethod + requestPath + jsonPayload;
