@@ -325,6 +325,7 @@ public class Bitso {
         return orders;
     }
 
+    /** Lookup orders by their public OID. */
     public BitsoOrder[] lookupOrders(String... ordersId)
             throws BitsoAPIException {
         String request = "/v3/orders";
@@ -441,11 +442,11 @@ public class Bitso {
             parameters.put("minor", request.getValue().toPlainString());
         }
 
-        if (request.getMajorSettle() != null) {
-            parameters.put("major_settle", request.getMajorSettle());
+        if (request.getSettleMajor() != null) {
+            parameters.put("settle_major", request.getSettleMajor());
         }
-        if (request.getMinorSettle() != null) {
-            parameters.put("minor_settle", request.getMinorSettle());
+        if (request.getSettleMinor() != null) {
+            parameters.put("settle_minor", request.getSettleMinor());
         }
 
         String postResponse = sendBitsoPost("/v3/orders", parameters);
