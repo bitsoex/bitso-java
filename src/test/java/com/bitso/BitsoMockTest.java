@@ -88,10 +88,10 @@ public class BitsoMockTest extends BitsoTest {
         Mockito.when(mBitso.getAccountStatus()).thenReturn(mockAccountStatus);
         Mockito.when(mBitso.getAccountBalance()).thenReturn(mockBalance);
         Mockito.when(mBitso.getFees()).thenReturn(mockFee);
-        Mockito.when(mBitso.getWithdrawals(eq(List.of()))).thenReturn(mockWithdrawals);
-        Mockito.when(mBitso.getFundings(eq(List.of()))).thenReturn(mockFundings);
+        Mockito.when(mBitso.getWithdrawals(List.of())).thenReturn(mockWithdrawals);
+        Mockito.when(mBitso.getFundings(List.of())).thenReturn(mockFundings);
         Mockito.when(mBitso.getUserTrades(eq(List.of("")), eq(""))).thenThrow(new IllegalArgumentException("wrong params"));
-        Mockito.when(mBitso.getUserTrades(eq(List.of()))).thenReturn(mockTrades);
+        Mockito.when(mBitso.getUserTrades(List.of())).thenReturn(mockTrades);
         Mockito.when(mBitso.getOpenOrders(anyString())).thenReturn(List.of());
         JSONArray orders = Helpers.getJSONFromFile("privateOpenOrders.json").getJSONArray("payload");
         var one = List.of(new BitsoOrder(orders.getJSONObject(0)));
@@ -110,8 +110,8 @@ public class BitsoMockTest extends BitsoTest {
         mxnbOrder.put("status", "open");
         mxnbOrder.put("type", "limit");
         mxnbOrder.put("settle_minor", "mxnb");
-        Mockito.when(mBitso.lookupOrders(eq("mxnbOrder"))).thenReturn(List.of(new BitsoOrder(mxnbOrder)));
         Mockito.when(mBitso.lookupOrders(any(), any())).thenReturn(lookup);
+        Mockito.when(mBitso.lookupOrders("mxnbOrder")).thenReturn(List.of(new BitsoOrder(mxnbOrder)));
         Mockito.when(mBitso.cancelAllOrders()).thenReturn(List.of());
         Mockito.when(mBitso.getBanks()).thenReturn(mockBitsoBanks);
         Mockito.when(mBitso.placeOrder(argThat(req -> req != null && "mxnb".equals(req.getSettleMinor()))))
@@ -120,6 +120,8 @@ public class BitsoMockTest extends BitsoTest {
                 .thenReturn("genericOrder", generateOrderIds(10));
         Mockito.when(mBitso.placeLimitOrder(anyString(), any(), any(), any(), any(), any()))
                 .thenReturn("limitOrder", generateOrderIds(15));
+        Mockito.when(mBitso.modifyOrder(anyString(), any())).thenReturn(true);
+        Mockito.when(mBitso.modifyOrder(eq("non-existent-order-id"), any())).thenReturn(false);
     }
 
     private final AtomicLong oidgen = new AtomicLong(12345);
