@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.net.ssl.HttpsURLConnection;
@@ -186,7 +187,7 @@ public class Bitso {
      * @return BitsoWithdrawal[]
      * @throws BitsoAPIException
      */
-    public List<BitsoWithdrawal> getWithdrawals(String[] withdrawalsIds, String... queryParameters)
+    public List<BitsoWithdrawal> getWithdrawals(List<String> withdrawalsIds, String... queryParameters)
             throws BitsoAPIException {
         String request = "/v3/withdrawals";
 
@@ -195,8 +196,10 @@ public class Bitso {
         }
 
         if (withdrawalsIds != null) {
-            String withdrawalsIdsParameters = processQueryParameters("-", withdrawalsIds);
-            request += ((withdrawalsIdsParameters != null) ? "/" + withdrawalsIdsParameters : "");
+            String withdrawalsIdsParameters = String.join("-", withdrawalsIds);
+            if (!withdrawalsIdsParameters.isEmpty()) {
+                request += "/" + withdrawalsIdsParameters;
+            }
         }
 
         if (queryParameters != null && queryParameters.length > 0) {
@@ -218,27 +221,29 @@ public class Bitso {
      * The request needs fundingssIds or queryParameters, not both. In case both parameters are provided null
      * will be returned
      * 
-     * @param fundingssIds
+     * @param fundingsIds
      * @param queryParameters
      * @return
      * @throws BitsoAPIException
      */
-    public List<BitsoFunding> getFundings(String[] fundingssIds, String... queryParameters)
+    public List<BitsoFunding> getFundings(List<String> fundingsIds, String... queryParameters)
             throws BitsoAPIException {
         String request = "/v3/fundings";
 
-        if ((fundingssIds != null && (queryParameters != null && queryParameters.length > 0))) {
+        if ((fundingsIds != null && (queryParameters != null && queryParameters.length > 0))) {
             return null;
         }
 
-        if (fundingssIds != null) {
-            String fundingssIdsParameters = processQueryParameters("-", fundingssIds);
-            request += ((fundingssIdsParameters != null) ? "/" + fundingssIdsParameters : "");
+        if (fundingsIds != null) {
+            String fundingssIdsParameters = String.join("-", fundingsIds);
+            if (!fundingssIdsParameters.isEmpty()) {
+                request += "/" + fundingssIdsParameters;
+            }
         }
 
         if (queryParameters != null && queryParameters.length > 0) {
-            String parsedQueryParametes = processQueryParameters("&", queryParameters);
-            request += ((parsedQueryParametes != null) ? "?" + parsedQueryParametes : "");
+            String parsedQueryParameters = processQueryParameters("&", queryParameters);
+            request += ((parsedQueryParameters != null) ? "?" + parsedQueryParameters : "");
         }
 
         String getResponse = sendBitsoGet(request);

@@ -225,8 +225,7 @@ public abstract class BitsoTest {
 
         if (totalElementsFirstCall > 0) {
             BitsoWithdrawal bitsoWithdrawal = withdrawals.get(0);
-            var oneWithdrawal = mBitso
-                    .getWithdrawals(new String[] { bitsoWithdrawal.getWithdrawalId() });
+            var oneWithdrawal = mBitso.getWithdrawals(List.of(bitsoWithdrawal.getWithdrawalId()));
             assertNotNull(oneWithdrawal);
             totalElements = oneWithdrawal.size();
             assertEquals(1, totalElements);
@@ -241,9 +240,9 @@ public abstract class BitsoTest {
             BitsoWithdrawal bitsoWithdrawalFirst = withdrawals.get(0);
             BitsoWithdrawal bitsoWithdrawalSecond = withdrawals.get(1);
             BitsoWithdrawal bitsoWithdrawalThird = withdrawals.get(2);
-            var threeWithdrawals = mBitso.getWithdrawals(new String[] {
+            var threeWithdrawals = mBitso.getWithdrawals(List.of(
                     bitsoWithdrawalFirst.getWithdrawalId(), bitsoWithdrawalSecond.getWithdrawalId(),
-                    bitsoWithdrawalThird.getWithdrawalId() });
+                    bitsoWithdrawalThird.getWithdrawalId()));
             assertNotNull(threeWithdrawals);
             totalElements = threeWithdrawals.size();
             assertEquals(3, totalElements);
@@ -253,7 +252,7 @@ public abstract class BitsoTest {
         }
         throttlePrivate();
 
-        var withdrawalsBothParameters = mBitso.getWithdrawals(new String[] { "" }, "");
+        var withdrawalsBothParameters = mBitso.getWithdrawals(List.of(""), "");
         assertNull(withdrawalsBothParameters);
 
         throttlePrivate();
@@ -309,7 +308,6 @@ public abstract class BitsoTest {
         assertNotNull(fundings);
         totalElements = fundings.size();
         totalElementsFirstCall = totalElements;
-        // assertEquals((totalElements >= 0 && totalElements <= 25), true);
         for (BitsoFunding bitsoFunding : fundings) {
             assertTrue(nullCheck(bitsoFunding, BitsoFunding.class));
         }
@@ -318,7 +316,7 @@ public abstract class BitsoTest {
 
         if (totalElementsFirstCall > 0) {
             BitsoFunding bitsoFunding = fundings.get(0);
-            var oneFunding = mBitso.getFundings(new String[] { bitsoFunding.getFundingId() });
+            var oneFunding = mBitso.getFundings(List.of(bitsoFunding.getFundingId()));
             assertNotNull(oneFunding);
             totalElements = oneFunding.size();
             assertEquals(1, totalElements);
@@ -334,8 +332,8 @@ public abstract class BitsoTest {
             BitsoFunding bitsoFundingFirst = fundings.get(0);
             BitsoFunding bitsoFundingSecond = fundings.get(1);
             BitsoFunding bitsoFundingThird = fundings.get(2);
-            var threeFundings = mBitso.getFundings(new String[] { bitsoFundingFirst.getFundingId(),
-                    bitsoFundingSecond.getFundingId(), bitsoFundingThird.getFundingId() });
+            var threeFundings = mBitso.getFundings(List.of(bitsoFundingFirst.getFundingId(),
+                    bitsoFundingSecond.getFundingId(), bitsoFundingThird.getFundingId()));
             assertNotNull(threeFundings);
             totalElements = threeFundings.size();
             assertEquals(3, totalElements);
@@ -346,7 +344,7 @@ public abstract class BitsoTest {
 
         throttlePrivate();
 
-        var fundingsBothParameters = mBitso.getFundings(new String[] { "" }, "");
+        var fundingsBothParameters = mBitso.getFundings(List.of(""), "");
         assertNull(fundingsBothParameters);
 
         throttlePrivate();
