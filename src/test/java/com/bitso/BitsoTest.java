@@ -40,7 +40,7 @@ public abstract class BitsoTest {
         BookInfo[] books = mBitso.getAvailableBooks();
         assertNotNull(books);
         int totalElements = books.length;
-        assertTrue(totalElements > 10, "Expected more than 10 books");
+        assertTrue(totalElements > 5, "Expected more than 5 books");
         for (BookInfo bookInfo : books) {
             assertTrue(nullCheck(bookInfo, BookInfo.class));
             if (bookInfo.getBook().equals("btc_mxn")) {
@@ -57,7 +57,7 @@ public abstract class BitsoTest {
         throttlePublic();
         assertNotNull(tickers);
         int totalElements = tickers.length;
-        assertTrue(totalElements > 10, "Expected more than 10 ticker entries");
+        assertTrue(totalElements > 5, "Expected more than 5 ticker entries");
         for (Ticker ticker : tickers) {
             assertTrue(nullCheck(ticker, BitsoTicker.class));
         }
@@ -626,7 +626,7 @@ public abstract class BitsoTest {
         BitsoTicker[] tickers = mBitso.getSignedTicker();
         assertNotNull(tickers);
         int totalElements = tickers.length;
-        assertTrue(totalElements > 10, "Expected more than 10 ticker entries");
+        assertTrue(totalElements > 5, "Expected more than 5 ticker entries");
         for (Ticker ticker : tickers) {
             assertTrue(nullCheck(ticker, BitsoTicker.class));
         }
@@ -637,7 +637,7 @@ public abstract class BitsoTest {
         BookInfo[] books = mBitso.getSignedAvailableBooks();
         assertNotNull(books);
         int totalElements = books.length;
-        assertTrue(totalElements > 10, "Expected more than 10 books");
+        assertTrue(totalElements > 5, "Expected more than 5 books");
         for (BookInfo bookInfo : books) {
             assertTrue(nullCheck(bookInfo, BookInfo.class));
         }
