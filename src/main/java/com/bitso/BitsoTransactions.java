@@ -28,10 +28,6 @@ public class BitsoTransactions {
         return mTransactionsList;
     }
 
-    public void setmTransactionsList(Transaction[] mTransactionsList) {
-        this.mTransactionsList = mTransactionsList;
-    }
-
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Bitso Recent Transactions\n");

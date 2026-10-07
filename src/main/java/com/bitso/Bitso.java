@@ -260,7 +260,7 @@ public class Bitso {
      * @return
      * @throws BitsoAPIException
      */
-    public BitsoTrade[] getUserTrades(String[] tradesIds, String... queryParameters)
+    public List<BitsoTrade> getUserTrades(String[] tradesIds, String... queryParameters)
             throws BitsoAPIException {
         String request = "/v3/user_trades";
 
@@ -281,14 +281,14 @@ public class Bitso {
         String getResponse = sendBitsoGet(request);
         JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
         int totalElements = payloadJSON.length();
-        BitsoTrade[] trades = new BitsoTrade[totalElements];
+        var trades = new ArrayList<BitsoTrade>(totalElements);
         for (int i = 0; i < totalElements; i++) {
-            trades[i] = new BitsoTrade(payloadJSON.getJSONObject(i));
+            trades.add(new BitsoTrade(payloadJSON.getJSONObject(i)));
         }
         return trades;
     }
 
-    public BitsoTrade[] getOrderTrades(String orderId)
+    public List<BitsoTrade> getOrderTrades(String orderId)
             throws BitsoAPIException {
         String request = "/v3/order_trades";
 
@@ -301,9 +301,9 @@ public class Bitso {
         String getResponse = sendBitsoGet(request);
         JSONArray payloadJSON = (JSONArray) getJSONPayload(getResponse);
         int totalElements = payloadJSON.length();
-        BitsoTrade[] trades = new BitsoTrade[totalElements];
+        var trades = new ArrayList<BitsoTrade>(totalElements);
         for (int i = 0; i < totalElements; i++) {
-            trades[i] = new BitsoTrade(payloadJSON.getJSONObject(i));
+            trades.add(new BitsoTrade(payloadJSON.getJSONObject(i)));
         }
         return trades;
     }
