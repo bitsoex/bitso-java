@@ -409,7 +409,7 @@ public abstract class BitsoTest {
 
         if (totalElementsFirstCall > 0) {
             BitsoTrade bitso = trades.get(0);
-            var one = mBitso.getUserTrades(new String[] { String.valueOf(bitso.getTid()) });
+            var one = mBitso.getUserTrades(List.of(String.valueOf(bitso.getTid())));
             assertNotNull(one);
             totalElements = one.size();
             assertTrue((totalElements == 1));
@@ -425,8 +425,8 @@ public abstract class BitsoTest {
             BitsoTrade bitsoFirst = trades.get(0);
             BitsoTrade bitsoSecond = trades.get(1);
             BitsoTrade bitsoThird = trades.get(2);
-            var three = mBitso.getUserTrades(new String[] { String.valueOf(bitsoFirst.getTid()),
-                    String.valueOf(bitsoSecond.getTid()), String.valueOf(bitsoThird.getTid()) });
+            var three = mBitso.getUserTrades(List.of(String.valueOf(bitsoFirst.getTid()),
+                    String.valueOf(bitsoSecond.getTid()), String.valueOf(bitsoThird.getTid())));
             assertNotNull(three);
             totalElements = three.size();
             assertEquals(3, totalElements);
@@ -436,7 +436,7 @@ public abstract class BitsoTest {
         }
         throttlePrivate();
 
-        var bothParameters = mBitso.getUserTrades(new String[] { "" }, "");
+        var bothParameters = mBitso.getUserTrades(List.of(""), "");
         assertNull(bothParameters);
 
         throttlePrivate();

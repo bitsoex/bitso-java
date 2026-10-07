@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.net.ssl.HttpsURLConnection;
@@ -265,7 +264,7 @@ public class Bitso {
      * @return
      * @throws BitsoAPIException
      */
-    public List<BitsoTrade> getUserTrades(String[] tradesIds, String... queryParameters)
+    public List<BitsoTrade> getUserTrades(List<String> tradesIds, String... queryParameters)
             throws BitsoAPIException {
         String request = "/v3/user_trades";
 
@@ -274,8 +273,10 @@ public class Bitso {
         }
 
         if (tradesIds != null) {
-            String fundingssIdsParameters = processQueryParameters("-", tradesIds);
-            request += ((fundingssIdsParameters != null) ? "/" + fundingssIdsParameters : "");
+            String fundingssIdsParameters = String.join("-", tradesIds);
+            if (!fundingssIdsParameters.isEmpty()) {
+                request += "/" + fundingssIdsParameters;
+            }
         }
 
         if (queryParameters != null && queryParameters.length > 0) {
