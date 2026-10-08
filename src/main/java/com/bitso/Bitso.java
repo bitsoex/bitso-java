@@ -5,19 +5,24 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.net.ssl.HttpsURLConnection;
 
 import com.bitso.exchange.BitsoTicker;
+import com.bitso.trading.ModifyOrderRequest;
 import com.bitso.trading.OrderRequest;
 import jakarta.annotation.Nonnull;
 import lombok.Getter;
@@ -33,7 +38,6 @@ import com.bitso.exceptions.BitsoServerException;
 import com.bitso.exceptions.BitsoValidationException;
 import com.bitso.exchange.BookInfo;
 import com.bitso.helpers.Helpers;
-import com.bitso.http.BlockingHttpClient;
 
 /**
  * An implementation of the Bitso API.
@@ -42,7 +46,6 @@ import com.bitso.http.BlockingHttpClient;
 public class Bitso {
     private final String ETHER = "ether";
     private final String BITCOIN = "bitcoin";
-    public static long THROTTLE_MS = 1000;
 
     /** The API key. */
     @Getter
@@ -52,7 +55,7 @@ public class Bitso {
     @Getter
     private String baseUrl;
 
-    private final BlockingHttpClient client = new BlockingHttpClient(false, THROTTLE_MS);
+    private final HttpClient client = HttpClient.newBuilder().build();
     /** Set the timeout to read a response, in milliseconds.
      * Default is 30 seconds.
      */
@@ -550,6 +553,56 @@ public class Bitso {
         return Helpers.getString(payloadJSON, "oid");
     }
 
+    /** Modify an existing order. You can change the price of an open order, or the amount/value,
+     * or a combination of both. For stop orders that haven't been triggered, you can modify the stop rate.
+     * A modification may require locking more balance, or may result in some locked balance being released.
+     * The modification may fail if the order is canceled or completed before the change can be performed.
+     * To see the result of the modification, you can query the order or listen to the public websockets.
+     * @param orderId The id of the order to modify.
+     * @return true if the order was modified successfully, false otherwise
+     */
+    public boolean modifyOrder(@Nonnull String orderId, @Nonnull ModifyOrderRequest mod) throws BitsoAPIException {
+        if (orderId == null || orderId.isBlank()) {
+            throw new IllegalArgumentException("orderId cannot be null or blank");
+        }
+        String uri = "/v4/orders/" + orderId;
+        JSONObject req = new JSONObject();
+        mod.validate();
+        if (mod.getMajor() != null) {
+            req.put("major", mod.getMajor().toPlainString());
+        } else if (mod.getMinor() != null) {
+            req.put("minor", mod.getMinor().toPlainString());
+        }
+        if (mod.getPrice() != null) {
+            req.put("price", mod.getPrice().toPlainString());
+        }
+        if (mod.getStopRate() != null) {
+            req.put("stop", mod.getStopRate().toPlainString());
+        }
+        if (mod.isCancelOnFail()) {
+            req.put("cancel", "1");
+        }
+        String jsonString = req.toString();
+
+        try {
+            var response = client.send(createAuthenticatedRequest(uri, "PATCH", jsonString), HttpResponse.BodyHandlers.ofString());
+            JSONObject payload = (JSONObject) getJSONPayload(response.body());
+            boolean ok = payload.has("success") && payload.getBoolean("success");
+            if (!ok) {
+                ok = payload.has("oid") && payload.getString("oid").equals(orderId);
+                if (!ok) {
+                    log.error("failed to modify order: {}", payload);
+                }
+            }
+            return ok;
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new BitsoAPIException(e);
+        } catch (IOException e) {
+            throw new BitsoAPIException(e);
+        }
+    }
+
     /** Cancel one or more orders.
      * @param ordersIds One or more order ids to cancel.
      * @return List of canceled order ids.
@@ -773,7 +826,7 @@ public class Bitso {
         }
     }
 
-    private static Entry<String, String> buildBitsoAuthHeader(String secretKey, String publicKey, long nonce,
+    private static Map<String, String> buildBitsoAuthHeader(String secretKey, String publicKey, long nonce,
             String httpMethod, String requestPath, String jsonPayload) {
         if (jsonPayload == null) jsonPayload = "";
         String message = String.valueOf(nonce) + httpMethod + requestPath + jsonPayload;
@@ -783,7 +836,6 @@ public class Bitso {
         try {
             Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(localMac);
-
             // Compute the hmac on input data bytes
             byte[] arrayOfByte = mac.doFinal(message.getBytes());
             BigInteger localBigInteger = new BigInteger(1, arrayOfByte);
@@ -792,64 +844,68 @@ public class Bitso {
             log.error("Failed to build auth header", e);
         }
         String authHeader = String.format("Bitso %s:%s:%s", publicKey, nonce, signature);
-        return Map.entry("Authorization", authHeader);
+        return Map.of("Authorization", authHeader, "Content-Type", "application/json");
     }
 
     public String sendGet(String requestedURL) throws BitsoAPIException {
-        HttpsURLConnection connection = null;
+        var req = HttpRequest.newBuilder()
+                .uri(URI.create(baseUrl + requestedURL))
+                .GET()
+                .timeout(Duration.ofMillis(readTimeout))
+                .header("User-Agent", "Android")
+                .build();
         try {
-            URL url = new URL(baseUrl + requestedURL);
-            connection = (HttpsURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("User-Agent", "Android");
-            connection.setReadTimeout(readTimeout);
-            return Helpers.convertInputStreamToString(connection.getInputStream());
-        } catch (MalformedURLException e) {
-            log.error("bad URL", e);
-            throw new BitsoAPIException(322, "Not a Valid URL", e);
-        } catch (ProtocolException e) {
-            log.error("bad method", e);
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
+            return client.send(req, HttpResponse.BodyHandlers.ofString()).body();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new BitsoAPIException(e);
         } catch (IOException e) {
             log.error("network error", e);
-            return Helpers.convertInputStreamToString(connection.getErrorStream());
+            throw new BitsoAPIException(e);
         }
     }
 
     public String sendBitsoGet(String requestPath) throws BitsoAPIException {
-        return sendBitsoHttpRequest(requestPath, "GET");
-    }
-
-    private String sendBitsoHttpRequest(String requestPath, String method) throws BitsoAPIException {
-        String requestURL = baseUrl + requestPath;
-        HttpsURLConnection connection = null;
+        var req = createAuthenticatedRequest(requestPath, "GET", null);
         try {
-            URL url = new URL(requestURL);
-            connection = (HttpsURLConnection) url.openConnection();
-            connection.addRequestProperty("Authorization",
-                    buildBitsoAuthHeader(requestPath, "GET", key, secret));
-            connection.setRequestProperty("User-Agent", "Bitso-java-api");
-            connection.setRequestMethod(method);
-            connection.setReadTimeout(readTimeout);
-            return Helpers.convertInputStreamToString(connection.getInputStream());
-        } catch (MalformedURLException e) {
-            log.error("bad URL", e);
-            throw new BitsoAPIException(322, "Not a Valid URL", e);
-        } catch (ProtocolException e) {
-            log.error("bad method", e);
-            throw new BitsoAPIException(901, "Unsupported HTTP method", e);
+            return client.send(req, HttpResponse.BodyHandlers.ofString()).body();
         } catch (IOException e) {
             log.error("network error", e);
-            return Helpers.convertInputStreamToString(connection.getErrorStream());
+            throw new BitsoAPIException(e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new BitsoAPIException(e);
         }
     }
 
-    private String sendBitsoDelete(String requestPath) throws BitsoAPIException {
+    private HttpRequest createAuthenticatedRequest(String url, String method, String jsonString) {
+        var request = HttpRequest.newBuilder()
+                .uri(URI.create(baseUrl + url))
+                .timeout(Duration.ofMillis(readTimeout))
+                .header("User-Agent", "Bitso-java-api");
+        if (jsonString == null) {
+            request.method(method, HttpRequest.BodyPublishers.noBody());
+        } else {
+            request.method(method, HttpRequest.BodyPublishers.ofString(jsonString));
+        }
         long nonce = System.currentTimeMillis() + System.currentTimeMillis();
-        Entry<String, String> authHeader = buildBitsoAuthHeader(secret, key, nonce, "DELETE", requestPath,
-                null);
-        var headers = Map.of("Content-Type", "application/json", authHeader.getKey(), authHeader.getValue());
-        return client.sendDelete(baseUrl + requestPath, headers);
+        var headers = buildBitsoAuthHeader(secret, key, nonce, method, url, jsonString);
+        for (var header : headers.entrySet()) {
+            request.header(header.getKey(), header.getValue());
+        }
+        return request.build();
+    }
+
+    private String sendBitsoDelete(String requestPath) throws BitsoAPIException {
+        var request = createAuthenticatedRequest(requestPath, "DELETE", null);
+        try {
+            return client.send(request, HttpResponse.BodyHandlers.ofString()).body();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new BitsoAPIException(e);
+        } catch (IOException e) {
+            throw new BitsoAPIException(e);
+        }
     }
 
     public String sendBitsoPost(String url) throws BitsoAPIException {
@@ -857,16 +913,19 @@ public class Bitso {
     }
 
     public String sendBitsoPost(String requestPath, JSONObject jsonPayload) throws BitsoAPIException {
-        long nonce = System.currentTimeMillis() + System.currentTimeMillis();
         String jsonString = "";
         if (jsonPayload != null) {
             jsonString = jsonPayload.toString();
         }
-        Entry<String, String> header = buildBitsoAuthHeader(secret, key, nonce, "POST", requestPath,
-                jsonString);
-        var headers = Map.of("Content-Type", "application/json", header.getKey(), header.getValue());
-
-        return client.sendPost(baseUrl + requestPath, jsonString, headers);
+        try {
+            var request = createAuthenticatedRequest(requestPath, "POST", jsonString);
+            return client.send(request, HttpResponse.BodyHandlers.ofString()).body();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new BitsoAPIException(e);
+        } catch (IOException e) {
+            throw new BitsoAPIException(e);
+        }
     }
 
     public String processQueryParameters(String separator, String... parameters) {

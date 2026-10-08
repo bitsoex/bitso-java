@@ -1,16 +1,14 @@
 package com.bitso.examples;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.apache.hc.client5.http.classic.methods.HttpPost;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
-import org.apache.hc.client5.http.impl.classic.HttpClients;
-import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.json.JSONObject;
 
 public class BitsoJavaExample {
@@ -29,7 +27,7 @@ public class BitsoJavaExample {
         mac.init(localMac);
         byte[] arrayOfByte = mac.doFinal(message.getBytes());
         BigInteger localBigInteger = new BigInteger(1, arrayOfByte);
-        signature = String.format("%0" + (arrayOfByte.length << 1) + "x", new Object[] { localBigInteger });
+        signature = String.format("%0" + (arrayOfByte.length << 1) + "x", localBigInteger);
 
         // Build the request parameters
         JSONObject o = new JSONObject();
@@ -40,21 +38,12 @@ public class BitsoJavaExample {
         String url = "https://api.bitso.com/v2/balance";
 
         // Send request
-        HttpPost postRequest = new HttpPost(url);
-        postRequest.addHeader("Content-Type", "application/json");
-        postRequest.setEntity(new StringEntity(body));
-
-        CloseableHttpResponse response = HttpClients.createDefault().execute(postRequest);
-        BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-
-        String inputLine;
-        StringBuffer responseBody = new StringBuffer();
-
-        while ((inputLine = in.readLine()) != null) {
-            responseBody.append(inputLine);
-        }
-        in.close();
-
-        System.out.println(responseBody.toString());
+        var request = HttpRequest.newBuilder().uri(URI.create(url))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .build();
+        var client = HttpClient.newHttpClient();
+        String response = client.send(request, HttpResponse.BodyHandlers.ofString()).body();
+        System.out.println(response);
     }
 }

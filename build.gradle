@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.github.bitsoex'
-version = '5.0.0'
+version = '5.1.0'
 
 description = "bitso-java"
 
@@ -27,7 +27,6 @@ repositories {
 }
 
 dependencies {
-    api libs.httpclient5
     api libs.json
     api libs.netty
     api libs.slf4j.api
